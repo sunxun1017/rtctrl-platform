@@ -1,0 +1,15 @@
+[kernel]
+mode = "strict"
+require_fifo = true
+require_affinity = true
+require_memory_lock = true
+
+[thread.io]
+period_us = 1000
+priority = 80
+cpu = -1
+
+[thread.control]
+period_us = 5000
+priority = 70
+cpu = -1

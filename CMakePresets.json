@@ -1,0 +1,44 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 16, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "release",
+      "displayName": "Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "asan",
+      "displayName": "ASan + UBSan",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/asan",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "RTCTRL_ENABLE_SANITIZERS": "ON"
+      }
+    },
+    {
+      "name": "riscv64",
+      "displayName": "RISC-V 64 cross build",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/riscv64",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/linux-cross.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RTCTRL_TARGET_TRIPLE": "riscv64-linux-gnu",
+        "RTCTRL_BUILD_TESTS": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "release", "configurePreset": "release" },
+    { "name": "asan", "configurePreset": "asan" },
+    { "name": "riscv64", "configurePreset": "riscv64" }
+  ],
+  "testPresets": [
+    { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },
+    { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } }
+  ]
+}

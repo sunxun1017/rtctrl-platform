@@ -1,0 +1,27 @@
+[Unit]
+Description=Portable robot real-time control runtime
+After=local-fs.target
+
+[Service]
+Type=simple
+User=@RTCTRL_USER@
+Group=@RTCTRL_GROUP@
+# Production starts disarmed. An authenticated supervisor must explicitly arm
+# the hardware after health checks; process restart never implies re-arming.
+ExecStart=@RTCTRL_BINDIR@/rtctrl_demo --strict-rt @RTCTRL_ARGS@
+Restart=no
+LimitRTPRIO=@RTCTRL_MAX_RTPRIO@
+LimitMEMLOCK=@RTCTRL_MEMLOCK_BYTES@
+LimitRTTIME=@RTCTRL_RTTIME@
+RestrictRealtime=no
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ReadWritePaths=@RTCTRL_STATE_DIR@
+
+[Install]
+WantedBy=multi-user.target
