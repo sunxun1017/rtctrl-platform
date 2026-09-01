@@ -139,7 +139,10 @@ void RealtimeEngine::io_loop() noexcept {
     hal_.close();
     return;
   }
-  if (config_.arm_actuation && hal_.arm(platform_.now_ns()) != hal::HalStatus::Ok) {
+  model::SensorFrame startup_state{};
+  if (config_.arm_actuation &&
+      (hal_.read(platform_.now_ns(), startup_state) != hal::HalStatus::Ok ||
+       hal_.arm(platform_.now_ns()) != hal::HalStatus::Ok)) {
     fatal_startup_error_.store(true);
     io_startup_state_.store(-1, std::memory_order_release);
     stop_.store(true);
@@ -151,6 +154,9 @@ void RealtimeEngine::io_loop() noexcept {
 
   platform::PeriodicTimer timer(platform_, config_.io_period_ns);
   model::SensorFrame state{};
+  if (config_.arm_actuation) {
+    state = startup_state;
+  }
   model::CommandFrame command{};
   safety_.make_safe_command(state, platform_.now_ns(), command);
   bool fault_latched = false;

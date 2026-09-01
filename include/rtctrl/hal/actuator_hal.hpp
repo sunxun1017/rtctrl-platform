@@ -14,6 +14,8 @@ public:
   // open_safe() may initialize resources but must never energize an actuator.
   // All real-time calls are bounded, non-blocking and allocation-free.
   virtual HalStatus open_safe(std::int64_t now_ns) noexcept = 0;
+  // The runtime performs one successful read() before arm(), allowing adapters
+  // to seed a jump-free hold command from measured state.
   virtual HalStatus arm(std::int64_t now_ns) noexcept = 0;
   virtual HalStatus read(std::int64_t now_ns, model::SensorFrame& output) noexcept = 0;
   virtual HalStatus write(std::int64_t now_ns, const model::CommandFrame& input) noexcept = 0;

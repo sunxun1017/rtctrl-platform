@@ -17,17 +17,18 @@ bool JointPd::update(const model::SensorFrame& state, const ControlContext& cont
 
   for (std::size_t i = 0; i < model::kJointCount; ++i) {
     const double target = context.target.position[i];
-    const double effort = config_.kp[i] * (target - state.position[i]) -
-                          config_.kd[i] * state.velocity[i];
-    if (!std::isfinite(effort)) {
+    if (!std::isfinite(target) || !std::isfinite(config_.kp[i]) ||
+        !std::isfinite(config_.kd[i]) || !std::isfinite(state.position[i]) ||
+        !std::isfinite(state.velocity[i])) {
       return false;
     }
     command.target_position[i] = target;
     command.target_velocity[i] = 0.0;
-    command.effort[i] = std::clamp(effort, -config_.max_effort, config_.max_effort);
+    command.effort[i] = 0.0;
+    command.kp[i] = config_.kp[i];
+    command.kd[i] = config_.kd[i];
   }
   return true;
 }
 
 }  // namespace rtctrl::control
-

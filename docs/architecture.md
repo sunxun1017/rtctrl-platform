@@ -8,7 +8,7 @@ app/composition root
   |          |--> HAL-api ------> simulated / framed actuator HAL
   |          |--> control-api --> PD / future policy controller
   |          `--> safety + fixed-capacity IPC
-  |-- HAL adapter --> byte-transport + protocol codec
+  |-- HAL adapter --> shared-memory L0 / simulated / future direct EtherCAT
   `-- bridge ------> CLI / shared-memory / future ROS 2
 ```
 
@@ -29,7 +29,11 @@ Control thread (200 Hz) -> bounded SPSC command -> I/O thread (1 kHz) -> HAL
 
 目标与状态分别有独立 freshness lease。命令源停止后，控制线程不会用旧目标生成带新时间戳的命令；设备状态过期或序号不前进时也不会刷新控制命令。
 
-字节链路采用 `IByteTransport -> ITargetCodec -> FramedCommandSource` 三层组合：设备文件和短读写只存在于 transport，帧 ABI 与 CRC 只存在于 protocol，会话、重放和跨时钟域租约只存在于 source。替换 RK3588、RISC-V、NearLink 或 SPI 不会改变控制器与实时引擎。V1 细节见 `docs/control-link-v1.md`。
+字节链路采用 `IByteTransport -> ITargetCodec -> FramedCommandSource` 三层组合：设备文件和短读写只存在于 transport，帧 ABI 与 CRC 只存在于 protocol，会话、重放和跨时钟域租约只存在于 source。替换 RK3588、RISC-V、NearLink 或 SPI 不会改变控制器与实时引擎。V2 细节见 `docs/control-link-v1.md`。
+
+从 `sx_text` 继承的双环被收敛为 `SharedMotorRegion -> SharedMemoryHal -> RealtimeEngine`：L0 进程独占 EtherCAT/vendor SDK、物理槽位、单位换算和机构耦合；控制进程只看 SI 单位逻辑关节。命令与反馈分别使用有界快照序列，ABI 同时校验 magic、version、region size 和 joint count，并携带生成号、采样时间与命令截止时间。使能位和 L0 fault/cycle counter 独立于数据快照。
+
+`RTCTRL_JOINT_COUNT` 是安装 ABI 的一部分。`profiles/yidong23_topology.hpp` 只在部署叶子记录三 master、23 个物理槽位与标定，编译期验证逻辑关节和物理槽位都是一一覆盖；核心 runtime、controller、safety 与 transport 不包含 Yidong 名称或 EtherCAT SDK。
 
 ## 实时规则
 
@@ -43,6 +47,7 @@ Control thread (200 Hz) -> bounded SPSC command -> I/O thread (1 kHz) -> HAL
 2. 命令是否过期；
 3. NaN/Inf；
 4. 位置、速度和力矩边界。
+5. 混合阻抗 `kp/kd` 的有限性、非负性和上界。
 
 任何检查失败都生成 `SafeStop` 指令并累计可观测指标。真实机器人部署时仍需驱动器或 MCU 侧独立 watchdog，Linux 用户态不能成为唯一安全层。
 

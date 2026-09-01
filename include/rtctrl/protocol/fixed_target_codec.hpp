@@ -12,7 +12,7 @@ namespace rtctrl::protocol {
 class FixedTargetCodec final : public ITargetCodec {
 public:
   static constexpr std::uint32_t kMagic = 0x4c435452U;  // "RTCL" on wire.
-  static constexpr std::uint8_t kVersion = 1;
+  static constexpr std::uint8_t kVersion = 2;
   static constexpr std::uint8_t kTargetFrameType = 1;
   static constexpr std::size_t kHeaderSize = 36;
   static constexpr std::size_t kPayloadSize = model::kJointCount * sizeof(float);

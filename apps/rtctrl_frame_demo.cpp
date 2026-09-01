@@ -37,7 +37,7 @@ int main() {
   rtctrl::model::ControlTarget target{};
   bool received = false;
   std::int64_t receiver_now_ns = 1'000'000'000;
-  for (int attempt = 0; attempt < 16 && !received; ++attempt) {
+  for (int attempt = 0; attempt < 128 && !received; ++attempt) {
     received = source.poll(receiver_now_ns, target);
     receiver_now_ns += 1'000'000;
   }

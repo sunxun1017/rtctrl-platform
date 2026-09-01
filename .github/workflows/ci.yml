@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        preset: [release, asan]
+        preset: [release, humanoid23, asan, tsan]
     steps:
       - uses: actions/checkout@v4
       - name: Configure

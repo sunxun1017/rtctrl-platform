@@ -10,6 +10,16 @@
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
+      "name": "humanoid23",
+      "displayName": "Release - Yidong 23 joint profile",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/humanoid23",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RTCTRL_JOINT_COUNT": "23"
+      }
+    },
+    {
       "name": "asan",
       "displayName": "ASan + UBSan",
       "generator": "Ninja",
@@ -17,6 +27,16 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "RTCTRL_ENABLE_SANITIZERS": "ON"
+      }
+    },
+    {
+      "name": "tsan",
+      "displayName": "ThreadSanitizer",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/tsan",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "RTCTRL_ENABLE_TSAN": "ON"
       }
     },
     {
@@ -34,11 +54,15 @@
   ],
   "buildPresets": [
     { "name": "release", "configurePreset": "release" },
+    { "name": "humanoid23", "configurePreset": "humanoid23" },
     { "name": "asan", "configurePreset": "asan" },
+    { "name": "tsan", "configurePreset": "tsan" },
     { "name": "riscv64", "configurePreset": "riscv64" }
   ],
   "testPresets": [
     { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },
-    { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } }
+    { "name": "humanoid23", "configurePreset": "humanoid23", "output": { "outputOnFailure": true } },
+    { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } },
+    { "name": "tsan", "configurePreset": "tsan", "output": { "outputOnFailure": true } }
   ]
 }

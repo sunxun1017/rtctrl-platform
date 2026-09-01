@@ -7,7 +7,13 @@
 
 namespace rtctrl::model {
 
-constexpr std::size_t kJointCount = 6;
+#ifndef RTCTRL_JOINT_COUNT
+#define RTCTRL_JOINT_COUNT 6
+#endif
+
+static_assert(RTCTRL_JOINT_COUNT >= 1 && RTCTRL_JOINT_COUNT <= 64,
+              "RTCTRL_JOINT_COUNT must be in [1, 64]");
+constexpr std::size_t kJointCount = RTCTRL_JOINT_COUNT;
 
 enum class CommandMode : std::uint8_t { Disabled = 0, Position = 1, SafeStop = 2 };
 
@@ -28,6 +34,8 @@ struct CommandFrame {
   std::array<double, kJointCount> target_position{};
   std::array<double, kJointCount> target_velocity{};
   std::array<double, kJointCount> effort{};
+  std::array<double, kJointCount> kp{};
+  std::array<double, kJointCount> kd{};
 };
 
 struct ControlTarget {

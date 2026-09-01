@@ -1,6 +1,6 @@
 # rtctrl-platform
 
-面向机器人端侧的可移植 Linux 实时控制平台。RK3588 是首个目标而非架构前提；第一阶段不依赖 ROS，提供 1 kHz I/O、200 Hz 控制、固定容量数据通路、故障注入和时延基准。ControlLink V1 已打通固定帧编解码、UART 短包重组、CRC32C、会话重放防护与接收端租约。
+面向机器人端侧的可移植 Linux 实时控制平台。RK3588 是首个目标而非架构前提；第一阶段不依赖 ROS，提供 1 kHz I/O、200 Hz 控制、固定容量数据通路、故障注入和时延基准。ControlLink V2 已打通固定 profile 帧编解码、UART 短包重组、CRC32C、会话重放防护与接收端租约。
 
 ## 设计目标
 
@@ -10,6 +10,8 @@
 - `SCHED_FIFO`、CPU 亲和性和 `mlockall` 不可用时，默认安全回退到普通调度并报告能力；`--strict-rt` 可改为失败即停止。
 - WSL 运行 POSIX + 模拟 HAL；Linux/RK3588、UART/SPI/NearLink 与 ROS 2 都通过叶子适配器接入。仓库已提供 POSIX 串口适配器，SPI 和 ROS 2 保持可选。
 - 启动默认保持未武装状态；演示也必须显式传入 `--arm` 才允许普通控制指令进入 HAL。
+- 逻辑关节数是编译期 profile：默认 6 关节；`humanoid23` 使用从 `sx_text` 提炼的 23 关节/三 EtherCAT master 拓扑，不修改核心源码。
+- L0 硬件进程与控制进程通过版本化共享内存 ABI 解耦；ROS 2、vendor EtherCAT SDK 和 ONNX Runtime 都留在叶子适配器。
 
 ## 快速开始（WSL）
 
@@ -28,6 +30,15 @@ ctest --preset release
 ```bash
 ./scripts/check.sh
 ./scripts/verify-install-and-signal.sh
+```
+
+23 关节 profile：
+
+```bash
+cmake --preset humanoid23
+cmake --build --preset humanoid23 -j8
+ctest --preset humanoid23 --output-on-failure
+./build/humanoid23/rtctrl_frame_demo
 ```
 
 普通用户通常没有 `SCHED_FIFO` 权限，因此输出中出现 `scheduler=fallback` 是预期行为。不要把 WSL 时延结果作为 RK3588 的硬实时验收结论。
@@ -65,8 +76,10 @@ include/rtctrl/       稳定接口、数据模型与实时容器
 src/platform/         平台无关周期器与 POSIX 适配器
 src/hal/              模拟或真实执行器后端
 src/control/          可替换控制算法
-src/protocol/         固定长度 ControlLink V1 与 CRC32C
+src/protocol/         固定 profile ControlLink V2 与 CRC32C
 src/transport/        loopback、POSIX UART、分帧命令源
+src/ipc/              版本化 POSIX 共享内存与 L0 双向快照
+include/rtctrl/profiles/ 目标机器人拓扑叶子配置
 src/safety/           命令租约、边界与故障策略
 src/runtime/          双速率线程和数据流编排
 tests/                零第三方依赖的单元测试
@@ -76,8 +89,8 @@ config/               portable / strict 运行意图配置
 cmake/toolchains/      不绑定板卡的交叉编译入口
 ```
 
-协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
-本轮可复现构建、sanitizer、信号停机与 WSL 功能基线见 [`docs/verification-v0.3.0.md`](docs/verification-v0.3.0.md)。
+协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。从本人 `sx_text` 分支提炼和改造的内容见 [`docs/sx-text-integration.md`](docs/sx-text-integration.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
+当前 6/23 关节构建、共享内存、sanitizer 与已知环境限制见 [`docs/verification-v0.4.0.md`](docs/verification-v0.4.0.md)；上一版基线保留在 [`docs/verification-v0.3.0.md`](docs/verification-v0.3.0.md)。
 
 ## 交叉构建
 

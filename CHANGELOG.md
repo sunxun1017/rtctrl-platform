@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 - 2026-09-01
+
+- 从本人 `sx_text` 分支提炼 23 关节/三 EtherCAT master 拓扑，并增加编译期完整性与协议匹配校验。
+- 增加版本化 POSIX 共享内存 ABI、L0 双向一致快照和 `SharedMemoryHal`，保持实时核心无 ROS/vendor 依赖。
+- runtime 使能前必须先获得新鲜反馈；共享内存急停拥有独立 enable 直达路径。
+- 命令模型升级为 position/velocity/effort/kp/kd 混合阻抗契约，安全策略校验增益边界。
+- 增加固定容量 `PolicyActionMapper`，支持 action clip/scale、逻辑关节重映射、关节限位及 delta-action 残差。
+- 关节数改为 1–64 的编译期 profile；ControlLink V2 显式携带 joint count，默认 6 关节 64 字节、humanoid23 为 132 字节。
+
 ## 0.3.0 - 2026-09-01
 
 - 增加 64 字节 ControlLink V1：显式小端、CRC32C、会话号、严格序号和相对租约。

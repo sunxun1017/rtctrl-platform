@@ -1,8 +1,13 @@
 #include "rtctrl/control/joint_pd.hpp"
+#include "rtctrl/control/policy_action_mapper.hpp"
 #include "rtctrl/hal/simulated_hal.hpp"
+#include "rtctrl/hal/shared_memory_hal.hpp"
+#include "rtctrl/ipc/shared_motor_abi.hpp"
+#include "rtctrl/ipc/posix_shared_memory.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
 #include "rtctrl/platform/posix_realtime.hpp"
 #include "rtctrl/protocol/fixed_target_codec.hpp"
+#include "rtctrl/profiles/yidong23_topology.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
 #include "rtctrl/transport/command_source.hpp"
@@ -13,9 +18,11 @@
 #include <atomic>
 #include <chrono>
 #include <cmath>
+#include <cstdio>
 #include <iostream>
 #include <limits>
 #include <thread>
+#include <unistd.h>
 
 namespace {
 
@@ -107,7 +114,8 @@ void test_controller_and_hal() {
   rtctrl::model::CommandFrame command{};
   expect(controller.update(state, context, command), "PD controller update");
   expect(command.mode == rtctrl::model::CommandMode::Position, "PD emits position mode");
-  expect(command.effort[0] > 0.0 && command.effort[0] <= 20.0, "PD effort saturated");
+  expect(command.effort[0] == 0.0 && command.kp[0] == 40.0 && command.kd[0] == 2.0,
+         "PD emits hybrid impedance gains with zero feed-forward effort");
 
   rtctrl::hal::SimulatedHal hal;
   expect(hal.open_safe(1'000) == rtctrl::hal::HalStatus::Ok, "sim HAL opens safe");
@@ -139,7 +147,8 @@ void test_fixed_target_codec() {
   const auto encoded = codec.encode(input, wire.data(), wire.size());
   expect(encoded.status == rtctrl::protocol::CodecStatus::Ok,
          "target frame encodes");
-  expect(encoded.produced == 64, "v1 target frame has stable 64-byte ABI");
+  expect(encoded.produced == rtctrl::protocol::FixedTargetCodec::kFrameSize,
+         "target frame size follows the selected joint profile");
 
   rtctrl::protocol::TargetEnvelope output{};
   const auto decoded = codec.decode(wire.data(), wire.size(), output);
@@ -165,6 +174,158 @@ void test_fixed_target_codec() {
   }
 }
 
+void test_shared_memory_hal() {
+  rtctrl::ipc::SharedMotorRegion region;
+  expect(rtctrl::ipc::valid_shared_motor_region(region),
+         "shared-memory ABI header matches this joint profile");
+
+  rtctrl::ipc::FeedbackSnapshot feedback{};
+  feedback.generation = 7;
+  feedback.sample_time_ns = 1'000'000;
+  feedback.joints[0].position = 0.4;
+  feedback.joints[0].velocity = -0.1;
+  feedback.imu.sample_time_ns = feedback.sample_time_ns;
+  rtctrl::ipc::publish_feedback(region, feedback);
+
+  rtctrl::hal::SharedMemoryHal hal(region, {5'000'000});
+  expect(hal.open_safe(1'000'100) == rtctrl::hal::HalStatus::Ok,
+         "shared-memory HAL opens with torque disabled");
+  expect(region.motor_enable.load() == 0,
+         "opening shared-memory HAL never energizes motors");
+  expect(hal.arm(1'000'100) == rtctrl::hal::HalStatus::NotReady,
+         "arm is refused before a feedback seed");
+
+  rtctrl::model::SensorFrame state{};
+  expect(hal.read(1'000'100, state) == rtctrl::hal::HalStatus::Ok &&
+             state.sequence == 7 && state.position[0] == 0.4,
+         "feedback snapshot reaches the logical joint model");
+  expect(hal.arm(1'000'100) == rtctrl::hal::HalStatus::Ok &&
+             region.motor_enable.load() == 1,
+         "arm succeeds only after fresh fault-free feedback");
+
+  rtctrl::model::CommandFrame command{};
+  command.sequence = 9;
+  command.created_time_ns = 1'000'100;
+  command.valid_until_ns = 2'000'000;
+  command.mode = rtctrl::model::CommandMode::Position;
+  command.target_position[0] = 0.5;
+  command.kp[0] = 40.0;
+  command.kd[0] = 2.0;
+  expect(hal.write(1'000'200, command) == rtctrl::hal::HalStatus::Ok,
+         "hybrid command publishes to L0 mailbox");
+  rtctrl::ipc::CommandSnapshot published{};
+  expect(rtctrl::ipc::read_command(region, published) &&
+             published.generation == 9 && published.joints[0].position == 0.5 &&
+             published.joints[0].kp == 40.0,
+         "L0 reads a consistent logical-joint command snapshot");
+
+  hal.emergency_stop(1'000'300);
+  expect(region.motor_enable.load() == 0,
+         "emergency stop cuts the independent L0 enable line");
+  hal.close();
+}
+
+void test_posix_shared_memory_lifecycle() {
+  std::array<char, 64> name{};
+  const auto nonce = std::chrono::steady_clock::now().time_since_epoch().count();
+  (void)std::snprintf(name.data(), name.size(), "/rtctrl-test-%ld-%lld",
+                      static_cast<long>(::getpid()), static_cast<long long>(nonce));
+  rtctrl::ipc::PosixSharedMemoryRegion owner;
+  rtctrl::ipc::PosixSharedMemoryRegion client;
+  expect(owner.create_owner(name.data()),
+         "L0 creates a new shared-memory region without replacing an old one");
+  expect(client.attach(name.data()),
+         "controller attaches only after ABI size/version validation");
+  if (owner.get() != nullptr && client.get() != nullptr) {
+    owner.get()->l0_cycle_counter.store(123, std::memory_order_release);
+    expect(client.get()->l0_cycle_counter.load(std::memory_order_acquire) == 123,
+           "L0 liveness counter is visible across independent mappings");
+  }
+  client.close();
+  owner.close();
+
+  rtctrl::ipc::PosixSharedMemoryRegion missing;
+  expect(!missing.attach(name.data()), "owner cleanup unlinks its exact segment");
+}
+
+void test_shared_snapshot_concurrency() {
+  rtctrl::ipc::SharedMotorRegion region;
+  std::atomic<bool> done{false};
+  std::atomic<bool> mismatch{false};
+  std::thread writer([&]() {
+    rtctrl::ipc::FeedbackSnapshot snapshot{};
+    for (std::uint64_t generation = 1; generation <= 10'000; ++generation) {
+      snapshot.generation = generation;
+      snapshot.sample_time_ns = static_cast<std::int64_t>(generation);
+      for (auto& joint : snapshot.joints) {
+        joint.position = static_cast<double>(generation);
+      }
+      rtctrl::ipc::publish_feedback(region, snapshot);
+    }
+    done.store(true, std::memory_order_release);
+  });
+  std::thread reader([&]() {
+    do {
+      rtctrl::ipc::FeedbackSnapshot snapshot{};
+      if (rtctrl::ipc::read_feedback(region, snapshot) && snapshot.generation != 0) {
+        for (const auto& joint : snapshot.joints) {
+          if (joint.position != static_cast<double>(snapshot.generation)) {
+            mismatch.store(true, std::memory_order_release);
+          }
+        }
+      }
+    } while (!done.load(std::memory_order_acquire));
+  });
+  writer.join();
+  reader.join();
+  expect(!mismatch.load(std::memory_order_acquire),
+         "concurrent shared feedback reads never expose a torn generation");
+}
+
+void test_yidong_topology() {
+  constexpr auto& topology = rtctrl::profiles::yidong23::kTopology;
+  static_assert(topology.valid());
+  const auto* waist_pitch = topology.for_logical_joint(13);
+  expect(waist_pitch != nullptr && waist_pitch->master_id == 2 &&
+             waist_pitch->motor_index == 5 &&
+             waist_pitch->calibration.protocol == rtctrl::hal::MotorProtocol::Ti5,
+         "Yidong logical joint maps to the reviewed physical EtherCAT slot");
+  const auto* left_hip = topology.for_physical_motor(0, 0);
+  expect(left_hip != nullptr && left_hip->logical_joint_index == 0 &&
+             left_hip->calibration.effort_max == 150.0,
+         "motor calibration stays attached to the physical motor route");
+}
+
+void test_policy_action_mapper() {
+  if constexpr (rtctrl::model::kJointCount >= 2) {
+    rtctrl::control::PolicyActionConfig config;
+    config.action_count = 2;
+    config.logical_joint[0] = 1;
+    config.logical_joint[1] = 0;
+    config.default_position[0] = -0.2;
+    config.default_position[1] = 0.3;
+    config.action_scale[0] = 0.5;
+    config.action_scale[1] = 0.2;
+    config.delta_scale[0] = 0.5;
+    config.delta_scale[1] = 0.5;
+    rtctrl::control::PolicyActionMapper mapper(config);
+    expect(mapper.valid(), "policy joint mapping is validated once at startup");
+    const std::array<float, 2> base{2.0F, -0.5F};
+    const std::array<float, 2> delta{1.0F, 2.0F};
+    rtctrl::model::CommandFrame output{};
+    expect(mapper.map(base.data(), delta.data(), 10'000, 5'000, output),
+           "base policy and delta-action residual map without allocation");
+    expect(std::abs(output.target_position[1] - 0.8) < 1.0e-9,
+           "residual action is clipped, scaled and added to nominal pose");
+    expect(std::abs(output.target_position[0] - (-0.1)) < 1.0e-9,
+           "policy output is remapped into canonical logical joint order");
+    auto bad = base;
+    bad[0] = std::numeric_limits<float>::quiet_NaN();
+    expect(!mapper.map(bad.data(), delta.data(), 20'000, 5'000, output),
+           "non-finite policy output is rejected before the HAL boundary");
+  }
+}
+
 void test_framed_command_source() {
   rtctrl::protocol::FixedTargetCodec codec;
   rtctrl::transport::LoopbackByteTransport link(3);
@@ -184,7 +345,7 @@ void test_framed_command_source() {
   rtctrl::model::ControlTarget target{};
   bool received = false;
   std::int64_t now_ns = 5'000'000'000LL;
-  for (int attempt = 0; attempt < 32 && !received; ++attempt) {
+  for (int attempt = 0; attempt < 128 && !received; ++attempt) {
     received = source.poll(now_ns, target);
     now_ns += 1'000'000;
   }
@@ -194,7 +355,7 @@ void test_framed_command_source() {
          "wire lease is clamped and converted to receiver clock domain");
 
   expect(link.inject(wire.data(), wire.size()), "replay injected");
-  for (int attempt = 0; attempt < 32 && source.metrics().replayed_frames == 0;
+  for (int attempt = 0; attempt < 128 && source.metrics().replayed_frames == 0;
        ++attempt) {
     (void)source.poll(now_ns, target);
     now_ns += 1'000'000;
@@ -212,7 +373,7 @@ void test_framed_command_source() {
              link.inject(wire.data(), wire.size()),
          "garbage prefix and valid frame injected");
   received = false;
-  for (int attempt = 0; attempt < 32 && !received; ++attempt) {
+  for (int attempt = 0; attempt < 128 && !received; ++attempt) {
     received = source.poll(now_ns, target);
     now_ns += 1'000'000;
   }
@@ -226,7 +387,7 @@ void test_framed_command_source() {
              rtctrl::protocol::CodecStatus::Ok &&
              link.inject(wire.data(), wire.size()),
          "foreign session frame injected");
-  for (int attempt = 0; attempt < 32; ++attempt) {
+  for (int attempt = 0; attempt < 128; ++attempt) {
     (void)source.poll(now_ns, target);
     now_ns += 1'000'000;
   }
@@ -327,6 +488,11 @@ int main() {
   test_safety_policy();
   test_controller_and_hal();
   test_fixed_target_codec();
+  test_shared_memory_hal();
+  test_posix_shared_memory_lifecycle();
+  test_shared_snapshot_concurrency();
+  test_yidong_topology();
+  test_policy_action_mapper();
   test_framed_command_source();
   test_target_lease();
   if (failures == 0) {

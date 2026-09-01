@@ -16,7 +16,8 @@ SafetyDecision SafetyPolicy::evaluate(const model::SensorFrame& state,
   for (std::size_t i = 0; i < model::kJointCount; ++i) {
     if (!std::isfinite(state.position[i]) || !std::isfinite(state.velocity[i]) ||
         !std::isfinite(state.effort[i]) || !std::isfinite(command.target_position[i]) ||
-        !std::isfinite(command.target_velocity[i]) || !std::isfinite(command.effort[i])) {
+        !std::isfinite(command.target_velocity[i]) || !std::isfinite(command.effort[i]) ||
+        !std::isfinite(command.kp[i]) || !std::isfinite(command.kd[i])) {
       return SafetyDecision::InvalidNumber;
     }
     if (std::abs(state.position[i]) > limits_.max_position_abs ||
@@ -24,7 +25,9 @@ SafetyDecision SafetyPolicy::evaluate(const model::SensorFrame& state,
         std::abs(state.velocity[i]) > limits_.max_velocity_abs ||
         std::abs(command.target_velocity[i]) > limits_.max_velocity_abs ||
         std::abs(state.effort[i]) > limits_.max_effort_abs ||
-        std::abs(command.effort[i]) > limits_.max_effort_abs) {
+        std::abs(command.effort[i]) > limits_.max_effort_abs || command.kp[i] < 0.0 ||
+        command.kp[i] > limits_.max_kp || command.kd[i] < 0.0 ||
+        command.kd[i] > limits_.max_kd) {
       return SafetyDecision::LimitViolation;
     }
   }

@@ -13,7 +13,7 @@ constexpr std::size_t kTypeOffset = 5;
 constexpr std::size_t kFlagsOffset = 6;
 constexpr std::size_t kSessionOffset = 8;
 constexpr std::size_t kPayloadSizeOffset = 12;
-constexpr std::size_t kReservedOffset = 14;
+constexpr std::size_t kJointCountOffset = 14;
 constexpr std::size_t kSequenceOffset = 16;
 constexpr std::size_t kSenderTimeOffset = 24;
 constexpr std::size_t kLeaseOffset = 32;
@@ -110,7 +110,8 @@ EncodeResult FixedTargetCodec::encode(const TargetEnvelope& input, std::byte* ou
   put_u16(output + kFlagsOffset, 0);
   put_u32(output + kSessionOffset, input.session_id);
   put_u16(output + kPayloadSizeOffset, static_cast<std::uint16_t>(kPayloadSize));
-  put_u16(output + kReservedOffset, 0);
+  put_u16(output + kJointCountOffset,
+          static_cast<std::uint16_t>(model::kJointCount));
   put_u64(output + kSequenceOffset, input.sequence);
   put_u64(output + kSenderTimeOffset, input.sender_time_ns);
   put_u32(output + kLeaseOffset, input.lease_us);
@@ -143,7 +144,7 @@ DecodeResult FixedTargetCodec::decode(const std::byte* input, std::size_t size,
       std::to_integer<std::uint8_t>(input[kTypeOffset]) == kTargetFrameType &&
       get_u16(input + kFlagsOffset) == 0 &&
       get_u16(input + kPayloadSizeOffset) == kPayloadSize &&
-      get_u16(input + kReservedOffset) == 0;
+      get_u16(input + kJointCountOffset) == model::kJointCount;
   if (!shape_valid) {
     return {CodecStatus::InvalidFrame, 1};
   }

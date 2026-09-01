@@ -18,6 +18,8 @@ struct SafetyLimits {
   double max_position_abs{3.2};
   double max_velocity_abs{8.0};
   double max_effort_abs{25.0};
+  double max_kp{200.0};
+  double max_kd{20.0};
 };
 
 class SafetyPolicy {
@@ -33,4 +35,3 @@ private:
 };
 
 }  // namespace rtctrl::safety
-

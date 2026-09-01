@@ -7,9 +7,13 @@
 namespace rtctrl::control {
 
 struct JointPdConfig {
-  std::array<double, model::kJointCount> kp{40.0, 40.0, 40.0, 40.0, 40.0, 40.0};
-  std::array<double, model::kJointCount> kd{2.0, 2.0, 2.0, 2.0, 2.0, 2.0};
-  double max_effort{20.0};
+  JointPdConfig() noexcept {
+    kp.fill(40.0);
+    kd.fill(2.0);
+  }
+
+  std::array<double, model::kJointCount> kp{};
+  std::array<double, model::kJointCount> kd{};
 };
 
 class JointPd final : public IController {
@@ -25,4 +29,3 @@ private:
 };
 
 }  // namespace rtctrl::control
-
