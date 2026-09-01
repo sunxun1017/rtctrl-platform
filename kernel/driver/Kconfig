@@ -1,0 +1,14 @@
+config RTCTRL_MAILBOX
+	tristate "Robot real-time DMA mailbox"
+	depends on OF && HAS_IOMEM && HAS_DMA && RESET_CONTROLLER && 64BIT
+	select MISC_DEVICES
+	help
+	  Platform driver for a robot control mailbox shared with a RISC-V control
+	  endpoint or FPGA. Userspace uses fixed-size, kernel-staged ioctls; only the
+	  kernel and endpoint access the coherent-DMA rings. A kernel watchdog forces
+	  the hardware enable line low when accepted command submissions stop or a
+	  command lease expires. A dedicated reset controller is required to stop
+	  endpoint bus mastering if the normal DMA-quiesce handshake fails.
+
+	  The block is not a native RK3588 peripheral. Enable it only when the board
+	  device tree describes compatible mailbox hardware or firmware.

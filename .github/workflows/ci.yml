@@ -24,3 +24,14 @@ jobs:
         run: ctest --preset ${{ matrix.preset }} --output-on-failure
       - name: Protocol integration demo
         run: ./build/${{ matrix.preset }}/rtctrl_frame_demo
+
+  kernel-module:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install configured kernel headers
+        run: sudo apt-get update && sudo apt-get install -y linux-headers-generic
+      - name: Build out-of-tree mailbox module
+        run: |
+          kernel_dir=$(find /usr/src -maxdepth 1 -type d -name 'linux-headers-*-generic' | sort -V | tail -1)
+          ./kernel/scripts/build-module.sh "$kernel_dir"

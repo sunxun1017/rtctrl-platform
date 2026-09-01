@@ -1,5 +1,11 @@
 set(CMAKE_SYSTEM_NAME Linux)
 
+# Compiler ABI checks run in nested try_compile projects. Explicitly propagate
+# the platform inputs so the toolchain remains reusable for every target.
+set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+    RTCTRL_TARGET_TRIPLE
+    RTCTRL_SYSROOT)
+
 if(NOT DEFINED RTCTRL_TARGET_TRIPLE)
   message(FATAL_ERROR "Set RTCTRL_TARGET_TRIPLE, for example aarch64-linux-gnu")
 endif()

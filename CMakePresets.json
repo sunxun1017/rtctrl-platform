@@ -50,6 +50,18 @@
         "RTCTRL_TARGET_TRIPLE": "riscv64-linux-gnu",
         "RTCTRL_BUILD_TESTS": "OFF"
       }
+    },
+    {
+      "name": "aarch64",
+      "displayName": "AArch64 Linux cross build",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/aarch64",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/linux-cross.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RTCTRL_TARGET_TRIPLE": "aarch64-linux-gnu",
+        "RTCTRL_BUILD_TESTS": "OFF"
+      }
     }
   ],
   "buildPresets": [
@@ -57,7 +69,8 @@
     { "name": "humanoid23", "configurePreset": "humanoid23" },
     { "name": "asan", "configurePreset": "asan" },
     { "name": "tsan", "configurePreset": "tsan" },
-    { "name": "riscv64", "configurePreset": "riscv64" }
+    { "name": "riscv64", "configurePreset": "riscv64" },
+    { "name": "aarch64", "configurePreset": "aarch64" }
   ],
   "testPresets": [
     { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },

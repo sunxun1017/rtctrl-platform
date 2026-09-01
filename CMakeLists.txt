@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(rtctrl_platform VERSION 0.4.0 LANGUAGES CXX)
+project(rtctrl_platform VERSION 0.5.0 LANGUAGES C CXX)
 
 option(RTCTRL_ENABLE_SANITIZERS "Enable address and undefined-behavior sanitizers" OFF)
 option(RTCTRL_ENABLE_TSAN "Enable thread sanitizer" OFF)
@@ -16,7 +16,9 @@ include(CMakePackageConfigHelpers)
 add_library(rtctrl_options INTERFACE)
 target_include_directories(rtctrl_options INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/uapi>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/uapi>)
 target_compile_features(rtctrl_options INTERFACE cxx_std_17)
 target_compile_definitions(rtctrl_options INTERFACE
     RTCTRL_JOINT_COUNT=${RTCTRL_JOINT_COUNT})
@@ -39,13 +41,16 @@ add_library(rtctrl_platform
     src/platform/posix_realtime.cpp)
 target_link_libraries(rtctrl_platform PUBLIC rtctrl_options Threads::Threads)
 
+add_library(rtctrl_ipc
+    src/ipc/posix_shared_memory.cpp
+    src/ipc/kernel_mailbox_codec.cpp)
+target_link_libraries(rtctrl_ipc PUBLIC rtctrl_options)
+
 add_library(rtctrl_hal
     src/hal/simulated_hal.cpp
-    src/hal/shared_memory_hal.cpp)
-target_link_libraries(rtctrl_hal PUBLIC rtctrl_options)
-
-add_library(rtctrl_ipc src/ipc/posix_shared_memory.cpp)
-target_link_libraries(rtctrl_ipc PUBLIC rtctrl_options)
+    src/hal/shared_memory_hal.cpp
+    src/hal/kernel_mailbox_hal.cpp)
+target_link_libraries(rtctrl_hal PUBLIC rtctrl_options rtctrl_ipc)
 
 add_library(rtctrl_control
     src/control/joint_pd.cpp
@@ -68,6 +73,11 @@ target_link_libraries(rtctrl_safety PUBLIC rtctrl_options)
 add_library(rtctrl_runtime src/runtime/realtime_engine.cpp)
 target_link_libraries(rtctrl_runtime PUBLIC rtctrl_options rtctrl_platform rtctrl_hal
     rtctrl_control rtctrl_transport rtctrl_safety rtctrl_ipc Threads::Threads)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  # Some RV64 GCC targets lower even byte-sized std::atomic operations to
+  # libatomic calls; make the installed runtime target carry that ABI need.
+  target_link_libraries(rtctrl_runtime PUBLIC atomic)
+endif()
 
 add_library(rtctrl INTERFACE)
 target_link_libraries(rtctrl INTERFACE rtctrl_runtime)
@@ -86,6 +96,13 @@ if(RTCTRL_BUILD_TESTS)
   add_executable(rtctrl_tests tests/test_main.cpp)
   target_link_libraries(rtctrl_tests PRIVATE rtctrl)
   add_test(NAME rtctrl_tests COMMAND rtctrl_tests)
+
+  add_executable(rtctrl_uapi_c_test tests/uapi_c_compile.c)
+  target_include_directories(rtctrl_uapi_c_test PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/include/uapi)
+  target_compile_options(rtctrl_uapi_c_test PRIVATE
+      -Wall -Wextra -Wpedantic -Wconversion)
+  add_test(NAME rtctrl_uapi_c_test COMMAND rtctrl_uapi_c_test)
 endif()
 
 install(TARGETS rtctrl_options rtctrl_platform rtctrl_hal rtctrl_ipc rtctrl_control rtctrl_protocol

@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/misc/sx,rtctrl-mailbox-v2.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Robot real-time coherent-DMA mailbox
+
+maintainers:
+  - Sun Xun <sx2728977548@163.com>
+
+description: |
+  A memory-mapped mailbox implemented by a companion controller, FPGA, or
+  real-time firmware endpoint. The block exchanges fixed-size robot command
+  and feedback frames through one host-allocated coherent DMA region. It also
+  provides a doorbell, receive interrupt, enable gate, and hardware status.
+  Hardware ABI V2 requires CONTROL reset and STATUS DMA-quiesced handshakes so
+  the host can safely reinitialize or release coherent memory across power and
+  device lifecycle transitions.
+
+properties:
+  compatible:
+    const: sx,rtctrl-mailbox-v2
+
+  reg:
+    maxItems: 1
+
+  interrupts:
+    maxItems: 1
+
+  resets:
+    maxItems: 1
+
+  reset-names:
+    const: mailbox
+
+  sx,watchdog-timeout-us:
+    description:
+      Maximum interval between accepted command doorbells before the host
+      driver disables command output. A command lease may expire earlier.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1000
+    maximum: 1000000
+    default: 100000
+
+  sx,joint-count:
+    description:
+      Exact number of joints implemented by this endpoint. Command and feedback
+      frames with any other joint count are rejected before publication.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1
+    maximum: 64
+
+required:
+  - compatible
+  - reg
+  - interrupts
+  - resets
+  - reset-names
+  - sx,joint-count
+
+additionalProperties: false
+
+examples:
+  - |
+    mailbox@fda90000 {
+        compatible = "sx,rtctrl-mailbox-v2";
+        reg = <0xfda90000 0x1000>;
+        interrupts = <0 123 4>;
+        resets = <&cru 42>;
+        reset-names = "mailbox";
+        sx,joint-count = <23>;
+        sx,watchdog-timeout-us = <50000>;
+    };
+...

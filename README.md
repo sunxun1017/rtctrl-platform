@@ -11,12 +11,12 @@
 - WSL 运行 POSIX + 模拟 HAL；Linux/RK3588、UART/SPI/NearLink 与 ROS 2 都通过叶子适配器接入。仓库已提供 POSIX 串口适配器，SPI 和 ROS 2 保持可选。
 - 启动默认保持未武装状态；演示也必须显式传入 `--arm` 才允许普通控制指令进入 HAL。
 - 逻辑关节数是编译期 profile：默认 6 关节；`humanoid23` 使用从 `sx_text` 提炼的 23 关节/三 EtherCAT master 拓扑，不修改核心源码。
-- L0 硬件进程与控制进程通过版本化共享内存 ABI 解耦；ROS 2、vendor EtherCAT SDK 和 ONNX Runtime 都留在叶子适配器。
+- L0 硬件进程与控制进程可通过版本化 POSIX 共享内存解耦；具备伴随控制器/FPGA mailbox 时，也可选择 Linux C 内核驱动的 kernel-staged ioctl + coherent-DMA + IRQ + hrtimer watchdog 路径。硬件 ABI V2 要求精确关节数、DMA_QUIESCED/RESET 握手和独立硬复位线；ROS 2、vendor EtherCAT SDK 和 ONNX Runtime 都留在叶子适配器。
 
 ## 快速开始（WSL）
 
 ```bash
-cd /home/sx/projects/rk3588-rt-control
+cd /home/sx/projects/rk3588-rt-control-v0.5.0
 cmake --preset release
 cmake --build --preset release -j8
 ctest --preset release
@@ -56,9 +56,11 @@ RTCTRL_REQUIRE_FIFO=1 RTCTRL_REQUIRE_MLOCK=1 \
 ```bash
 ./kernel/scripts/check-kernel.sh
 ./kernel/scripts/check-kernel.sh --strict  # CI/板端验收模式
+./kernel/scripts/build-module.sh /absolute/path/to/linux-build
 ```
 
 生产与诊断 Kconfig、systemd 模板和目标板使用边界见 [`kernel/README.md`](kernel/README.md)。脚本不会修改运行内核、WSL 全局配置、IRQ 或 sysctl。
+编程语言选择和内核/用户态职责见 [`docs/language-and-kernel-boundary.md`](docs/language-and-kernel-boundary.md)。
 
 ## 故障注入
 
@@ -84,24 +86,26 @@ src/safety/           命令租约、边界与故障策略
 src/runtime/          双速率线程和数据流编排
 tests/                零第三方依赖的单元测试
 docs/                 架构与部署说明
-kernel/               Kconfig、只读检查器与 systemd 模板
+kernel/               C 平台驱动、DT binding、Kconfig、只读检查器与 systemd 模板
 config/               portable / strict 运行意图配置
 cmake/toolchains/      不绑定板卡的交叉编译入口
 ```
 
 协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。从本人 `sx_text` 分支提炼和改造的内容见 [`docs/sx-text-integration.md`](docs/sx-text-integration.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
-当前 6/23 关节构建、共享内存、sanitizer 与已知环境限制见 [`docs/verification-v0.4.0.md`](docs/verification-v0.4.0.md)；上一版基线保留在 [`docs/verification-v0.3.0.md`](docs/verification-v0.3.0.md)。
+当前 C UAPI、C++17 内核 mailbox HAL、6/23 关节构建与已知环境限制见 [`docs/verification-v0.5.0.md`](docs/verification-v0.5.0.md)；旧版记录仍保留在 [`docs/verification-v0.4.0.md`](docs/verification-v0.4.0.md)。
 
 ## 交叉构建
 
-安装 `riscv64-linux-gnu-g++` 后可验证 RV64 编译：
+ARM64（包括 RK3588 用户态）与 RV64 使用同一个不绑定板卡的工具链入口：
 
 ```bash
+cmake --preset aarch64
+cmake --build --preset aarch64 -j8
 cmake --preset riscv64
 cmake --build --preset riscv64 -j8
 ```
 
-RK3588 使用相同工具链入口，将 `RTCTRL_TARGET_TRIPLE` 设为 `aarch64-linux-gnu`，有板厂 sysroot 时再传入 `RTCTRL_SYSROOT`。交叉产物只证明 ABI/编译可移植性，实时性仍必须在目标板测量。
+有板厂 sysroot 时通过 `-DRTCTRL_SYSROOT=/absolute/sysroot` 注入。交叉产物只证明源码与 ABI 的编译可移植性，实时性仍必须在目标板测量。
 
 ## 开源参考
 

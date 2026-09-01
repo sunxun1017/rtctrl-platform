@@ -4,6 +4,7 @@
 #include "rtctrl/hal/shared_memory_hal.hpp"
 #include "rtctrl/ipc/shared_motor_abi.hpp"
 #include "rtctrl/ipc/posix_shared_memory.hpp"
+#include "rtctrl/ipc/kernel_mailbox_codec.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
 #include "rtctrl/platform/posix_realtime.hpp"
 #include "rtctrl/protocol/fixed_target_codec.hpp"
@@ -282,6 +283,46 @@ void test_shared_snapshot_concurrency() {
          "concurrent shared feedback reads never expose a torn generation");
 }
 
+void test_kernel_mailbox_codec() {
+  rtctrl::model::CommandFrame command{};
+  command.sequence = 1;
+  command.created_time_ns = 100;
+  command.valid_until_ns = 1'000;
+  command.mode = rtctrl::model::CommandMode::Position;
+  command.target_position[0] = 0.25;
+  command.kp[0] = 40.0;
+  command.kd[0] = 2.0;
+  rtctrl_mb_command_frame encoded{};
+  expect(rtctrl::ipc::encode_mailbox_command(command, encoded) ==
+             rtctrl::ipc::MailboxFrameStatus::Ok &&
+             encoded.joint_count == rtctrl::model::kJointCount &&
+             encoded.joint[0].position == 0.25F &&
+             encoded.flags == RTCTRL_MB_COMMAND_FLAG_POSITION,
+         "C++ HAL encodes one fixed command for the C UAPI");
+  command.effort[0] = std::numeric_limits<double>::quiet_NaN();
+  expect(rtctrl::ipc::encode_mailbox_command(command, encoded) ==
+             rtctrl::ipc::MailboxFrameStatus::InvalidFrame,
+         "non-finite command is rejected before ioctl submission");
+
+  rtctrl_mb_feedback_frame feedback{};
+  feedback.sequence = 7;
+  feedback.sample_time_ns = 2'000;
+  feedback.device_cycle = 77;
+  feedback.joint_count = rtctrl::model::kJointCount;
+  feedback.joint[0].position = 0.5F;
+  feedback.joint[0].velocity = -0.2F;
+  rtctrl::model::SensorFrame state{};
+  expect(rtctrl::ipc::decode_mailbox_feedback(feedback, 2'500, 1'000,
+                                               state) ==
+             rtctrl::ipc::MailboxFrameStatus::Ok &&
+             state.sequence == 7 && state.position[0] == 0.5,
+         "kernel-staged feedback reaches the logical joint model");
+  expect(rtctrl::ipc::decode_mailbox_feedback(feedback, 4'000, 1'000,
+                                               state) ==
+             rtctrl::ipc::MailboxFrameStatus::Stale,
+         "stale kernel feedback is rejected at the HAL boundary");
+}
+
 void test_yidong_topology() {
   constexpr auto& topology = rtctrl::profiles::yidong23::kTopology;
   static_assert(topology.valid());
@@ -491,6 +532,7 @@ int main() {
   test_shared_memory_hal();
   test_posix_shared_memory_lifecycle();
   test_shared_snapshot_concurrency();
+  test_kernel_mailbox_codec();
   test_yidong_topology();
   test_policy_action_mapper();
   test_framed_command_source();
