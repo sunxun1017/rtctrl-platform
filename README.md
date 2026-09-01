@@ -77,6 +77,7 @@ cmake/toolchains/      不绑定板卡的交叉编译入口
 ```
 
 协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
+本轮可复现构建、sanitizer、信号停机与 WSL 功能基线见 [`docs/verification-v0.3.0.md`](docs/verification-v0.3.0.md)。
 
 ## 交叉构建
 
