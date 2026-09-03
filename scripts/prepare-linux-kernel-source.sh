@@ -2,18 +2,20 @@
 set -euo pipefail
 
 usage() {
-    echo "usage: $0 --platform NAME [--plan] [--build-dtb] [--jobs N]" >&2
+    echo "usage: $0 --platform NAME [--plan] [--build-dtb] [--dtb rockchip/NAME.dtb] [--jobs N]" >&2
 }
 
 platform=""
 plan=0
 build_dtb=0
+requested_dtb=""
 jobs="${RTCTRL_BUILD_JOBS:-$(nproc)}"
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --platform) platform="${2:-}"; shift 2 ;;
         --plan) plan=1; shift ;;
         --build-dtb) build_dtb=1; shift ;;
+        --dtb) requested_dtb="${2:-}"; shift 2 ;;
         --jobs) jobs="${2:-}"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) usage; exit 2 ;;
@@ -30,6 +32,14 @@ repo_root="$(git rev-parse --show-toplevel)"
 # shellcheck source=scripts/lib/linux-userspace-profile.sh
 source "${repo_root}/scripts/lib/linux-userspace-profile.sh"
 rtctrl_load_linux_userspace_profile "${repo_root}" "${platform}"
+
+if [[ -n "${requested_dtb}" ]]; then
+    if [[ ! "${requested_dtb}" =~ ^rockchip/[a-zA-Z0-9._+-]+\.dtb$ ]]; then
+        echo "invalid kernel DTB target: ${requested_dtb}" >&2
+        exit 2
+    fi
+    RTCTRL_KERNEL_DTB="${requested_dtb}"
+fi
 
 for required in RTCTRL_KERNEL_UPSTREAM_URL RTCTRL_KERNEL_UPSTREAM_BRANCH \
         RTCTRL_KERNEL_SUBMODULE RTCTRL_KERNEL_COMMIT \
