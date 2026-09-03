@@ -2,13 +2,20 @@
 set -euo pipefail
 
 usage() {
-    echo "usage: $0 --platform NAME [--plan] [--build-dtb] [--dtb rockchip/NAME.dtb] [--jobs N]" >&2
+    cat >&2 <<EOF
+usage: $0 --platform NAME [--plan] [--build-dtb] [--dtb rockchip/NAME.dtb] [--jobs N]
+       $0 --platform NAME --sdk-root PATH --install-overlay [--dtb rockchip/NAME.dtb] [--plan]
+       $0 --platform NAME --sdk-root PATH --build-sdk-kernel [--dtb rockchip/NAME.dtb] [--plan]
+EOF
 }
 
 platform=""
 plan=0
 build_dtb=0
 requested_dtb=""
+sdk_root=""
+install_overlay=0
+build_sdk_kernel=0
 jobs="${RTCTRL_BUILD_JOBS:-$(nproc)}"
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -16,6 +23,9 @@ while [[ $# -gt 0 ]]; do
         --plan) plan=1; shift ;;
         --build-dtb) build_dtb=1; shift ;;
         --dtb) requested_dtb="${2:-}"; shift 2 ;;
+        --sdk-root) sdk_root="${2:-}"; shift 2 ;;
+        --install-overlay) install_overlay=1; shift ;;
+        --build-sdk-kernel) build_sdk_kernel=1; install_overlay=1; shift ;;
         --jobs) jobs="${2:-}"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) usage; exit 2 ;;
@@ -23,7 +33,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "${platform}" || ! "${platform}" =~ ^[a-z0-9][a-z0-9._-]*$ ||
-      ! "${jobs}" =~ ^[1-9][0-9]*$ ]]; then
+      ! "${jobs}" =~ ^[1-9][0-9]*$ ||
+      ( -n "${sdk_root}" && "${sdk_root}" != /* ) ||
+      ( "${install_overlay}" == "1" && -z "${sdk_root}" ) ||
+      ( -n "${sdk_root}" && "${install_overlay}" != "1" ) ||
+      ( "${install_overlay}" == "1" && "${build_dtb}" == "1" ) ]]; then
     usage
     exit 2
 fi
@@ -49,6 +63,108 @@ for required in RTCTRL_KERNEL_UPSTREAM_URL RTCTRL_KERNEL_UPSTREAM_BRANCH \
         exit 2
     fi
 done
+
+if [[ "${install_overlay}" == "1" ]]; then
+    for required in RTCTRL_SDK_BOARD_CONFIG RTCTRL_SDK_KERNEL_DTS; do
+        if [[ -z "${!required:-}" ]]; then
+            echo "platform profile does not define ${required}" >&2
+            exit 2
+        fi
+    done
+
+    "${repo_root}/scripts/check-linux-sdk.sh" \
+        --platform "${platform}" --sdk-root "${sdk_root}"
+
+    sdk_kernel_relative="${RTCTRL_SDK_KERNEL_DTS%%/arch/*}"
+    if [[ "${sdk_kernel_relative}" == "${RTCTRL_SDK_KERNEL_DTS}" ]]; then
+        echo "cannot derive SDK kernel root from ${RTCTRL_SDK_KERNEL_DTS}" >&2
+        exit 2
+    fi
+    sdk_kernel="${sdk_root}/${sdk_kernel_relative}"
+    sdk_board_config="${sdk_root}/${RTCTRL_SDK_BOARD_CONFIG}"
+    dts_name="${RTCTRL_KERNEL_DTB#rockchip/}"
+    dts_name="${dts_name%.dtb}"
+    custom_config_name="99_rtctrl_${platform//-/_}_defconfig"
+    custom_config="$(dirname "${sdk_board_config}")/${custom_config_name}"
+
+    if [[ ! -d "${sdk_kernel}" || ! -f "${sdk_board_config}" ||
+          ! -x "${sdk_root}/build.sh" ]]; then
+        echo "SDK source checkout is incomplete: ${sdk_root}" >&2
+        exit 1
+    fi
+
+    echo "SDK kernel:      ${sdk_kernel}"
+    echo "SDK DTS:         ${dts_name}"
+    echo "SDK config:      ${custom_config}"
+    if [[ "${plan}" == "1" ]]; then
+        exit 0
+    fi
+
+    while IFS= read -r -d '' file; do
+        relative="${file#${repo_root}/${RTCTRL_KERNEL_OVERLAY}/}"
+        mkdir -p "$(dirname "${sdk_kernel}/${relative}")"
+        # Do not preserve source timestamps: make must see refreshed SDK inputs.
+        cp "${file}" "${sdk_kernel}/${relative}"
+    done < <(find "${repo_root}/${RTCTRL_KERNEL_OVERLAY}" -type f -print0)
+
+    config_tmp="$(mktemp "${custom_config}.tmp.XXXXXX")"
+    awk -v dts="${dts_name}" '
+        /^RK_KERNEL_DTS_NAME=/ { print "RK_KERNEL_DTS_NAME=\"" dts "\""; next }
+        /^RK_KERNEL_MULTI_DTS=/ { print "RK_KERNEL_MULTI_DTS=\"$RK_KERNEL_DTS_NAME\""; next }
+        { print }
+    ' "${sdk_board_config}" > "${config_tmp}"
+    mv "${config_tmp}" "${custom_config}"
+
+    echo "installed BSP overlay and SDK config"
+    if [[ "${build_sdk_kernel}" == "1" ]]; then
+        sdk_build_path="${PATH}"
+        host_tools="${repo_root}/.deps/host-tools"
+        if [[ -d "${host_tools}/bin" ]]; then
+            sdk_build_path="${host_tools}/bin:${sdk_build_path}"
+        fi
+        for command in make flex bison lz4 python; do
+            if ! PATH="${sdk_build_path}" command -v "${command}" >/dev/null 2>&1; then
+                echo "missing SDK kernel build command: ${command}" >&2
+                echo "run ./scripts/bootstrap-aarch64.sh --install or install the equivalent package" >&2
+                exit 1
+            fi
+        done
+        if ! PATH="${sdk_build_path}" lz4 -h 2>&1 | grep -q favor-decSpeed; then
+            echo "SDK kernel build requires lz4 with --favor-decSpeed support" >&2
+            echo "run ./scripts/bootstrap-aarch64.sh --install or install lz4 >= 1.9.4" >&2
+            exit 1
+        fi
+        sdk_headers=(openssl/ssl.h gmp.h mpc.h ncurses.h)
+        missing_headers=()
+        for header in "${sdk_headers[@]}"; do
+            if ! printf '#include <%s>\n' "${header}" | \
+                    cc -E -x c - >/dev/null 2>&1; then
+                missing_headers+=("${header}")
+            fi
+        done
+        if [[ ${#missing_headers[@]} -gt 0 ]]; then
+            echo "missing SDK kernel build headers: ${missing_headers[*]}" >&2
+            echo "run ./scripts/bootstrap-aarch64.sh --install" >&2
+            exit 1
+        fi
+
+        # This SDK treats a defconfig command as an initialization-only run, so
+        # selecting the config and building the kernel must be separate calls.
+        (cd "${sdk_root}" && PATH="${sdk_build_path}" ./build.sh "${custom_config_name}")
+        (cd "${sdk_root}" && PATH="${sdk_build_path}" ./build.sh kernel)
+        sdk_boot_image="${sdk_root}/output/firmware/boot.img"
+        if [[ ! -s "${sdk_boot_image}" ]]; then
+            echo "SDK kernel build did not produce ${sdk_boot_image}" >&2
+            exit 1
+        fi
+        echo "SDK boot image:  ${sdk_boot_image}"
+    else
+        echo "build commands:   cd ${sdk_root} && ./build.sh ${custom_config_name}"
+        echo "                  cd ${sdk_root} && ./build.sh kernel"
+    fi
+    exit 0
+fi
+
 kernel_source="${repo_root}/${RTCTRL_KERNEL_SUBMODULE}"
 overlay="${repo_root}/${RTCTRL_KERNEL_OVERLAY}"
 if [[ ! -f "${kernel_source}/Makefile" ]]; then

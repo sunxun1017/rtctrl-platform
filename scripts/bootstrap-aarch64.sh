@@ -26,7 +26,7 @@ fi
 PATH="${host_tools}:${PATH}"
 export PATH
 
-host_commands=(cmake ninja make git python bc bison flex openssl pahole rsync cpio
+host_commands=(cmake ninja make git python bc bison flex lz4 openssl pahole rsync cpio
   autoconf automake libtoolize pkg-config)
 commands=("${host_commands[@]}" aarch64-linux-gnu-gcc aarch64-linux-gnu-g++)
 missing=()
@@ -34,9 +34,10 @@ for command in "${commands[@]}"; do
   command -v "${command}" >/dev/null 2>&1 || missing+=("${command}")
 done
 
-if [[ ${#missing[@]} -gt 0 && "${install_packages}" == "1" ]]; then
+if [[ "${install_packages}" == "1" ]]; then
   packages=(build-essential cmake ninja-build git gcc-aarch64-linux-gnu
-    g++-aarch64-linux-gnu bc bison flex libssl-dev libelf-dev dwarves rsync
+    g++-aarch64-linux-gnu bc bison flex lz4 python-is-python3 libssl-dev
+    libgmp-dev libmpc-dev libncurses-dev libelf-dev dwarves rsync
     cpio autoconf automake libtool pkg-config)
   if command -v apt-get >/dev/null 2>&1 && [[ "$(id -u)" == "0" ]]; then
     apt-get update
