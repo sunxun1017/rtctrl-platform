@@ -6,3 +6,4 @@
 /dts-v1/;
 #include "rv1126b-alientek.dtsi"
 #include "rv1126b-alientek-mipi720x1280-panel.dtsi"
+#include "rv1126b-alientek-ov13850-csi1.dtsi"

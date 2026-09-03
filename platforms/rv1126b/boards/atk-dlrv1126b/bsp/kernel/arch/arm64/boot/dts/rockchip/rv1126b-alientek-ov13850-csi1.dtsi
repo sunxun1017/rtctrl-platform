@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * ATK-DLRV1126B board CSI1 connector with an ATK-MCOV13850 module.
+ *
+ * Board connector mapping inherited from the vendor BSP:
+ *   I2C4 -> CSI2 D-PHY3 -> MIPI2 CSI2 -> RKCIF MIPI/LVDS2 -> ISP virtual 1
+ */
+
+&imx415_1 {
+	status = "disabled";
+};
+
+&imx415_out1 {
+	/delete-property/ remote-endpoint;
+};
+
+&imx335_1 {
+	status = "disabled";
+};
+
+&imx586_1 {
+	status = "disabled";
+};
+
+&i2c4 {
+	ov13850_1: ov13850@10 {
+		compatible = "ovti,ov13850";
+		reg = <0x10>;
+		clocks = <&cru CLK_MIPI1_OUT2IO>;
+		clock-names = "xvclk";
+		reset-gpios = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
+		power-gpios = <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "rockchip,camera_default";
+		pinctrl-0 = <&cam_clk1_pins>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "back";
+		rockchip,camera-module-name = "ATK-MCOV13850";
+		rockchip,camera-module-lens-name = "default";
+		status = "okay";
+
+		port {
+			ov13850_out1: endpoint {
+				remote-endpoint = <&csi_dphy3_input0>;
+				data-lanes = <1 2>;
+			};
+		};
+	};
+};
+
+&csi_dphy3_input0 {
+	remote-endpoint = <&ov13850_out1>;
+	data-lanes = <1 2>;
+};
