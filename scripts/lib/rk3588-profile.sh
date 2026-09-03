@@ -40,11 +40,11 @@ rtctrl_load_rk3588_profile() {
   fi
 
   local common="${repo_root}/platforms/rk3588/common.env"
-  local profile="${repo_root}/platforms/${board}/profile.env"
+  local profile="${repo_root}/platforms/rk3588/boards/${board}/profile.env"
   if [[ ! -f "${common}" || ! -f "${profile}" ]]; then
     echo "unknown board profile: ${board}" >&2
     echo "available profiles:" >&2
-    find "${repo_root}/platforms" -mindepth 2 -maxdepth 2 -name profile.env \
+    find "${repo_root}/platforms/rk3588/boards" -mindepth 2 -maxdepth 2 -name profile.env \
       -printf '  %h\n' | sed 's#.*/##' | sort >&2
     return 2
   fi

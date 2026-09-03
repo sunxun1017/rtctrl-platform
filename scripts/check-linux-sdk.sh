@@ -29,7 +29,7 @@ repo_root="$(git rev-parse --show-toplevel)"
 source "${repo_root}/scripts/lib/linux-userspace-profile.sh"
 rtctrl_load_linux_userspace_profile "${repo_root}" "${platform}"
 
-sdk_profile="${repo_root}/platforms/${platform}/sdk.env"
+sdk_profile="${RTCTRL_PLATFORM_DIR}/sdk.lock.env"
 if [[ ! -f "${sdk_profile}" ]]; then
     echo "platform has no SDK lock: ${platform}" >&2
     exit 2

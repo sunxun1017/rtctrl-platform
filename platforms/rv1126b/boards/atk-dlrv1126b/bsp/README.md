@@ -2,7 +2,7 @@
 
 This directory contains the minimum board files required on top of the pinned
 public Rockchip Linux 6.1 kernel. Files retain their upstream SPDX identifiers
-and were derived from the vendor SDK release locked by `../sdk.env`. Only
+and were derived from the vendor SDK release locked by `../sdk.lock.env`. Only
 non-semantic whitespace is normalized to satisfy this repository's checks.
 
 The overlay currently contains the normal 720x1280 board variant selected by

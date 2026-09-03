@@ -1,19 +1,26 @@
 # Platform profiles
 
-Linux userspace profiles describe portable CPU/ABI build inputs without
-claiming support for a particular carrier's kernel or peripherals.
-`atk-dlrv1126b/userspace.env` is the first such profile and is consumed by
-`scripts/cross-build-linux-userspace.sh`. Its support and validation boundary is
-documented in `docs/rv1126b.md`. The adjacent `sdk.env` locks the vendor SDK
-release and manifest commit; `scripts/check-linux-sdk.sh` verifies a local SDK
+Profiles follow one layout for every supported SoC and carrier:
+
+```text
+platforms/<soc>/common.env
+platforms/<soc>/boards/<board>/profile.env
+platforms/<soc>/boards/<board>/sdk.lock.env  # only when a vendor SDK is required
+platforms/<soc>/boards/<board>/bsp/          # only board-specific overlays
+```
+
+`common.env` contains architecture and SoC-wide defaults. `profile.env` is the
+single board entry point for userspace, kernel, DTB, and toolchain selection.
+An optional `sdk.lock.env` records only vendor release provenance; it does not
+duplicate board configuration. `scripts/check-linux-sdk.sh` verifies a local SDK
 archive without importing its multi-gigabyte `repo` object store into this Git
 repository.
 
 The RV1126B Linux kernel is independently pinned as the public
 `third_party/linux-rv1126b` submodule. The Alientek-only files live in
-`atk-dlrv1126b/bsp/kernel` and are applied to an ignored, content-addressed
-working copy by `scripts/prepare-linux-kernel-source.sh`; the public submodule
-therefore stays clean and updateable.
+`rv1126b/boards/atk-dlrv1126b/bsp/kernel` and are applied to an ignored,
+content-addressed working copy by `scripts/prepare-linux-kernel-source.sh`; the
+public submodule therefore stays clean and updateable.
 
 Kernel profiles are board-specific because a DTB, defconfig, BSP commit, and
 physical wiring cannot be selected safely from the SoC name alone.
@@ -24,7 +31,8 @@ The build system separates SoC-wide defaults from carrier-specific facts:
 
 - `rk3588/common.env` selects ARM64, the cross-toolchain prefix, base defconfig,
   and real-time configuration fragments.
-- `<board>/profile.env` pins a kernel Git commit and selects one DTB.
+- `rk3588/boards/<board>/profile.env` pins a kernel Git commit and selects one
+  DTB.
 - generated kernels, modules, staged libraries, and manifests stay under
   ignored `.deps/`; no machine artifacts are committed.
 

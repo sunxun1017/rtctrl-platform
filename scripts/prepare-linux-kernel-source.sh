@@ -27,28 +27,18 @@ if [[ -z "${platform}" || ! "${platform}" =~ ^[a-z0-9][a-z0-9._-]*$ ||
 fi
 
 repo_root="$(git rev-parse --show-toplevel)"
-profile="${repo_root}/platforms/${platform}/kernel.env"
-if [[ ! -f "${profile}" ]]; then
-    echo "platform has no public kernel profile: ${platform}" >&2
-    exit 2
-fi
-# Kernel profiles are version-controlled build data, not user input.
-# shellcheck disable=SC1090
-source "${profile}"
+# shellcheck source=scripts/lib/linux-userspace-profile.sh
+source "${repo_root}/scripts/lib/linux-userspace-profile.sh"
+rtctrl_load_linux_userspace_profile "${repo_root}" "${platform}"
 
-for required in RTCTRL_KERNEL_PROFILE_SCHEMA RTCTRL_KERNEL_UPSTREAM_URL \
-        RTCTRL_KERNEL_UPSTREAM_BRANCH RTCTRL_KERNEL_SUBMODULE RTCTRL_KERNEL_COMMIT \
+for required in RTCTRL_KERNEL_UPSTREAM_URL RTCTRL_KERNEL_UPSTREAM_BRANCH \
+        RTCTRL_KERNEL_SUBMODULE RTCTRL_KERNEL_COMMIT \
         RTCTRL_KERNEL_OVERLAY RTCTRL_KERNEL_DEFCONFIG RTCTRL_KERNEL_DTB; do
     if [[ -z "${!required:-}" ]]; then
         echo "kernel profile does not define ${required}" >&2
         exit 2
     fi
 done
-if [[ "${RTCTRL_KERNEL_PROFILE_SCHEMA}" != "1" ]]; then
-    echo "unsupported kernel profile schema" >&2
-    exit 2
-fi
-
 kernel_source="${repo_root}/${RTCTRL_KERNEL_SUBMODULE}"
 overlay="${repo_root}/${RTCTRL_KERNEL_OVERLAY}"
 if [[ ! -f "${kernel_source}/Makefile" ]]; then
