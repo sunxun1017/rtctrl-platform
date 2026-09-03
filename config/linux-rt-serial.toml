@@ -1,0 +1,19 @@
+[runtime]
+strict_realtime = true
+startup_feedback_timeout_ms = 1000
+state_validity_ms = 10
+
+[actuator]
+protocol = "dynamixel-2"
+profile = "deployment-defined-control-table"
+
+[link]
+backend = "posix-serial"
+exclusive = true
+device = "/dev/ttyS0"
+baud_rate = 57600
+linux_rs485 = false
+
+[threads]
+io_period_us = 1000
+control_period_us = 5000

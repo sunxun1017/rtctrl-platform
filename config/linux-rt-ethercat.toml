@@ -1,0 +1,15 @@
+[runtime]
+strict_realtime = true
+
+[actuator]
+protocol = "deployment-defined"
+
+[link]
+backend = "igh-ethercat"
+exclusive = true
+master_index = 0
+nic_family = "intel-i210-igb"
+
+[threads]
+io_period_us = 1000
+control_period_us = 5000

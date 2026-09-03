@@ -21,6 +21,8 @@ struct RuntimeConfig {
   std::int64_t command_validity_ns{15'000'000};
   std::int64_t target_validity_ns{100'000'000};
   std::int64_t state_validity_ns{10'000'000};
+  std::int64_t startup_feedback_timeout_ns{1'000'000'000};
+  std::int64_t startup_poll_interval_ns{1'000'000};
   bool lock_memory{true};
   bool arm_actuation{false};
   platform::ThreadConfig io_thread{"rt-io", -1, 80, false};

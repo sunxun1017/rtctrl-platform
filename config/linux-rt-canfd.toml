@@ -1,0 +1,14 @@
+[runtime]
+strict_realtime = true
+
+[actuator]
+protocol = "deployment-defined"
+
+[link]
+backend = "socketcan-fd"
+exclusive = true
+interface = "can0"
+
+[threads]
+io_period_us = 1000
+control_period_us = 5000

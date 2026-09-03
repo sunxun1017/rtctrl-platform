@@ -30,6 +30,17 @@
       }
     },
     {
+      "name": "igh",
+      "displayName": "Release - IgH EtherCAT adapter",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/igh",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RTCTRL_ENABLE_IGH_ETHERCAT": "ON",
+        "RTCTRL_IGH_ROOT": "/opt/etherlab"
+      }
+    },
+    {
       "name": "tsan",
       "displayName": "ThreadSanitizer",
       "generator": "Ninja",
@@ -68,6 +79,7 @@
     { "name": "release", "configurePreset": "release" },
     { "name": "humanoid23", "configurePreset": "humanoid23" },
     { "name": "asan", "configurePreset": "asan" },
+    { "name": "igh", "configurePreset": "igh" },
     { "name": "tsan", "configurePreset": "tsan" },
     { "name": "riscv64", "configurePreset": "riscv64" },
     { "name": "aarch64", "configurePreset": "aarch64" }
@@ -76,6 +88,7 @@
     { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },
     { "name": "humanoid23", "configurePreset": "humanoid23", "output": { "outputOnFailure": true } },
     { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } },
+    { "name": "igh", "configurePreset": "igh", "output": { "outputOnFailure": true } },
     { "name": "tsan", "configurePreset": "tsan", "output": { "outputOnFailure": true } }
   ]
 }

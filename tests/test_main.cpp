@@ -1,5 +1,7 @@
 #include "rtctrl/control/joint_pd.hpp"
 #include "rtctrl/control/policy_action_mapper.hpp"
+#include "rtctrl/hal/actuator_composition.hpp"
+#include "rtctrl/hal/protocol_actuator_hal.hpp"
 #include "rtctrl/hal/simulated_hal.hpp"
 #include "rtctrl/hal/shared_memory_hal.hpp"
 #include "rtctrl/ipc/shared_motor_abi.hpp"
@@ -14,6 +16,7 @@
 #include "rtctrl/transport/command_source.hpp"
 #include "rtctrl/transport/framed_command_source.hpp"
 #include "rtctrl/transport/loopback_byte_transport.hpp"
+#include "rtctrl/transport/socketcan_fd_transport.hpp"
 
 #include <array>
 #include <atomic>
@@ -84,6 +87,207 @@ void test_platform_independent_timer() {
   const auto recovered = timer.wait_next();
   expect(recovered.scheduled_ns == 5'000,
          "platform timer resumes at the next future deadline");
+}
+
+void test_can_frame_contract() {
+  rtctrl::transport::CanFrame frame{};
+  frame.fd = true;
+  frame.id = 0x123;
+  frame.size = 64;
+  frame.bit_rate_switch = true;
+  expect(rtctrl::transport::valid_can_frame(frame, true),
+         "valid CAN-FD frame is accepted");
+
+  frame.id = 0x800;
+  expect(!rtctrl::transport::valid_can_frame(frame, true),
+         "11-bit CAN identifier overflow is rejected");
+  frame.extended = true;
+  expect(rtctrl::transport::valid_can_frame(frame, true),
+         "extended CAN identifier is accepted when explicitly selected");
+
+  frame.fd = false;
+  frame.size = 9;
+  frame.bit_rate_switch = false;
+  expect(!rtctrl::transport::valid_can_frame(frame, true),
+         "Classical CAN payload over eight bytes is rejected");
+  frame.size = 8;
+  frame.remote_request = true;
+  expect(rtctrl::transport::valid_can_frame(frame, true),
+         "Classical CAN remote request is represented explicitly");
+  frame.fd = true;
+  expect(!rtctrl::transport::valid_can_frame(frame, true),
+         "CAN-FD remote request is rejected");
+
+  rtctrl::transport::SocketCanFdTransport invalid("");
+  expect(invalid.open() == rtctrl::transport::TransportStatus::Error &&
+             invalid.last_error() == EINVAL,
+         "SocketCAN rejects an empty interface name before a system call");
+
+  rtctrl::transport::SocketCanFdTransport filtered("vcan0");
+  const rtctrl::transport::CanFilter bad_filter{0x800, 0x7ff, false};
+  expect(!filtered.set_filters(&bad_filter, 1),
+         "SocketCAN rejects an overflowing standard filter identifier");
+  const rtctrl::transport::CanFilter good_filter{0x123, 0x7ff, false};
+  expect(filtered.set_filters(&good_filter, 1),
+         "SocketCAN accepts a bounded exact-match filter");
+}
+
+class TestActuatorLink final : public rtctrl::hal::IActuatorLink {
+public:
+  rtctrl::hal::ActuatorLinkCapabilities capabilities() const noexcept override {
+    return {64, 16};
+  }
+  rtctrl::hal::ActuatorLinkStatus open() noexcept override {
+    open_ = true;
+    return rtctrl::hal::ActuatorLinkStatus::Ok;
+  }
+  rtctrl::hal::ActuatorLinkStatus receive(
+      std::int64_t now_ns,
+      rtctrl::hal::ActuatorPacketBatch& packets) noexcept override {
+    if (!open_) {
+      return rtctrl::hal::ActuatorLinkStatus::Closed;
+    }
+    rtctrl::hal::ActuatorPacket packet{};
+    packet.endpoint = 7;
+    packet.size = 1;
+    packet.payload[0] = std::byte{42};
+    packet.timestamp_ns = now_ns;
+    return packets.push(packet) ? rtctrl::hal::ActuatorLinkStatus::Ok
+                                : rtctrl::hal::ActuatorLinkStatus::Error;
+  }
+  rtctrl::hal::ActuatorLinkStatus transmit(
+      std::int64_t,
+      const rtctrl::hal::ActuatorPacketBatch& packets) noexcept override {
+    if (!open_) {
+      return rtctrl::hal::ActuatorLinkStatus::Closed;
+    }
+    ++transmits;
+    last_endpoint = packets.empty() ? 0 : packets[0].endpoint;
+    return rtctrl::hal::ActuatorLinkStatus::Ok;
+  }
+  void close() noexcept override { open_ = false; }
+
+  int transmits{0};
+  std::uint16_t last_endpoint{0};
+
+private:
+  bool open_{false};
+};
+
+class TestMotorProtocol final : public rtctrl::hal::IActuatorProtocol {
+public:
+  explicit TestMotorProtocol(
+      rtctrl::hal::ActuatorProtocolRequirements requirements = {1, 1}) noexcept
+      : requirements_(requirements) {}
+
+  rtctrl::hal::ActuatorProtocolRequirements requirements() const noexcept override {
+    return requirements_;
+  }
+  void reset() noexcept override { reset_called = true; }
+  rtctrl::hal::ActuatorProtocolStatus encode_startup(
+      std::int64_t, rtctrl::hal::ActuatorPacketBatch&) noexcept override {
+    return rtctrl::hal::ActuatorProtocolStatus::Ok;
+  }
+  rtctrl::hal::ActuatorProtocolStatus decode_feedback(
+      std::int64_t, const rtctrl::hal::ActuatorPacketBatch& packets,
+      rtctrl::model::SensorFrame& output) noexcept override {
+    if (packets.empty() || packets[0].endpoint != 7) {
+      return rtctrl::hal::ActuatorProtocolStatus::InvalidData;
+    }
+    output.sequence = static_cast<std::uint64_t>(packets[0].payload[0]);
+    return rtctrl::hal::ActuatorProtocolStatus::Ok;
+  }
+  rtctrl::hal::ActuatorProtocolStatus encode_arm(
+      std::int64_t, rtctrl::hal::ActuatorPacketBatch& packets) noexcept override {
+    return encode(1, packets);
+  }
+  rtctrl::hal::ActuatorProtocolStatus encode_command(
+      std::int64_t, const rtctrl::model::CommandFrame&,
+      rtctrl::hal::ActuatorPacketBatch& packets) noexcept override {
+    return encode(2, packets);
+  }
+  rtctrl::hal::ActuatorProtocolStatus encode_safe_stop(
+      std::int64_t, rtctrl::hal::ActuatorPacketBatch& packets) noexcept override {
+    return encode(0, packets);
+  }
+
+  bool reset_called{false};
+
+private:
+  rtctrl::hal::ActuatorProtocolRequirements requirements_{};
+
+  static rtctrl::hal::ActuatorProtocolStatus encode(
+      std::uint8_t value,
+      rtctrl::hal::ActuatorPacketBatch& packets) noexcept {
+    rtctrl::hal::ActuatorPacket packet{};
+    packet.endpoint = 7;
+    packet.size = 1;
+    packet.payload[0] = static_cast<std::byte>(value);
+    return packets.push(packet) ? rtctrl::hal::ActuatorProtocolStatus::Ok
+                                : rtctrl::hal::ActuatorProtocolStatus::InvalidData;
+  }
+};
+
+void test_actuator_dependency_injection() {
+  TestActuatorLink serial;
+  TestActuatorLink can_fd;
+  TestActuatorLink ethercat;
+  TestMotorProtocol motor_protocol;
+  const rtctrl::hal::ActuatorLinkProviders providers{
+      &serial, &can_fd, &ethercat};
+
+  const auto serial_dependencies =
+      rtctrl::hal::inject_actuator_dependencies(
+          rtctrl::hal::ActuatorLinkBackend::Serial, providers,
+          &motor_protocol);
+  const auto can_dependencies = rtctrl::hal::inject_actuator_dependencies(
+      rtctrl::hal::ActuatorLinkBackend::CanFd, providers, &motor_protocol);
+  const auto ethercat_dependencies =
+      rtctrl::hal::inject_actuator_dependencies(
+          rtctrl::hal::ActuatorLinkBackend::IghEthercat, providers,
+          &motor_protocol);
+  expect(serial_dependencies && serial_dependencies.link == &serial,
+         "serial link is injected independently from the motor protocol");
+  expect(can_dependencies && can_dependencies.link == &can_fd,
+         "CAN-FD link can reuse the same motor protocol object");
+  expect(ethercat_dependencies && ethercat_dependencies.link == &ethercat,
+         "EtherCAT link can reuse the same motor protocol object");
+  expect(serial_dependencies.protocol == can_dependencies.protocol &&
+             can_dependencies.protocol == ethercat_dependencies.protocol,
+         "transport selection does not select or identify a motor family");
+
+  const rtctrl::hal::ActuatorLinkProviders missing{};
+  expect(!rtctrl::hal::inject_actuator_dependencies(
+              rtctrl::hal::ActuatorLinkBackend::Serial, missing,
+              &motor_protocol),
+         "missing selected link fails composition without fallback probing");
+  TestMotorProtocol oversized_protocol({65, 1});
+  expect(!rtctrl::hal::inject_actuator_dependencies(
+              rtctrl::hal::ActuatorLinkBackend::CanFd, providers,
+              &oversized_protocol),
+         "link capability mismatch is rejected before realtime startup");
+
+  rtctrl::hal::ProtocolActuatorHal hal(serial, motor_protocol);
+  rtctrl::model::CommandFrame command{};
+  rtctrl::model::SensorFrame feedback{};
+  expect(hal.write(1, command) == rtctrl::hal::HalStatus::NotReady,
+         "composed HAL cannot write before safe open and arm");
+  expect(hal.open_safe(2) == rtctrl::hal::HalStatus::Ok &&
+             motor_protocol.reset_called,
+         "composed HAL opens the selected link and resets only the codec");
+  expect(hal.arm(2) == rtctrl::hal::HalStatus::NotReady,
+         "composed HAL requires decoded feedback before arm");
+  expect(hal.read(3, feedback) == rtctrl::hal::HalStatus::Ok &&
+             feedback.sequence == 42,
+         "selected link feedback is decoded by the injected motor codec");
+  expect(hal.arm(4) == rtctrl::hal::HalStatus::Ok &&
+             hal.write(5, command) == rtctrl::hal::HalStatus::Ok &&
+             serial.last_endpoint == 7,
+         "arm and command packets cross the selected link");
+  hal.emergency_stop(6);
+  expect(hal.write(7, command) == rtctrl::hal::HalStatus::NotReady,
+         "safe stop disarms the composed HAL");
+  hal.close();
 }
 
 void test_safety_policy() {
@@ -498,6 +702,68 @@ private:
   std::uint64_t sequence_{0};
 };
 
+class IntermittentFeedbackHal final : public rtctrl::hal::IActuatorHal {
+public:
+  rtctrl::hal::HalStatus open_safe(std::int64_t) noexcept override {
+    return rtctrl::hal::HalStatus::Ok;
+  }
+  rtctrl::hal::HalStatus arm(std::int64_t) noexcept override {
+    if (successful_reads.load() == 0) {
+      return rtctrl::hal::HalStatus::NotReady;
+    }
+    armed.store(true);
+    return rtctrl::hal::HalStatus::Ok;
+  }
+  rtctrl::hal::HalStatus read(
+      std::int64_t now_ns,
+      rtctrl::model::SensorFrame& output) noexcept override {
+    const auto attempt = ++read_attempts;
+    if (attempt % 3 != 0) {
+      return rtctrl::hal::HalStatus::NotReady;
+    }
+    output = {};
+    output.sequence = static_cast<std::uint64_t>(++successful_reads);
+    output.sample_time_ns = now_ns;
+    return rtctrl::hal::HalStatus::Ok;
+  }
+  rtctrl::hal::HalStatus write(
+      std::int64_t, const rtctrl::model::CommandFrame&) noexcept override {
+    return armed.load() ? rtctrl::hal::HalStatus::Ok
+                        : rtctrl::hal::HalStatus::NotReady;
+  }
+  void emergency_stop(std::int64_t) noexcept override { armed.store(false); }
+  void close() noexcept override {}
+
+  std::atomic<int> read_attempts{0};
+  std::atomic<int> successful_reads{0};
+  std::atomic<bool> armed{false};
+};
+
+void test_bounded_multitick_feedback() {
+  rtctrl::runtime::RuntimeConfig config{};
+  config.lock_memory = false;
+  config.arm_actuation = true;
+  config.io_thread.priority = 0;
+  config.control_thread.priority = 0;
+  config.startup_feedback_timeout_ns = 50'000'000;
+  config.startup_poll_interval_ns = 1'000'000;
+  config.state_validity_ns = 10'000'000;
+  IntermittentFeedbackHal hal;
+  rtctrl::control::JointPd controller;
+  OneShotSource source;
+  rtctrl::safety::SafetyPolicy safety;
+  rtctrl::platform::PosixRealtimePlatform platform;
+  rtctrl::runtime::RealtimeEngine engine(
+      config, platform, hal, controller, source, safety);
+  expect(engine.start(),
+         "runtime waits for bounded multi-tick startup feedback");
+  std::this_thread::sleep_for(std::chrono::milliseconds(25));
+  engine.request_stop();
+  engine.join();
+  expect(hal.successful_reads.load() > 1 && !engine.report().fault_latched,
+         "transient NotReady feedback does not fault before the state lease");
+}
+
 void test_target_lease() {
   rtctrl::runtime::RuntimeConfig config{};
   config.lock_memory = false;
@@ -526,6 +792,8 @@ void test_target_lease() {
 int main() {
   test_spsc_ring();
   test_platform_independent_timer();
+  test_can_frame_contract();
+  test_actuator_dependency_injection();
   test_safety_policy();
   test_controller_and_hal();
   test_fixed_target_codec();
@@ -536,6 +804,7 @@ int main() {
   test_yidong_topology();
   test_policy_action_mapper();
   test_framed_command_source();
+  test_bounded_multitick_feedback();
   test_target_lease();
   if (failures == 0) {
     std::cout << "all tests passed\n";

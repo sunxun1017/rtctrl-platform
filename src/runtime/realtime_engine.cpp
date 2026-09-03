@@ -1,5 +1,6 @@
 #include "rtctrl/runtime/realtime_engine.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <exception>
 #include <thread>
@@ -23,7 +24,10 @@ bool valid_config(const RuntimeConfig& config) noexcept {
                              config.control_period_ns % config.io_period_ns == 0;
   const bool leases_valid = config.command_validity_ns >= config.control_period_ns &&
                             config.target_validity_ns >= config.source_period_ns &&
-                            config.state_validity_ns >= config.control_period_ns;
+                            config.state_validity_ns >= config.control_period_ns &&
+                            config.startup_feedback_timeout_ns >=
+                                config.startup_poll_interval_ns &&
+                            config.startup_poll_interval_ns > 0;
   const auto valid_thread = [](const platform::ThreadConfig& value) {
     return value.priority >= 0 && value.priority <= 99 && value.cpu >= -1;
   };
@@ -140,8 +144,31 @@ void RealtimeEngine::io_loop() noexcept {
     return;
   }
   model::SensorFrame startup_state{};
-  if (config_.arm_actuation &&
-      (hal_.read(platform_.now_ns(), startup_state) != hal::HalStatus::Ok ||
+  bool startup_feedback_ready = !config_.arm_actuation;
+  if (config_.arm_actuation) {
+    const auto startup_begin_ns = platform_.now_ns();
+    const auto startup_deadline_ns =
+        startup_begin_ns + config_.startup_feedback_timeout_ns;
+    while (!startup_feedback_ready && !stop_.load(std::memory_order_acquire)) {
+      const auto now_ns = platform_.now_ns();
+      const auto status = hal_.read(now_ns, startup_state);
+      if (status == hal::HalStatus::Ok) {
+        startup_feedback_ready = true;
+        break;
+      }
+      if (status == hal::HalStatus::IoError || now_ns >= startup_deadline_ns) {
+        break;
+      }
+      const auto next_poll_ns =
+          std::min(now_ns + config_.startup_poll_interval_ns,
+                   startup_deadline_ns);
+      if (platform_.sleep_until(next_poll_ns) != 0) {
+        break;
+      }
+    }
+  }
+  if (!startup_feedback_ready ||
+      (config_.arm_actuation &&
        hal_.arm(platform_.now_ns()) != hal::HalStatus::Ok)) {
     fatal_startup_error_.store(true);
     io_startup_state_.store(-1, std::memory_order_release);
@@ -162,6 +189,7 @@ void RealtimeEngine::io_loop() noexcept {
   bool fault_latched = false;
   bool hardware_safe_state_entered = false;
   hardware_safe_state_entered = !config_.arm_actuation;
+  std::int64_t last_successful_read_ns = platform_.now_ns();
 
   while (!stop_.load(std::memory_order_acquire)) {
     const auto wakeup = timer.wait_next();
@@ -175,8 +203,19 @@ void RealtimeEngine::io_loop() noexcept {
     report_.io_metrics.record_wakeup(wakeup.actual_ns - wakeup.scheduled_ns,
                                      wakeup.skipped_periods);
 
-    const bool read_ok = hal_.read(begin_ns, state) == hal::HalStatus::Ok;
-    if (!read_ok) {
+    const auto read_status = hal_.read(begin_ns, state);
+    const bool read_ok = read_status == hal::HalStatus::Ok;
+    if (read_ok) {
+      last_successful_read_ns = begin_ns;
+    } else if (read_status == hal::HalStatus::NotReady &&
+               begin_ns - last_successful_read_ns <=
+                   config_.state_validity_ns) {
+      // A bounded multi-tick receive is normal for half-duplex serial links.
+      // Do not send another command until the complete feedback transaction
+      // arrives; the state lease still bounds how long this may continue.
+      report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+      continue;
+    } else {
       ++report_.io_metrics.io_errors;
       if (!fault_latched) {
         ++report_.safety_interventions;

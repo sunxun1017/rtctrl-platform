@@ -1,4 +1,12 @@
 /build/
 /results/
+/.deps/
+/.cache/
+/.vscode/
+/.idea/
+CMakeUserPresets.json
+compile_commands.json
+*.swp
+*.swo
+*~
 *.log
-

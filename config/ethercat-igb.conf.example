@@ -1,0 +1,6 @@
+# Copy the relevant values into /etc/ethercat.conf after verifying the
+# dedicated Intel I210/I211/I350 interface. Never use ff:ff:ff:ff:ff:ff in a
+# production robot because it can claim the wrong NIC.
+MASTER0_DEVICE="REPLACE_WITH_DEDICATED_NIC_MAC"
+DEVICE_MODULES="igb"
+UPDOWN_INTERFACES=""

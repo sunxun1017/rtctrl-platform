@@ -5,14 +5,28 @@
 ```text
 app/composition root
   |-- runtime --> platform-api --> POSIX / future RTOS adapter
-  |          |--> HAL-api ------> simulated / framed actuator HAL
+  |          |--> HAL-api ------> simulated / composed actuator HAL
   |          |--> control-api --> PD / future policy controller
   |          `--> safety + fixed-capacity IPC
-  |-- HAL adapter --> shared-memory L0 / simulated / future direct EtherCAT
+  |-- composed HAL --> motor protocol codec + selected actuator link
+  |                                      |-- serial byte stream
+  |                                      |-- SocketCAN CAN-FD
+  |                                      `-- IgH EtherCAT process image
+  |-- HAL adapter --> shared-memory L0 / kernel mailbox / simulated
   `-- bridge ------> CLI / shared-memory / future ROS 2
 ```
 
-依赖只指向抽象。HAL 不依赖控制器；protocol 不依赖 Linux 或具体总线；controller 不知道板卡、设备协议和目标来源；bridge 回调不得直接进入实时线程。RK3588、NearLink 和 ROS 2 分别只是 deployment、transport 和 bridge 的实现。
+依赖只指向抽象。HAL 不依赖控制器；controller 不知道板卡、设备协议、通信链路和目标来源；bridge 回调不得直接进入实时线程。RK3588、NearLink 和 ROS 2 分别只是 deployment、transport 和 bridge 的实现。
+
+电机协议和通信方式是两个独立注入维度。`IActuatorProtocol` 负责控制字、寄存器、单位、
+缩放和反馈校验；`IActuatorLink` 负责逻辑 endpoint 到串口帧/CAN ID/EtherCAT PDO 的
+路由及物理 I/O；`ProtocolActuatorHal` 是唯一组合点。composition root 可以给同一个
+电机 codec 注入 Serial、CAN-FD 或 IgH EtherCAT link，runtime 始终只看到
+`IActuatorHal`。详细决策见 `docs/adr/0004-actuator-protocol-link-separation.md`。
+
+Dynamixel 是该组合的首个串口执行器实现：`DynamixelJointProfile ->
+DynamixelProtocol2 -> HalfDuplexSerialLink -> PosixSerialTransport`。Profile、Protocol、
+半双工调度和设备文件保持四个边界；详见 `docs/dynamixel.md`。
 
 ## 线程与数据流
 
@@ -29,9 +43,13 @@ Control thread (200 Hz) -> bounded SPSC command -> I/O thread (1 kHz) -> HAL
 
 目标与状态分别有独立 freshness lease。命令源停止后，控制线程不会用旧目标生成带新时间戳的命令；设备状态过期或序号不前进时也不会刷新控制命令。
 
-字节链路采用 `IByteTransport -> ITargetCodec -> FramedCommandSource` 三层组合：设备文件和短读写只存在于 transport，帧 ABI 与 CRC 只存在于 protocol，会话、重放和跨时钟域租约只存在于 source。替换 RK3588、RISC-V、NearLink 或 SPI 不会改变控制器与实时引擎。V2 细节见 `docs/control-link-v1.md`。
+上游目标输入的字节链路采用 `IByteTransport -> ITargetCodec -> FramedCommandSource`
+三层组合；它与下游电机链路是不同端口。设备文件和短读写只存在于 transport，帧 ABI
+与 CRC 只存在于 protocol，会话、重放和跨时钟域租约只存在于 source。替换 RK3588、
+RISC-V、NearLink 或 SPI 不会改变控制器与实时引擎。V2 细节见
+`docs/control-link-v1.md`。
 
-从 `sx_text` 继承的双环被收敛为 `SharedMotorRegion -> SharedMemoryHal -> RealtimeEngine`：L0 进程独占 EtherCAT/vendor SDK、物理槽位、单位换算和机构耦合；控制进程只看 SI 单位逻辑关节。命令与反馈分别使用有界快照序列，ABI 同时校验 magic、version、region size 和 joint count，并携带生成号、采样时间与命令截止时间。使能位和 L0 fault/cycle counter 独立于数据快照。
+从 `sx_text` 继承的双环被收敛为 `SharedMotorRegion -> SharedMemoryHal -> RealtimeEngine`：L0 进程独占 IgH EtherCAT/其他 vendor SDK、物理槽位、单位换算和机构耦合；控制进程只看 SI 单位逻辑关节。命令与反馈分别使用有界快照序列，ABI 同时校验 magic、version、region size 和 joint count，并携带生成号、采样时间与命令截止时间。使能位和 L0 fault/cycle counter 独立于数据快照。
 
 `RTCTRL_JOINT_COUNT` 是安装 ABI 的一部分。`profiles/yidong23_topology.hpp` 只在部署叶子记录三 master、23 个物理槽位与标定，编译期验证逻辑关节和物理槽位都是一一覆盖；核心 runtime、controller、safety 与 transport 不包含 Yidong 名称或 EtherCAT SDK。
 

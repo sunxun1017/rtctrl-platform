@@ -11,6 +11,7 @@
 - `bindings/misc/`：对应硬件邮箱的设备树 schema，不写死 RK3588 地址。
 - `config/rtctrl-mailbox.cfg`：驱动集成到目标内核树后可合并的模块配置。
 - `scripts/build-module.sh`：针对显式内核构建树编译外部模块，不安装或加载。
+- `ethercat/`：锁定 IgH 1.6.12，并为 Intel I210/I211/I350 构建 native `ec_igb`；只构建和检查，不安装或加载。
 
 配置片段不是最终配置。必须在目标板 BSP 上合并、运行 `olddefconfig`，再审计生成的 `.config`；依赖不满足或无 prompt 的 Kconfig 符号可能忽略片段赋值。`HZ=1000` 是工程起点，而高分辨率定时来自 `HIGH_RES_TIMERS`。
 
@@ -19,7 +20,13 @@
 ./kernel/scripts/check-kernel.sh --strict
 ./kernel/scripts/merge-config.sh /path/to/linux /tmp/rtctrl.config production
 ./kernel/scripts/build-module.sh /absolute/path/to/linux-build
+git submodule update --init --recursive
+./scripts/check-third-party.sh
+./kernel/ethercat/build-igh-igb.sh third_party/igh-ethercat /path/to/linux-build .deps/igh-build
 ```
+
+专用 EtherCAT 网卡的选型、MAC 绑定、依赖注入与实时验收见
+[`docs/dedicated-ethercat-igb.md`](../docs/dedicated-ethercat-igb.md)。
 
 ## 板端原则
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- 增加不绑定电机型号的 Linux SocketCAN 帧级适配器，同时支持 Classical CAN、CAN-FD、标准/扩展帧、BRS/ESI、RTR、错误帧、内核过滤器和接收时间戳。
+- 增加 CAN/CAN-FD 帧合法性检查、固定容量配置和部署/`vcan` 验证文档。
+- 增加可选的 IgH EtherCAT 1.6 `ecrt` 适配器，覆盖 master/domain/slave、SyncManager/PDO、Working Counter、从站状态和 Distributed Clocks 周期生命周期。
+- IgH 公共配置保持电机无关且不暴露 `ecrt.h`；PDO、identity、DC 参数和 process-data offset 由部署叶子提供。
+- 增加锁定 IgH 1.6.12 的 Intel I210/I211/I350 native `ec_igb` 获取、构建和网卡隔离检查工具；构建默认关闭 generic、EoE 与实时循环 syslog。
+- 增加 Serial/CAN-FD/IgH EtherCAT 三选一链路与独立电机协议 codec 两个注入维度、固定容量逻辑数据包、组合式 `ProtocolActuatorHal` 和互斥部署意图；实时循环不做总线探测或切换。
+- 增加 Dynamixel Protocol 2.0 CRC/Byte Stuffing/流式解析、可注入 Control Table profile、批量 Sync Write/Bulk Read 和固定容量半双工串口 link；POSIX 串口新增 1–4 Mbps 档位与可选 Linux RS-485 自动方向。
+
 ## 0.4.0 - 2026-09-01
 
 - 从本人 `sx_text` 分支提炼 23 关节/三 EtherCAT master 拓扑，并增加编译期完整性与协议匹配校验。

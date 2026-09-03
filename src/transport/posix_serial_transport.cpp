@@ -3,6 +3,8 @@
 #include <cerrno>
 #include <cstring>
 #include <fcntl.h>
+#include <linux/serial.h>
+#include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
 
@@ -22,8 +24,38 @@ speed_t to_speed(int baud_rate) noexcept {
 #ifdef B460800
     case 460800: return B460800;
 #endif
+#ifdef B500000
+    case 500000: return B500000;
+#endif
+#ifdef B576000
+    case 576000: return B576000;
+#endif
 #ifdef B921600
     case 921600: return B921600;
+#endif
+#ifdef B1000000
+    case 1000000: return B1000000;
+#endif
+#ifdef B1152000
+    case 1152000: return B1152000;
+#endif
+#ifdef B1500000
+    case 1500000: return B1500000;
+#endif
+#ifdef B2000000
+    case 2000000: return B2000000;
+#endif
+#ifdef B2500000
+    case 2500000: return B2500000;
+#endif
+#ifdef B3000000
+    case 3000000: return B3000000;
+#endif
+#ifdef B3500000
+    case 3500000: return B3500000;
+#endif
+#ifdef B4000000
+    case 4000000: return B4000000;
 #endif
     default: return static_cast<speed_t>(0);
   }
@@ -45,15 +77,22 @@ IoResult map_result(ssize_t result) noexcept {
 }  // namespace
 
 PosixSerialTransport::PosixSerialTransport(const char* device, int baud_rate) noexcept
-    : baud_rate_(baud_rate) {
-  if (device == nullptr) {
+    : PosixSerialTransport(PosixSerialOptions{device, baud_rate}) {}
+
+PosixSerialTransport::PosixSerialTransport(
+    const PosixSerialOptions& options) noexcept
+    : baud_rate_(options.baud_rate), linux_rs485_(options.linux_rs485),
+      rts_high_while_sending_(options.rts_high_while_sending),
+      delay_before_send_ms_(options.delay_before_send_ms),
+      delay_after_send_ms_(options.delay_after_send_ms) {
+  if (options.device == nullptr) {
     return;
   }
-  const auto length = std::strlen(device);
+  const auto length = std::strlen(options.device);
   if (length == 0 || length >= device_.size() || to_speed(baud_rate_) == 0) {
     return;
   }
-  std::memcpy(device_.data(), device, length + 1);
+  std::memcpy(device_.data(), options.device, length + 1);
   config_valid_ = true;
 }
 
@@ -85,6 +124,18 @@ TransportStatus PosixSerialTransport::open() noexcept {
       ::tcsetattr(fd_, TCSANOW, &tty) != 0) {
     close();
     return TransportStatus::Error;
+  }
+  if (linux_rs485_) {
+    serial_rs485 rs485{};
+    rs485.flags = SER_RS485_ENABLED;
+    rs485.flags |= rts_high_while_sending_ ? SER_RS485_RTS_ON_SEND
+                                           : SER_RS485_RTS_AFTER_SEND;
+    rs485.delay_rts_before_send = delay_before_send_ms_;
+    rs485.delay_rts_after_send = delay_after_send_ms_;
+    if (::ioctl(fd_, TIOCSRS485, &rs485) != 0) {
+      close();
+      return TransportStatus::Error;
+    }
   }
   (void)::tcflush(fd_, TCIOFLUSH);
   return TransportStatus::Ok;

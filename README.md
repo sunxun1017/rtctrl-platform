@@ -6,16 +6,19 @@
 
 - 实时域仅执行定长 POD 数据处理；循环内不分配内存、不写日志、不做阻塞 I/O。
 - `IRealtimePlatform`、HAL、control、transport、protocol 与 bridge 边界彼此解耦。
+- 电机协议与通信链路分别注入；同一 codec 可部署在串口、CAN-FD 或 IgH EtherCAT link 上，runtime 不感知电机型号和总线类型。
+- 串口执行器提供固定容量 Dynamixel Protocol 2.0、Sync Write/Bulk Read、半双工短写续传和可注入 Control Table profile。
 - I/O 线程为 1 kHz，控制线程为 200 Hz，命令通过有效期租约防止陈旧指令下发。
 - `SCHED_FIFO`、CPU 亲和性和 `mlockall` 不可用时，默认安全回退到普通调度并报告能力；`--strict-rt` 可改为失败即停止。
-- WSL 运行 POSIX + 模拟 HAL；Linux/RK3588、UART/SPI/NearLink 与 ROS 2 都通过叶子适配器接入。仓库已提供 POSIX 串口适配器，SPI 和 ROS 2 保持可选。
+- WSL 运行 POSIX + 模拟 HAL；Linux/RK3588、UART/SPI/NearLink 与 ROS 2 都通过叶子适配器接入。仓库已提供 POSIX 串口和 Linux SocketCAN CAN-FD 帧级适配器，SPI 和 ROS 2 保持可选。
 - 启动默认保持未武装状态；演示也必须显式传入 `--arm` 才允许普通控制指令进入 HAL。
 - 逻辑关节数是编译期 profile：默认 6 关节；`humanoid23` 使用从 `sx_text` 提炼的 23 关节/三 EtherCAT master 拓扑，不修改核心源码。
-- L0 硬件进程与控制进程可通过版本化 POSIX 共享内存解耦；具备伴随控制器/FPGA mailbox 时，也可选择 Linux C 内核驱动的 kernel-staged ioctl + coherent-DMA + IRQ + hrtimer watchdog 路径。硬件 ABI V2 要求精确关节数、DMA_QUIESCED/RESET 握手和独立硬复位线；ROS 2、vendor EtherCAT SDK 和 ONNX Runtime 都留在叶子适配器。
+- L0 硬件进程与控制进程可通过版本化 POSIX 共享内存解耦；EtherCAT 可选用 IgH 1.6 `ecrt` 适配器；具备伴随控制器/FPGA mailbox 时，也可选择 Linux C 内核驱动的 kernel-staged ioctl + coherent-DMA + IRQ + hrtimer watchdog 路径。硬件 ABI V2 要求精确关节数、DMA_QUIESCED/RESET 握手和独立硬复位线；ROS 2、设备 PDO codec 和 ONNX Runtime 都留在叶子适配器。
 
 ## 快速开始（WSL）
 
 ```bash
+git clone --recurse-submodules <repository-url>
 cd /home/sx/projects/rk3588-rt-control-v0.5.0
 cmake --preset release
 cmake --build --preset release -j8
@@ -79,7 +82,7 @@ src/platform/         平台无关周期器与 POSIX 适配器
 src/hal/              模拟或真实执行器后端
 src/control/          可替换控制算法
 src/protocol/         固定 profile ControlLink V2 与 CRC32C
-src/transport/        loopback、POSIX UART、分帧命令源
+src/transport/        loopback、POSIX UART、SocketCAN CAN-FD、分帧命令源
 src/ipc/              版本化 POSIX 共享内存与 L0 双向快照
 include/rtctrl/profiles/ 目标机器人拓扑叶子配置
 src/safety/           命令租约、边界与故障策略
@@ -89,10 +92,17 @@ docs/                 架构与部署说明
 kernel/               C 平台驱动、DT binding、Kconfig、只读检查器与 systemd 模板
 config/               portable / strict 运行意图配置
 cmake/toolchains/      不绑定板卡的交叉编译入口
+third_party/           Git 子模块锁定的可选第三方源码
 ```
 
 协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。从本人 `sx_text` 分支提炼和改造的内容见 [`docs/sx-text-integration.md`](docs/sx-text-integration.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
 当前 C UAPI、C++17 内核 mailbox HAL、6/23 关节构建与已知环境限制见 [`docs/verification-v0.5.0.md`](docs/verification-v0.5.0.md)；旧版记录仍保留在 [`docs/verification-v0.4.0.md`](docs/verification-v0.4.0.md)。
+Linux CAN/CAN-FD 接口配置、`vcan` 环回、API 示例及与具体电机协议的职责边界见 [`docs/can-fd.md`](docs/can-fd.md)。
+IgH master/domain/PDO/DC 生命周期、构建方法和真机边界见 [`docs/igh-ethercat.md`](docs/igh-ethercat.md)。
+专用 Intel I210 PCIe 网卡、IgH native `ec_igb` 构建、通信依赖注入和实时部署边界见 [`docs/dedicated-ethercat-igb.md`](docs/dedicated-ethercat-igb.md)。
+电机协议/链路正交、逻辑 endpoint 路由和组合式 HAL 决策见 [`docs/adr/0004-actuator-protocol-link-separation.md`](docs/adr/0004-actuator-protocol-link-separation.md)。
+Dynamixel Protocol 2.0、U2D2/原生 UART 接线边界、型号 profile 和总线带宽见 [`docs/dynamixel.md`](docs/dynamixel.md)。
+跨机器开发时的子模块初始化、版本锁定和内核 ABI 边界见 [`third_party/README.md`](third_party/README.md)；可运行 `./scripts/check-third-party.sh` 校验源码提交。默认构建不需要 IgH，也不依赖 Dynamixel SDK。
 
 ## 交叉构建
 
