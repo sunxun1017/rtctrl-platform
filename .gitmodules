@@ -5,3 +5,8 @@
 	path = third_party/linux-rk3588
 	url = https://github.com/orangepi-xunlong/linux-orangepi.git
 	shallow = true
+[submodule "third_party/linux-rv1126b"]
+	path = third_party/linux-rv1126b
+	url = https://github.com/rockchip-linux/kernel.git
+	branch = develop-6.1
+	shallow = true

@@ -9,6 +9,12 @@ release and manifest commit; `scripts/check-linux-sdk.sh` verifies a local SDK
 archive without importing its multi-gigabyte `repo` object store into this Git
 repository.
 
+The RV1126B Linux kernel is independently pinned as the public
+`third_party/linux-rv1126b` submodule. The Alientek-only files live in
+`atk-dlrv1126b/bsp/kernel` and are applied to an ignored, content-addressed
+working copy by `scripts/prepare-linux-kernel-source.sh`; the public submodule
+therefore stays clean and updateable.
+
 Kernel profiles are board-specific because a DTB, defconfig, BSP commit, and
 physical wiring cannot be selected safely from the SoC name alone.
 

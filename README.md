@@ -133,6 +133,15 @@ cmake --build --preset riscv64 -j8
 实时线程。支持边界、单 SoC 视觉数据流和板端验收步骤见
 [`docs/rv1126b.md`](docs/rv1126b.md)。
 
+RV1126B 内核使用 Rockchip GitHub 官方 Linux 6.1 submodule，并在独立构建
+副本上叠加正点原子板级配置；不会修改或污染公共内核工作树：
+
+```bash
+./scripts/prepare-linux-kernel-source.sh \
+    --platform atk-dlrv1126b \
+    --build-dtb
+```
+
 完整 RK3588 构建采用“公共 SoC 配置 + 板卡 profile”。首次换开发机后：
 
 ```bash
