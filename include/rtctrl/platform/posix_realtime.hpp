@@ -4,6 +4,10 @@
 
 namespace rtctrl::platform {
 
+/**
+ * @brief A realtime platform implementation for POSIX systems.
+ *
+ */
 class PosixRealtimePlatform final : public IRealtimePlatform {
   public:
     std::int64_t now_ns() const noexcept override;

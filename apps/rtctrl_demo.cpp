@@ -35,7 +35,7 @@ struct Options {
     bool lock_memory{true};
     bool arm_actuation{false};
     int fault_after_ms{0};
-    bool help_requested{false};
+    bool only_help_requested{false};
 };
 
 void print_help() {
@@ -74,7 +74,7 @@ bool parse_options(int argc, char** argv, Options& options) {
             options.lock_memory = false;
         } else if (std::strcmp(argv[i], "--help") == 0) {
             print_help();
-            options.help_requested = true;
+            options.only_help_requested = true;
             return true;
         } else {
             std::cerr << "invalid argument: " << argv[i] << '\n';
@@ -103,12 +103,12 @@ int main(int argc, char** argv) {
     if (!parse_options(argc, argv, options)) {
         return 2;
     }
-    if (options.help_requested) {
+    if (options.only_help_requested) {
         return 0;
     }
 
-    std::signal(SIGINT, handle_stop_signal);
-    std::signal(SIGTERM, handle_stop_signal);
+    std::signal(SIGINT, handle_stop_signal);  // Handle Ctrl+C
+    std::signal(SIGTERM, handle_stop_signal); // Handle termination signal
 
     rtctrl::runtime::RuntimeConfig config{};
     config.lock_memory = options.lock_memory;

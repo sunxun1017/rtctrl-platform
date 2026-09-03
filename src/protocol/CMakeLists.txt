@@ -1,0 +1,2 @@
+add_library(rtctrl_protocol fixed_target_codec.cpp dynamixel_v2.cpp)
+target_link_libraries(rtctrl_protocol PUBLIC rtctrl_options)

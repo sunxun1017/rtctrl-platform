@@ -1,0 +1,6 @@
+add_executable(rtctrl_demo rtctrl_demo.cpp)
+target_link_libraries(rtctrl_demo PRIVATE rtctrl)
+add_executable(rtctrl_bench rtctrl_bench.cpp)
+target_link_libraries(rtctrl_bench PRIVATE rtctrl)
+add_executable(rtctrl_frame_demo rtctrl_frame_demo.cpp)
+target_link_libraries(rtctrl_frame_demo PRIVATE rtctrl_transport)

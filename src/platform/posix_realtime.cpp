@@ -72,8 +72,11 @@ PosixRealtimePlatform::configure_current_thread(const ThreadConfig& config) noex
 }
 
 void PosixRealtimePlatform::prefault_stack() noexcept {
-    volatile unsigned char buffer[64 * 1024]{};
-    constexpr std::size_t kPageSize = 4096;
+    volatile unsigned char
+        buffer[64 * 1024]{}; // TODO: make sure target system stack size is at least 64kB, or use
+                             // pthread_attr_getstacksize() to get the actual stack size
+    constexpr std::size_t kPageSize = 4096; // TODO: make sure target system page size is 4kB, or
+                                            // use sysconf(_SC_PAGESIZE) to get the actual page size
     for (std::size_t i = 0; i < sizeof(buffer); i += kPageSize) {
         buffer[i] = 0;
     }

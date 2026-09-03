@@ -1,0 +1,2 @@
+add_library(rtctrl_control joint_pd.cpp policy_action_mapper.cpp)
+target_link_libraries(rtctrl_control PUBLIC rtctrl_options)

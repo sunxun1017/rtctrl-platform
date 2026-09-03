@@ -33,7 +33,8 @@ int main(int argc, char** argv) {
     const auto memory = platform.lock_process_memory();
     platform.prefault_stack();
     const auto setup = platform.configure_current_thread({"rt-bench", cpu, priority, false});
-    rtctrl::platform::PeriodicTimer timer(platform, static_cast<std::int64_t>(period_us) * 1000LL);
+    rtctrl::platform::PeriodicTimer timer(platform,
+                                          static_cast<std::int64_t>(period_us) * 1000LL); // 1ms
     rtctrl::runtime::LoopMetrics metrics{};
     const auto end_ns =
         platform.now_ns() + static_cast<std::int64_t>(duration_seconds) * 1'000'000'000LL;

@@ -30,6 +30,10 @@ struct WakeupSample {
     int wait_error{0};
 };
 
+/**
+ * @brief Specify what capabilities a real-time platform should at least provide.
+ *
+ */
 class IRealtimePlatform {
   public:
     virtual ~IRealtimePlatform() = default;
