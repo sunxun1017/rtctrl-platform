@@ -76,6 +76,15 @@
         "RTCTRL_TARGET_TRIPLE": "aarch64-linux-gnu",
         "RTCTRL_BUILD_TESTS": "OFF"
       }
+    },
+    {
+      "name": "atk-dlrv1126b",
+      "displayName": "ALIENTEK ATK-DLRV1126B userspace cross build",
+      "inherits": "aarch64",
+      "binaryDir": "${sourceDir}/build/atk-dlrv1126b",
+      "cacheVariables": {
+        "RTCTRL_TARGET_TRIPLE": "aarch64-buildroot-linux-gnu"
+      }
     }
   ],
   "buildPresets": [
@@ -85,7 +94,8 @@
     { "name": "igh", "configurePreset": "igh" },
     { "name": "tsan", "configurePreset": "tsan" },
     { "name": "riscv64", "configurePreset": "riscv64" },
-    { "name": "aarch64", "configurePreset": "aarch64" }
+    { "name": "aarch64", "configurePreset": "aarch64" },
+    { "name": "atk-dlrv1126b", "configurePreset": "atk-dlrv1126b" }
   ],
   "testPresets": [
     { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },

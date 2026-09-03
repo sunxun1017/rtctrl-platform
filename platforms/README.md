@@ -1,4 +1,18 @@
-# RK3588 board profiles
+# Platform profiles
+
+Linux userspace profiles describe portable CPU/ABI build inputs without
+claiming support for a particular carrier's kernel or peripherals.
+`atk-dlrv1126b/userspace.env` is the first such profile and is consumed by
+`scripts/cross-build-linux-userspace.sh`. Its support and validation boundary is
+documented in `docs/rv1126b.md`. The adjacent `sdk.env` locks the vendor SDK
+release and manifest commit; `scripts/check-linux-sdk.sh` verifies a local SDK
+archive without importing its multi-gigabyte `repo` object store into this Git
+repository.
+
+Kernel profiles are board-specific because a DTB, defconfig, BSP commit, and
+physical wiring cannot be selected safely from the SoC name alone.
+
+## RK3588 board profiles
 
 The build system separates SoC-wide defaults from carrier-specific facts:
 

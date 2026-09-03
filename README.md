@@ -117,6 +117,22 @@ cmake --build --preset riscv64 -j8
 
 有板厂 sysroot 时通过 `-DRTCTRL_SYSROOT=/absolute/sysroot` 注入。交叉产物只证明源码与 ABI 的编译可移植性，实时性仍必须在目标板测量。
 
+正点原子 ATK-DLRV1126B 复用同一 ARM64/POSIX 核心，并提供独立的板级用户态部署 profile：
+
+```bash
+./scripts/cross-build-linux-userspace.sh \
+    --platform atk-dlrv1126b \
+    --sdk-root /absolute/path/to/atk_dlrv1126b_linux6.1_sdk \
+    --plan
+./scripts/cross-build-linux-userspace.sh \
+    --platform atk-dlrv1126b \
+    --sdk-root /absolute/path/to/atk_dlrv1126b_linux6.1_sdk
+```
+
+摄像头、RKISP/RKNN、板级设备树和 BSP 保持叶子集成，不进入 1 kHz/200 Hz
+实时线程。支持边界、单 SoC 视觉数据流和板端验收步骤见
+[`docs/rv1126b.md`](docs/rv1126b.md)。
+
 完整 RK3588 构建采用“公共 SoC 配置 + 板卡 profile”。首次换开发机后：
 
 ```bash
