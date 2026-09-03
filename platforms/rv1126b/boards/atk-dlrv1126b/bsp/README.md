@@ -28,6 +28,22 @@ Build the opt-in camera DTB with:
     --dtb rockchip/rv1126b-alientek-mipi720x1280-ov13850-csi1.dtb
 ```
 
+Install the maintained BSP overlay into a verified vendor SDK and generate a
+dedicated SDK configuration without modifying the vendor board configuration:
+
+```sh
+./scripts/prepare-linux-kernel-source.sh \
+    --platform atk-dlrv1126b \
+    --sdk-root /absolute/path/to/atk_dlrv1126b_linux6.1_sdk \
+    --install-overlay \
+    --dtb rockchip/rv1126b-alientek-mipi720x1280-ov13850-csi1.dtb
+```
+
+Replace `--install-overlay` with `--build-sdk-kernel` to install the overlay,
+select the generated `99_rtctrl_atk_dlrv1126b_defconfig`, and build the SDK
+`output/firmware/boot.img` in one command. Use `--plan` first to validate and
+show the resolved paths without changing the SDK.
+
 The reset and power GPIOs follow the existing CSI1 definitions in the vendor
 BSP. Confirm the connector schematic and the exact module/lens identity before
 deploying; the placeholder lens name must also be aligned with the production
