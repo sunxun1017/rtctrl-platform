@@ -117,7 +117,8 @@ if [[ "${install_overlay}" == "1" ]]; then
 
     echo "installed BSP overlay and SDK config"
     if [[ "${build_sdk_kernel}" == "1" ]]; then
-        sdk_build_path="${PATH}"
+        # The kernel build creates its matching dtc before FIT packaging.
+        sdk_build_path="${sdk_kernel}/scripts/dtc:${PATH}"
         host_tools="${repo_root}/.deps/host-tools"
         if [[ -d "${host_tools}/bin" ]]; then
             sdk_build_path="${host_tools}/bin:${sdk_build_path}"
