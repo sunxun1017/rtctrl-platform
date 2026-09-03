@@ -7,10 +7,9 @@
 namespace rtctrl::transport {
 
 class ICommandSource {
-public:
-  virtual ~ICommandSource() = default;
-  virtual bool poll(std::int64_t now_ns, model::ControlTarget& target) noexcept = 0;
+  public:
+    virtual ~ICommandSource() = default;
+    virtual bool poll(std::int64_t now_ns, model::ControlTarget& target) noexcept = 0;
 };
 
-}  // namespace rtctrl::transport
-
+} // namespace rtctrl::transport

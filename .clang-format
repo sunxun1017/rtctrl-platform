@@ -1,6 +1,14 @@
 BasedOnStyle: LLVM
-IndentWidth: 2
+IndentWidth: 4
+ContinuationIndentWidth: 4
+TabWidth: 4
+UseTab: Never
 ColumnLimit: 100
 PointerAlignment: Left
 SortIncludes: CaseSensitive
-
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+IndentCaseLabels: true
+NamespaceIndentation: None
