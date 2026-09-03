@@ -117,6 +117,27 @@ cmake --build --preset riscv64 -j8
 
 有板厂 sysroot 时通过 `-DRTCTRL_SYSROOT=/absolute/sysroot` 注入。交叉产物只证明源码与 ABI 的编译可移植性，实时性仍必须在目标板测量。
 
+完整 RK3588 构建采用“公共 SoC 配置 + 板卡 profile”。首次换开发机后：
+
+```bash
+git clone --recurse-submodules <repository-url>
+cd rtctrl-platform
+./scripts/bootstrap-aarch64.sh --install
+./scripts/cross-build-rk3588.sh --board orangepi-5-max --plan
+./scripts/cross-build-rk3588.sh --board orangepi-5-max
+```
+
+最后一条命令依次构建匹配 profile 的内核/DTB、mailbox 模块、IgH
+`ec_master`/`ec_igb` 和 rtctrl ARM64 用户态。若只需要不含板卡内核依赖的用户态：
+
+```bash
+./scripts/cross-build-rk3588.sh --board orangepi-5-max --userspace-only
+```
+
+生成物和构建清单位于被 Git 忽略的 `.deps/`、`build/aarch64-*`。当前已验证板卡
+profile 及新增其他 RK3588 载板的方法见 [`platforms/README.md`](platforms/README.md)。
+内核子模块固定构建输入，但不能让生成的 `.ko` 跨内核 ABI 通用。
+
 ## 开源参考
 
 - [Linux PREEMPT_RT](https://www.kernel.org/doc/html/latest/core-api/real-time/index.html)（GPL-2.0）：完全可抢占与线程化 IRQ 的目标运行环境。

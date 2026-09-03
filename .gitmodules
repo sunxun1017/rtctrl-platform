@@ -1,3 +1,7 @@
 [submodule "third_party/igh-ethercat"]
 	path = third_party/igh-ethercat
 	url = https://gitlab.com/etherlab.org/ethercat.git
+[submodule "linux-rk3588"]
+	path = third_party/linux-rk3588
+	url = https://github.com/orangepi-xunlong/linux-orangepi.git
+	shallow = true

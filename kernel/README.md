@@ -25,6 +25,19 @@ git submodule update --init --recursive
 ./kernel/ethercat/build-igh-igb.sh third_party/igh-ethercat /path/to/linux-build .deps/igh-build
 ```
 
+RK3588 完整交叉构建不需要手工拼这些命令；板卡 profile 会同时锁定内核 commit、
+defconfig、实时配置片段和 DTB：
+
+```bash
+./scripts/bootstrap-aarch64.sh --install
+./scripts/cross-build-rk3588.sh --board orangepi-5-max --plan
+./scripts/cross-build-rk3588.sh --board orangepi-5-max
+```
+
+`prepare-rk3588-kernel.sh` 默认只执行配置与 `modules_prepare`，用于快速审计；传入
+`--build` 才会生成完整 `Image`、模块、DTB 和可供外部模块使用的
+`Module.symvers`。所有输出均写入 `.deps/`，不会污染内核或 IgH 子模块。
+
 专用 EtherCAT 网卡的选型、MAC 绑定、依赖注入与实时验收见
 [`docs/dedicated-ethercat-igb.md`](../docs/dedicated-ethercat-igb.md)。
 

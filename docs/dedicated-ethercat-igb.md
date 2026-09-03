@@ -46,6 +46,17 @@ RTCTRL_IGH_HOST=aarch64-linux-gnu \
 必须使用目标板最终运行的、已经配置并 prepare/modules_prepare 的 BSP/PREEMPT_RT
 内核构建树。为桌面机内核编出的模块不能复制到 RK3588 使用。
 
+对于仓库内已经定义的板卡，推荐直接使用统一入口。它会先完整构建内核以生成
+`Module.symvers`，再以同一内核输出目录编译 IgH，避免 ABI 输入分叉：
+
+```bash
+./scripts/cross-build-rk3588.sh --board orangepi-5-max
+```
+
+其他 RK3588 板卡应新增自己的 profile 和 DTB 选择，不能仅因 SoC 相同就复用
+Orange Pi 的设备树。IgH `ec_igb` 不绑定板卡品牌；板端 PCIe 能枚举 I210 且内核
+ABI 匹配才是必要条件。
+
 ## 绑定前检查
 
 安装或加载模块前，先用接口名验证 PCI ID、当前驱动和路由隔离：

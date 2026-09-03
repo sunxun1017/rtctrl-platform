@@ -60,7 +60,28 @@ if [[ ! -f "${source_dir}/devices/igb/igb_main-${kernel_family}-orig.c" ]]; then
 fi
 
 if [[ ! -x "${source_dir}/configure" ]]; then
-  (cd "${source_dir}" && ./bootstrap)
+  generated_source="${output_dir}/generated-source"
+  source_revision="$(git -C "${source_dir}" rev-parse HEAD 2>/dev/null || echo unversioned)"
+  revision_file="${generated_source}/.rtctrl-source-revision"
+  if [[ -e "${generated_source}" &&
+        (! -f "${revision_file}" || "$(<"${revision_file}")" != "${source_revision}") ]]; then
+    echo "generated IgH source does not match ${source_revision}: ${generated_source}" >&2
+    echo "select a revision-specific empty output directory" >&2
+    exit 2
+  fi
+  if [[ ! -d "${generated_source}" ]]; then
+    mkdir -p -- "${generated_source}"
+    if git -C "${source_dir}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      git -C "${source_dir}" archive HEAD | tar -x -C "${generated_source}"
+    else
+      cp -a -- "${source_dir}/." "${generated_source}/"
+    fi
+    printf '%s\n' "${source_revision}" >"${revision_file}"
+  fi
+  if [[ ! -x "${generated_source}/configure" ]]; then
+    (cd "${generated_source}" && ./bootstrap)
+  fi
+  source_dir="${generated_source}"
 fi
 
 configure_args=(

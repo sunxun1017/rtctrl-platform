@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Pin the official Orange Pi RK3588 Linux source as a shallow Git submodule and
+  add board-profile-driven, isolated ARM64 kernel/DTB/module/IgH/user-space builds.
+- Add Debian/Ubuntu AArch64 bootstrap checks, RT kernel configuration contracts,
+  generated build manifests, and an extensible path for non-Orange-Pi RK3588 boards.
+
 - 增加不绑定电机型号的 Linux SocketCAN 帧级适配器，同时支持 Classical CAN、CAN-FD、标准/扩展帧、BRS/ESI、RTR、错误帧、内核过滤器和接收时间戳。
 - 增加 CAN/CAN-FD 帧合法性检查、固定容量配置和部署/`vcan` 验证文档。
 - 增加可选的 IgH EtherCAT 1.6 `ecrt` 适配器，覆盖 master/domain/slave、SyncManager/PDO、Working Counter、从站状态和 Distributed Clocks 周期生命周期。
