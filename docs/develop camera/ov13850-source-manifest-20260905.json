@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/home/sx/projects/rtctrl-platform/third_party/linux-rv1126b/drivers/media/i2c/ov13850.c",
+    "sha256": "0df2a5436e8a68865c0318d9e8c782eafbf41744ed4e2023ebf9bff38784cf8c"
+  },
+  {
+    "path": "/home/sx/projects/rtctrl-platform/platforms/rv1126b/boards/atk-dlrv1126b/bsp/kernel/arch/arm64/boot/dts/rockchip/rv1126b-alientek-ov13850-csi1.dtsi",
+    "sha256": "52f29f75c942e1ebd19ad497b3d614aa3c433e3fb7348b7fb7f906d56d58ed1f"
+  },
+  {
+    "path": "/home/sx/projects/atk_dlrv1126b_linux6.1_sdk/docs/cn/RV1126B/RKIPC/Rockchip_Tuning_Guide_ISP35_CN.pdf",
+    "sha256": "f4861a3c2eb83dc04a3fd7dd30a9e0e79a23d2496607f74fb5f47b5a7a9724dd"
+  },
+  {
+    "path": "/home/sx/projects/atk_dlrv1126b_linux6.1_sdk/docs/cn/RV1126B/RKIPC/Rockchip_Development_Guide_ISP35_CN.pdf",
+    "sha256": "edf5baa21f885b2a8caa53126bc2b9ec642358aeee4479e9451eac5059f797b5"
+  },
+  {
+    "path": "/home/sx/projects/atk_dlrv1126b_linux6.1_sdk/docs/cn/RV1126B/RKIPC/Rockchip_Color_Optimization_Guide_ISP39_ISP33_ISP35_CN.pdf",
+    "sha256": "b4a99d5e36a9afb423c783ab411b3ccbf620504be490d4c75c23d2a34a933b1f"
+  }
+]

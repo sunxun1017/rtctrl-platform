@@ -1,0 +1,25 @@
+--- a/rkaiq_3A_server/rkaiq_3A_server.cpp
++++ b/rkaiq_3A_server/rkaiq_3A_server.cpp
+@@ -164,13 +164,16 @@
+ static void start_engine(struct rkaiq_media_info *media_info)
+ {
+     DBG("device manager start\n");
+-    rk_aiq_uapi2_sysctl_start(media_info->aiq_ctx);
+     if (media_info->aiq_ctx == NULL) {
+-        ERR("rkisp_init engine failed\n");
+-        exit(-1);
+-    } else {
+-        DBG("rkisp_init engine succeed\n");
+-    }
++        ERR("rkaiq start requested without an initialized context\n");
++        exit(EXIT_FAILURE);
++    }
++    XCamReturn ret = rk_aiq_uapi2_sysctl_start(media_info->aiq_ctx);
++    if (ret != XCAM_RETURN_NO_ERROR) {
++        ERR("rkaiq engine start failed: %d\n", ret);
++        exit(EXIT_FAILURE);
++    }
++    DBG("rkaiq engine start succeeded\n");
+ }
+ 
+ static void stop_engine(struct rkaiq_media_info *media_info)

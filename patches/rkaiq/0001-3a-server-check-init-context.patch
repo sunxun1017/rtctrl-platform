@@ -1,0 +1,13 @@
+--- a/rkaiq_3A_server/rkaiq_3A_server.cpp
++++ b/rkaiq_3A_server/rkaiq_3A_server.cpp
+@@ -145,6 +145,10 @@
+ 
+     media_info->aiq_ctx = rk_aiq_uapi2_sysctl_init(media_info->sensor_entity_name,
+                                                   IQ_PATH, NULL, NULL);
++    if (media_info->aiq_ctx == NULL) {
++        ERR("rkaiq init failed; verify sensor IQ path and parser log\n");
++        exit(EXIT_FAILURE);
++    }
+     /* 3A server has listened stream events already */
+     rk_aiq_uapi2_sysctl_setListenStrmStatus(media_info->aiq_ctx, false);
+     if (has_mul_cam)
