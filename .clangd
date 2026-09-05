@@ -1,2 +1,18 @@
 CompileFlags:
     CompilationDatabase: build/release
+
+---
+If:
+    PathMatch: ^third_party/linux-rv1126b/.*
+CompileFlags:
+    CompilationDatabase: .deps/clangd/linux-rv1126b
+    Remove:
+        - -fconserve-stack
+        - -femit-struct-debug-baseonly
+        - -fno-allow-store-data-races
+        - -mabi=*
+        - -mbranch-protection=*
+        - -mgeneral-regs-only
+        - -mstack-protector-guard=*
+        - -mstack-protector-guard-reg=*
+        - -mstack-protector-guard-offset=*

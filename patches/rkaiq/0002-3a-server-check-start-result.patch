@@ -1,6 +1,8 @@
 --- a/rkaiq_3A_server/rkaiq_3A_server.cpp
 +++ b/rkaiq_3A_server/rkaiq_3A_server.cpp
-@@ -166,9 +166,12 @@
+@@ -164,13 +164,16 @@
+ static void start_engine(struct rkaiq_media_info *media_info)
+ {
      DBG("device manager start\n");
 -    rk_aiq_uapi2_sysctl_start(media_info->aiq_ctx);
      if (media_info->aiq_ctx == NULL) {
@@ -19,3 +21,5 @@
 +    }
 +    DBG("rkaiq engine start succeeded\n");
  }
+ 
+ static void stop_engine(struct rkaiq_media_info *media_info)
