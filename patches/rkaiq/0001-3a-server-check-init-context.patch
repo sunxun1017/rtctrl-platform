@@ -1,0 +1,9 @@
+--- a/rkaiq_3A_server/rkaiq_3A_server.cpp
++++ b/rkaiq_3A_server/rkaiq_3A_server.cpp
+@@ -147,2 +147,6 @@
+                                                   IQ_PATH, NULL, NULL);
++    if (media_info->aiq_ctx == NULL) {
++        ERR("rkaiq init failed; verify sensor IQ path and parser log\n");
++        exit(EXIT_FAILURE);
++    }
+     /* 3A server has listened stream events already */
