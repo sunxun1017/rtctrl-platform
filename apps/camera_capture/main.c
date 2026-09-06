@@ -86,7 +86,7 @@ int main() {
     struct v4l2_format fmt = {
         .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
         .fmt.pix_mp = {
-            .width = 2112, .height = 1568, .pixelformat = V4L2_PIX_FMT_NV12, .num_planes = 2}};
+            .width = 2112, .height = 1568, .pixelformat = V4L2_PIX_FMT_NV12, .num_planes = 1}};
     int ret = ioctl(fd, VIDIOC_S_FMT, &fmt); // 设置格式
     if (ret == -1) {
         perror("Failed to set format");
@@ -115,22 +115,26 @@ int main() {
     // 每个 buffer 都有一个，放到循环内和外，没有任何差异，因为这是数组，编译器会优化掉的
     struct v4l2_plane planes[num_planes];
     for (__u32 i = 0; i < buf_count; i++) {
-
         // 然后又把这个平面放进 buffer 里面
         struct v4l2_buffer buf = {.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
                                   .index = i,         // buffer 的索引
                                   .m.planes = planes, // 平面的地址
-                                  .length = num_planes};
-        ret = ioctl(fd, VIDIOC_QBUF, &buf); // 一直在申请，放进 buf
-        if (ret == -1) {
-            perror("Failed to queue buffer");
-            close(fd);
-            return -1;
-        }
-        //
+                                  .length = num_planes,
+                                  .memory = V4L2_MEMORY_MMAP};
+        // ret = ioctl(fd, VIDIOC_QBUF, &buf); // 这个是转交所有权，把这个buf交给驱动
+        // if (ret == -1) {
+        //     perror("Failed to queue buffer");
+        //     close(fd);
+        //     return -1;
+        // }
+        // 这是完全不对的，你都要mmap了，就不要 交出所有权啊！！！
         for (__u8 j = 0; j < num_planes; j++) {
-            maps[i][j] = mmap(NULL, planes[j].length, // 每个平面都要映射
-                              PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, planes[j].m.mem_offset);
+            maps[i][j] = mmap(NULL,
+                              planes[j].length, // 每个平面都要映射
+                              PROT_READ | PROT_WRITE,
+                              MAP_SHARED,
+                              fd,
+                              planes[j].m.mem_offset); // 不应该使用private
         }
     }
     // 4. 入队所有 buffer，你映射完了，就要放进去了
@@ -165,7 +169,7 @@ int main() {
             .length = num_planes,
             .m.planes = planes,
         };
-        ioctl(fd, VIDIOC_DQBUF, &buf); // 取出填好的 buffer
+        ioctl(fd, VIDIOC_DQBUF, &buf); // 驱动写好了，把他交给我
 
         int idx = buf.index;
         // 处理数据：maps[idx][0] 是 Y plane，maps[idx][1] 是 UV plane
