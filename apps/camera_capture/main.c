@@ -9,10 +9,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define handle_error(msg)                                                                          \
-    do {                                                                                           \
-        perror(msg);                                                                               \
-        exit(EXIT_FAILURE);                                                                        \
+#define handle_error(msg)                                                           \
+    do {                                                                            \
+        perror(msg);                                                                \
+        exit(EXIT_FAILURE);                                                         \
     } while (0)
 
 /**
@@ -28,7 +28,8 @@
 //     // if (caps)// 如果是新驱动
 //     caps = cap->capabilities; // 我要的就是整个设备的能力
 //     if (!caps)
-//         warnx("Using legacy capability query, we need to update the driver, we need entry device
+//         warnx("Using legacy capability query, we need to update the driver, we
+//         need entry device
 //         "
 //               "capabilities");
 //     return (caps & bit) != 0;
@@ -83,10 +84,11 @@ int main() {
     // 不要自己手动mmap了
 
     // 1. 设置格式
-    struct v4l2_format fmt = {
-        .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-        .fmt.pix_mp = {
-            .width = 2112, .height = 1568, .pixelformat = V4L2_PIX_FMT_NV12, .num_planes = 1}};
+    struct v4l2_format fmt = {.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+                              .fmt.pix_mp = {.width = 2112,
+                                             .height = 1568,
+                                             .pixelformat = V4L2_PIX_FMT_NV12,
+                                             .num_planes = 1}};
     int ret = ioctl(fd, VIDIOC_S_FMT, &fmt); // 设置格式
     if (ret == -1) {
         perror("Failed to set format");
@@ -99,7 +101,8 @@ int main() {
     // 2. 申请 buffer
     struct v4l2_requestbuffers req = {
         .count = 4,                                 // TODO: 这个是依据什么呢
-        .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, // 多平面采集，必须和 S_FMT 时的 type 一致
+        .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, // 多平面采集，必须和 S_FMT 时的
+                                                    // type 一致
         .memory = V4L2_MEMORY_MMAP,                 // 使用 mmap 方式
     };
     ret = ioctl(fd, VIDIOC_REQBUFS, &req); // 这就是在申请buf
@@ -112,7 +115,8 @@ int main() {
 
     // 3. 映射每个 buffer  的每个 plane，一个 buffer 就是一帧
     void* maps[buf_count][num_planes];
-    // 每个 buffer 都有一个，放到循环内和外，没有任何差异，因为这是数组，编译器会优化掉的
+    // 每个 buffer
+    // 都有一个，放到循环内和外，没有任何差异，因为这是数组，编译器会优化掉的
     struct v4l2_plane planes[num_planes];
     for (__u32 i = 0; i < buf_count; i++) {
         // 然后又把这个平面放进 buffer 里面
@@ -152,7 +156,8 @@ int main() {
     }
     // 5. 启动采集
     enum v4l2_buf_type type =
-        V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; // 要和前面申请 buf 和映射 buf的时候对应上
+        V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; // 要和前面申请 buf 和映射
+                                            // buf的时候对应上
     ret = ioctl(fd, VIDIOC_STREAMON, &type);
     if (ret == -1) {
         perror("Failed to start streaming");
