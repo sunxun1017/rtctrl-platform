@@ -812,6 +812,34 @@ ISP
 
 注意：这里是把驱动提供的缓冲区映射进程序，不是自己申请一块普通内存充当 DMA 缓冲区
 
+```c
+struct v4l2_buffer {
+ __u32   index;  /* id */
+ __u32   type;   /* 决定单平面还是多平面的*/
+ __u32   bytesused; // 有效数据的字节数
+ __u32   flags;
+ __u32   field;
+ struct timeval  timestamp; // 每一帧的时间戳
+ struct v4l2_timecode timecode;
+ __u32   sequence;
+
+ /* memory location */
+ __u32   memory;
+ union {
+  __u32           offset;   /* 单平面的事情 */
+  unsigned long   userptr;  /* 单平面的事情 */
+  struct v4l2_plane *planes;/* 多平面的事情，用户空间指向平面数组的信息 */
+  __s32  fd;/* 单平面的事情 */
+ } m;
+ __u32   length;    /* 单平面我先不管，多平面是每个平面的大小 */
+ __u32   reserved2;
+ union {
+  __s32  request_fd;
+  __u32  reserved;
+ };
+};
+```
+
 ## 5. 入队，然后开流
 
 把所有准备好的缓冲区通过 VIDIOC_QBUF 交给驱动，再调用 VIDIOC_STREAMON。
