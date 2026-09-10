@@ -1,4 +1,5 @@
-#include "rtctrl/vision/capture.h"
+#include "rtctrl/vision/v4l2_capture.h"
+#include "v4l2_format.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -18,7 +19,7 @@ struct mapping {
 struct camera_buffer {
     struct mapping planes[RTCTRL_CAMERA_MAX_PLANES];
 };
-struct rtctrl_camera {
+struct v4l2_camera {
     int fd;
     int streaming;
     int held;
@@ -39,7 +40,7 @@ static int camera_ioctl(int fd, unsigned long request, void* arg) {
     return result < 0 ? -errno : 0;
 }
 
-static void buffer_init(const struct rtctrl_camera* c,
+static void buffer_init(const struct v4l2_camera* c,
                         struct v4l2_buffer* b,
                         struct v4l2_plane* planes,
                         uint32_t index) {
@@ -52,7 +53,7 @@ static void buffer_init(const struct rtctrl_camera* c,
     b->m.planes = planes;
 }
 
-int rtctrl_camera_close(struct rtctrl_camera* c) {
+static int v4l2_close(struct v4l2_camera* c) {
     if (!c) {
         return 0;
     }
@@ -82,8 +83,8 @@ int rtctrl_camera_close(struct rtctrl_camera* c) {
     return result;
 }
 
-int rtctrl_camera_open(const struct rtctrl_camera_config* cfg,
-                       struct rtctrl_camera** output) {
+static int v4l2_open(const struct rtctrl_v4l2_config* cfg,
+                     struct v4l2_camera** output) {
     if (!output) {
         return -EINVAL;
     }
@@ -93,7 +94,7 @@ int rtctrl_camera_open(const struct rtctrl_camera_config* cfg,
          (!cfg->width || !cfg->height || !cfg->fourcc))) {
         return -EINVAL;
     }
-    struct rtctrl_camera* c = calloc(1, sizeof(*c));
+    struct v4l2_camera* c = calloc(1, sizeof(*c));
     if (!c) {
         return -ENOMEM;
     }
@@ -132,14 +133,7 @@ int rtctrl_camera_open(const struct rtctrl_camera_config* cfg,
         result = -EPROTO;
         goto fail;
     }
-    c->format = (struct rtctrl_camera_format){f->width,
-                                              f->height,
-                                              f->pixelformat,
-                                              f->num_planes,
-                                              f->colorspace,
-                                              f->quantization,
-                                              f->xfer_func,
-                                              f->ycbcr_enc};
+    rtctrl_v4l2_translate_format(f, &c->format);
     for (uint32_t p = 0; p < c->format.plane_count; ++p) {
         c->strides[p] = f->plane_fmt[p].bytesperline;
     }
@@ -204,12 +198,12 @@ int rtctrl_camera_open(const struct rtctrl_camera_config* cfg,
     *output = c;
     return 0;
 fail:
-    (void)rtctrl_camera_close(c);
+    (void)v4l2_close(c);
     return result;
 }
 
-int rtctrl_camera_get_format(const struct rtctrl_camera* c,
-                             struct rtctrl_camera_format* f) {
+static int v4l2_get_format(const struct v4l2_camera* c,
+                           struct rtctrl_camera_format* f) {
     if (!c || !f) {
         return -EINVAL;
     }
@@ -217,9 +211,9 @@ int rtctrl_camera_get_format(const struct rtctrl_camera* c,
     return 0;
 }
 
-int rtctrl_camera_acquire(struct rtctrl_camera* c,
-                          int timeout_ms,
-                          struct rtctrl_camera_frame* frame) {
+static int v4l2_acquire(struct v4l2_camera* c,
+                        int timeout_ms,
+                        struct rtctrl_camera_frame* frame) {
     if (!c || !frame || timeout_ms < 0) {
         return -EINVAL;
     }
@@ -292,7 +286,7 @@ int rtctrl_camera_acquire(struct rtctrl_camera* c,
     return 0;
 }
 
-int rtctrl_camera_release(struct rtctrl_camera* c, uint64_t token) {
+static int v4l2_release(struct v4l2_camera* c, uint64_t token) {
     if (!c || !c->held || token != c->token) {
         return -EINVAL;
     }
@@ -305,4 +299,37 @@ int rtctrl_camera_release(struct rtctrl_camera* c, uint64_t token) {
         c->failed = 1;
     }
     return result;
+}
+
+static int backend_open(const void* config, void** context) {
+    struct v4l2_camera* camera = NULL;
+    int result = v4l2_open(config, &camera);
+    *context = camera;
+    return result;
+}
+static int backend_format(const void* context, struct rtctrl_camera_format* format) {
+    return v4l2_get_format(context, format);
+}
+static int
+backend_acquire(void* context, int timeout_ms, struct rtctrl_camera_frame* frame) {
+    return v4l2_acquire(context, timeout_ms, frame);
+}
+static int backend_release(void* context, uint64_t token) {
+    return v4l2_release(context, token);
+}
+static int backend_close(void* context) {
+    return v4l2_close(context);
+}
+const struct rtctrl_capture_backend* rtctrl_v4l2_backend(void) {
+    static const struct rtctrl_capture_backend backend = {1,
+                                                          backend_open,
+                                                          backend_format,
+                                                          backend_acquire,
+                                                          backend_release,
+                                                          backend_close};
+    return &backend;
+}
+int rtctrl_v4l2_open(const struct rtctrl_v4l2_config* config,
+                     struct rtctrl_camera** camera) {
+    return rtctrl_camera_create(rtctrl_v4l2_backend(), config, camera);
 }

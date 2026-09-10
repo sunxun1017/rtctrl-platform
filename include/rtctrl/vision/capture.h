@@ -10,6 +10,8 @@ extern "C" {
 
 #define RTCTRL_CAMERA_MAX_PLANES 8
 
+#include "rtctrl/vision/image_format.h"
+
 /* Vendor-neutral borrowed frame contract. No V4L2 or RKAIQ types escape here. */
 struct rtctrl_frame_plane {
     const void* data;
@@ -19,12 +21,14 @@ struct rtctrl_frame_plane {
 struct rtctrl_camera_format {
     uint32_t width;
     uint32_t height;
-    uint32_t fourcc;
+    uint32_t pixel_format; /* enum rtctrl_pixel_format */
+    uint32_t
+        native_format; /* Backend diagnostic value only; never use for processing. */
     uint32_t plane_count;
-    uint32_t colorspace;
-    uint32_t quantization;
-    uint32_t transfer_function;
-    uint32_t ycbcr_encoding;
+    uint32_t colorspace;        /* enum rtctrl_colorspace */
+    uint32_t quantization;      /* enum rtctrl_quantization */
+    uint32_t transfer_function; /* enum rtctrl_transfer_function */
+    uint32_t ycbcr_encoding;    /* enum rtctrl_ycbcr_encoding */
 };
 struct rtctrl_camera_frame {
     struct rtctrl_camera_format format;
@@ -32,18 +36,10 @@ struct rtctrl_camera_frame {
     uint64_t token;
     uint32_t sequence;
     int64_t timestamp_ns;
-    int64_t dequeued_time_ns;
+    int64_t dequeued_time_ns; /* Local monotonic time, or zero when unavailable. */
     /* A driver timestamp is not necessarily exposure start. */
     int timestamp_monotonic;
     int corrupt;
-};
-struct rtctrl_camera_config {
-    const char* device;
-    /* Both zero preserve the device format. Otherwise fourcc is required. */
-    uint32_t width;
-    uint32_t height;
-    uint32_t fourcc;
-    uint32_t buffer_count;
 };
 struct rtctrl_camera;
 
@@ -53,8 +49,12 @@ struct rtctrl_camera;
  * Consumers must finish reading before release; asynchronous consumers need
  * a separate owned copy/pool. Errors other than EAGAIN/EINTR/ETIMEDOUT/EBUSY
  * require close and recreation. This API does not manage ISP/3A services. */
-int rtctrl_camera_open(const struct rtctrl_camera_config* config,
-                       struct rtctrl_camera** camera);
+struct rtctrl_capture_backend;
+/* Explicit composition: backend_config is consumed during creation. The backend
+ * callbacks are copied, so the descriptor itself need not outlive this call. */
+int rtctrl_camera_create(const struct rtctrl_capture_backend* backend,
+                         const void* backend_config,
+                         struct rtctrl_camera** camera);
 int rtctrl_camera_get_format(const struct rtctrl_camera* camera,
                              struct rtctrl_camera_format* format);
 int rtctrl_camera_acquire(struct rtctrl_camera* camera,

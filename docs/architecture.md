@@ -1,4 +1,4 @@
-# 平台架构（v0.6）
+# 平台架构（v0.7）
 
 本文件描述已经落地的架构。产品规划见 `develop camera/roadmap.md`；规划中的
 RKNN 推理、事件算法、远程设备管理不代表已有可部署实现。
@@ -18,8 +18,9 @@ RKNN 推理、事件算法、远程设备管理不代表已有可部署实现。
 | RTCTRL_PRODUCT / preset | 实际产物与用途 |
 | --- | --- |
 | development / release | 控制库、适配器、模拟 demo、协议 demo、benchmark；兼容原默认构建 |
-| control-sim | 同一控制能力集合；模拟产品入口只链接模拟 HAL、POSIX、PD、loopback 和仲裁器 |
-| vision-node | C V4L2 采集库与采集工具；没有控制运行库或执行器链接依赖 |
+| control-sim | 模拟控制与纯协议能力；不编译 mailbox、SocketCAN、原生串口和 POSIX 共享内存映射 |
+| vision-node | 通用 C 采集核心、synthetic 后端、可选 V4L2 后端及工具；没有控制库依赖 |
+| vision-node / vision-synthetic | 关闭 V4L2 的无硬件视觉构建，运行相同帧消费者 |
 | robot-vision | 控制和采集能力集合，另含语义事件到模拟控制的回放组合入口 |
 
 ```sh
@@ -30,8 +31,8 @@ ctest --preset robot-vision
 ```
 
 交叉编译通过现有 toolchain/profile 注入，产品通过 `-DRTCTRL_PRODUCT=vision-node`
-等选择。产品 preset 不绑定 SoC。`control-sim` 仍构建无厂商 SDK 的可用适配器库及
-回归测试；它的可执行文件没有链接这些未选中的硬件后端。
+等选择。产品 preset 不绑定 SoC。`control-sim` 显式关闭原生硬件适配器，保留无设备 I/O 的协议实现。
+适配器开关和 v0.7 接口迁移见 `adr/0006-injectable-capture-and-adapter-capabilities.md`。
 
 ## 编译依赖
 
@@ -41,21 +42,25 @@ apps（组合根）
   ├─ control → contracts
   ├─ bridge → contracts
   ├─ selected HAL / transport / POSIX adapter
-  └─ vision_v4l2（独立 C 库，无控制依赖）
+  └─ capture adapter → capture → capture_contracts（独立 C 契约，无控制依赖）
 ```
 
 `rtctrl_contracts` 提供 C++ 数据和接口的构建契约，`rtctrl_options` 保留共同的
 编译选项与关节 profile。`rtctrl_timer` 只通过平台接口等待周期；具体 POSIX
 实现属于 `rtctrl_platform_posix`。
 
-HAL 分为 `rtctrl_hal_sim`、`rtctrl_hal_protocol`、`rtctrl_hal_shm`、
+通用协议组合 HAL `rtctrl_hal_protocol` 只依赖接口；Dynamixel 和半双工链路分别由
+`rtctrl_actuator_dynamixel`、`rtctrl_actuator_serial_link` 实现。HAL 还包括
+`rtctrl_hal_sim`、`rtctrl_hal_shm`、
 `rtctrl_hal_mailbox`；字节流和 CAN 实现、语义命令源分别有独立 target。
 `rtctrl`、`rtctrl_hal`、`rtctrl_transport`、`rtctrl_platform`、`rtctrl_ipc`
-保留为兼容聚合 target。新应用应显式链接所需细粒度 target。
+保留为聚合 target。新应用应显式链接所需细粒度 target。
+上游 ControlLink 与下游 Dynamixel 编解码已拆为 `rtctrl_protocol_target` 和
+`rtctrl_protocol_dynamixel`，不再让上游来源绑定电机协议库。
 
 `cmake/Architecture.cmake` 在每次 configure 时递归检查核心 target 的依赖闭包；
 `scripts/check-architecture.py` 检查核心及其递归头文件依赖，禁止厂商和具体适配器
-进入核心。测试还安装 package 并编译独立下游消费者，防止导出不完整。
+进入实时核心、通用 HAL、采集核心和帧消费者。测试还安装 package 并编译独立下游消费者，防止导出不完整。
 
 ## 实时域与管理入口
 
@@ -116,8 +121,17 @@ HAL I/O 故障、非法数值、越界仍锁存故障。目标或命令过期走
 
 ## 视觉域
 
-`include/rtctrl/vision/capture.h` 是独立 C 契约，`src/vision/v4l2_capture.c`
-是 Linux 多平面 MMAP 适配器。它不暴露 V4L2、RKAIQ、RGA 或 RKNN 类型。
+`include/rtctrl/vision/capture.h` 是独立 C 契约，`src/vision/capture.c` 实现公共
+句柄与所有权管理。`capture_backend.h` 是后端端口；组合根通过
+`rtctrl_camera_create(backend, config, &camera)` 注入具体实现。
+
+`rtctrl_vision_v4l2` 实现 Linux 多平面 MMAP，`rtctrl_capture_synthetic` 实现无硬件
+确定性 GRAY8 图像源。消费者只使用通用句柄，无后端选择分支；独立配置、设备路径、
+原生结构及资源生命周期留在适配器。公共层复制回调表并验证元数据与借用 token。
+
+颜色空间、传递函数、YCbCr 矩阵、量化范围和像素格式采用 `image_format.h`
+的平台枚举。原生默认值仅在上下文足够时解析，否则为 UNKNOWN。
+`native_format` 仅供诊断，消费者不能用其数值推断可移植的图像处理语义。
 
 每个句柄一个所有者、最多一个借用帧：
 
@@ -127,16 +141,18 @@ open（配置、映射、排队、开流） → acquire → 使用只读帧 → 
 ```
 
 帧携带各平面的数据、有效长度、stride、颜色元数据、序号和时间戳来源。
+生成后端未节流，时间戳为 0（不可用），不宣称是真实采集时钟。
 release 后指针失效；异步推理必须先获得独立所有权或复制到自己的有界池，不能把
 借用指针排进异步队列后立即 QBUF。当前未实现 DMA-BUF；以后应新增适配器/所有权
 实现，保持这些语义。
 
 初始化失败逐项释放已映射资源；close 即使 STREAMOFF 失败也继续清理。
-借用 token 防止错误归还和重复归还。非法驱动长度、失败的归还会使句柄失效，
+公共层将独立递增的借用 token 映射回后端 token，防止底层复用 buffer ID
+时旧借用被再次接受。借用 token 防止错误归还和重复归还。非法驱动长度、失败的归还会使句柄失效，
 需要关闭并重新创建。重连策略属于非实时产品层。
 
-采集工具默认保留设备格式，采集 70 帧；可选保存第一张非损坏帧与 `.json`
-元数据。保存发生在诊断工具的同步流程，不能作为异步生产推理流水线使用。
+V4L2 采集入口默认保留设备格式，采集 70 帧；可选保存第一张非损坏帧与 schema_version=2 的 `.json`
+元数据。两种入口共用 `apps/camera_capture/capture_cli.c` 的帧处理代码。保存发生在诊断工具的同步流程，不能作为异步生产推理流水线使用。
 SIGINT/SIGTERM 通过正常路径清理。相机/ISP 拓扑与格式由板级部署准备，库不会
 猜测 `/dev/videoN`，也不会管理 3A 服务。
 
@@ -184,4 +200,6 @@ SDK Git commit 只作为辅助信息，不再冒充实际工作副本。失败�
 - 新板卡：增加 platform profile/BSP，不加板卡分支到 control/runtime。
 - 新产品：增加组合入口与产品 preset，声明故障处理和部署所有权，并添加端到端回放。
 
-接口迁移和验收命令见 `adr/0005-product-composition-and-domain-isolation.md`。
+v0.6 核心接口迁移见 ADR-0005；v0.7 后端接口迁移和构建能力见 ADR-0006。
+线程运行环境、安全门控和固定容量 SPSC 仍是有意保留的核心约束，不为每个稳定实现
+增加虚接口；本轮没有把 POSIX 运行时改造成 RTOS 执行器。

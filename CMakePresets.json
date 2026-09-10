@@ -95,7 +95,11 @@
       "inherits": "release",
       "binaryDir": "${sourceDir}/build/control-sim",
       "cacheVariables": {
-        "RTCTRL_PRODUCT": "control-sim"
+        "RTCTRL_PRODUCT": "control-sim",
+        "RTCTRL_ENABLE_POSIX_SHM": "OFF",
+        "RTCTRL_ENABLE_KERNEL_MAILBOX": "OFF",
+        "RTCTRL_ENABLE_SERIAL": "OFF",
+        "RTCTRL_ENABLE_SOCKETCAN": "OFF"
       }
     },
     {
@@ -112,6 +116,14 @@
       "binaryDir": "${sourceDir}/build/robot-vision",
       "cacheVariables": {
         "RTCTRL_PRODUCT": "robot-vision"
+      }
+    },
+    {
+      "name": "vision-synthetic",
+      "inherits": "vision-node",
+      "binaryDir": "${sourceDir}/build/vision-synthetic",
+      "cacheVariables": {
+        "RTCTRL_ENABLE_V4L2": "OFF"
       }
     }
   ],
@@ -159,6 +171,10 @@
     {
       "name": "robot-vision",
       "configurePreset": "robot-vision"
+    },
+    {
+      "name": "vision-synthetic",
+      "configurePreset": "vision-synthetic"
     }
   ],
   "testPresets": [
@@ -214,6 +230,13 @@
     {
       "name": "robot-vision",
       "configurePreset": "robot-vision",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "vision-synthetic",
+      "configurePreset": "vision-synthetic",
       "output": {
         "outputOnFailure": true
       }

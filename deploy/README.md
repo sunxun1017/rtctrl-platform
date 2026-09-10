@@ -5,12 +5,14 @@
 
 | 产品 | 入口 | 所有权 |
 | --- | --- | --- |
-| control-sim | rtctrl_demo | 主线程管理来源/仲裁；I/O 线程独占模拟 HAL |
-| vision-node | rtctrl_camera_capture DEVICE [OUTPUT_FILE] | 单句柄所有者管理 V4L2；ISP 由现有板级服务准备 |
+| control-sim | rtctrl_demo | 主线程管理来源/仲裁；I/O 线程独占模拟 HAL；原生硬件适配器默认不构建 |
+| vision-node | rtctrl_camera_capture DEVICE [OUTPUT_FILE] | 单句柄所有者管理注入的 V4L2 后端；ISP 由现有板级服务准备 |
+| vision-synthetic（preset） | rtctrl_camera_synthetic [OUTPUT_FILE] | 无硬件生成后端，共用同一帧消费者 |
 | robot-vision | 上述入口及 rtctrl_vision_control_replay EVENTS [--arm] | 回放语义互锁连接模拟控制；尚非生产视觉控制服务 |
 
 安装：cmake --install build/<product> --prefix <staging-directory>。
-核心 CMake package 与选中产物一起安装；相机也可在 apps/camera_capture 独立构建。
+核心 CMake package 与选中产物一起安装；相机也可在 apps/camera_capture 独立 C 构建，V4L2 可关闭。
+可选适配器开关见 ADR-0006；开关为 cache，切换产品请使用独立构建目录。
 
 现有 kernel/systemd 模板继续用于对应硬件部署；本轮不安装或启动任何宿主机服务。
 启动默认未武装、不得给重启策略暗中添加 --arm。真实部署的设备权限、CPU/IRQ、

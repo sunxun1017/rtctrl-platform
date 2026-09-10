@@ -1,7 +1,9 @@
-# 当前采集工具（v0.6）
+# 当前采集工具（v0.7）
 
-采集实现已提炼到 `src/vision/v4l2_capture.c`，公共 C 接口为
-`include/rtctrl/vision/capture.h`，本目录只负责 CLI、信号、输出和统计。
+通用采集句柄实现在 `src/vision/capture.c`，通过 `capture_backend.h` 注入后端。
+`capture_cli.c` 负责两种入口共用的信号、帧消费、输出和统计，不包含 V4L2 类型。
+
+V4L2 入口显式选择 `rtctrl_v4l2_open`：
 
 ```sh
 cmake --preset vision-node
@@ -9,12 +11,22 @@ cmake --build --preset vision-node
 ./build/vision-node/rtctrl_camera_capture /dev/video31 /tmp/frame.nv12
 ```
 
-设备路径需根据板端拓扑确认，示例路径不自动发现。程序保留当前格式，采集 70 帧，
-可选保存首张非损坏帧及 `.json` 格式/时间戳元数据。格式不一定是 NV12，输出扩展名
-不代表格式转换。保存是诊断用途的同步 I/O。超时失败退出，Ctrl+C 走统一资源清理。
+无硬件入口选择 `rtctrl_synthetic_open`：
 
-也可继续 `cmake -S apps/camera_capture -B build/camera-standalone` 独立构建。
-缓冲区 acquire/release 的契约及异步使用限制见 `docs/architecture.md`。
+```sh
+cmake --preset vision-synthetic
+cmake --build --preset vision-synthetic
+./build/vision-synthetic/rtctrl_camera_synthetic /tmp/frame.gray
+```
+
+设备路径需根据板端拓扑确认。V4L2 保留当前格式；生成后端输出 64×48 GRAY8，
+无节流、无采集时钟。两者采集 70 帧，可选保存首张非损坏帧及 schema_version=2
+的 `.json` 元数据。输出扩展名不代表格式转换，保存仍是诊断用途同步 I/O。
+公共 `pixel_format` 与颜色字段按 `image_format.h` 解释，`native_format` 仅供诊断。
+
+可继续 `cmake -S apps/camera_capture -B build/camera-standalone` 独立 C 构建；
+加 `-DRTCTRL_ENABLE_V4L2=OFF` 可只构建无硬件入口。
+资源/借用契约和扩展方式见 `docs/architecture.md` 与 ADR-0006。
 
 以下保留硬件探索笔记，其中的节点、格式和旧实现步骤不作为当前程序的行为说明。
 

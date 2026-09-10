@@ -2,28 +2,29 @@
 
 面向机器人端侧的可移植 Linux 实时控制平台。RK3588 是首个目标而非架构前提；第一阶段不依赖 ROS，提供 1 kHz I/O、200 Hz 控制、固定容量数据通路、故障注入和时延基准。ControlLink V2 已打通固定 profile 帧编解码、UART 短包重组、CRC32C、会话重放防护与接收端租约。
 
-## v0.6 架构入口
+## v0.7 架构入口
 
-项目采用端口与适配器、显式产品装配、控制/视觉运行域隔离。实时引擎只拥有
-I/O 与控制线程，命令源由非实时应用通过 `TargetArbiter` 注入；具体后端不再进入
-runtime 的链接依赖。相机已提炼为独立 C 采集库，具有借用帧和失败清理契约。
+项目采用端口与适配器、显式产品装配、控制/视觉运行域隔离。实时核心通过抽象
+连接控制器和执行器；通用协议 HAL、具体电机协议与链路分别构建。
+采集核心使用可注入 C 后端端口，V4L2 与无硬件 synthetic 后端共用同一个消费者。
+颜色和像素格式使用平台契约，原生 SDK 类型与数值在适配器内部转换。
 
-- [当前架构、模块边界和实现状态](docs/architecture.md)
-- [v0.6 接口迁移和架构决策](docs/adr/0005-product-composition-and-domain-isolation.md)
-- [产品装配与部署边界](deploy/README.md)
-- [v0.6 验证结果与环境限制](docs/verification-v0.6.0.md)
-
-产品 preset：`control-sim`、`vision-node`、`robot-vision`；`release` 保留控制开发默认集合。
+- [当前架构与实现边界](docs/architecture.md)
+- [v0.7 后端接口迁移与构建能力](docs/adr/0006-injectable-capture-and-adapter-capabilities.md)
+- [v0.7 验证结果与限制](docs/verification-v0.7.0.md)
+- [v0.6 实时入口迁移](docs/adr/0005-product-composition-and-domain-isolation.md)
+- [产品部署边界](deploy/README.md)
 
 ```bash
-cmake --preset robot-vision
-cmake --build --preset robot-vision -j8
-ctest --preset robot-vision
-./build/robot-vision/rtctrl_vision_control_replay tests/fixtures/vision-events.txt --arm
+cmake --preset vision-synthetic
+cmake --build --preset vision-synthetic -j8
+ctest --preset vision-synthetic
+./build/vision-synthetic/rtctrl_camera_synthetic /tmp/frame.gray
 ```
 
-`robot-vision` 已提供语义事件到模拟控制的回放闭环。RKNN 推理、生产视觉服务及其
-跨进程语义适配器仍需实现，不能把回放结果当作真机视觉闭环验收。
+`vision-synthetic` 完全不编译 V4L2；`control-sim` 不编译 mailbox、SocketCAN、原生
+串口和 POSIX 共享内存映射。`release` 保留默认控制开发能力；`robot-vision` 提供
+语义事件到模拟控制的回放闭环。RKNN worker 和生产视觉服务仍未实现。
 
 ## 设计目标
 
@@ -111,7 +112,7 @@ include/rtctrl/profiles/ 目标机器人拓扑叶子配置
 src/safety/           命令租约、边界与故障策略
 src/runtime/          双速率线程和数据流编排
 src/bridge/           非实时目标仲裁与应用接入
-src/vision/           独立 C V4L2 采集适配器
+src/vision/           通用 C 采集核心、V4L2 与 synthetic 后端
 deploy/               产品部署边界
 tests/                零第三方依赖的单元测试
 docs/                 架构与部署说明

@@ -1,2 +1,6 @@
-add_library(rtctrl_protocol fixed_target_codec.cpp dynamixel_v2.cpp)
-target_link_libraries(rtctrl_protocol PUBLIC rtctrl_contracts)
+add_library(rtctrl_protocol_target fixed_target_codec.cpp)
+target_link_libraries(rtctrl_protocol_target PUBLIC rtctrl_contracts)
+add_library(rtctrl_protocol_dynamixel dynamixel_v2.cpp)
+target_link_libraries(rtctrl_protocol_dynamixel PUBLIC rtctrl_contracts)
+add_library(rtctrl_protocol INTERFACE)
+target_link_libraries(rtctrl_protocol INTERFACE rtctrl_protocol_target rtctrl_protocol_dynamixel)

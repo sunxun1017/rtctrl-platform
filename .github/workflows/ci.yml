@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        preset: [release, humanoid23, asan, tsan, control-sim, vision-node, robot-vision]
+        preset: [release, humanoid23, asan, tsan, control-sim, vision-node, vision-synthetic, robot-vision]
     steps:
       - uses: actions/checkout@v4
       - name: Configure
@@ -23,7 +23,7 @@ jobs:
           UBSAN_OPTIONS: halt_on_error=1
         run: ctest --preset ${{ matrix.preset }} --output-on-failure
       - name: Protocol integration demo
-        if: matrix.preset != 'vision-node'
+        if: matrix.preset != 'vision-node' && matrix.preset != 'vision-synthetic'
         run: ./build/${{ matrix.preset }}/rtctrl_frame_demo
 
   kernel-module:

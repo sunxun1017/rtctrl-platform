@@ -1,14 +1,15 @@
 set(RTCTRL_INSTALL_TARGETS rtctrl_options rtctrl_contracts)
 if(RTCTRL_BUILD_CONTROL)
     list(APPEND RTCTRL_INSTALL_TARGETS rtctrl_timer rtctrl_platform_posix rtctrl_platform
-        rtctrl_hal_sim rtctrl_hal_protocol rtctrl_hal_shm rtctrl_hal_mailbox rtctrl_hal
-        rtctrl_ipc_posix rtctrl_mailbox_codec rtctrl_ipc rtctrl_control rtctrl_protocol
-        rtctrl_source_loopback rtctrl_source_framed rtctrl_transport_serial rtctrl_transport_can
+        rtctrl_hal_sim rtctrl_hal_protocol rtctrl_hal_shm rtctrl_hal
+        rtctrl_actuator_dynamixel rtctrl_actuator_serial_link
+        rtctrl_ipc rtctrl_control rtctrl_protocol rtctrl_protocol_target rtctrl_protocol_dynamixel
+        rtctrl_source_loopback rtctrl_source_framed
         rtctrl_transport rtctrl_safety rtctrl_runtime rtctrl_bridge rtctrl
         rtctrl_demo rtctrl_bench rtctrl_frame_demo)
 endif()
 if(RTCTRL_BUILD_VISION)
-    list(APPEND RTCTRL_INSTALL_TARGETS rtctrl_vision_v4l2 rtctrl_camera_capture)
+    list(APPEND RTCTRL_INSTALL_TARGETS rtctrl_capture_contracts rtctrl_capture rtctrl_capture_synthetic rtctrl_camera_synthetic)
 endif()
 if(RTCTRL_ENABLE_IGH_ETHERCAT)
     list(APPEND RTCTRL_INSTALL_TARGETS rtctrl_igh_ethercat)
@@ -17,6 +18,13 @@ endif()
 if(TARGET rtctrl_vision_control_replay)
     list(APPEND RTCTRL_INSTALL_TARGETS rtctrl_vision_control_replay)
 endif()
+
+foreach(optional rtctrl_hal_mailbox rtctrl_ipc_posix rtctrl_mailbox_codec
+        rtctrl_transport_serial rtctrl_transport_can rtctrl_vision_v4l2 rtctrl_camera_capture)
+    if(TARGET ${optional})
+        list(APPEND RTCTRL_INSTALL_TARGETS ${optional})
+    endif()
+endforeach()
 
 install(TARGETS ${RTCTRL_INSTALL_TARGETS}
     EXPORT rtctrlTargets

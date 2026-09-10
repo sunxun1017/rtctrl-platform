@@ -1,4 +1,4 @@
-#include "rtctrl/vision/capture.h"
+#include "rtctrl/vision/v4l2_capture.h"
 #include <errno.h>
 #include <linux/videodev2.h>
 #include <poll.h>
@@ -96,16 +96,16 @@ int __wrap_ioctl(int fd, unsigned long request, ...) {
     return 0;
 }
 int main(void) {
-    const struct rtctrl_camera_config cfg = {"fake", 0, 0, 0, 4};
+    const struct rtctrl_v4l2_config cfg = {"fake", 0, 0, 0, 4};
     struct rtctrl_camera* camera = NULL;
     struct rtctrl_camera_frame frame;
     fail_mapping = 1;
-    expect(rtctrl_camera_open(&cfg, &camera) == -ENOMEM && !camera,
+    expect(rtctrl_v4l2_open(&cfg, &camera) == -ENOMEM && !camera,
            "partial mmap fails");
     expect(!opened && !mapped,
            "partial initialization releases mappings and device");
     fail_mapping = 0;
-    expect(rtctrl_camera_open(&cfg, &camera) == 0, "open capture");
+    expect(rtctrl_v4l2_open(&cfg, &camera) == 0, "open capture");
     expect(rtctrl_camera_acquire(camera, 0, &frame) == 0 &&
                frame.planes[0].size == 384 && frame.planes[0].stride == 16 &&
                frame.timestamp_monotonic,
@@ -125,7 +125,7 @@ int main(void) {
                stream_off == 1,
            "cleanup completes despite STREAMOFF error");
     fail_stream_off = invalid_metadata = dequeued = 0;
-    expect(rtctrl_camera_open(&cfg, &camera) == 0, "recreate capture after failure");
+    expect(rtctrl_v4l2_open(&cfg, &camera) == 0, "recreate capture after failure");
     expect(rtctrl_camera_acquire(camera, 0, &frame) == 0,
            "acquire after recreation");
     fail_release = 1;

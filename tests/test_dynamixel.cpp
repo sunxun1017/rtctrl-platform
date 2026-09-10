@@ -1,16 +1,22 @@
 #include "rtctrl/hal/dynamixel_protocol.hpp"
 #include "rtctrl/hal/half_duplex_serial_link.hpp"
 #include "rtctrl/protocol/dynamixel_v2.hpp"
+#if RTCTRL_TEST_HAS_SERIAL
 #include "rtctrl/transport/posix_serial_transport.hpp"
+#endif
 
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#if RTCTRL_TEST_HAS_SERIAL
 #include <fcntl.h>
+#endif
 #include <iostream>
+#if RTCTRL_TEST_HAS_SERIAL
 #include <unistd.h>
+#endif
 
 namespace {
 
@@ -38,15 +44,25 @@ void put_i16(std::byte* output, std::int16_t value) {
 
 void test_official_sync_read_vector() {
     using namespace rtctrl::protocol;
-    const std::array<std::byte, 6> parameters{std::byte{0x84}, std::byte{0x00}, std::byte{0x04},
-                                              std::byte{0x00}, std::byte{0x01}, std::byte{0x02}};
+    const std::array<std::byte, 6> parameters{std::byte{0x84},
+                                              std::byte{0x00},
+                                              std::byte{0x04},
+                                              std::byte{0x00},
+                                              std::byte{0x01},
+                                              std::byte{0x02}};
     std::array<std::byte, 32> encoded{};
     std::size_t encoded_size = 0;
     expect(encode_dynamixel_v2_packet(
-               kDynamixelBroadcastId, static_cast<std::uint8_t>(DynamixelV2Instruction::SyncRead),
-               parameters.data(), parameters.size(), encoded.data(), encoded.size(), encoded_size),
+               kDynamixelBroadcastId,
+               static_cast<std::uint8_t>(DynamixelV2Instruction::SyncRead),
+               parameters.data(),
+               parameters.size(),
+               encoded.data(),
+               encoded.size(),
+               encoded_size),
            "official Protocol 2.0 Sync Read vector encodes");
-    expect(encoded_size == 16U && encoded[14] == std::byte{0xce} && encoded[15] == std::byte{0xfa},
+    expect(encoded_size == 16U && encoded[14] == std::byte{0xce} &&
+               encoded[15] == std::byte{0xfa},
            "Protocol 2.0 CRC matches the official CE FA example");
 
     DynamixelV2StreamParser parser;
@@ -57,27 +73,41 @@ void test_official_sync_read_vector() {
            "remaining Dynamixel bytes are accepted");
     DynamixelV2Packet packet{};
     expect(parser.pop(packet) && packet.id == kDynamixelBroadcastId &&
-               packet.instruction == 0x82U && packet.parameter_size == parameters.size(),
+               packet.instruction == 0x82U &&
+               packet.parameter_size == parameters.size(),
            "stream parser reconstructs a split instruction packet");
 }
 
 void test_stuffing_and_crc_recovery() {
     using namespace rtctrl::protocol;
-    const std::array<std::byte, 5> parameters{std::byte{0x11}, std::byte{0xff}, std::byte{0xff},
-                                              std::byte{0xfd}, std::byte{0x22}};
+    const std::array<std::byte, 5> parameters{std::byte{0x11},
+                                              std::byte{0xff},
+                                              std::byte{0xff},
+                                              std::byte{0xfd},
+                                              std::byte{0x22}};
     std::array<std::byte, 64> encoded{};
     std::size_t encoded_size = 0;
-    expect(encode_dynamixel_v2_packet(1, 0x03, parameters.data(), parameters.size(), encoded.data(),
-                                      encoded.size(), encoded_size),
+    expect(encode_dynamixel_v2_packet(1,
+                                      0x03,
+                                      parameters.data(),
+                                      parameters.size(),
+                                      encoded.data(),
+                                      encoded.size(),
+                                      encoded_size),
            "byte-stuffed packet encodes");
-    expect(encoded_size == 16U, "FF FF FD payload pattern adds exactly one stuffed byte");
+    expect(encoded_size == 16U,
+           "FF FF FD payload pattern adds exactly one stuffed byte");
     DynamixelV2StreamParser parser;
-    const std::array<std::byte, 3> garbage{std::byte{0x00}, std::byte{0x7f}, std::byte{0xff}};
-    expect(parser.push(garbage.data(), garbage.size()) && parser.push(encoded.data(), encoded_size),
+    const std::array<std::byte, 3> garbage{
+        std::byte{0x00}, std::byte{0x7f}, std::byte{0xff}};
+    expect(parser.push(garbage.data(), garbage.size()) &&
+               parser.push(encoded.data(), encoded_size),
            "parser accepts garbage-prefixed packet");
     DynamixelV2Packet packet{};
     expect(parser.pop(packet) && packet.parameter_size == parameters.size() &&
-               std::memcmp(packet.parameters.data(), parameters.data(), parameters.size()) == 0,
+               std::memcmp(packet.parameters.data(),
+                           parameters.data(),
+                           parameters.size()) == 0,
            "parser removes byte stuffing and resynchronizes after garbage");
 
     encoded[encoded_size - 1U] ^= std::byte{0x01};
@@ -90,15 +120,23 @@ void test_stuffing_and_crc_recovery() {
         worst_case[index + 1U] = std::byte{0xff};
         worst_case[index + 2U] = std::byte{0xfd};
     }
-    std::array<std::byte, rtctrl::hal::kActuatorPacketPayloadCapacity> bounded_wire{};
-    expect(encode_dynamixel_v2_packet(1, 0x03, worst_case.data(), worst_case.size(),
-                                      bounded_wire.data(), bounded_wire.size(), encoded_size) &&
+    std::array<std::byte, rtctrl::hal::kActuatorPacketPayloadCapacity>
+        bounded_wire{};
+    expect(encode_dynamixel_v2_packet(1,
+                                      0x03,
+                                      worst_case.data(),
+                                      worst_case.size(),
+                                      bounded_wire.data(),
+                                      bounded_wire.size(),
+                                      encoded_size) &&
                encoded_size <= bounded_wire.size(),
            "worst-case stuffing remains inside the actuator packet bound");
 }
 
-std::array<rtctrl::hal::DynamixelJointProfile, rtctrl::model::kJointCount> make_profiles() {
-    std::array<rtctrl::hal::DynamixelJointProfile, rtctrl::model::kJointCount> profiles{};
+std::array<rtctrl::hal::DynamixelJointProfile, rtctrl::model::kJointCount>
+make_profiles() {
+    std::array<rtctrl::hal::DynamixelJointProfile, rtctrl::model::kJointCount>
+        profiles{};
     for (std::size_t index = 0; index < profiles.size(); ++index) {
         profiles[index].id = static_cast<std::uint8_t>(index + 1U);
         profiles[index].torque_enable = {64, 1};
@@ -134,7 +172,8 @@ void test_motor_protocol_profile() {
            "Bulk Read wire packet enters parser");
     rtctrl::protocol::DynamixelV2Packet request{};
     expect(request_parser.pop(request) && request.instruction == 0x92U &&
-               request.parameter_size == std::min<std::size_t>(profiles.size(), 36U) * 5U,
+               request.parameter_size ==
+                   std::min<std::size_t>(profiles.size(), 36U) * 5U,
            "startup request uses Protocol 2.0 Bulk Read layout");
 
     ActuatorPacketBatch incoming;
@@ -143,19 +182,25 @@ void test_motor_protocol_profile() {
         status_parameters[0] = std::byte{0x00};
         put_i16(status_parameters.data() + 1, static_cast<std::int16_t>(index + 1));
         put_i32(status_parameters.data() + 3, static_cast<std::int32_t>(index + 2));
-        put_i32(status_parameters.data() + 7, static_cast<std::int32_t>(2048 + index * 10));
+        put_i32(status_parameters.data() + 7,
+                static_cast<std::int32_t>(2048 + index * 10));
         ActuatorPacket wire{};
         std::size_t wire_size = 0;
         expect(rtctrl::protocol::encode_dynamixel_v2_packet(
-                   profiles[index].id, rtctrl::protocol::kDynamixelStatusInstruction,
-                   status_parameters.data(), status_parameters.size(), wire.payload.data(),
-                   wire.payload.size(), wire_size),
+                   profiles[index].id,
+                   rtctrl::protocol::kDynamixelStatusInstruction,
+                   status_parameters.data(),
+                   status_parameters.size(),
+                   wire.payload.data(),
+                   wire.payload.size(),
+                   wire_size),
                "status packet encodes");
         wire.size = static_cast<std::uint16_t>(wire_size);
         expect(incoming.push(wire), "status packet enters fixed batch");
     }
     rtctrl::model::SensorFrame feedback{};
-    expect(protocol.decode_feedback(1234, incoming, feedback) == ActuatorProtocolStatus::Ok &&
+    expect(protocol.decode_feedback(1234, incoming, feedback) ==
+                   ActuatorProtocolStatus::Ok &&
                feedback.sequence == 1U && feedback.sample_time_ns == 1234,
            "all ID status packets complete one feedback frame");
     expect(std::abs(feedback.position[1] - 0.01) < 1e-12 &&
@@ -169,7 +214,8 @@ void test_motor_protocol_profile() {
     rtctrl::model::CommandFrame command{};
     command.mode = rtctrl::model::CommandMode::Position;
     command.target_position.fill(0.1);
-    expect(protocol.encode_command(0, command, outgoing) == ActuatorProtocolStatus::Ok &&
+    expect(protocol.encode_command(0, command, outgoing) ==
+                   ActuatorProtocolStatus::Ok &&
                outgoing.size() == position_write_count + bulk_request_count,
            "position command batches Sync Write and the next Bulk Read");
     expect(protocol.encode_safe_stop(0, outgoing) == ActuatorProtocolStatus::Ok &&
@@ -235,7 +281,8 @@ void test_half_duplex_partial_io() {
         packet.payload[index] = static_cast<std::byte>(index);
     }
     ActuatorPacketBatch outgoing;
-    expect(outgoing.push(packet) && link.transmit(0, outgoing) == ActuatorLinkStatus::Ok,
+    expect(outgoing.push(packet) &&
+               link.transmit(0, outgoing) == ActuatorLinkStatus::Ok,
            "partial serial write is retained in a fixed internal queue");
     ActuatorPacketBatch incoming;
     expect(link.receive(1, incoming) == ActuatorLinkStatus::WouldBlock &&
@@ -243,12 +290,14 @@ void test_half_duplex_partial_io() {
            "receive phase first drains the half-duplex transmit queue");
     bytes.receive_[0] = std::byte{0xaa};
     bytes.receive_size_ = 1;
-    expect(link.receive(3, incoming) == ActuatorLinkStatus::Ok && incoming.size() == 1U &&
-               incoming[0].payload[0] == std::byte{0xaa} && bytes.sent_size_ == 8U,
+    expect(link.receive(3, incoming) == ActuatorLinkStatus::Ok &&
+               incoming.size() == 1U && incoming[0].payload[0] == std::byte{0xaa} &&
+               bytes.sent_size_ == 8U,
            "link changes to receive only after the full packet is accepted");
     link.close();
 }
 
+#if RTCTRL_TEST_HAS_SERIAL
 void test_posix_one_megabaud() {
     const int master = ::posix_openpt(O_RDWR | O_NOCTTY);
     if (master < 0 || ::grantpt(master) != 0 || ::unlockpt(master) != 0) {
@@ -268,6 +317,7 @@ void test_posix_one_megabaud() {
     }
     (void)::close(master);
 }
+#endif
 
 } // namespace
 
@@ -276,7 +326,9 @@ int main() {
     test_stuffing_and_crc_recovery();
     test_motor_protocol_profile();
     test_half_duplex_partial_io();
+#if RTCTRL_TEST_HAS_SERIAL
     test_posix_one_megabaud();
+#endif
     if (failures == 0) {
         std::cout << "Dynamixel Protocol 2.0 tests passed\n";
     }

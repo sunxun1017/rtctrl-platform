@@ -1,40 +1,58 @@
 #!/usr/bin/env python3
-"""Reject adapter headers reachable from the realtime core, including transitive includes."""
+"""Check transitive includes at realtime, capture-core and frame-consumer boundaries."""
 from pathlib import Path
 import re
 import sys
 
 root = Path(__file__).resolve().parents[1]
-allowed_prefixes = ("rtctrl/model/", "rtctrl/control/", "rtctrl/safety/", "rtctrl/runtime/")
-allowed_headers = {"rtctrl/hal/actuator_hal.hpp", "rtctrl/platform/realtime_platform.hpp",
-                   "rtctrl/ipc/spsc_ring.hpp", "rtctrl/bridge/runtime_ports.hpp"}
 include_pattern = re.compile(r'^\s*#\s*include\s*[<"]([^">]+)[">]', re.MULTILINE)
-forbidden_system = re.compile(r"^(linux/|sys/|ecrt\.h$|rk_aiq|rknn|ros/|rclcpp/)")
-visited = set()
+forbidden_native = r"^(linux/|sys/|ecrt\.h$|rk_aiq|rknn|ros/|rclcpp/)"
 errors = []
 
 
-def visit(path):
-    if path in visited:
-        return
-    visited.add(path)
-    for include in include_pattern.findall(path.read_text()):
-        if forbidden_system.match(include):
-            errors.append(f"{path.relative_to(root)} includes platform/vendor header {include}")
-        if not include.startswith("rtctrl/"):
-            continue
-        if not include.startswith(allowed_prefixes) and include not in allowed_headers:
-            errors.append(f"{path.relative_to(root)} reaches adapter/application header {include}")
-        else:
-            visit(root / "include" / include)
+def scan(label, starts, allowed_headers, allowed_prefixes=(), forbidden=forbidden_native):
+    visited = set()
+
+    def visit(path):
+        if path in visited:
+            return
+        visited.add(path)
+        for include in include_pattern.findall(path.read_text()):
+            if re.match(forbidden, include):
+                errors.append(f"{label}: {path.relative_to(root)} includes native header {include}")
+            if include.startswith("rtctrl/"):
+                if include not in allowed_headers and not include.startswith(allowed_prefixes):
+                    errors.append(f"{label}: {path.relative_to(root)} reaches forbidden header {include}")
+                else:
+                    visit(root / "include" / include)
+            elif (path.parent / include).is_file():
+                visit(path.parent / include)
+
+    for start in starts:
+        visit(start)
+    print(f"{label}: checked {len(visited)} files")
 
 
+starts = []
 for directory in ("src/runtime", "src/control", "src/safety", "include/rtctrl/runtime",
                   "include/rtctrl/control", "include/rtctrl/safety"):
-    for source in (root / directory).rglob("*"):
-        if source.suffix in (".cpp", ".hpp"):
-            visit(source)
+    starts.extend(p for p in (root / directory).rglob("*") if p.suffix in (".cpp", ".hpp"))
+scan("Realtime core", starts,
+     {"rtctrl/hal/actuator_hal.hpp", "rtctrl/platform/realtime_platform.hpp",
+      "rtctrl/ipc/spsc_ring.hpp", "rtctrl/bridge/runtime_ports.hpp"},
+     ("rtctrl/model/", "rtctrl/control/", "rtctrl/safety/", "rtctrl/runtime/"))
+scan("Composed actuator HAL", [root / "src/hal/protocol_actuator_hal.cpp"],
+     {"rtctrl/hal/protocol_actuator_hal.hpp", "rtctrl/hal/actuator_hal.hpp",
+      "rtctrl/hal/actuator_link.hpp", "rtctrl/hal/actuator_protocol.hpp"}, ("rtctrl/model/",))
+capture_headers = {"rtctrl/vision/capture.h", "rtctrl/vision/capture_backend.h",
+                   "rtctrl/vision/image_format.h"}
+forbidden_capture = r"^(linux/|sys/|pthread\.h$|unistd\.h$|poll\.h$|fcntl\.h$|rk_aiq|rknn)"
+scan("Capture core/consumer", [root / p for p in (
+    "src/vision/capture.c", "apps/camera_capture/capture_cli.c")],
+    capture_headers, forbidden=forbidden_capture)
+scan("Synthetic adapter", [root / "src/vision/synthetic_capture.c"],
+     capture_headers | {"rtctrl/vision/synthetic_capture.h"}, forbidden=forbidden_capture)
 if errors:
     print("\n".join(errors), file=sys.stderr)
     sys.exit(1)
-print(f"Realtime include boundaries passed ({len(visited)} files)")
+print("Architecture include boundaries passed")

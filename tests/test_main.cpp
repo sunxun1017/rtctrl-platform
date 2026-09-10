@@ -5,8 +5,12 @@
 #include "rtctrl/hal/protocol_actuator_hal.hpp"
 #include "rtctrl/hal/shared_memory_hal.hpp"
 #include "rtctrl/hal/simulated_hal.hpp"
+#if RTCTRL_TEST_HAS_MAILBOX
 #include "rtctrl/ipc/kernel_mailbox_codec.hpp"
+#endif
+#if RTCTRL_TEST_HAS_POSIX_SHM
 #include "rtctrl/ipc/posix_shared_memory.hpp"
+#endif
 #include "rtctrl/ipc/shared_motor_abi.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
 #include "rtctrl/platform/posix_realtime.hpp"
@@ -14,10 +18,13 @@
 #include "rtctrl/protocol/fixed_target_codec.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
+#include "rtctrl/transport/can_transport.hpp"
 #include "rtctrl/transport/command_source.hpp"
 #include "rtctrl/transport/framed_command_source.hpp"
 #include "rtctrl/transport/loopback_byte_transport.hpp"
+#if RTCTRL_TEST_HAS_SOCKETCAN
 #include "rtctrl/transport/socketcan_fd_transport.hpp"
+#endif
 
 #include <array>
 #include <atomic>
@@ -27,7 +34,9 @@
 #include <iostream>
 #include <limits>
 #include <thread>
+#if RTCTRL_TEST_HAS_POSIX_SHM
 #include <unistd.h>
+#endif
 
 namespace {
 
@@ -122,6 +131,7 @@ void test_can_frame_contract() {
     expect(!rtctrl::transport::valid_can_frame(frame, true),
            "CAN-FD remote request is rejected");
 
+#if RTCTRL_TEST_HAS_SOCKETCAN
     rtctrl::transport::SocketCanFdTransport invalid("");
     expect(invalid.open() == rtctrl::transport::TransportStatus::Error &&
                invalid.last_error() == EINVAL,
@@ -134,6 +144,7 @@ void test_can_frame_contract() {
     const rtctrl::transport::CanFilter good_filter{0x123, 0x7ff, false};
     expect(filtered.set_filters(&good_filter, 1),
            "SocketCAN accepts a bounded exact-match filter");
+#endif
 }
 
 class TestActuatorLink final : public rtctrl::hal::IActuatorLink {
@@ -441,6 +452,7 @@ void test_shared_memory_hal() {
     hal.close();
 }
 
+#if RTCTRL_TEST_HAS_POSIX_SHM
 void test_posix_shared_memory_lifecycle() {
     std::array<char, 64> name{};
     const auto nonce = std::chrono::steady_clock::now().time_since_epoch().count();
@@ -466,6 +478,7 @@ void test_posix_shared_memory_lifecycle() {
     rtctrl::ipc::PosixSharedMemoryRegion missing;
     expect(!missing.attach(name.data()), "owner cleanup unlinks its exact segment");
 }
+#endif
 
 void test_shared_snapshot_concurrency() {
     rtctrl::ipc::SharedMotorRegion region;
@@ -502,6 +515,7 @@ void test_shared_snapshot_concurrency() {
            "concurrent shared feedback reads never expose a torn generation");
 }
 
+#if RTCTRL_TEST_HAS_MAILBOX
 void test_kernel_mailbox_codec() {
     rtctrl::model::CommandFrame command{};
     command.sequence = 1;
@@ -539,6 +553,7 @@ void test_kernel_mailbox_codec() {
                rtctrl::ipc::MailboxFrameStatus::Stale,
            "stale kernel feedback is rejected at the HAL boundary");
 }
+#endif
 
 void test_yidong_topology() {
     constexpr auto& topology = rtctrl::profiles::yidong23::kTopology;
@@ -820,9 +835,13 @@ int main() {
     test_controller_and_hal();
     test_fixed_target_codec();
     test_shared_memory_hal();
+#if RTCTRL_TEST_HAS_POSIX_SHM
     test_posix_shared_memory_lifecycle();
+#endif
     test_shared_snapshot_concurrency();
+#if RTCTRL_TEST_HAS_MAILBOX
     test_kernel_mailbox_codec();
+#endif
     test_yidong_topology();
     test_policy_action_mapper();
     test_framed_command_source();

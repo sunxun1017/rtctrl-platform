@@ -33,5 +33,32 @@ if(RTCTRL_BUILD_CONTROL)
     rtctrl_check_closure(rtctrl_control "rtctrl_control;rtctrl_contracts;rtctrl_options" "")
 endif()
 if(RTCTRL_BUILD_VISION)
-    rtctrl_check_closure(rtctrl_vision_v4l2 "rtctrl_vision_v4l2" "")
+    rtctrl_check_closure(rtctrl_capture "rtctrl_capture;rtctrl_capture_contracts" "")
+    rtctrl_check_closure(rtctrl_capture_synthetic
+        "rtctrl_capture_synthetic;rtctrl_capture;rtctrl_capture_contracts" "")
+    if(TARGET rtctrl_vision_v4l2)
+        rtctrl_check_closure(rtctrl_vision_v4l2
+            "rtctrl_vision_v4l2;rtctrl_capture;rtctrl_capture_contracts" "")
+    endif()
+    rtctrl_check_closure(rtctrl_capture_cli
+        "rtctrl_capture_cli;rtctrl_capture;rtctrl_capture_contracts" "")
 endif()
+
+if(RTCTRL_BUILD_CONTROL)
+    rtctrl_check_closure(rtctrl_hal_protocol "rtctrl_hal_protocol;rtctrl_contracts;rtctrl_options" "")
+    rtctrl_check_closure(rtctrl_actuator_serial_link "rtctrl_actuator_serial_link;rtctrl_contracts;rtctrl_options" "")
+    rtctrl_check_closure(rtctrl_source_framed
+        "rtctrl_source_framed;rtctrl_protocol_target;rtctrl_contracts;rtctrl_options" "")
+endif()
+
+# Disabled capabilities must remove targets, not merely remove a link from demo.
+foreach(pair "POSIX_SHM|rtctrl_ipc_posix" "KERNEL_MAILBOX|rtctrl_hal_mailbox"
+        "KERNEL_MAILBOX|rtctrl_mailbox_codec" "SERIAL|rtctrl_transport_serial"
+        "SOCKETCAN|rtctrl_transport_can" "V4L2|rtctrl_vision_v4l2")
+    string(REPLACE "|" ";" parts "${pair}")
+    list(GET parts 0 capability)
+    list(GET parts 1 adapter)
+    if(NOT RTCTRL_ENABLE_${capability} AND TARGET ${adapter})
+        message(FATAL_ERROR "Disabled adapter is still being built: ${adapter}")
+    endif()
+endforeach()
