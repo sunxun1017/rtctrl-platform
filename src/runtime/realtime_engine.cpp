@@ -19,12 +19,12 @@ bool setup_failed(const platform::ThreadConfig& config,
 }
 
 bool valid_config(const RuntimeConfig& config) noexcept {
-    const bool periods_valid = config.io_period_ns > 0 && config.control_period_ns > 0 &&
-                               config.source_period_ns > 0 &&
+    const bool periods_valid = config.io_period_ns > 0 &&
+                               config.control_period_ns > 0 &&
                                config.control_period_ns % config.io_period_ns == 0;
     const bool leases_valid =
         config.command_validity_ns >= config.control_period_ns &&
-        config.target_validity_ns >= config.source_period_ns &&
+        config.target_validity_ns >= config.control_period_ns &&
         config.state_validity_ns >= config.control_period_ns &&
         config.startup_feedback_timeout_ns >= config.startup_poll_interval_ns &&
         config.startup_poll_interval_ns > 0;
@@ -47,12 +47,16 @@ bool wait_for_startup(const std::atomic<int>& state) noexcept {
 
 } // namespace
 
-RealtimeEngine::RealtimeEngine(RuntimeConfig config, platform::IRealtimePlatform& platform,
-                               hal::IActuatorHal& hal, control::IController& controller,
-                               transport::ICommandSource& source,
+RealtimeEngine::RealtimeEngine(RuntimeConfig config,
+                               platform::IRealtimePlatform& platform,
+                               hal::IActuatorHal& hal,
+                               control::IController& controller,
                                safety::SafetyPolicy& safety) noexcept
-    : config_(config), platform_(platform), hal_(hal), controller_(controller), source_(source),
-      safety_(safety) {}
+    : config_(config)
+    , platform_(platform)
+    , hal_(hal)
+    , controller_(controller)
+    , safety_(safety) {}
 
 RealtimeEngine::~RealtimeEngine() {
     request_stop();
@@ -60,10 +64,13 @@ RealtimeEngine::~RealtimeEngine() {
 }
 
 bool RealtimeEngine::start() noexcept {
-    if (running_.exchange(true) || started_once_ || !valid_config(config_)) {
-        running_.store(false);
+    // start/join belong to one lifecycle owner; a rejected second start must
+    // not clear the running flag of an active engine.
+    if (running_.load() || started_once_ || !valid_config(config_)) {
         return false;
     }
+    running_.store(true);
+    lifecycle_.store(bridge::RuntimeState::Starting);
     started_once_ = true;
     stop_.store(false);
     fatal_startup_error_.store(false);
@@ -72,8 +79,11 @@ bool RealtimeEngine::start() noexcept {
     report_ = {};
     if (config_.lock_memory) {
         report_.memory = platform_.lock_process_memory();
-        if (!report_.memory.active && (config_.io_thread.strict || config_.control_thread.strict)) {
+        if (!report_.memory.active &&
+            (config_.io_thread.strict || config_.control_thread.strict)) {
             report_.fatal_startup_error = true;
+            fatal_startup_error_.store(true);
+            lifecycle_.store(bridge::RuntimeState::Stopped);
             running_.store(false);
             return false;
         }
@@ -82,19 +92,19 @@ bool RealtimeEngine::start() noexcept {
     try {
         io_thread_ = std::thread(&RealtimeEngine::io_loop, this);
         control_thread_ = std::thread(&RealtimeEngine::control_loop, this);
-        if (!wait_for_startup(io_startup_state_) || !wait_for_startup(control_startup_state_)) {
+        if (!wait_for_startup(io_startup_state_) ||
+            !wait_for_startup(control_startup_state_)) {
             stop_.store(true);
             join();
             return false;
         }
-        source_thread_ = std::thread(&RealtimeEngine::source_loop, this);
     } catch (const std::exception&) {
+        fatal_startup_error_.store(true);
         stop_.store(true);
         join();
-        hal_.emergency_stop(platform_.now_ns());
-        hal_.close();
         return false;
     }
+    lifecycle_.store(bridge::RuntimeState::Ready);
     return true;
 }
 
@@ -103,9 +113,6 @@ void RealtimeEngine::request_stop() noexcept {
 }
 
 void RealtimeEngine::join() noexcept {
-    if (source_thread_.joinable()) {
-        source_thread_.join();
-    }
     if (control_thread_.joinable()) {
         control_thread_.join();
     }
@@ -114,6 +121,7 @@ void RealtimeEngine::join() noexcept {
     }
     report_.fatal_startup_error = fatal_startup_error_.load();
     running_.store(false);
+    lifecycle_.store(bridge::RuntimeState::Stopped);
 }
 
 RuntimeReport RealtimeEngine::report() const noexcept {
@@ -144,7 +152,8 @@ void RealtimeEngine::io_loop() noexcept {
     bool startup_feedback_ready = !config_.arm_actuation;
     if (config_.arm_actuation) {
         const auto startup_begin_ns = platform_.now_ns();
-        const auto startup_deadline_ns = startup_begin_ns + config_.startup_feedback_timeout_ns;
+        const auto startup_deadline_ns =
+            startup_begin_ns + config_.startup_feedback_timeout_ns;
         while (!startup_feedback_ready && !stop_.load(std::memory_order_acquire)) {
             const auto now_ns = platform_.now_ns();
             const auto status = hal_.read(now_ns, startup_state);
@@ -155,15 +164,16 @@ void RealtimeEngine::io_loop() noexcept {
             if (status == hal::HalStatus::IoError || now_ns >= startup_deadline_ns) {
                 break;
             }
-            const auto next_poll_ns =
-                std::min(now_ns + config_.startup_poll_interval_ns, startup_deadline_ns);
+            const auto next_poll_ns = std::min(
+                now_ns + config_.startup_poll_interval_ns, startup_deadline_ns);
             if (platform_.sleep_until(next_poll_ns) != 0) {
                 break;
             }
         }
     }
-    if (!startup_feedback_ready ||
-        (config_.arm_actuation && hal_.arm(platform_.now_ns()) != hal::HalStatus::Ok)) {
+    // Both scheduler gates must succeed before the only hardware owner arms.
+    if (!startup_feedback_ready || !wait_for_startup(control_startup_state_) ||
+        stop_.load()) {
         fatal_startup_error_.store(true);
         io_startup_state_.store(-1, std::memory_order_release);
         stop_.store(true);
@@ -171,6 +181,14 @@ void RealtimeEngine::io_loop() noexcept {
         hal_.close();
         return;
     }
+    // Request/response HALs may only produce the startup response before arm.
+    // Publish that sample so the controller can create the first command.
+    if (config_.arm_actuation) {
+        (void)states_.try_push(startup_state);
+        (void)snapshots_.try_push(startup_state);
+    }
+    // Startup permission alone does not energize hardware. The first accepted
+    // command below arms only after feedback and both scheduler gates are ready.
     io_startup_state_.store(1, std::memory_order_release);
 
     platform::PeriodicTimer timer(platform_, config_.io_period_ns);
@@ -182,7 +200,7 @@ void RealtimeEngine::io_loop() noexcept {
     safety_.make_safe_command(state, platform_.now_ns(), command);
     bool fault_latched = false;
     bool hardware_safe_state_entered = false;
-    hardware_safe_state_entered = !config_.arm_actuation;
+    hardware_safe_state_entered = !armed_.load();
     std::int64_t last_successful_read_ns = platform_.now_ns();
 
     while (!stop_.load(std::memory_order_acquire)) {
@@ -197,17 +215,27 @@ void RealtimeEngine::io_loop() noexcept {
         report_.io_metrics.record_wakeup(wakeup.actual_ns - wakeup.scheduled_ns,
                                          wakeup.skipped_periods);
 
+        if (disarm_requested_.load(std::memory_order_acquire) &&
+            !hardware_safe_state_entered) {
+            hal_.emergency_stop(begin_ns);
+            hardware_safe_state_entered = true;
+            armed_.store(false);
+        }
         const auto read_status = hal_.read(begin_ns, state);
         const bool read_ok = read_status == hal::HalStatus::Ok;
         if (read_ok) {
             last_successful_read_ns = begin_ns;
         } else if (read_status == hal::HalStatus::NotReady &&
                    begin_ns - last_successful_read_ns <= config_.state_validity_ns) {
-            // A bounded multi-tick receive is normal for half-duplex serial links.
-            // Do not send another command until the complete feedback transaction
-            // arrives; the state lease still bounds how long this may continue.
-            report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
-            continue;
+            // Before first arm, a request/response HAL may have no further
+            // traffic. Its fresh startup sample can authorize the arm command.
+            // Once armed, wait for the complete feedback transaction before
+            // sending another command (including after a short arm write).
+            if (armed_.load() || !config_.arm_actuation ||
+                disarm_requested_.load()) {
+                report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+                continue;
+            }
         } else {
             ++report_.io_metrics.io_errors;
             if (!fault_latched) {
@@ -215,6 +243,11 @@ void RealtimeEngine::io_loop() noexcept {
             }
             fault_latched = true;
             report_.fault_latched = true;
+            fault_latched_.store(true);
+            armed_.store(false);
+        }
+        if (read_ok) {
+            (void)snapshots_.try_push(state);
         }
         if (read_ok && !states_.try_push(state)) {
             ++report_.io_metrics.queue_drops;
@@ -233,7 +266,7 @@ void RealtimeEngine::io_loop() noexcept {
             report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
             continue;
         }
-        if (!config_.arm_actuation) {
+        if (!config_.arm_actuation || disarm_requested_.load()) {
             report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
             continue;
         }
@@ -249,6 +282,8 @@ void RealtimeEngine::io_loop() noexcept {
                 decision == safety::SafetyDecision::LimitViolation) {
                 fault_latched = true;
                 report_.fault_latched = true;
+                fault_latched_.store(true);
+                armed_.store(false);
                 if (!hardware_safe_state_entered) {
                     hal_.emergency_stop(begin_ns);
                     hardware_safe_state_entered = true;
@@ -257,12 +292,44 @@ void RealtimeEngine::io_loop() noexcept {
                 continue;
             }
             safety_.make_safe_command(state, begin_ns, command);
+            if (!armed_.load()) {
+                report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+                continue;
+            }
         }
 
+        if (!armed_.load()) {
+            if (state.sample_time_ns > begin_ns ||
+                begin_ns - state.sample_time_ns > config_.state_validity_ns) {
+                report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+                continue;
+            }
+            if (hal_.arm(begin_ns) != hal::HalStatus::Ok) {
+                fault_latched = true;
+                report_.fault_latched = true;
+                fault_latched_.store(true);
+                ++report_.io_metrics.io_errors;
+                ++report_.safety_interventions;
+                hal_.emergency_stop(begin_ns);
+                hardware_safe_state_entered = true;
+                report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+                continue;
+            }
+            armed_.store(true);
+            hardware_safe_state_entered = false;
+            // Arm can enqueue a half-duplex transaction. Resume through read()
+            // on subsequent cycles instead of writing into that occupied link.
+            report_.io_metrics.record_execution(platform_.now_ns() - begin_ns);
+            continue;
+        }
+        // A request racing this cycle takes effect no later than the next I/O
+        // cycle. Management never accesses HAL concurrently.
         if (hal_.write(begin_ns, command) != hal::HalStatus::Ok) {
             ++report_.io_metrics.io_errors;
             fault_latched = true;
             report_.fault_latched = true;
+            fault_latched_.store(true);
+            armed_.store(false);
             ++report_.safety_interventions;
             if (!hardware_safe_state_entered) {
                 hal_.emergency_stop(begin_ns);
@@ -276,11 +343,13 @@ void RealtimeEngine::io_loop() noexcept {
         hal_.emergency_stop(platform_.now_ns());
     }
     hal_.close();
+    armed_.store(false);
 }
 
 void RealtimeEngine::control_loop() noexcept {
     platform_.prefault_stack();
-    report_.control_setup = platform_.configure_current_thread(config_.control_thread);
+    report_.control_setup =
+        platform_.configure_current_thread(config_.control_thread);
     if (setup_failed(config_.control_thread, report_.control_setup)) {
         fatal_startup_error_.store(true);
         control_startup_state_.store(-1, std::memory_order_release);
@@ -311,7 +380,8 @@ void RealtimeEngine::control_loop() noexcept {
         model::ControlTarget candidate_target{};
         if (targets_.drain_latest(candidate_target) &&
             candidate_target.sequence > last_target_sequence &&
-            candidate_target.created_time_ns <= begin_ns + config_.control_period_ns) {
+            candidate_target.created_time_ns <=
+                begin_ns + config_.control_period_ns) {
             target = candidate_target;
             last_target_sequence = target.sequence;
             has_target = true;
@@ -320,16 +390,19 @@ void RealtimeEngine::control_loop() noexcept {
             report_.control_metrics.record_execution(platform_.now_ns() - begin_ns);
             continue;
         }
-        const bool state_fresh = state.sequence > last_state_sequence &&
-                                 state.sample_time_ns <= begin_ns &&
-                                 begin_ns - state.sample_time_ns <= config_.state_validity_ns;
+        const bool state_fresh =
+            state.sequence > last_state_sequence &&
+            state.sample_time_ns <= begin_ns &&
+            begin_ns - state.sample_time_ns <= config_.state_validity_ns;
         last_state_sequence = state.sequence;
         const bool transport_lease_fresh =
             target.valid_until_ns == 0 ||
-            (target.valid_until_ns >= target.created_time_ns && begin_ns <= target.valid_until_ns);
-        const bool target_fresh = has_target && target.created_time_ns <= begin_ns &&
-                                  begin_ns - target.created_time_ns <= config_.target_validity_ns &&
-                                  transport_lease_fresh;
+            (target.valid_until_ns >= target.created_time_ns &&
+             begin_ns <= target.valid_until_ns);
+        const bool target_fresh =
+            has_target && target.created_time_ns <= begin_ns &&
+            begin_ns - target.created_time_ns <= config_.target_validity_ns &&
+            transport_lease_fresh;
         if (!state_fresh || !target_fresh) {
             report_.control_metrics.record_execution(platform_.now_ns() - begin_ns);
             continue;
@@ -345,29 +418,46 @@ void RealtimeEngine::control_loop() noexcept {
         context.dt_seconds = static_cast<double>(config_.control_period_ns) / 1.0e9;
         context.target = target;
         model::CommandFrame command{};
-        if (controller_.update(state, context, command) && !commands_.try_push(command)) {
+        if (controller_.update(state, context, command) &&
+            !commands_.try_push(command)) {
             ++report_.control_metrics.queue_drops;
         }
         report_.control_metrics.record_execution(platform_.now_ns() - begin_ns);
     }
 }
 
-void RealtimeEngine::source_loop() noexcept {
-    platform::PeriodicTimer timer(platform_, config_.source_period_ns);
-    while (!stop_.load(std::memory_order_acquire)) {
-        const auto wakeup = timer.wait_next();
-        if (wakeup.wait_error != 0) {
-            fatal_startup_error_.store(true);
-            stop_.store(true);
-            break;
-        }
-        model::ControlTarget target{};
-        if (source_.poll(wakeup.actual_ns, target)) {
-            if (!targets_.try_push(target)) {
-                ++report_.control_metrics.queue_drops;
-            }
-        }
+void RealtimeEngine::request_disarm() noexcept {
+    disarm_requested_.store(true, std::memory_order_release);
+}
+
+bridge::RuntimeState RealtimeEngine::state() const noexcept {
+    const auto lifecycle = lifecycle_.load(std::memory_order_acquire);
+    if (lifecycle == bridge::RuntimeState::Stopped ||
+        lifecycle == bridge::RuntimeState::Created) {
+        return lifecycle;
     }
+    if (fault_latched_.load() || fatal_startup_error_.load()) {
+        return bridge::RuntimeState::FaultLatched;
+    }
+    if (stop_.load()) {
+        return bridge::RuntimeState::Stopping;
+    }
+    return armed_.load() ? bridge::RuntimeState::Armed : lifecycle;
+}
+
+bool RealtimeEngine::try_submit(const model::ControlTarget& target) noexcept {
+    return running_.load(std::memory_order_acquire) && !stop_.load() &&
+           !disarm_requested_.load() && targets_.try_push(target);
+}
+
+bool RealtimeEngine::try_read_latest(model::SensorFrame& state) const noexcept {
+    if (snapshots_.drain_latest(last_snapshot_)) {
+        has_snapshot_ = true;
+    }
+    if (has_snapshot_) {
+        state = last_snapshot_;
+    }
+    return has_snapshot_;
 }
 
 } // namespace rtctrl::runtime

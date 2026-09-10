@@ -1,6 +1,10 @@
 {
   "version": 3,
-  "cmakeMinimumRequired": { "major": 3, "minor": 16, "patch": 0 },
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 16,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "release",
@@ -85,23 +89,134 @@
       "cacheVariables": {
         "RTCTRL_TARGET_TRIPLE": "aarch64-buildroot-linux-gnu"
       }
+    },
+    {
+      "name": "control-sim",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/control-sim",
+      "cacheVariables": {
+        "RTCTRL_PRODUCT": "control-sim"
+      }
+    },
+    {
+      "name": "vision-node",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/vision-node",
+      "cacheVariables": {
+        "RTCTRL_PRODUCT": "vision-node"
+      }
+    },
+    {
+      "name": "robot-vision",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/robot-vision",
+      "cacheVariables": {
+        "RTCTRL_PRODUCT": "robot-vision"
+      }
     }
   ],
   "buildPresets": [
-    { "name": "release", "configurePreset": "release" },
-    { "name": "humanoid23", "configurePreset": "humanoid23" },
-    { "name": "asan", "configurePreset": "asan" },
-    { "name": "igh", "configurePreset": "igh" },
-    { "name": "tsan", "configurePreset": "tsan" },
-    { "name": "riscv64", "configurePreset": "riscv64" },
-    { "name": "aarch64", "configurePreset": "aarch64" },
-    { "name": "atk-dlrv1126b", "configurePreset": "atk-dlrv1126b" }
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "humanoid23",
+      "configurePreset": "humanoid23"
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan"
+    },
+    {
+      "name": "igh",
+      "configurePreset": "igh"
+    },
+    {
+      "name": "tsan",
+      "configurePreset": "tsan"
+    },
+    {
+      "name": "riscv64",
+      "configurePreset": "riscv64"
+    },
+    {
+      "name": "aarch64",
+      "configurePreset": "aarch64"
+    },
+    {
+      "name": "atk-dlrv1126b",
+      "configurePreset": "atk-dlrv1126b"
+    },
+    {
+      "name": "control-sim",
+      "configurePreset": "control-sim"
+    },
+    {
+      "name": "vision-node",
+      "configurePreset": "vision-node"
+    },
+    {
+      "name": "robot-vision",
+      "configurePreset": "robot-vision"
+    }
   ],
   "testPresets": [
-    { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },
-    { "name": "humanoid23", "configurePreset": "humanoid23", "output": { "outputOnFailure": true } },
-    { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } },
-    { "name": "igh", "configurePreset": "igh", "output": { "outputOnFailure": true } },
-    { "name": "tsan", "configurePreset": "tsan", "output": { "outputOnFailure": true } }
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "humanoid23",
+      "configurePreset": "humanoid23",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "igh",
+      "configurePreset": "igh",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "tsan",
+      "configurePreset": "tsan",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "control-sim",
+      "configurePreset": "control-sim",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "vision-node",
+      "configurePreset": "vision-node",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "robot-vision",
+      "configurePreset": "robot-vision",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
   ]
 }

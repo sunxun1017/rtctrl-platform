@@ -1,0 +1,20 @@
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message(FATAL_ERROR "The V4L2 capture adapter requires Linux")
+endif()
+if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
+    set(CMAKE_INSTALL_INCLUDEDIR include)
+endif()
+add_library(rtctrl_vision_v4l2 v4l2_capture.c)
+target_include_directories(rtctrl_vision_v4l2 PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features(rtctrl_vision_v4l2 PUBLIC c_std_11)
+target_compile_options(rtctrl_vision_v4l2 PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
+
+if(RTCTRL_ENABLE_SANITIZERS)
+    target_compile_options(rtctrl_vision_v4l2 PUBLIC -fsanitize=address,undefined -fno-omit-frame-pointer)
+    target_link_options(rtctrl_vision_v4l2 PUBLIC -fsanitize=address,undefined)
+elseif(RTCTRL_ENABLE_TSAN)
+    target_compile_options(rtctrl_vision_v4l2 PUBLIC -fsanitize=thread -fno-omit-frame-pointer)
+    target_link_options(rtctrl_vision_v4l2 PUBLIC -fsanitize=thread)
+endif()

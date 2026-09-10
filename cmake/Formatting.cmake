@@ -12,11 +12,13 @@ function(rtctrl_add_format_targets)
 
     file(GLOB_RECURSE RTCTRL_FORMAT_SOURCES CONFIGURE_DEPENDS
         "${PROJECT_SOURCE_DIR}/apps/*.cpp"
+        "${PROJECT_SOURCE_DIR}/apps/*.c"
         "${PROJECT_SOURCE_DIR}/include/*.h"
         "${PROJECT_SOURCE_DIR}/include/*.hpp"
         "${PROJECT_SOURCE_DIR}/kernel/*.c"
         "${PROJECT_SOURCE_DIR}/kernel/*.h"
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
+        "${PROJECT_SOURCE_DIR}/src/*.c"
         "${PROJECT_SOURCE_DIR}/tests/*.c"
         "${PROJECT_SOURCE_DIR}/tests/*.cpp")
     add_custom_target(format

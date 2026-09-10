@@ -1,4 +1,11 @@
-add_library(rtctrl_transport
-    loopback_source.cpp loopback_byte_transport.cpp framed_command_source.cpp
-    posix_serial_transport.cpp socketcan_fd_transport.cpp)
-target_link_libraries(rtctrl_transport PUBLIC rtctrl_options rtctrl_protocol)
+add_library(rtctrl_source_loopback loopback_source.cpp loopback_byte_transport.cpp)
+target_link_libraries(rtctrl_source_loopback PUBLIC rtctrl_contracts)
+add_library(rtctrl_source_framed framed_command_source.cpp)
+target_link_libraries(rtctrl_source_framed PUBLIC rtctrl_contracts rtctrl_protocol)
+add_library(rtctrl_transport_serial posix_serial_transport.cpp)
+target_link_libraries(rtctrl_transport_serial PUBLIC rtctrl_contracts)
+add_library(rtctrl_transport_can socketcan_fd_transport.cpp)
+target_link_libraries(rtctrl_transport_can PUBLIC rtctrl_contracts)
+add_library(rtctrl_transport INTERFACE)
+target_link_libraries(rtctrl_transport INTERFACE rtctrl_source_loopback rtctrl_source_framed
+    rtctrl_transport_serial rtctrl_transport_can)

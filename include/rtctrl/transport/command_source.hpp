@@ -1,15 +1,7 @@
 #pragma once
-
-#include "rtctrl/model/frames.hpp"
-
-#include <cstdint>
+#include "rtctrl/bridge/command_source.hpp"
 
 namespace rtctrl::transport {
-
-class ICommandSource {
-  public:
-    virtual ~ICommandSource() = default;
-    virtual bool poll(std::int64_t now_ns, model::ControlTarget& target) noexcept = 0;
-};
-
+// Compatibility name; semantic input belongs to the application boundary.
+using ICommandSource = bridge::ICommandSource;
 } // namespace rtctrl::transport

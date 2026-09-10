@@ -1,2 +1,6 @@
-add_library(rtctrl_platform realtime_platform.cpp posix_realtime.cpp)
-target_link_libraries(rtctrl_platform PUBLIC rtctrl_options Threads::Threads)
+add_library(rtctrl_timer realtime_platform.cpp)
+target_link_libraries(rtctrl_timer PUBLIC rtctrl_contracts)
+add_library(rtctrl_platform_posix posix_realtime.cpp)
+target_link_libraries(rtctrl_platform_posix PUBLIC rtctrl_contracts Threads::Threads)
+add_library(rtctrl_platform INTERFACE)
+target_link_libraries(rtctrl_platform INTERFACE rtctrl_timer rtctrl_platform_posix)

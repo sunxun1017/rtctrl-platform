@@ -11,7 +11,8 @@ namespace rtctrl::ipc {
 template <typename T, std::size_t Capacity> class SpscRing {
     static_assert(Capacity >= 2 && (Capacity & (Capacity - 1)) == 0,
                   "capacity must be a power of two");
-    static_assert(std::is_trivially_copyable_v<T>, "real-time messages must be POD-like");
+    static_assert(std::is_trivially_copyable_v<T>,
+                  "real-time messages must be POD-like");
     static_assert(std::atomic<std::uint64_t>::is_always_lock_free,
                   "SPSC counters must be lock-free on the target platform");
 
@@ -41,7 +42,8 @@ template <typename T, std::size_t Capacity> class SpscRing {
     bool drain_latest(T& value) noexcept {
         bool found = false;
         T candidate{};
-        while (try_pop(candidate)) {
+        const auto available = size_approx();
+        for (std::size_t i = 0; i < available && try_pop(candidate); ++i) {
             value = candidate;
             found = true;
         }

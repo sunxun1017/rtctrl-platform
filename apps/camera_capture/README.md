@@ -1,3 +1,25 @@
+# 当前采集工具（v0.6）
+
+采集实现已提炼到 `src/vision/v4l2_capture.c`，公共 C 接口为
+`include/rtctrl/vision/capture.h`，本目录只负责 CLI、信号、输出和统计。
+
+```sh
+cmake --preset vision-node
+cmake --build --preset vision-node
+./build/vision-node/rtctrl_camera_capture /dev/video31 /tmp/frame.nv12
+```
+
+设备路径需根据板端拓扑确认，示例路径不自动发现。程序保留当前格式，采集 70 帧，
+可选保存首张非损坏帧及 `.json` 格式/时间戳元数据。格式不一定是 NV12，输出扩展名
+不代表格式转换。保存是诊断用途的同步 I/O。超时失败退出，Ctrl+C 走统一资源清理。
+
+也可继续 `cmake -S apps/camera_capture -B build/camera-standalone` 独立构建。
+缓冲区 acquire/release 的契约及异步使用限制见 `docs/architecture.md`。
+
+以下保留硬件探索笔记，其中的节点、格式和旧实现步骤不作为当前程序的行为说明。
+
+---
+
 # capture camera
 
 这部分是要写一个最小采集程序，相当于做一个基线，测量缓冲区流转

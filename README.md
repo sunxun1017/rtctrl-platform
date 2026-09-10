@@ -2,6 +2,29 @@
 
 面向机器人端侧的可移植 Linux 实时控制平台。RK3588 是首个目标而非架构前提；第一阶段不依赖 ROS，提供 1 kHz I/O、200 Hz 控制、固定容量数据通路、故障注入和时延基准。ControlLink V2 已打通固定 profile 帧编解码、UART 短包重组、CRC32C、会话重放防护与接收端租约。
 
+## v0.6 架构入口
+
+项目采用端口与适配器、显式产品装配、控制/视觉运行域隔离。实时引擎只拥有
+I/O 与控制线程，命令源由非实时应用通过 `TargetArbiter` 注入；具体后端不再进入
+runtime 的链接依赖。相机已提炼为独立 C 采集库，具有借用帧和失败清理契约。
+
+- [当前架构、模块边界和实现状态](docs/architecture.md)
+- [v0.6 接口迁移和架构决策](docs/adr/0005-product-composition-and-domain-isolation.md)
+- [产品装配与部署边界](deploy/README.md)
+- [v0.6 验证结果与环境限制](docs/verification-v0.6.0.md)
+
+产品 preset：`control-sim`、`vision-node`、`robot-vision`；`release` 保留控制开发默认集合。
+
+```bash
+cmake --preset robot-vision
+cmake --build --preset robot-vision -j8
+ctest --preset robot-vision
+./build/robot-vision/rtctrl_vision_control_replay tests/fixtures/vision-events.txt --arm
+```
+
+`robot-vision` 已提供语义事件到模拟控制的回放闭环。RKNN 推理、生产视觉服务及其
+跨进程语义适配器仍需实现，不能把回放结果当作真机视觉闭环验收。
+
 ## 设计目标
 
 - 实时域仅执行定长 POD 数据处理；循环内不分配内存、不写日志、不做阻塞 I/O。
@@ -11,7 +34,7 @@
 - I/O 线程为 1 kHz，控制线程为 200 Hz，命令通过有效期租约防止陈旧指令下发。
 - `SCHED_FIFO`、CPU 亲和性和 `mlockall` 不可用时，默认安全回退到普通调度并报告能力；`--strict-rt` 可改为失败即停止。
 - WSL 运行 POSIX + 模拟 HAL；Linux/RK3588、UART/SPI/NearLink 与 ROS 2 都通过叶子适配器接入。仓库已提供 POSIX 串口和 Linux SocketCAN CAN-FD 帧级适配器，SPI 和 ROS 2 保持可选。
-- 启动默认保持未武装状态；演示也必须显式传入 `--arm` 才允许普通控制指令进入 HAL。
+- 启动默认保持未武装状态；显式传入 `--arm` 后，还须等待调度门控、反馈和首条有效控制命令，才由 I/O 线程武装 HAL。
 - 逻辑关节数是编译期 profile：默认 6 关节；`humanoid23` 使用从 `sx_text` 提炼的 23 关节/三 EtherCAT master 拓扑，不修改核心源码。
 - L0 硬件进程与控制进程可通过版本化 POSIX 共享内存解耦；EtherCAT 可选用 IgH 1.6 `ecrt` 适配器；具备伴随控制器/FPGA mailbox 时，也可选择 Linux C 内核驱动的 kernel-staged ioctl + coherent-DMA + IRQ + hrtimer watchdog 路径。硬件 ABI V2 要求精确关节数、DMA_QUIESCED/RESET 握手和独立硬复位线；ROS 2、设备 PDO codec 和 ONNX Runtime 都留在叶子适配器。
 
@@ -76,7 +99,7 @@ RTCTRL_REQUIRE_FIFO=1 RTCTRL_REQUIRE_MLOCK=1 \
 ## 目录
 
 ```text
-apps/                 演示程序和独立周期基准
+apps/                 产品组合入口、演示程序和独立周期基准
 include/rtctrl/       稳定接口、数据模型与实时容器
 src/platform/         平台无关周期器与 POSIX 适配器
 src/hal/              模拟或真实执行器后端
@@ -87,6 +110,9 @@ src/ipc/              版本化 POSIX 共享内存与 L0 双向快照
 include/rtctrl/profiles/ 目标机器人拓扑叶子配置
 src/safety/           命令租约、边界与故障策略
 src/runtime/          双速率线程和数据流编排
+src/bridge/           非实时目标仲裁与应用接入
+src/vision/           独立 C V4L2 采集适配器
+deploy/               产品部署边界
 tests/                零第三方依赖的单元测试
 docs/                 架构与部署说明
 kernel/               C 平台驱动、DT binding、Kconfig、只读检查器与 systemd 模板

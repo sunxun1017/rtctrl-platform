@@ -1,2 +1,6 @@
-add_library(rtctrl_ipc posix_shared_memory.cpp kernel_mailbox_codec.cpp)
-target_link_libraries(rtctrl_ipc PUBLIC rtctrl_options)
+add_library(rtctrl_ipc_posix posix_shared_memory.cpp)
+target_link_libraries(rtctrl_ipc_posix PUBLIC rtctrl_contracts)
+add_library(rtctrl_mailbox_codec kernel_mailbox_codec.cpp)
+target_link_libraries(rtctrl_mailbox_codec PUBLIC rtctrl_contracts)
+add_library(rtctrl_ipc INTERFACE)
+target_link_libraries(rtctrl_ipc INTERFACE rtctrl_ipc_posix rtctrl_mailbox_codec)

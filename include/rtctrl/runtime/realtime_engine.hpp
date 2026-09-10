@@ -1,12 +1,12 @@
 #pragma once
 
+#include "rtctrl/bridge/runtime_ports.hpp"
 #include "rtctrl/control/controller.hpp"
 #include "rtctrl/hal/actuator_hal.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
 #include "rtctrl/platform/realtime_platform.hpp"
 #include "rtctrl/runtime/metrics.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
-#include "rtctrl/transport/command_source.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -17,7 +17,6 @@ namespace rtctrl::runtime {
 struct RuntimeConfig {
     std::int64_t io_period_ns{1'000'000};
     std::int64_t control_period_ns{5'000'000};
-    std::int64_t source_period_ns{20'000'000};
     std::int64_t command_validity_ns{15'000'000};
     std::int64_t target_validity_ns{100'000'000};
     std::int64_t state_validity_ns{10'000'000};
@@ -40,37 +39,50 @@ struct RuntimeReport {
     bool fatal_startup_error{false};
 };
 
-class RealtimeEngine {
+class RealtimeEngine final : public bridge::ITargetIngress,
+                             public bridge::IStateSnapshot,
+                             public bridge::ILifecycleControl {
   public:
-    RealtimeEngine(RuntimeConfig config, platform::IRealtimePlatform& platform,
-                   hal::IActuatorHal& hal, control::IController& controller,
-                   transport::ICommandSource& source, safety::SafetyPolicy& safety) noexcept;
+    RealtimeEngine(RuntimeConfig config,
+                   platform::IRealtimePlatform& platform,
+                   hal::IActuatorHal& hal,
+                   control::IController& controller,
+                   safety::SafetyPolicy& safety) noexcept;
     ~RealtimeEngine();
 
     RealtimeEngine(const RealtimeEngine&) = delete;
     RealtimeEngine& operator=(const RealtimeEngine&) = delete;
 
     bool start() noexcept;
-    void request_stop() noexcept;
+    void request_stop() noexcept override;
+    void request_disarm() noexcept override;
+    bridge::RuntimeState state() const noexcept override;
+    bool try_submit(const model::ControlTarget& target) noexcept override;
+    bool try_read_latest(model::SensorFrame& state) const noexcept override;
     void join() noexcept;
     RuntimeReport report() const noexcept;
 
   private:
     void io_loop() noexcept;
     void control_loop() noexcept;
-    void source_loop() noexcept;
 
     RuntimeConfig config_;
     platform::IRealtimePlatform& platform_;
     hal::IActuatorHal& hal_;
     control::IController& controller_;
-    transport::ICommandSource& source_;
     safety::SafetyPolicy& safety_;
 
     ipc::SpscRing<model::SensorFrame, 256> states_{};
     ipc::SpscRing<model::CommandFrame, 64> commands_{};
     ipc::SpscRing<model::ControlTarget, 32> targets_{};
 
+    mutable ipc::SpscRing<model::SensorFrame, 32> snapshots_{};
+    mutable model::SensorFrame last_snapshot_{};
+    mutable bool has_snapshot_{false};
+    std::atomic<bool> disarm_requested_{false};
+    std::atomic<bool> armed_{false};
+    std::atomic<bool> fault_latched_{false};
+    std::atomic<bridge::RuntimeState> lifecycle_{bridge::RuntimeState::Created};
     std::atomic<bool> stop_{false};
     std::atomic<bool> running_{false};
     std::atomic<bool> fatal_startup_error_{false};
@@ -79,7 +91,6 @@ class RealtimeEngine {
     bool started_once_{false};
     std::thread io_thread_{};
     std::thread control_thread_{};
-    std::thread source_thread_{};
     RuntimeReport report_{};
 };
 

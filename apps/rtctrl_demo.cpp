@@ -1,3 +1,4 @@
+#include "rtctrl/bridge/target_arbiter.hpp"
 #include "rtctrl/control/joint_pd.hpp"
 #include "rtctrl/hal/simulated_hal.hpp"
 #include "rtctrl/platform/posix_realtime.hpp"
@@ -39,9 +40,10 @@ struct Options {
 };
 
 void print_help() {
-    std::cout << "rtctrl_demo [--duration SEC] [--io-cpu N] [--control-cpu N]\n"
-                 "            [--io-priority N] [--control-priority N] [--strict-rt]\n"
-                 "            [--arm] [--no-mlock] [--fault-after-ms N]\n";
+    std::cout
+        << "rtctrl_demo [--duration SEC] [--io-cpu N] [--control-cpu N]\n"
+           "            [--io-priority N] [--control-priority N] [--strict-rt]\n"
+           "            [--arm] [--no-mlock] [--fault-after-ms N]\n";
 }
 
 bool parse_int(int argc, char** argv, int& index, int& output) {
@@ -113,26 +115,37 @@ int main(int argc, char** argv) {
     rtctrl::runtime::RuntimeConfig config{};
     config.lock_memory = options.lock_memory;
     config.arm_actuation = options.arm_actuation;
-    config.io_thread = {"rt-io", options.io_cpu, options.io_priority, options.strict_rt};
-    config.control_thread = {"rt-control", options.control_cpu, options.control_priority,
+    config.io_thread = {
+        "rt-io", options.io_cpu, options.io_priority, options.strict_rt};
+    config.control_thread = {"rt-control",
+                             options.control_cpu,
+                             options.control_priority,
                              options.strict_rt};
 
     rtctrl::hal::SimulatedHalConfig hal_config{};
-    hal_config.fault_after_ns = static_cast<std::int64_t>(options.fault_after_ms) * 1'000'000LL;
+    hal_config.fault_after_ns =
+        static_cast<std::int64_t>(options.fault_after_ms) * 1'000'000LL;
     rtctrl::hal::SimulatedHal hal(hal_config);
     rtctrl::platform::PosixRealtimePlatform platform;
     rtctrl::control::JointPd controller;
     rtctrl::transport::LoopbackSource source;
     rtctrl::safety::SafetyPolicy safety;
-    rtctrl::runtime::RealtimeEngine engine(config, platform, hal, controller, source, safety);
+    rtctrl::runtime::RealtimeEngine engine(
+        config, platform, hal, controller, safety);
+
+    rtctrl::bridge::TargetArbiter targets(engine, config.target_validity_ns);
+    if (!targets.bind(0, source, 0)) {
+        return 2;
+    }
 
     if (!engine.start()) {
         std::cerr << "failed to start runtime\n";
         return 1;
     }
-    const auto deadline =
-        std::chrono::steady_clock::now() + std::chrono::seconds(options.duration_seconds);
+    const auto deadline = std::chrono::steady_clock::now() +
+                          std::chrono::seconds(options.duration_seconds);
     while (stop_requested == 0 && std::chrono::steady_clock::now() < deadline) {
+        (void)targets.poll(platform.now_ns());
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     engine.request_stop();
@@ -140,14 +153,17 @@ int main(int argc, char** argv) {
 
     const auto report = engine.report();
     std::cout << std::fixed << std::setprecision(1);
-    std::cout << "scheduler: io=" << (report.io_setup.fifo_active ? "SCHED_FIFO" : "fallback")
-              << " control=" << (report.control_setup.fifo_active ? "SCHED_FIFO" : "fallback")
+    std::cout << "scheduler: io="
+              << (report.io_setup.fifo_active ? "SCHED_FIFO" : "fallback")
+              << " control="
+              << (report.control_setup.fifo_active ? "SCHED_FIFO" : "fallback")
               << " mlock=" << (report.memory.active ? "active" : "fallback") << '\n';
     print_loop("io_1khz", report.io_metrics);
     print_loop("control_200hz", report.control_metrics);
     std::cout << "safety_interventions=" << report.safety_interventions
               << " stale_commands=" << report.io_metrics.stale_commands
               << " io_errors=" << report.io_metrics.io_errors
-              << " fault_latched=" << (report.fault_latched ? "true" : "false") << '\n';
+              << " fault_latched=" << (report.fault_latched ? "true" : "false")
+              << '\n';
     return report.fatal_startup_error ? 3 : 0;
 }

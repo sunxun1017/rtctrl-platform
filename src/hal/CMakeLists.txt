@@ -1,4 +1,10 @@
-add_library(rtctrl_hal
-    dynamixel_protocol.cpp simulated_hal.cpp shared_memory_hal.cpp kernel_mailbox_hal.cpp
-    half_duplex_serial_link.cpp protocol_actuator_hal.cpp)
-target_link_libraries(rtctrl_hal PUBLIC rtctrl_options rtctrl_ipc rtctrl_protocol)
+add_library(rtctrl_hal_sim simulated_hal.cpp)
+target_link_libraries(rtctrl_hal_sim PUBLIC rtctrl_contracts)
+add_library(rtctrl_hal_protocol dynamixel_protocol.cpp half_duplex_serial_link.cpp protocol_actuator_hal.cpp)
+target_link_libraries(rtctrl_hal_protocol PUBLIC rtctrl_contracts rtctrl_protocol)
+add_library(rtctrl_hal_shm shared_memory_hal.cpp)
+target_link_libraries(rtctrl_hal_shm PUBLIC rtctrl_contracts rtctrl_ipc_posix)
+add_library(rtctrl_hal_mailbox kernel_mailbox_hal.cpp)
+target_link_libraries(rtctrl_hal_mailbox PUBLIC rtctrl_contracts rtctrl_mailbox_codec)
+add_library(rtctrl_hal INTERFACE)
+target_link_libraries(rtctrl_hal INTERFACE rtctrl_hal_sim rtctrl_hal_protocol rtctrl_hal_shm rtctrl_hal_mailbox)

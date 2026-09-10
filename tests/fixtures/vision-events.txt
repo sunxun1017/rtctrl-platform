@@ -1,0 +1,5 @@
+# offset_ms ttl_ms scene (local replay clock)
+0 100 clear
+30 100 clear
+60 100 active
+90 100 clear

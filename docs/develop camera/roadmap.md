@@ -79,21 +79,20 @@ UNKNOWN -> NORMAL -> SUSPECT -> ACTIVE -> RECOVERING -> NORMAL
 
 “检测到人”最多触发“请求减速/进入安全状态”，不能绕过急停、限位、租约和硬件安全机制。视觉结果必须允许 `unknown`，不能强迫系统在不可信时给出“正常”。
 
-建议新增目录边界：
+目录与依赖以 [`../architecture.md`](../architecture.md) 为准。v0.6 已采用：
 
 ```text
-apps/vision-camera/
-  camera-service/       # V4L2、RKISP、buffer pool、断流恢复
-  preprocess/           # RGA/CPU 格式和尺寸转换
-  ai-service/           # RKNN 模型、NPU worker、指标
-  tracking/             # 跟踪和轨迹
-  event-engine/         # 规则和时空状态机
-  device-agent/         # 配置、健康、升级、远程诊断
-include/rtctrl/vision/  # 稳定消息，不放 RKNN 细节
-tests/vision/            # 回放、状态机、故障和协议测试
-tools/vision/            # 采集、转换、benchmark、诊断包
-models/                  # manifest/model-card，不提交大二进制
+apps/camera_capture/       # 采集诊断工具的装配入口
+src/vision/                # 可复用视觉模块与具体适配器，已实现 V4L2 采集
+include/rtctrl/vision/     # C 帧所有权契约、C++ 语义观测，不暴露 RKNN 类型
+src/bridge/                # 非实时仲裁；视觉互锁位于 bridge 公共接口
+platforms/                 # 板卡、BSP 与 SDK 配置
+patches/rkaiq/             # 有序厂商补丁
 ```
+
+后续预处理、推理、跟踪和事件模块继续放入 `src/vision/` 的独立子模块，
+完整服务只在 `apps/` 装配；模型卡、模型转换和标定工具各自保持独立。
+这些算法与生产服务尚未实现。当前语义回放已接通模拟控制，不等于板端推理闭环。
 
 ## 4. 技术主线和必须完成的产物
 
