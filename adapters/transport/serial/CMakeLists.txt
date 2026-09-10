@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_transport_serial src/posix_serial_transport.cpp)
+target_link_libraries(rtctrl_transport_serial PUBLIC rtctrl_transport_api)

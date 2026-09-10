@@ -7,11 +7,6 @@ function(rtctrl_add_build_options)
     endif()
 
     add_library(rtctrl_options INTERFACE)
-    target_include_directories(rtctrl_options INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/uapi>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/uapi>)
     target_compile_features(rtctrl_options INTERFACE cxx_std_17)
     target_compile_definitions(rtctrl_options INTERFACE
         RTCTRL_JOINT_COUNT=${RTCTRL_JOINT_COUNT})

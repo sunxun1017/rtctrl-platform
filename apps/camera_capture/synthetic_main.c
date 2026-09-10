@@ -1,5 +1,5 @@
 #include "capture_cli.h"
-#include "rtctrl/vision/synthetic_capture.h"
+#include "rtctrl/adapters/synthetic/capture.h"
 #include <stdio.h>
 #include <string.h>
 int main(int argc, char** argv) {

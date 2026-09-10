@@ -1,2 +1,0 @@
-add_library(rtctrl_safety safety_policy.cpp)
-target_link_libraries(rtctrl_safety PUBLIC rtctrl_contracts)

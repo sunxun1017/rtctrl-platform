@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_ipc_posix src/posix_shared_memory.cpp)
+target_link_libraries(rtctrl_ipc_posix PUBLIC rtctrl_ipc_api)

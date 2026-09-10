@@ -6,7 +6,7 @@
 
 | `sx_text` 中的成熟设计 | 当前平台中的实现 | 改造点 |
 |---|---|---|
-| 23 关节 logical order 与三 EtherCAT master wiring | `profiles/yidong23_topology.hpp` | 路由与电机标定留在叶子 profile；编译期验证物理槽位、逻辑关节、协议均一一匹配 |
+| 23 关节 logical order 与三 EtherCAT master wiring | `products/yidong23/include/rtctrl/products/yidong23/topology.hpp` | 路由与电机标定留在叶子 profile；编译期验证物理槽位、逻辑关节、协议均一一匹配 |
 | L0 无 ROS 实时进程与 ros2_control HAL 的共享内存双环 | `ipc/shared_motor_abi.hpp`、`SharedMemoryHal` | ABI 增加 magic、region size、joint count、生成号、采样时间、命令截止时间；映射所有权与 HAL 分离 |
 | configure 时不使能、activate 前用反馈位置种子、独立 enable 线 | runtime 启动先 `read()` 再 `arm()` | 无新鲜反馈或存在 L0 fault 时拒绝使能；emergency stop 先切 enable 再发布零增益保持帧 |
 | `JointCommand(position, velocity, effort, kp, kd)` 混合阻抗契约 | `model::CommandFrame` 与共享内存命令 | safety 同时验证 effort、kp、kd；模拟 HAL 也遵循相同混合阻抗语义 |

@@ -1,0 +1,4 @@
+rtctrl_module_api(control)
+target_link_libraries(rtctrl_control_api INTERFACE rtctrl_model_api)
+rtctrl_module_library(rtctrl_control src/joint_pd.cpp src/policy_action_mapper.cpp)
+target_link_libraries(rtctrl_control PUBLIC rtctrl_control_api)

@@ -1,0 +1,6 @@
+if(TARGET rtctrl_uapi)
+    add_executable(rtctrl_uapi_c_test uapi_c_compile.c)
+    target_link_libraries(rtctrl_uapi_c_test PRIVATE rtctrl_uapi)
+    target_compile_options(rtctrl_uapi_c_test PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
+    add_test(NAME rtctrl_uapi_c_test COMMAND rtctrl_uapi_c_test)
+endif()

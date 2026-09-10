@@ -1,0 +1,6 @@
+rtctrl_module_api(protocol)
+target_link_libraries(rtctrl_protocol_api INTERFACE rtctrl_model_api)
+rtctrl_module_library(rtctrl_protocol_target src/fixed_target_codec.cpp)
+target_link_libraries(rtctrl_protocol_target PUBLIC rtctrl_protocol_api)
+rtctrl_module_library(rtctrl_protocol_dynamixel src/dynamixel_v2.cpp)
+target_link_libraries(rtctrl_protocol_dynamixel PUBLIC rtctrl_protocol_api)

@@ -1,5 +1,5 @@
 #include "capture_cli.h"
-#include "rtctrl/vision/v4l2_capture.h"
+#include "rtctrl/adapters/v4l2/capture.h"
 #include <stdio.h>
 #include <string.h>
 int main(int argc, char** argv) {

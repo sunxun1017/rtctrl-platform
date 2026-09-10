@@ -1,2 +1,0 @@
-add_library(rtctrl_bridge target_arbiter.cpp)
-target_link_libraries(rtctrl_bridge PUBLIC rtctrl_contracts)

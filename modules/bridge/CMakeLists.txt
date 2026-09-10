@@ -1,0 +1,8 @@
+rtctrl_module_api(bridge)
+target_link_libraries(rtctrl_bridge_api INTERFACE rtctrl_model_api rtctrl_runtime_api rtctrl_vision_api rtctrl_transport_api rtctrl_protocol_api)
+rtctrl_module_library(rtctrl_bridge src/target_arbiter.cpp)
+target_link_libraries(rtctrl_bridge PUBLIC rtctrl_bridge_api)
+
+# The source consumes an injected codec; the composition root chooses its implementation.
+rtctrl_module_library(rtctrl_source_framed src/framed_command_source.cpp)
+target_link_libraries(rtctrl_source_framed PUBLIC rtctrl_bridge_api)

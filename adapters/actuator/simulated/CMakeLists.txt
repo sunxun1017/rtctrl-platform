@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_hal_sim src/simulated_hal.cpp)
+target_link_libraries(rtctrl_hal_sim PUBLIC rtctrl_actuator_api)

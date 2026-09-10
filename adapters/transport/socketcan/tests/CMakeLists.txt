@@ -1,0 +1,5 @@
+if(TARGET rtctrl_transport_can)
+    add_executable(rtctrl_socketcan_vcan_test test_socketcan_vcan.cpp)
+    target_link_libraries(rtctrl_socketcan_vcan_test PRIVATE rtctrl_transport_can)
+    add_test(NAME rtctrl_socketcan_vcan_test COMMAND rtctrl_socketcan_vcan_test)
+endif()

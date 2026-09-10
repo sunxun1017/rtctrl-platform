@@ -1,5 +1,14 @@
 # v0.7.0 — 2026-09-10
 
+## v0.8.0
+
+- Organize reusable capabilities as self-contained modules and concrete backends as adapters.
+- Move runtime-owned ports out of bridge and split periodic timer implementation from the environment port.
+- Replace global include paths and umbrella targets with explicit module dependencies; keep UAPI adapter-local.
+- Export module-only packages with per-module include roots; adapters are statically composed into applications.
+- Remove deprecated command-source alias and tracked Python bytecode; retain integration and hardware regression coverage.
+- Source/header and package migration: docs/adr/0007-module-owned-ports.md.
+
 - 通用采集句柄通过 C 后端端口注入 V4L2 或 synthetic，实现独立所有权与错误检查。
 - 颜色/像素格式采用平台枚举，共用消费者不依赖任何具体后端。
 - 原生适配器独立构建开关，control-sim 和 vision-synthetic 不编译关闭的硬件源码。

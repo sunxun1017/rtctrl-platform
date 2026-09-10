@@ -1,8 +1,8 @@
+#include "rtctrl/adapters/posix/posix_realtime.hpp"
 #include "rtctrl/bridge/target_arbiter.hpp"
 #include "rtctrl/bridge/vision_interlock.hpp"
 #include "rtctrl/control/joint_pd.hpp"
 #include "rtctrl/hal/actuator_hal.hpp"
-#include "rtctrl/platform/posix_realtime.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 
 #include <atomic>
@@ -19,7 +19,7 @@ void expect(bool condition, const char* reason) {
         std::cerr << reason << '\n';
     }
 }
-struct Ingress : rtctrl::bridge::ITargetIngress {
+struct Ingress : rtctrl::runtime::ITargetIngress {
     bool available{true};
     unsigned writes{0};
     rtctrl::model::ControlTarget last{};
@@ -51,14 +51,14 @@ struct Source : rtctrl::bridge::ICommandSource {
         pending = true;
     }
 };
-struct Lifecycle : rtctrl::bridge::ILifecycleControl {
+struct Lifecycle : rtctrl::runtime::ILifecycleControl {
     unsigned disarms{0};
     void request_disarm() noexcept override {
         ++disarms;
     }
     void request_stop() noexcept override {}
-    rtctrl::bridge::RuntimeState state() const noexcept override {
-        return rtctrl::bridge::RuntimeState::Ready;
+    rtctrl::runtime::RuntimeState state() const noexcept override {
+        return rtctrl::runtime::RuntimeState::Ready;
     }
 };
 void arbitration() {
@@ -261,7 +261,7 @@ void runtime() {
            "no writes or rearm after disarm");
     engine.request_stop();
     engine.join();
-    expect(engine.state() == rtctrl::bridge::RuntimeState::Stopped,
+    expect(engine.state() == rtctrl::runtime::RuntimeState::Stopped,
            "joined lifecycle");
     expect(!engine.report().fault_latched,
            "requested disarm is not a hardware fault");

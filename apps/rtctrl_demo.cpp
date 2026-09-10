@@ -1,10 +1,10 @@
+#include "rtctrl/adapters/loopback/loopback_source.hpp"
+#include "rtctrl/adapters/posix/posix_realtime.hpp"
+#include "rtctrl/adapters/simulated/simulated_hal.hpp"
 #include "rtctrl/bridge/target_arbiter.hpp"
 #include "rtctrl/control/joint_pd.hpp"
-#include "rtctrl/hal/simulated_hal.hpp"
-#include "rtctrl/platform/posix_realtime.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
-#include "rtctrl/transport/loopback_source.hpp"
 
 #include <chrono>
 #include <csignal>

@@ -96,7 +96,9 @@ ctest --preset vision-synthetic
 ## v0.6 → v0.7 迁移
 
 - 原 `rtctrl_camera_config`/`rtctrl_camera_open` 改为显式适配器入口
-  `rtctrl_v4l2_config`/`rtctrl_v4l2_open`，声明在 `vision/v4l2_capture.h`。
+  `rtctrl_v4l2_config`/`rtctrl_v4l2_open`，创建入口现已迁至适配器专属的
+  `rtctrl/adapters/v4l2/capture.h`；应用须显式链接 `rtctrl_vision_v4l2`。
+  该头文件和库目标不再作为平台公共 API 安装导出。
 - 通用消费者只包含 `vision/capture.h`，链接 `rtctrl_capture`。
 - 公共格式的 `fourcc` 改为 `pixel_format` 和诊断用 `native_format`；颜色字段
   必须按 `vision/image_format.h` 解释，不再使用 V4L2 枚举比较。

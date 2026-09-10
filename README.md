@@ -2,13 +2,17 @@
 
 面向机器人端侧的可移植 Linux 实时控制平台。RK3588 是首个目标而非架构前提；第一阶段不依赖 ROS，提供 1 kHz I/O、200 Hz 控制、固定容量数据通路、故障注入和时延基准。ControlLink V2 已打通固定 profile 帧编解码、UART 短包重组、CRC32C、会话重放防护与接收端租约。
 
-## v0.7 架构入口
+## v0.8 架构入口
 
 项目采用端口与适配器、显式产品装配、控制/视觉运行域隔离。实时核心通过抽象
 连接控制器和执行器；通用协议 HAL、具体电机协议与链路分别构建。
 采集核心使用可注入 C 后端端口，V4L2 与无硬件 synthetic 后端共用同一个消费者。
 颜色和像素格式使用平台契约，原生 SDK 类型与数值在适配器内部转换。
 
+- [模块职责与端口归属](modules/README.md)
+- [机器人产品配置](products/README.md)
+- [公开头文件边界调整](docs/adr/0008-public-header-ownership.md)
+- [v0.8 目录与接口迁移](docs/adr/0007-module-owned-ports.md)
 - [当前架构与实现边界](docs/architecture.md)
 - [v0.7 后端接口迁移与构建能力](docs/adr/0006-injectable-capture-and-adapter-capabilities.md)
 - [v0.7 验证结果与限制](docs/verification-v0.7.0.md)
@@ -25,6 +29,19 @@ ctest --preset vision-synthetic
 `vision-synthetic` 完全不编译 V4L2；`control-sim` 不编译 mailbox、SocketCAN、原生
 串口和 POSIX 共享内存映射。`release` 保留默认控制开发能力；`robot-vision` 提供
 语义事件到模拟控制的回放闭环。RKNN worker 和生产视觉服务仍未实现。
+
+## IDE / clangd
+
+首次打开工程或修改 CMake 配置后，运行 `cmake --preset robot-vision`。
+仓库的 `.clangd` 使用 `build/robot-vision/compile_commands.json`，覆盖控制和视觉
+源码；默认 `release` 产品不包含视觉源码，不能为相机文件提供准确的编译参数。
+无需把编译数据库复制到仓库根目录。若编辑器仍显示旧诊断，执行
+`clangd: Restart language server`。内核源码继续使用 `.clangd` 中独立的内核配置。
+
+如果 C++ 文件仍提示找不到 `cstdint` 等标准头文件，可在编辑器的 clangd 参数中
+设置 `--query-driver=/usr/bin/c++,/usr/bin/cc`，允许 clangd 查询实际编译器的系统
+头文件路径；编译器位于其他位置时替换为编译数据库中对应的可信路径。
+不要把本机 GCC 版本目录硬编码进模块 CMake 或 `.clangd`。
 
 ## 设计目标
 
@@ -100,29 +117,21 @@ RTCTRL_REQUIRE_FIFO=1 RTCTRL_REQUIRE_MLOCK=1 \
 ## 目录
 
 ```text
-apps/                 产品组合入口、演示程序和独立周期基准
-include/rtctrl/       稳定接口、数据模型与实时容器
-src/platform/         平台无关周期器与 POSIX 适配器
-src/hal/              模拟或真实执行器后端
-src/control/          可替换控制算法
-src/protocol/         固定 profile ControlLink V2 与 CRC32C
-src/transport/        loopback、POSIX UART、SocketCAN CAN-FD、分帧命令源
-src/ipc/              版本化 POSIX 共享内存与 L0 双向快照
-include/rtctrl/profiles/ 目标机器人拓扑叶子配置
-src/safety/           命令租约、边界与故障策略
-src/runtime/          双速率线程和数据流编排
-src/bridge/           非实时目标仲裁与应用接入
-src/vision/           通用 C 采集核心、V4L2 与 synthetic 后端
+modules/              按能力组织的库；每个模块有自己的 include、src、CMakeLists
+adapters/             端口的具体实现；系统 I/O、硬件、厂商 SDK 和模拟后端
+apps/                 产品入口，选择并注入模块和适配器
+platforms/            SoC、板卡、BSP、SDK 与工具链配置
+include/uapi/         用户态与内核共享 ABI
+kernel/               内核驱动、DT binding、Kconfig 与部署模板
+tests/                跨模块集成、产品回放和安装验证；专属测试随模块/适配器存放
 deploy/               产品部署边界
-tests/                零第三方依赖的单元测试
-docs/                 架构与部署说明
-kernel/               C 平台驱动、DT binding、Kconfig、只读检查器与 systemd 模板
+docs/                 架构、迁移、板端与验证记录
 config/               portable / strict 运行意图配置
-cmake/toolchains/      不绑定板卡的交叉编译入口
-third_party/           Git 子模块锁定的可选第三方源码
+cmake/                构建规则、依赖检查、安装与交叉工具链
+third_party/          锁定版本的外部源码
 ```
 
-协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。从本人 `sx_text` 分支提炼和改造的内容见 [`docs/sx-text-integration.md`](docs/sx-text-integration.md)。安装后会导出 `rtctrlTargets.cmake`，下游项目可通过 CMake package 集成，而不必复制源码。
+协议字节布局、跨时钟域租约与 MQTT/NearLink 边界见 [`docs/control-link-v1.md`](docs/control-link-v1.md)。从本人 `sx_text` 分支提炼和改造的内容见 [`docs/sx-text-integration.md`](docs/sx-text-integration.md)。安装后导出各模块的 CMake target；下游通过 target 获得对应头文件路径。具体适配器只供源码树内的应用装配，不在公共 package 中导出。
 当前 C UAPI、C++17 内核 mailbox HAL、6/23 关节构建与已知环境限制见 [`docs/verification-v0.5.0.md`](docs/verification-v0.5.0.md)；旧版记录仍保留在 [`docs/verification-v0.4.0.md`](docs/verification-v0.4.0.md)。
 Linux CAN/CAN-FD 接口配置、`vcan` 环回、API 示例及与具体电机协议的职责边界见 [`docs/can-fd.md`](docs/can-fd.md)。
 IgH master/domain/PDO/DC 生命周期、构建方法和真机边界见 [`docs/igh-ethercat.md`](docs/igh-ethercat.md)。

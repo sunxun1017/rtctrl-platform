@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_actuator_dynamixel src/dynamixel_protocol.cpp)
+target_link_libraries(rtctrl_actuator_dynamixel PUBLIC rtctrl_actuator_api rtctrl_protocol_dynamixel)

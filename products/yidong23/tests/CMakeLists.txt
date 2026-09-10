@@ -1,0 +1,3 @@
+add_executable(rtctrl_yidong23_topology_test test_topology.cpp)
+target_link_libraries(rtctrl_yidong23_topology_test PRIVATE rtctrl_product_yidong23)
+add_test(NAME rtctrl_yidong23_topology_test COMMAND rtctrl_yidong23_topology_test)

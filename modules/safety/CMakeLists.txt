@@ -1,0 +1,4 @@
+rtctrl_module_api(safety)
+target_link_libraries(rtctrl_safety_api INTERFACE rtctrl_model_api)
+rtctrl_module_library(rtctrl_safety src/safety_policy.cpp)
+target_link_libraries(rtctrl_safety PUBLIC rtctrl_safety_api)

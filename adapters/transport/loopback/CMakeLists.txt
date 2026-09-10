@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_source_loopback src/loopback_source.cpp src/loopback_byte_transport.cpp)
+target_link_libraries(rtctrl_source_loopback PUBLIC rtctrl_transport_api rtctrl_bridge_api)

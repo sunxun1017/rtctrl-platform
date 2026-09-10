@@ -1,29 +1,28 @@
+#include "rtctrl/adapters/shared_memory/shared_memory_hal.hpp"
+#include "rtctrl/adapters/simulated/simulated_hal.hpp"
 #include "rtctrl/bridge/target_arbiter.hpp"
 #include "rtctrl/control/joint_pd.hpp"
 #include "rtctrl/control/policy_action_mapper.hpp"
 #include "rtctrl/hal/actuator_composition.hpp"
 #include "rtctrl/hal/protocol_actuator_hal.hpp"
-#include "rtctrl/hal/shared_memory_hal.hpp"
-#include "rtctrl/hal/simulated_hal.hpp"
 #if RTCTRL_TEST_HAS_MAILBOX
-#include "rtctrl/ipc/kernel_mailbox_codec.hpp"
+#include "rtctrl/adapters/mailbox/kernel_mailbox_codec.hpp"
 #endif
 #if RTCTRL_TEST_HAS_POSIX_SHM
-#include "rtctrl/ipc/posix_shared_memory.hpp"
+#include "rtctrl/adapters/posix_shm/posix_shared_memory.hpp"
 #endif
+#include "rtctrl/adapters/loopback/loopback_byte_transport.hpp"
+#include "rtctrl/adapters/posix/posix_realtime.hpp"
+#include "rtctrl/bridge/command_source.hpp"
 #include "rtctrl/ipc/shared_motor_abi.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
-#include "rtctrl/platform/posix_realtime.hpp"
-#include "rtctrl/profiles/yidong23_topology.hpp"
 #include "rtctrl/protocol/fixed_target_codec.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
 #include "rtctrl/transport/can_transport.hpp"
-#include "rtctrl/transport/command_source.hpp"
-#include "rtctrl/transport/framed_command_source.hpp"
-#include "rtctrl/transport/loopback_byte_transport.hpp"
+#include "rtctrl/bridge/framed_command_source.hpp"
 #if RTCTRL_TEST_HAS_SOCKETCAN
-#include "rtctrl/transport/socketcan_fd_transport.hpp"
+#include "rtctrl/adapters/socketcan/socketcan_fd_transport.hpp"
 #endif
 
 #include <array>
@@ -62,44 +61,6 @@ void test_spsc_ring() {
     expect(queue.drain_latest(value) && value == 5,
            "drain_latest keeps newest value");
     expect(!queue.try_pop(value), "queue empty after drain");
-}
-
-class FakeRealtimePlatform final : public rtctrl::platform::IRealtimePlatform {
-  public:
-    std::int64_t now_ns() const noexcept override {
-        return now_;
-    }
-    rtctrl::platform::MemoryLockReport lock_process_memory() noexcept override {
-        return {true, 0};
-    }
-    rtctrl::platform::ThreadSetupReport configure_current_thread(
-        const rtctrl::platform::ThreadConfig&) noexcept override {
-        return {true, true, 0, 0};
-    }
-    void prefault_stack() noexcept override {}
-    int sleep_until(std::int64_t deadline_ns) noexcept override {
-        now_ = deadline_ns + overshoot_ns;
-        return 0;
-    }
-
-    std::int64_t now_{0};
-    std::int64_t overshoot_ns{0};
-};
-
-void test_platform_independent_timer() {
-    FakeRealtimePlatform platform;
-    rtctrl::platform::PeriodicTimer timer(platform, 1'000);
-    const auto first = timer.wait_next();
-    expect(first.scheduled_ns == 1'000 && first.skipped_periods == 0,
-           "platform timer uses injected monotonic clock");
-    platform.overshoot_ns = 2'500;
-    const auto late = timer.wait_next();
-    expect(late.scheduled_ns == 2'000 && late.skipped_periods == 2,
-           "platform timer skips missed periods without catch-up storm");
-    platform.overshoot_ns = 0;
-    const auto recovered = timer.wait_next();
-    expect(recovered.scheduled_ns == 5'000,
-           "platform timer resumes at the next future deadline");
 }
 
 void test_can_frame_contract() {
@@ -258,14 +219,13 @@ void test_actuator_dependency_injection() {
     TestActuatorLink can_fd;
     TestActuatorLink ethercat;
     TestMotorProtocol motor_protocol;
-    const rtctrl::hal::ActuatorLinkProviders providers{&serial, &can_fd, &ethercat};
 
-    const auto serial_dependencies = rtctrl::hal::inject_actuator_dependencies(
-        rtctrl::hal::ActuatorLinkBackend::Serial, providers, &motor_protocol);
-    const auto can_dependencies = rtctrl::hal::inject_actuator_dependencies(
-        rtctrl::hal::ActuatorLinkBackend::CanFd, providers, &motor_protocol);
-    const auto ethercat_dependencies = rtctrl::hal::inject_actuator_dependencies(
-        rtctrl::hal::ActuatorLinkBackend::IghEthercat, providers, &motor_protocol);
+    const auto serial_dependencies =
+        rtctrl::hal::inject_actuator_dependencies(&serial, &motor_protocol);
+    const auto can_dependencies =
+        rtctrl::hal::inject_actuator_dependencies(&can_fd, &motor_protocol);
+    const auto ethercat_dependencies =
+        rtctrl::hal::inject_actuator_dependencies(&ethercat, &motor_protocol);
     expect(serial_dependencies && serial_dependencies.link == &serial,
            "serial link is injected independently from the motor protocol");
     expect(can_dependencies && can_dependencies.link == &can_fd,
@@ -276,15 +236,13 @@ void test_actuator_dependency_injection() {
                can_dependencies.protocol == ethercat_dependencies.protocol,
            "transport selection does not select or identify a motor family");
 
-    const rtctrl::hal::ActuatorLinkProviders missing{};
-    expect(!rtctrl::hal::inject_actuator_dependencies(
-               rtctrl::hal::ActuatorLinkBackend::Serial, missing, &motor_protocol),
+    expect(!rtctrl::hal::inject_actuator_dependencies(nullptr, &motor_protocol),
            "missing selected link fails composition without fallback probing");
+    expect(!rtctrl::hal::inject_actuator_dependencies(&serial, nullptr),
+           "missing protocol fails composition");
     TestMotorProtocol oversized_protocol({65, 1});
-    expect(
-        !rtctrl::hal::inject_actuator_dependencies(
-            rtctrl::hal::ActuatorLinkBackend::CanFd, providers, &oversized_protocol),
-        "link capability mismatch is rejected before realtime startup");
+    expect(!rtctrl::hal::inject_actuator_dependencies(&can_fd, &oversized_protocol),
+           "link capability mismatch is rejected before realtime startup");
 
     rtctrl::hal::ProtocolActuatorHal hal(serial, motor_protocol);
     rtctrl::model::CommandFrame command{};
@@ -555,19 +513,6 @@ void test_kernel_mailbox_codec() {
 }
 #endif
 
-void test_yidong_topology() {
-    constexpr auto& topology = rtctrl::profiles::yidong23::kTopology;
-    static_assert(topology.valid());
-    const auto* waist_pitch = topology.for_logical_joint(13);
-    expect(waist_pitch != nullptr && waist_pitch->master_id == 2 &&
-               waist_pitch->motor_index == 5 &&
-               waist_pitch->calibration.protocol == rtctrl::hal::MotorProtocol::Ti5,
-           "Yidong logical joint maps to the reviewed physical EtherCAT slot");
-    const auto* left_hip = topology.for_physical_motor(0, 0);
-    expect(left_hip != nullptr && left_hip->logical_joint_index == 0 &&
-               left_hip->calibration.effort_max == 150.0,
-           "motor calibration stays attached to the physical motor route");
-}
 
 void test_policy_action_mapper() {
     if constexpr (rtctrl::model::kJointCount >= 2) {
@@ -602,9 +547,9 @@ void test_policy_action_mapper() {
 void test_framed_command_source() {
     rtctrl::protocol::FixedTargetCodec codec;
     rtctrl::transport::LoopbackByteTransport link(3);
-    rtctrl::transport::FramedSourcePolicy policy{};
+    rtctrl::bridge::FramedSourcePolicy policy{};
     policy.max_lease_us = 25'000;
-    rtctrl::transport::FramedCommandSource source(link, codec, policy);
+    rtctrl::bridge::FramedCommandSource source(link, codec, policy);
     expect(source.open() == rtctrl::transport::TransportStatus::Ok,
            "framed source opens transport");
 
@@ -669,7 +614,7 @@ void test_framed_command_source() {
     source.close();
 }
 
-class OneShotSource final : public rtctrl::transport::ICommandSource {
+class OneShotSource final : public rtctrl::bridge::ICommandSource {
   public:
     bool poll(std::int64_t now_ns,
               rtctrl::model::ControlTarget& target) noexcept override {
@@ -828,7 +773,6 @@ void test_target_lease() {
 
 int main() {
     test_spsc_ring();
-    test_platform_independent_timer();
     test_can_frame_contract();
     test_actuator_dependency_injection();
     test_safety_policy();
@@ -842,7 +786,6 @@ int main() {
 #if RTCTRL_TEST_HAS_MAILBOX
     test_kernel_mailbox_codec();
 #endif
-    test_yidong_topology();
     test_policy_action_mapper();
     test_framed_command_source();
     test_bounded_multitick_feedback();

@@ -11,7 +11,8 @@
 | robot-vision | 上述入口及 rtctrl_vision_control_replay EVENTS [--arm] | 回放语义互锁连接模拟控制；尚非生产视觉控制服务 |
 
 安装：cmake --install build/<product> --prefix <staging-directory>。
-核心 CMake package 与选中产物一起安装；相机也可在 apps/camera_capture 独立 C 构建，V4L2 可关闭。
+v0.8 的 CMake package 只导出模块接口与库，适配器静态链接进选中应用；
+模块头文件路径由 imported target 传递，具体适配器创建接口不安装。相机也可在 apps/camera_capture 独立 C 构建，V4L2 可关闭。
 可选适配器开关见 ADR-0006；开关为 cache，切换产品请使用独立构建目录。
 
 现有 kernel/systemd 模板继续用于对应硬件部署；本轮不安装或启动任何宿主机服务。

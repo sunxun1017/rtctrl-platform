@@ -1,0 +1,2 @@
+rtctrl_module_api(ipc)
+target_link_libraries(rtctrl_ipc_api INTERFACE rtctrl_model_api)

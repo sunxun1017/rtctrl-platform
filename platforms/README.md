@@ -1,4 +1,15 @@
-# Platform profiles
+# 板级与 SoC 配置
+
+本目录是构建和部署数据，不是 C++ 的运行时 port 层。
+
+- 板卡、BSP、内核、工具链选择放在这里。
+- 时钟、等待、线程配置端口放在 `modules/runtime/include/rtctrl/runtime/`。
+- POSIX 具体实现放在 `adapters/realtime/posix/`。
+- 产品入口在 `apps/` 中选择适配器，通用模块不读取板级 profile。
+
+模块与端口职责见 [modules/README.md](../modules/README.md)。
+
+## Platform profiles
 
 Profiles follow one layout for every supported SoC and carrier:
 

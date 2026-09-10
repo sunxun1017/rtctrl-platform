@@ -73,18 +73,16 @@ ABI 匹配才是必要条件。
 
 ## 通信链路与电机协议独立注入
 
-`ActuatorLinkBackend` 和 `inject_actuator_dependencies()` 位于
-[`actuator_composition.hpp`](../include/rtctrl/hal/actuator_composition.hpp)。composition
+`inject_actuator_dependencies()` 位于
+[`actuator_composition.hpp`](../modules/actuator/include/rtctrl/hal/actuator_composition.hpp)。composition
 root 在创建实时线程前分别注入通信链路和电机协议：
 
 ```cpp
-rtctrl::hal::ActuatorLinkProviders links{
-    .serial = serial_link,
-    .can_fd = can_link,
-    .igh_ethercat = ethercat_link,
-};
 auto dependencies = rtctrl::hal::inject_actuator_dependencies(
-    rtctrl::hal::ActuatorLinkBackend::IghEthercat, links, motor_protocol);
+    ethercat_link, motor_protocol);
+if (!dependencies) {
+    return 1; // Missing dependency or incompatible packet capacity.
+}
 rtctrl::hal::ProtocolActuatorHal actuator(
     *dependencies.link, *dependencies.protocol);
 ```

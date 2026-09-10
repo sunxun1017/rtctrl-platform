@@ -1,0 +1,4 @@
+rtctrl_adapter(rtctrl_mailbox_codec src/kernel_mailbox_codec.cpp)
+target_link_libraries(rtctrl_mailbox_codec PUBLIC rtctrl_model_api rtctrl_uapi)
+rtctrl_adapter(rtctrl_hal_mailbox src/kernel_mailbox_hal.cpp)
+target_link_libraries(rtctrl_hal_mailbox PUBLIC rtctrl_actuator_api rtctrl_mailbox_codec)

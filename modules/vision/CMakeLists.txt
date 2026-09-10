@@ -1,0 +1,2 @@
+rtctrl_module_api(vision)
+target_compile_features(rtctrl_vision_api INTERFACE cxx_std_17)

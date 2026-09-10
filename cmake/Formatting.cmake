@@ -11,6 +11,10 @@ function(rtctrl_add_format_targets)
     endif()
 
     file(GLOB_RECURSE RTCTRL_FORMAT_SOURCES CONFIGURE_DEPENDS
+        "${PROJECT_SOURCE_DIR}/adapters/*.cpp"
+        "${PROJECT_SOURCE_DIR}/adapters/*.hpp"
+        "${PROJECT_SOURCE_DIR}/adapters/*.c"
+        "${PROJECT_SOURCE_DIR}/adapters/*.h"
         "${PROJECT_SOURCE_DIR}/apps/*.cpp"
         "${PROJECT_SOURCE_DIR}/apps/*.c"
         "${PROJECT_SOURCE_DIR}/apps/*.h"
@@ -18,9 +22,12 @@ function(rtctrl_add_format_targets)
         "${PROJECT_SOURCE_DIR}/include/*.hpp"
         "${PROJECT_SOURCE_DIR}/kernel/*.c"
         "${PROJECT_SOURCE_DIR}/kernel/*.h"
-        "${PROJECT_SOURCE_DIR}/src/*.cpp"
-        "${PROJECT_SOURCE_DIR}/src/*.c"
-        "${PROJECT_SOURCE_DIR}/src/*.h"
+        "${PROJECT_SOURCE_DIR}/modules/*.cpp"
+        "${PROJECT_SOURCE_DIR}/modules/*.c"
+        "${PROJECT_SOURCE_DIR}/modules/*.h"
+        "${PROJECT_SOURCE_DIR}/modules/*.hpp"
+        "${PROJECT_SOURCE_DIR}/products/*.cpp"
+        "${PROJECT_SOURCE_DIR}/products/*.hpp"
         "${PROJECT_SOURCE_DIR}/tests/*.c"
         "${PROJECT_SOURCE_DIR}/tests/*.cpp")
     add_custom_target(format

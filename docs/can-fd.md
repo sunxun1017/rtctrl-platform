@@ -46,7 +46,7 @@ RTCTRL_VCAN_INTERFACE=vcan0 ctest --test-dir build/release \
 ## C++ 使用示例
 
 ```cpp
-#include <rtctrl/transport/socketcan_fd_transport.hpp>
+#include <rtctrl/adapters/socketcan/socketcan_fd_transport.hpp>
 
 rtctrl::transport::SocketCanFdTransport can("can0");
 const rtctrl::transport::CanFilter filters[]{{0x180, 0x7f0, false}};

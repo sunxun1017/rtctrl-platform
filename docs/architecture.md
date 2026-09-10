@@ -1,4 +1,4 @@
-# 平台架构（v0.7）
+# 平台架构（v0.8）
 
 本文件描述已经落地的架构。产品规划见 `develop camera/roadmap.md`；规划中的
 RKNN 推理、事件算法、远程设备管理不代表已有可部署实现。
@@ -34,33 +34,50 @@ ctest --preset robot-vision
 等选择。产品 preset 不绑定 SoC。`control-sim` 显式关闭原生硬件适配器，保留无设备 I/O 的协议实现。
 适配器开关和 v0.7 接口迁移见 `adr/0006-injectable-capture-and-adapter-capabilities.md`。
 
-## 编译依赖
+## 模块、端口与编译依赖
+
+模块按能力放在 `modules/<name>/`，自己的公共头文件、实现与专属测试分别放在
+`include/`、`src/`、`tests/`。纯头文件模块不创建空的 src。完整职责表见
+[modules/README.md](../modules/README.md)。`src` 只表示本模块需要编译的实现，
+不是一个系统层级；公共接口也可以包含稳定的算法类，不限于虚函数。
+
+端口由需要它的模块拥有：运行时拥有时钟/等待及生命周期端口，actuator 拥有
+执行器/协议/链路端口，transport 拥有字节/CAN 端口，capture 拥有 C 后端回调表。
+不增加全局 port 层，不给固定算法和容器增加没有替换需求的虚接口。
 
 ```text
-apps（组合根）
-  ├─ runtime → contracts + timer + safety + Threads
-  ├─ control → contracts
-  ├─ bridge → contracts
-  ├─ selected HAL / transport / POSIX adapter
-  └─ capture adapter → capture → capture_contracts（独立 C 契约，无控制依赖）
+apps → 选择模块 + 适配器，构造后注入
+runtime → runtime API + control API + actuator API + ipc API + timer + safety + Threads
+bridge → runtime API + model + vision + transport API + protocol API（不链接 runtime 引擎）
+control / safety → model
+bridge 内的 framed source → bridge API → transport API + protocol API（codec 由应用注入）
+capture adapter → capture → capture API（独立 C，无控制依赖）
 ```
 
-`rtctrl_contracts` 提供 C++ 数据和接口的构建契约，`rtctrl_options` 保留共同的
-编译选项与关节 profile。`rtctrl_timer` 只通过平台接口等待周期；具体 POSIX
-实现属于 `rtctrl_platform_posix`。
+`rtctrl_options` 只传递编译选项和关节 profile，不包含公共头文件或 UAPI 搜索路径。
+模块通过自己的 `rtctrl_<module>_api` target 提供头文件；实际库再声明需要的模块。
+`*_api` 用于接口依赖，调用非内联实现必须链接对应库，例如 `rtctrl_runtime`。
+runtime 的 ports/include、timer/include 和 include 分别由端口、定时器和引擎 target
+导出；仅依赖端口时看不到引擎头文件。LoopMetrics 是端口根目录中的共享统计数据，
+benchmark 无需链接线程引擎即可使用。机器人专用拓扑在 products/yidong23，
+不会由 actuator 或模块安装包导出。公开头文件通过源码树和安装包的独立编译检查。
+周期算法 `periodic_timer.cpp` 属于 runtime，POSIX 实现属于
+`adapters/realtime/posix`。运行时不再反向依赖 bridge。
 
-通用协议组合 HAL `rtctrl_hal_protocol` 只依赖接口；Dynamixel 和半双工链路分别由
-`rtctrl_actuator_dynamixel`、`rtctrl_actuator_serial_link` 实现。HAL 还包括
-`rtctrl_hal_sim`、`rtctrl_hal_shm`、
-`rtctrl_hal_mailbox`；字节流和 CAN 实现、语义命令源分别有独立 target。
-`rtctrl`、`rtctrl_hal`、`rtctrl_transport`、`rtctrl_platform`、`rtctrl_ipc`
-保留为聚合 target。新应用应显式链接所需细粒度 target。
-上游 ControlLink 与下游 Dynamixel 编解码已拆为 `rtctrl_protocol_target` 和
-`rtctrl_protocol_dynamixel`，不再让上游来源绑定电机协议库。
+删除旧的 `rtctrl`、`rtctrl_contracts`、`rtctrl_hal`、`rtctrl_transport`、
+`rtctrl_platform`、`rtctrl_ipc` 和 `rtctrl_protocol` 聚合目标。
+应用和测试显式链接所需库。稳定通用算法仍可直接复用，例如通用组合 HAL、
+半双工链路、ControlLink 和 Dynamixel 编解码，不因具体类的存在就强制新增端口。
+具体系统与设备实现，以及模拟实现，统一放在 `adapters/`。
 
-`cmake/Architecture.cmake` 在每次 configure 时递归检查核心 target 的依赖闭包；
-`scripts/check-architecture.py` 检查核心及其递归头文件依赖，禁止厂商和具体适配器
-进入实时核心、通用 HAL、采集核心和帧消费者。测试还安装 package 并编译独立下游消费者，防止导出不完整。
+默认安装只导出模块，头文件使用模块独立的安装根目录，由 CMake target 传递，
+不能再手写一个全局 `-Iinclude` 来访问所有模块。适配器静态链接到应用，不安装其
+创建头文件或库目标。mailbox UAPI 只由对应适配器和 UAPI 测试显式依赖。
+
+`cmake/Architecture.cmake` 检查所有模块的依赖闭包，拒绝模块链接适配器；
+运行时和桥接另外限制各自允许的依赖。递归 include 检查覆盖所有模块和通用
+帧消费者，拒绝厂商/系统头文件、适配器头文件和重复公共路径。
+安装测试编译独立消费者，并确认运行时端口可用而 POSIX 适配器不可见。
 
 ## 实时域与管理入口
 
@@ -80,7 +97,8 @@ apps（组合根）
 `apps/rtctrl_demo.cpp` 在普通主循环每 20 ms 调用仲裁器。实际网络适配器必须及时
 返回；阻塞 SDK/网络工作应放在独立 worker，再通过自己的有界队列交给普通循环。
 
-`ICommandSource` 属于 bridge 语义入口；旧 transport 命名保留为 alias。
+`ICommandSource` 属于 bridge 语义入口；旧 transport alias 已移除。
+`ITargetIngress`、`IStateSnapshot`、`ILifecycleControl` 和 `RuntimeState` 属于 runtime。
 `TargetArbiter` 由一个非实时线程独占，启动前绑定来源。数值越大的 priority
 越优先，同优先级取较小 slot。每来源独立防重放，输出重新分配单调序列号，
 但保留原始创建时间，并将有效期限制在来源期限与本地租约的较小值。
@@ -121,13 +139,20 @@ HAL I/O 故障、非法数值、越界仍锁存故障。目标或命令过期走
 
 ## 视觉域
 
-`include/rtctrl/vision/capture.h` 是独立 C 契约，`src/vision/capture.c` 实现公共
+`modules/capture/include/rtctrl/capture/capture.h` 是独立 C 契约，`modules/capture/src/capture.c` 实现公共
 句柄与所有权管理。`capture_backend.h` 是后端端口；组合根通过
 `rtctrl_camera_create(backend, config, &camera)` 注入具体实现。
 
 `rtctrl_vision_v4l2` 实现 Linux 多平面 MMAP，`rtctrl_capture_synthetic` 实现无硬件
 确定性 GRAY8 图像源。消费者只使用通用句柄，无后端选择分支；独立配置、设备路径、
 原生结构及资源生命周期留在适配器。公共层复制回调表并验证元数据与借用 token。
+
+V4L2 源码位于 `adapters/capture/v4l2/src/`，创建入口迁至
+`adapters/capture/v4l2/include/rtctrl/adapters/v4l2/capture.h`。
+只有应用装配代码与适配器测试显式链接 `rtctrl_vision_v4l2`，才能获得该头文件路径；
+通用消费者继续只链接 `rtctrl_capture`。默认安装包不导出 V4L2 创建接口或库目标，
+相机工具静态链接该适配器后安装。旧路径 `rtctrl/vision/v4l2_capture.h` 已移除，
+不保留将具体实现重新引入公共 include 树的转发头文件。
 
 颜色空间、传递函数、YCbCr 矩阵、量化范围和像素格式采用 `image_format.h`
 的平台枚举。原生默认值仅在上下文足够时解析，否则为 UNKNOWN。
@@ -196,10 +221,13 @@ SDK Git commit 只作为辅助信息，不再冒充实际工作副本。失败�
 - 新控制算法：实现 IController，在产品入口选择，不修改 runtime。
 - 新执行器：实现协议或链路，按 capabilities 装配；HAL 不进入视觉域。
 - 新命令源：实现 bridge::ICommandSource，经仲裁进入唯一实时入口。
-- 新相机/推理后端：留在视觉适配器，厂商句柄不进入 Observation 或控制数据模型。
+- 新相机后端：放在 adapters/capture，实现 capture 端口。
+- 新推理能力：通用契约归独立 inference 模块；RKNN 等后端归 adapters/inference，
+  不依赖视觉或关节语义。当前没有通过构建验证的推理模块，不创建空壳 target。
 - 新板卡：增加 platform profile/BSP，不加板卡分支到 control/runtime。
 - 新产品：增加组合入口与产品 preset，声明故障处理和部署所有权，并添加端到端回放。
 
-v0.6 核心接口迁移见 ADR-0005；v0.7 后端接口迁移和构建能力见 ADR-0006。
+v0.8 模块/端口迁移见 [ADR-0007](adr/0007-module-owned-ports.md)。
+v0.6、v0.7 的历史接口记录分别见 ADR-0005、ADR-0006。
 线程运行环境、安全门控和固定容量 SPSC 仍是有意保留的核心约束，不为每个稳定实现
 增加虚接口；本轮没有把 POSIX 运行时改造成 RTOS 执行器。

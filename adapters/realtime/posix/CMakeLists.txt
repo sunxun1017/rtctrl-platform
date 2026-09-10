@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_platform_posix src/posix_realtime.cpp)
+target_link_libraries(rtctrl_platform_posix PUBLIC rtctrl_runtime_api Threads::Threads)

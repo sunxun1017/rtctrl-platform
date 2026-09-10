@@ -1,8 +1,8 @@
-#include "rtctrl/hal/dynamixel_protocol.hpp"
+#include "rtctrl/adapters/dynamixel/dynamixel_protocol.hpp"
 #include "rtctrl/hal/half_duplex_serial_link.hpp"
 #include "rtctrl/protocol/dynamixel_v2.hpp"
 #if RTCTRL_TEST_HAS_SERIAL
-#include "rtctrl/transport/posix_serial_transport.hpp"
+#include "rtctrl/adapters/serial/posix_serial_transport.hpp"
 #endif
 
 #include <algorithm>

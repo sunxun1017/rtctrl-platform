@@ -1,0 +1,6 @@
+rtctrl_module_api(actuator)
+target_link_libraries(rtctrl_actuator_api INTERFACE rtctrl_model_api rtctrl_transport_api)
+rtctrl_module_library(rtctrl_hal_protocol src/protocol_actuator_hal.cpp)
+target_link_libraries(rtctrl_hal_protocol PUBLIC rtctrl_actuator_api)
+rtctrl_module_library(rtctrl_actuator_serial_link src/half_duplex_serial_link.cpp)
+target_link_libraries(rtctrl_actuator_serial_link PUBLIC rtctrl_actuator_api rtctrl_transport_api)

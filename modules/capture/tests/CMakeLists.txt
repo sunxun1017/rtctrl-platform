@@ -1,0 +1,3 @@
+add_executable(rtctrl_capture_backend_test test_capture_backend.c)
+target_link_libraries(rtctrl_capture_backend_test PRIVATE rtctrl_capture_synthetic)
+add_test(NAME rtctrl_capture_backend_test COMMAND rtctrl_capture_backend_test)

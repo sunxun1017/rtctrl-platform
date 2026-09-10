@@ -1,0 +1,2 @@
+rtctrl_module_api(model)
+target_link_libraries(rtctrl_model_api INTERFACE rtctrl_options)

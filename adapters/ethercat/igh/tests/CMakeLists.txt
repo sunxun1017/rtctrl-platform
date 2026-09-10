@@ -1,0 +1,5 @@
+if(TARGET rtctrl_igh_ethercat)
+    add_executable(rtctrl_igh_contract_test test_igh_contract.cpp)
+    target_link_libraries(rtctrl_igh_contract_test PRIVATE rtctrl_igh_ethercat)
+    add_test(NAME rtctrl_igh_contract_test COMMAND rtctrl_igh_contract_test)
+endif()

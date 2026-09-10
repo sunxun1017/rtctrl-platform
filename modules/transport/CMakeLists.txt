@@ -1,0 +1,2 @@
+rtctrl_module_api(transport)
+target_link_libraries(rtctrl_transport_api INTERFACE rtctrl_options)

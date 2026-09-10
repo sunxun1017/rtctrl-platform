@@ -1,4 +1,5 @@
-#include "rtctrl/platform/posix_realtime.hpp"
+#include "rtctrl/runtime/periodic_timer.hpp"
+#include "rtctrl/adapters/posix/posix_realtime.hpp"
 #include "rtctrl/runtime/metrics.hpp"
 
 #include <cstdlib>

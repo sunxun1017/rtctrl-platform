@@ -1,6 +1,6 @@
+#include "rtctrl/adapters/loopback/loopback_byte_transport.hpp"
+#include "rtctrl/bridge/framed_command_source.hpp"
 #include "rtctrl/protocol/fixed_target_codec.hpp"
-#include "rtctrl/transport/framed_command_source.hpp"
-#include "rtctrl/transport/loopback_byte_transport.hpp"
 
 #include <array>
 #include <cstddef>
@@ -11,7 +11,7 @@
 int main() {
     rtctrl::protocol::FixedTargetCodec codec;
     rtctrl::transport::LoopbackByteTransport link(7);
-    rtctrl::transport::FramedCommandSource source(link, codec);
+    rtctrl::bridge::FramedCommandSource source(link, codec);
     if (source.open() != rtctrl::transport::TransportStatus::Ok) {
         std::cerr << "failed to open loopback link\n";
         return 1;
@@ -50,8 +50,8 @@ int main() {
     std::cout << "{\n"
               << "  \"wire_bytes\": " << encoded.produced << ",\n"
               << "  \"sequence\": " << target.sequence << ",\n"
-              << "  \"local_lease_us\": " << (target.valid_until_ns - target.created_time_ns) / 1000
-              << ",\n"
+              << "  \"local_lease_us\": "
+              << (target.valid_until_ns - target.created_time_ns) / 1000 << ",\n"
               << "  \"frames_ok\": " << metrics.frames_ok << ",\n"
               << "  \"framing_errors\": " << metrics.framing_errors << ",\n"
               << "  \"positions\": [";

@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_transport_can src/socketcan_fd_transport.cpp)
+target_link_libraries(rtctrl_transport_can PUBLIC rtctrl_transport_api)

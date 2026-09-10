@@ -26,29 +26,25 @@ function(rtctrl_check_closure target allowed visited)
         endif()
     endforeach()
 endfunction()
+# Modules may depend only on module targets and explicit host runtime support.
+get_property(module_targets GLOBAL PROPERTY RTCTRL_MODULE_TARGETS)
+set(module_allowed ${module_targets} rtctrl_options Threads::Threads atomic)
+foreach(target IN LISTS module_targets)
+    rtctrl_check_closure(${target} "${module_allowed}" "")
+endforeach()
 if(RTCTRL_BUILD_CONTROL)
+    rtctrl_check_closure(rtctrl_runtime_api
+        "rtctrl_runtime_api;rtctrl_model_api;rtctrl_options" "")
+    rtctrl_check_closure(rtctrl_transport_api
+        "rtctrl_transport_api;rtctrl_options" "")
     rtctrl_check_closure(rtctrl_runtime
-        "rtctrl_runtime;rtctrl_contracts;rtctrl_options;rtctrl_timer;rtctrl_safety;Threads::Threads;atomic" "")
-    rtctrl_check_closure(rtctrl_bridge "rtctrl_bridge;rtctrl_contracts;rtctrl_options" "")
-    rtctrl_check_closure(rtctrl_control "rtctrl_control;rtctrl_contracts;rtctrl_options" "")
+        "rtctrl_runtime;rtctrl_runtime_api;rtctrl_model_api;rtctrl_options;rtctrl_timer;rtctrl_safety;rtctrl_safety_api;rtctrl_control_api;rtctrl_actuator_api;rtctrl_transport_api;rtctrl_ipc_api;Threads::Threads;atomic" "")
+    rtctrl_check_closure(rtctrl_bridge
+        "rtctrl_bridge;rtctrl_bridge_api;rtctrl_runtime_api;rtctrl_vision_api;rtctrl_model_api;rtctrl_options;rtctrl_transport_api;rtctrl_protocol_api" "")
 endif()
 if(RTCTRL_BUILD_VISION)
-    rtctrl_check_closure(rtctrl_capture "rtctrl_capture;rtctrl_capture_contracts" "")
-    rtctrl_check_closure(rtctrl_capture_synthetic
-        "rtctrl_capture_synthetic;rtctrl_capture;rtctrl_capture_contracts" "")
-    if(TARGET rtctrl_vision_v4l2)
-        rtctrl_check_closure(rtctrl_vision_v4l2
-            "rtctrl_vision_v4l2;rtctrl_capture;rtctrl_capture_contracts" "")
-    endif()
-    rtctrl_check_closure(rtctrl_capture_cli
-        "rtctrl_capture_cli;rtctrl_capture;rtctrl_capture_contracts" "")
-endif()
-
-if(RTCTRL_BUILD_CONTROL)
-    rtctrl_check_closure(rtctrl_hal_protocol "rtctrl_hal_protocol;rtctrl_contracts;rtctrl_options" "")
-    rtctrl_check_closure(rtctrl_actuator_serial_link "rtctrl_actuator_serial_link;rtctrl_contracts;rtctrl_options" "")
-    rtctrl_check_closure(rtctrl_source_framed
-        "rtctrl_source_framed;rtctrl_protocol_target;rtctrl_contracts;rtctrl_options" "")
+    rtctrl_check_closure(rtctrl_capture "rtctrl_capture;rtctrl_capture_api" "")
+    rtctrl_check_closure(rtctrl_capture_cli "rtctrl_capture_cli;rtctrl_capture;rtctrl_capture_api" "")
 endif()
 
 # Disabled capabilities must remove targets, not merely remove a link from demo.

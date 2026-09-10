@@ -1,9 +1,13 @@
-# 当前采集工具（v0.7）
+# 当前采集工具（v0.8）
 
-通用采集句柄实现在 `src/vision/capture.c`，通过 `capture_backend.h` 注入后端。
+通用采集句柄实现在 `modules/capture/src/capture.c`，通过 `capture_backend.h` 注入后端。
 `capture_cli.c` 负责两种入口共用的信号、帧消费、输出和统计，不包含 V4L2 类型。
 
 V4L2 入口显式选择 `rtctrl_v4l2_open`：
+
+`main.c` 包含 `rtctrl/adapters/v4l2/capture.h`，并链接 `rtctrl_vision_v4l2`。
+创建接口属于 `adapters/capture/v4l2/`，不随平台公共头文件安装。
+通用消费者 `capture_cli.c` 只依赖 `rtctrl_capture`。
 
 ```sh
 cmake --preset vision-node

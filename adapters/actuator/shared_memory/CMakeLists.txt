@@ -1,0 +1,2 @@
+rtctrl_adapter(rtctrl_hal_shm src/shared_memory_hal.cpp)
+target_link_libraries(rtctrl_hal_shm PUBLIC rtctrl_actuator_api rtctrl_ipc_api)

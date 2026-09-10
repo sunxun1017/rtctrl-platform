@@ -1,5 +1,7 @@
 CompileFlags:
-    CompilationDatabase: build/release
+    # Generate with: cmake --preset robot-vision
+    # The release product omits vision sources and cannot describe their flags.
+    CompilationDatabase: build/robot-vision
 
 ---
 If:

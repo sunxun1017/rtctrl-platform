@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(rtctrl_platform VERSION 0.7.0 LANGUAGES C CXX)
+project(rtctrl_platform VERSION 0.8.0 LANGUAGES C CXX)
 
 option(RTCTRL_ENABLE_SANITIZERS "Enable address and undefined-behavior sanitizers" OFF)
 option(RTCTRL_ENABLE_TSAN "Enable thread sanitizer" OFF)
@@ -40,38 +40,26 @@ include(cmake/Formatting.cmake)
 rtctrl_add_build_options()
 rtctrl_add_format_targets()
 
-add_library(rtctrl_contracts INTERFACE)
-target_link_libraries(rtctrl_contracts INTERFACE rtctrl_options)
-
+include(cmake/Modules.cmake)
+add_subdirectory(modules/vision)
 if(RTCTRL_BUILD_CONTROL)
-    add_subdirectory(src/platform)
-    add_subdirectory(src/ipc)
-    add_subdirectory(src/protocol)
-    add_subdirectory(src/hal)
-    add_subdirectory(src/control)
-    add_subdirectory(src/transport)
-    add_subdirectory(src/safety)
-    add_subdirectory(src/runtime)
-    add_subdirectory(src/bridge)
-
-    if(RTCTRL_ENABLE_IGH_ETHERCAT)
-        add_subdirectory(src/ethercat)
-    endif()
-
-    add_library(rtctrl INTERFACE)
-    # Compatibility umbrella for existing consumers. New products link individual targets.
-    target_link_libraries(rtctrl INTERFACE rtctrl_runtime rtctrl_platform rtctrl_hal
-        rtctrl_control rtctrl_transport rtctrl_ipc rtctrl_bridge)
+    foreach(module model ipc control safety protocol transport actuator runtime bridge)
+        add_subdirectory(modules/${module})
+    endforeach()
 endif()
-
 if(RTCTRL_BUILD_VISION)
-    add_subdirectory(src/vision)
+    add_subdirectory(modules/capture)
+endif()
+add_subdirectory(adapters)
+if(RTCTRL_BUILD_CONTROL)
+    add_subdirectory(products/yidong23)
 endif()
 
 add_subdirectory(apps)
 
 if(RTCTRL_BUILD_TESTS)
     enable_testing()
+    include(cmake/PublicHeaders.cmake)
     add_subdirectory(tests)
 endif()
 
