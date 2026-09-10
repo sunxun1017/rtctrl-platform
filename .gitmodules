@@ -10,3 +10,6 @@
 	url = https://github.com/rockchip-linux/kernel.git
 	branch = develop-6.1
 	shallow = true
+[submodule "third_party/rknn-toolkit"]
+	path = third_party/rknn-toolkit
+	url = https://github.com/airockchip/rknn-toolkit2.git
