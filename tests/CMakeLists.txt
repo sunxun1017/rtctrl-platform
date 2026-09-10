@@ -77,3 +77,10 @@ if(RTCTRL_BUILD_VISION AND Python3_Interpreter_FOUND)
     add_test(NAME rtctrl_capture_cli_output_test COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_SOURCE_DIR}/test_capture_cli.py $<TARGET_FILE:rtctrl_camera_synthetic>)
 endif()
+
+# Test the RKNN bridge through the module interface without a hardware runtime.
+if(NOT CMAKE_CROSSCOMPILING AND EXISTS
+        "${PROJECT_SOURCE_DIR}/third_party/rknn-toolkit/rknpu2/runtime/Linux/librknn_api/include/rknn_api.h")
+    add_subdirectory(${PROJECT_SOURCE_DIR}/adapters/inference/rknn/tests
+        ${CMAKE_CURRENT_BINARY_DIR}/rknn)
+endif()

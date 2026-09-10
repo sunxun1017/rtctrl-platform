@@ -1,0 +1,6 @@
+interface:
+  display_name: "rtctrl 项目开发助手"
+  short_description: "理解实时控制与视觉开发需求，协调子 agent 并持续沉淀验证经验"
+  default_prompt: "使用 $rtctrl-dev 理解当前开发需求，结合项目架构完成实现和验证，按需委派子 agent，并沉淀已验证经验。"
+policy:
+  allow_implicit_invocation: true

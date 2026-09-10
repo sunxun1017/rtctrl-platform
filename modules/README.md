@@ -16,10 +16,11 @@
 | ipc | SPSC 容器、共享控制数据 ABI；不创建系统资源 | rtctrl_ipc_api |
 | bridge | 非实时来源仲裁、分帧命令源、视觉互锁策略 | rtctrl_bridge、rtctrl_source_framed |
 | capture | 通用 C 采集、帧借用和后端回调契约 | rtctrl_capture |
+| inference | 通用张量描述、大小计算和同步后端接口 | rtctrl_inference、rtctrl_inference_api |
 | vision | 视觉观测的语义数据契约，不依赖相机或 NPU | rtctrl_vision_api |
 
-推理能力应独立归入 inference 模块，RKNN 归 adapters/inference。当前构建没有推理
-实现，不创建占位模块或将目录存在当作功能完成。
+推理契约与张量大小计算归 inference 模块，RKNN 归 adapters/inference。当前支持输入
+准备和同步执行接口；输出读取和完整生产推理服务尚未实现。通用模块不依赖 RKNN SDK。
 
 ## 端口归属
 
@@ -31,6 +32,7 @@
 | IActuatorHal / IActuatorProtocol / IActuatorLink | actuator | 模拟、Dynamixel、mailbox、通用组合 HAL 等 |
 | IByteTransport / ICanTransport | transport | 串口、SocketCAN、loopback |
 | ICommandSource | bridge | 分帧命令源、loopback 来源 |
+| rtctrl::inference::Backend | inference | RKNN 适配器、测试替身及外部实现 |
 | rtctrl_capture_backend | capture | V4L2、synthetic、外部自定义后端 |
 
 端口与业务接口可以不同。采集核心通过 backend 回调取得帧，再统一验证所有权，

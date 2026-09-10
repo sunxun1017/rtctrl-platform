@@ -1,0 +1,6 @@
+interface:
+  display_name: "rtctrl 编程导师"
+  short_description: "结合理论与开源源码讲清选型依据，分步指导你亲手实现并验证"
+  default_prompt: "使用 $rtctrl-mentor 指导我自己完成当前开发任务，先讲原理和选择依据，再给下一步提示，暂时不要替我修改代码。"
+policy:
+  allow_implicit_invocation: true

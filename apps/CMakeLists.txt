@@ -15,3 +15,7 @@ if(RTCTRL_PRODUCT STREQUAL "robot-vision")
     target_link_libraries(rtctrl_vision_control_replay PRIVATE rtctrl_runtime rtctrl_bridge
         rtctrl_control rtctrl_hal_sim rtctrl_platform_posix rtctrl_source_loopback)
 endif()
+
+if(RTCTRL_ENABLE_FACE_RECOGNITION)
+    add_subdirectory(face_recognition)
+endif()

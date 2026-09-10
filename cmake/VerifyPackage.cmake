@@ -28,12 +28,14 @@ cmake_minimum_required(VERSION 3.16)
 project(rtctrl_external_consumer LANGUAGES C CXX)
 find_package(rtctrl 0.8 REQUIRED CONFIG)
 include("${CMAKE_CURRENT_SOURCE_DIR}/public-header-checks.cmake")
+add_executable(inference_core inference_core.cpp)
+target_link_libraries(inference_core PRIVATE rtctrl::rtctrl_inference)
 if(TARGET rtctrl::rtctrl_product_yidong23)
     message(FATAL_ERROR "Product profile leaked into the public module package")
 endif()
 foreach(adapter rtctrl_vision_v4l2 rtctrl_capture_synthetic rtctrl_platform_posix
         rtctrl_hal_sim rtctrl_hal_mailbox rtctrl_ipc_posix rtctrl_transport_serial
-        rtctrl_transport_can rtctrl_igh_ethercat)
+        rtctrl_transport_can rtctrl_igh_ethercat rtctrl_inference_rknn)
     if(TARGET rtctrl::${adapter})
         message(FATAL_ERROR "Adapter target leaked into the public module package: ${adapter}")
     endif()
@@ -58,6 +60,14 @@ if(VISION)
     add_executable(camera camera.c)
     target_link_libraries(camera PRIVATE rtctrl::rtctrl_capture)
 endif()
+]=])
+file(WRITE "${check_dir}/consumer/inference_core.cpp" [=[
+#include <rtctrl/inference/backend.hpp>
+int main() {
+    rtctrl::inference::TensorSpec spec;
+    spec.shape = {2, 3};
+    return spec.byte_size() == 24 ? 0 : 1;
+}
 ]=])
 file(WRITE "${check_dir}/consumer/core.cpp" [=[
 #include <rtctrl/runtime/realtime_engine.hpp>
@@ -95,6 +105,10 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build "${check_dir}/build"
     RESULT_VARIABLE result OUTPUT_QUIET)
 if(NOT result EQUAL 0)
     message(FATAL_ERROR "External consumer linking failed")
+endif()
+execute_process(COMMAND "${check_dir}/build/inference_core" RESULT_VARIABLE result)
+if(NOT result EQUAL 0)
+    message(FATAL_ERROR "External inference consumer failed")
 endif()
 if(CONTROL)
     execute_process(COMMAND "${check_dir}/build/core" RESULT_VARIABLE result)

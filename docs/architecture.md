@@ -223,7 +223,8 @@ SDK Git commit 只作为辅助信息，不再冒充实际工作副本。失败�
 - 新命令源：实现 bridge::ICommandSource，经仲裁进入唯一实时入口。
 - 新相机后端：放在 adapters/capture，实现 capture 端口。
 - 新推理能力：通用契约归独立 inference 模块；RKNN 等后端归 adapters/inference，
-  不依赖视觉或关节语义。当前没有通过构建验证的推理模块，不创建空壳 target。
+  不依赖视觉或关节语义。通用 inference 模块提供张量描述、大小计算和同步 Backend 接口；RKNN 输入路径
+  通过宿主机 SDK 替身测试，输出 API 和目标板完整推理仍待实现。
 - 新板卡：增加 platform profile/BSP，不加板卡分支到 control/runtime。
 - 新产品：增加组合入口与产品 preset，声明故障处理和部署所有权，并添加端到端回放。
 

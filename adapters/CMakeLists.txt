@@ -28,3 +28,7 @@ if(RTCTRL_BUILD_VISION)
         add_subdirectory(capture/v4l2)
     endif()
 endif()
+
+if(RTCTRL_ENABLE_RKNN)
+    add_subdirectory(inference/rknn)
+endif()

@@ -40,7 +40,12 @@ include(cmake/Formatting.cmake)
 rtctrl_add_build_options()
 rtctrl_add_format_targets()
 
+if(RTCTRL_BUILD_TESTS)
+    enable_testing()
+endif()
+
 include(cmake/Modules.cmake)
+add_subdirectory(modules/inference)
 add_subdirectory(modules/vision)
 if(RTCTRL_BUILD_CONTROL)
     foreach(module model ipc control safety protocol transport actuator runtime bridge)

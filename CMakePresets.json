@@ -125,6 +125,18 @@
       "cacheVariables": {
         "RTCTRL_ENABLE_V4L2": "OFF"
       }
+    },
+    {
+      "name": "face-host",
+      "displayName": "Host face recognition algorithms and CLI",
+      "inherits": "release",
+      "binaryDir": "${sourceDir}/build/face-host",
+      "cacheVariables": {
+        "RTCTRL_ENABLE_FACE_RECOGNITION": "ON",
+        "RTCTRL_ENABLE_RKNN": "ON",
+        "RTCTRL_FACE_BUILD_CLI": "ON",
+        "RTCTRL_BUILD_TESTS": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -175,6 +187,10 @@
     {
       "name": "vision-synthetic",
       "configurePreset": "vision-synthetic"
+    },
+    {
+      "name": "face-host",
+      "configurePreset": "face-host"
     }
   ],
   "testPresets": [
@@ -237,6 +253,13 @@
     {
       "name": "vision-synthetic",
       "configurePreset": "vision-synthetic",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "face-host",
+      "configurePreset": "face-host",
       "output": {
         "outputOnFailure": true
       }

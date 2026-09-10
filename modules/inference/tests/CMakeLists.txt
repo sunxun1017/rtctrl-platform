@@ -1,0 +1,4 @@
+add_executable(rtctrl_inference_tensor_test test_tensor.cpp)
+target_link_libraries(rtctrl_inference_tensor_test PRIVATE rtctrl_inference)
+target_compile_options(rtctrl_inference_tensor_test PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
+add_test(NAME rtctrl_inference_tensor_test COMMAND rtctrl_inference_tensor_test)
