@@ -32,3 +32,23 @@
 - 结论：该 BSP 可使用 V4L2 DMA-BUF、编码器内置 RGA 缩放、MPP JPEG；不需要把原始 NV12 转成 CPU BGR 再编码。不能把硬件缩放或编码包零拷贝属性描述为整个 HTTP 链路零拷贝。
 - 实现注意：厂商库可能向 stdout 写诊断，二进制视频使用独立 FD；板端可缺少 `/proc/PID/task/PID/children`，性能工具用 `/proc/PID/stat` 的父进程字段定位子进程。
 - 失效条件：BSP、插件构建选项、采集格式或尺寸变化时重验；独立预览的结果不代表其他处理应用性能。
+
+## 2026-09-12：MPP 池复用与输入零拷贝要分别验证
+
+适用条件：RV1126B 独立 GStreamer 摄像头预览，当前 SDK rockchipmpp 插件。
+证据：`outputs/MPP缓冲复用实测.md`、`outputs/mpp-reuse/` 中的 OFF/ON 计数、重复测量和输入探测日志。
+allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性。预热后 heap 分配归零，
+仍不能证明无映射、无复制；这次两块 GstMemory 输入实际走 RGA 虚拟地址路径。
+手工构建需保留 SDK 的 `-fvisibility=hidden`，否则同名 `mpp_enc_debug` 符号可冲突。
+换 SDK、输入布局或构建方式后重新验证；不要据此跳过 DMA 同步或默认启用实验插件。
+
+## 2026-09-12：推理优化按同输入、同二进制分层对照
+
+适用条件：RV1126B 的 RetinaFace/MobileFaceNet 视频应用，当前配套 OpenCV 与 RKNN runtime。
+证据：`outputs/npu-20260912/` 的 API 配对、perf Self、颜色转换和 JPEG 编码日志。
+`inputs_set` 墙钟包含 SDK 内部路径，不能全部归为 NPU 核心执行或某一种类型转换。
+显式 UInt8 需匹配实际像素值域、布局与字节缓冲，并保留普通 Float32 默认契约。
+这次查表在 x86 一致、ARM 因 FMA 舍入差 1；保留舍入后又比原式慢约 2%，因此未采用。
+固定输入下板上 TurboJPEG 编码比配套 OpenCV JPEG 更快，压缩输出仍复制成独立对象供 HTTP 持有。
+后续复用的是 perf 定位、正确性检查与单变量对照的方法，不应强行沿用某个“零拷贝”或查表方案。
+换工具链、模型、编码库、颜色元数据或输入布局后重验；短对照与提前停止的采样不能当长时间稳定性结果。

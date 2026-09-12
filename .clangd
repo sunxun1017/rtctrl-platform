@@ -18,3 +18,11 @@ CompileFlags:
         - -mstack-protector-guard=*
         - -mstack-protector-guard-reg=*
         - -mstack-protector-guard-offset=*
+
+---
+If:
+    PathMatch: ^apps/face_recognition/.*
+CompileFlags:
+    # Includes rtctrl_face_video and its V4L2/capture dependencies.
+    # Generate with: cmake --preset face-video
+    CompilationDatabase: build/face-video
