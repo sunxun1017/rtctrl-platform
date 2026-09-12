@@ -1,0 +1,91 @@
+sample pair=0 native=0 wall_us=22322.4 thread_cpu_us=17276
+sample pair=0 native=1 wall_us=9266.54 thread_cpu_us=4174.04
+comparison pair=0 finite=1 max_abs_error=0
+sample pair=1 native=1 wall_us=9004.04 thread_cpu_us=4158.87
+sample pair=1 native=0 wall_us=22356 thread_cpu_us=17268.4
+comparison pair=1 finite=1 max_abs_error=0
+sample pair=2 native=0 wall_us=22188.5 thread_cpu_us=17305.2
+sample pair=2 native=1 wall_us=9158.33 thread_cpu_us=4193
+comparison pair=2 finite=1 max_abs_error=0
+sample pair=3 native=1 wall_us=9170.58 thread_cpu_us=4230.04
+sample pair=3 native=0 wall_us=22248.3 thread_cpu_us=17348.3
+comparison pair=3 finite=1 max_abs_error=0
+sample pair=4 native=0 wall_us=22389.8 thread_cpu_us=17400.2
+sample pair=4 native=1 wall_us=9266.83 thread_cpu_us=4177.25
+comparison pair=4 finite=1 max_abs_error=0
+sample pair=5 native=1 wall_us=9108.46 thread_cpu_us=4252.5
+sample pair=5 native=0 wall_us=22380.2 thread_cpu_us=17361.5
+comparison pair=5 finite=1 max_abs_error=0
+sample pair=6 native=0 wall_us=22166.4 thread_cpu_us=17271.9
+sample pair=6 native=1 wall_us=9170.88 thread_cpu_us=4177.83
+comparison pair=6 finite=1 max_abs_error=0
+sample pair=7 native=1 wall_us=9057.71 thread_cpu_us=4218.67
+sample pair=7 native=0 wall_us=22074.5 thread_cpu_us=17213.9
+comparison pair=7 finite=1 max_abs_error=0
+sample pair=8 native=0 wall_us=22337 thread_cpu_us=17231.1
+sample pair=8 native=1 wall_us=9506.58 thread_cpu_us=4347.88
+comparison pair=8 finite=1 max_abs_error=0
+sample pair=9 native=1 wall_us=9563.17 thread_cpu_us=4428.96
+sample pair=9 native=0 wall_us=22390.1 thread_cpu_us=17338.1
+comparison pair=9 finite=1 max_abs_error=0
+sample pair=10 native=0 wall_us=22401.8 thread_cpu_us=17351.2
+sample pair=10 native=1 wall_us=9049.25 thread_cpu_us=4206.12
+comparison pair=10 finite=1 max_abs_error=0
+sample pair=11 native=1 wall_us=9384.96 thread_cpu_us=4207.29
+sample pair=11 native=0 wall_us=22437.9 thread_cpu_us=17366.4
+comparison pair=11 finite=1 max_abs_error=0
+sample pair=12 native=0 wall_us=22509.4 thread_cpu_us=17425
+sample pair=12 native=1 wall_us=9254.29 thread_cpu_us=4239.67
+comparison pair=12 finite=1 max_abs_error=0
+sample pair=13 native=1 wall_us=9091.83 thread_cpu_us=4146.63
+sample pair=13 native=0 wall_us=22331.2 thread_cpu_us=17258.2
+comparison pair=13 finite=1 max_abs_error=0
+sample pair=14 native=0 wall_us=22426.8 thread_cpu_us=17246.5
+sample pair=14 native=1 wall_us=9323.12 thread_cpu_us=4229.17
+comparison pair=14 finite=1 max_abs_error=0
+sample pair=15 native=1 wall_us=9259.25 thread_cpu_us=4215.46
+sample pair=15 native=0 wall_us=22230.8 thread_cpu_us=17198.1
+comparison pair=15 finite=1 max_abs_error=0
+sample pair=16 native=0 wall_us=22223.2 thread_cpu_us=17338.7
+sample pair=16 native=1 wall_us=9189.83 thread_cpu_us=4215.17
+comparison pair=16 finite=1 max_abs_error=0
+sample pair=17 native=1 wall_us=9220.46 thread_cpu_us=4221
+sample pair=17 native=0 wall_us=22379.6 thread_cpu_us=17394.1
+comparison pair=17 finite=1 max_abs_error=0
+sample pair=18 native=0 wall_us=22352.2 thread_cpu_us=17353
+sample pair=18 native=1 wall_us=9262.17 thread_cpu_us=4163.25
+comparison pair=18 finite=1 max_abs_error=0
+sample pair=19 native=1 wall_us=9076.67 thread_cpu_us=4254.54
+sample pair=19 native=0 wall_us=22294.4 thread_cpu_us=17266.4
+comparison pair=19 finite=1 max_abs_error=0
+sample pair=20 native=0 wall_us=22346.6 thread_cpu_us=17381.9
+sample pair=20 native=1 wall_us=9194.21 thread_cpu_us=4201.17
+comparison pair=20 finite=1 max_abs_error=0
+sample pair=21 native=1 wall_us=9200.62 thread_cpu_us=4211.38
+sample pair=21 native=0 wall_us=22155.9 thread_cpu_us=17244.5
+comparison pair=21 finite=1 max_abs_error=0
+sample pair=22 native=0 wall_us=22083.8 thread_cpu_us=17239.8
+sample pair=22 native=1 wall_us=9236.5 thread_cpu_us=4175.79
+comparison pair=22 finite=1 max_abs_error=0
+sample pair=23 native=1 wall_us=9149 thread_cpu_us=4264.75
+sample pair=23 native=0 wall_us=22324.5 thread_cpu_us=17231.7
+comparison pair=23 finite=1 max_abs_error=0
+sample pair=24 native=0 wall_us=22104 thread_cpu_us=17228.8
+sample pair=24 native=1 wall_us=9195.67 thread_cpu_us=4197.37
+comparison pair=24 finite=1 max_abs_error=0
+sample pair=25 native=1 wall_us=9138.79 thread_cpu_us=4231.21
+sample pair=25 native=0 wall_us=22122.3 thread_cpu_us=17291.5
+comparison pair=25 finite=1 max_abs_error=0
+sample pair=26 native=0 wall_us=22357.1 thread_cpu_us=17395.6
+sample pair=26 native=1 wall_us=9020.96 thread_cpu_us=4141.38
+comparison pair=26 finite=1 max_abs_error=0
+sample pair=27 native=1 wall_us=9276.17 thread_cpu_us=4225.38
+sample pair=27 native=0 wall_us=22247.5 thread_cpu_us=17218
+comparison pair=27 finite=1 max_abs_error=0
+sample pair=28 native=0 wall_us=22176.6 thread_cpu_us=17293.5
+sample pair=28 native=1 wall_us=9131.5 thread_cpu_us=4154.5
+comparison pair=28 finite=1 max_abs_error=0
+sample pair=29 native=1 wall_us=9216.38 thread_cpu_us=4233.54
+sample pair=29 native=0 wall_us=22317.5 thread_cpu_us=17385.4
+comparison pair=29 finite=1 max_abs_error=0
+result max_abs_error=0

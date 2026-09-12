@@ -25,12 +25,7 @@ void* runtime() {
                                       "rknn_inputs_set",
                                       "rknn_run",
                                       "rknn_outputs_get",
-                                      "rknn_outputs_release",
-                                      "rknn_create_mem",
-                                      "rknn_create_mem_from_fd",
-                                      "rknn_destroy_mem",
-                                      "rknn_set_io_mem",
-                                      "rknn_mem_sync"};
+                                      "rknn_outputs_release"};
             for (const char* name : required) {
                 if (!dlsym(handle, name)) {
                     std::cerr << "Incompatible RKNN runtime: missing " << name
@@ -121,4 +116,10 @@ int rknn_mem_sync(rknn_context ctx, rknn_tensor_mem* mem, rknn_mem_sync_mode mod
     static auto function = symbol<decltype(&rknn_mem_sync)>("rknn_mem_sync");
     return function ? function(ctx, mem, mode) : RKNN_ERR_DEVICE_UNAVAILABLE;
 }
+}
+
+extern "C" rknn_tensor_mem*
+rknn_create_mem2(rknn_context ctx, uint64_t size, uint64_t flags) {
+    static auto function = symbol<decltype(&rknn_create_mem2)>("rknn_create_mem2");
+    return function ? function(ctx, size, flags) : nullptr;
 }

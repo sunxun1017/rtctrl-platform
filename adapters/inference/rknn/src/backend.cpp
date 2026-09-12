@@ -1,6 +1,7 @@
 #include "rtctrl/adapters/rknn/backend.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 #include <fstream>
 #include <limits>
@@ -8,6 +9,31 @@
 
 namespace rknn {
 namespace {
+// IEEE binary32 -> binary16, round to nearest/even; LUT setup only.
+unsigned short half_bits(float value) {
+    if (!std::isfinite(value) || std::abs(value) > 65504.0f)
+        throw std::invalid_argument("Native normalization exceeds finite FP16");
+    std::uint32_t bits;
+    std::memcpy(&bits, &value, sizeof(bits));
+    const unsigned sign = (bits >> 16) & 0x8000;
+    const int exponent = static_cast<int>((bits >> 23) & 255) - 127 + 15;
+    unsigned mantissa = bits & 0x7fffff;
+    if (exponent < -10)
+        return static_cast<unsigned short>(sign);
+    if (exponent <= 0) {
+        mantissa |= 0x800000;
+        const unsigned shift = 14 - exponent;
+        unsigned result = mantissa >> shift;
+        const unsigned remainder = mantissa & ((1u << shift) - 1);
+        const unsigned halfway = 1u << (shift - 1);
+        result += remainder > halfway || (remainder == halfway && (result & 1));
+        return static_cast<unsigned short>(sign | result);
+    }
+    unsigned result = (static_cast<unsigned>(exponent) << 10) | (mantissa >> 13);
+    const unsigned remainder = mantissa & 0x1fff;
+    result += remainder > 0x1000 || (remainder == 0x1000 && (result & 1));
+    return static_cast<unsigned short>(sign | result);
+}
 std::vector<unsigned char> load_model(const char* path) {
     if (path == nullptr || *path == '\0') {
         throw std::invalid_argument("RKNN model path is empty");
@@ -151,7 +177,57 @@ RknnBackend::RknnBackend(const char* model_path, TensorType input_type)
     }
 }
 
+RknnBackend::RknnBackend(const char* model_path,
+                         const NativeInputNormalization& normalization)
+    : RknnBackend(model_path, TensorType::UInt8) {
+    static_assert(sizeof(unsigned short) == 2, "FP16 storage needs 16 bits");
+    if (inputs_.size() != 1)
+        throw std::invalid_argument("Native input requires one RGB tensor");
+    rknn_tensor_attr attr{};
+    if (rknn_query(ctx_, RKNN_QUERY_NATIVE_INPUT_ATTR, &attr, sizeof(attr)) !=
+        RKNN_SUCC)
+        throw std::runtime_error("Cannot query native input");
+    const auto& spec = input_specs_[0];
+    const bool nhwc = spec.layout == TensorLayout::NHWC;
+    const bool nchw = spec.layout == TensorLayout::NCHW;
+    const bool identity = attr.qnt_type == RKNN_TENSOR_QNT_NONE ||
+                          (attr.qnt_type == RKNN_TENSOR_QNT_AFFINE_ASYMMETRIC &&
+                           attr.zp == 0 && attr.scale == 1.0f);
+    if (attr.type != RKNN_TENSOR_FLOAT16 || attr.fmt != RKNN_TENSOR_NHWC ||
+        attr.n_dims != 4 || attr.dims[0] != 1 || attr.dims[3] != 3 ||
+        !attr.dims[1] || !attr.dims[2] || !identity || spec.shape.size() != 4 ||
+        (!nhwc && !nchw) || spec.shape[0] != 1 || spec.shape[nhwc ? 3 : 1] != 3 ||
+        spec.shape[nhwc ? 1 : 2] != attr.dims[1] ||
+        spec.shape[nhwc ? 2 : 3] != attr.dims[2] ||
+        attr.n_elems != spec.byte_size() ||
+        static_cast<std::uint64_t>(attr.n_elems) * 2 != attr.size ||
+        attr.size_with_stride != attr.size ||
+        (attr.w_stride && attr.w_stride != attr.dims[2]) ||
+        (attr.h_stride && attr.h_stride != attr.dims[1]))
+        throw std::invalid_argument(
+            "Unsupported native RGB FP16 shape/stride/quantization");
+    for (std::size_t c = 0; c < 3; ++c) {
+        if (!std::isfinite(normalization.mean[c]) ||
+            !std::isfinite(normalization.std[c]) || normalization.std[c] <= 0)
+            throw std::invalid_argument("Invalid native normalization");
+        for (unsigned v = 0; v < 256; ++v)
+            native_lut_[c][v] =
+                half_bits((static_cast<float>(v) - normalization.mean[c]) /
+                          normalization.std[c]);
+    }
+    native_input_ =
+        rknn_create_mem2(ctx_, attr.size_with_stride, RKNN_FLAG_MEMORY_CACHEABLE);
+    if (!native_input_ || !native_input_->virt_addr ||
+        native_input_->size < attr.size_with_stride)
+        throw std::runtime_error("Cannot allocate cacheable native input");
+    attr.pass_through = 1;
+    if (rknn_set_io_mem(ctx_, native_input_, &attr) != RKNN_SUCC)
+        throw std::runtime_error("Cannot bind native input");
+}
+
 RknnBackend::~RknnBackend() {
+    if (native_input_)
+        rknn_destroy_mem(ctx_, native_input_);
     if (ctx_ != 0) {
         rknn_destroy(ctx_);
     }
@@ -224,9 +300,21 @@ bool RknnBackend::run() {
         return failed();
     }
     std::fill(input_ready_.begin(), input_ready_.end(), false);
-    if (rknn_inputs_set(ctx_,
-                        static_cast<std::uint32_t>(inputs_.size()),
-                        inputs_.data()) != RKNN_SUCC) {
+    if (native_input_) {
+        auto* target = static_cast<unsigned short*>(native_input_->virt_addr);
+        const auto& bytes = input_bytes_[0];
+        const auto pixels = bytes.size() / 3;
+        const bool nchw = input_specs_[0].layout == TensorLayout::NCHW;
+        for (std::size_t i = 0; i < pixels; ++i)
+            for (std::size_t c = 0; c < 3; ++c)
+                target[i * 3 + c] =
+                    native_lut_[c][bytes[nchw ? c * pixels + i : i * 3 + c]];
+        if (rknn_mem_sync(ctx_, native_input_, RKNN_MEMORY_SYNC_TO_DEVICE) !=
+            RKNN_SUCC)
+            return failed();
+    } else if (rknn_inputs_set(ctx_,
+                               static_cast<std::uint32_t>(inputs_.size()),
+                               inputs_.data()) != RKNN_SUCC) {
         return failed();
     }
     if (rknn_run(ctx_, nullptr) != RKNN_SUCC)

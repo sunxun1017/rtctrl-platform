@@ -1,0 +1,28 @@
+{
+  "detector": {
+    "0": {
+      "samples": 30,
+      "wall_ms": 22.28921,
+      "thread_cpu_ms": 17.30409666666667
+    },
+    "1": {
+      "samples": 30,
+      "wall_ms": 9.204825000000001,
+      "thread_cpu_ms": 4.216460333333333
+    },
+    "max_abs_error": 0
+  },
+  "recognizer": {
+    "0": {
+      "samples": 30,
+      "wall_ms": 8.294048,
+      "thread_cpu_ms": 2.3744193333333334
+    },
+    "1": {
+      "samples": 30,
+      "wall_ms": 6.594340333333333,
+      "thread_cpu_ms": 0.6840947
+    },
+    "max_abs_error": 0
+  }
+}

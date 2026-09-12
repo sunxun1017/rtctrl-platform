@@ -105,3 +105,13 @@ rknn::RknnBackend backend(model_path, rtctrl::inference::TensorType::UInt8);
 ```
 
 UInt8 使用独立字节存储，input_spec、可写 view 与 prepare_input_data 的长度均按字节计算；不会把旧 Float32 指针当成字节。视频应用通过 `--input-type uint8` 显式开启，默认 `float32`。应用按输入布局把 BGR8 转为 RGB，直接写入借用缓冲，完整写入后 commit；输出仍为 Float32。模型内部预处理和量化由 SDK 处理，切换类型前应验证同一输入下的输出一致性。
+
+## 显式 native FP16 输入
+
+`RknnBackend(path, NativeInputNormalization{mean, std})` 对外仍接收原始 RGB UInt8，普通构造的默认行为不变。该选项只接受单输入、batch=1、三通道，native 必须为无额外 stride 的 FP16 NHWC，量化必须为 NONE 或 zp=0、scale=1 的恒等 AFFINE。外部 NCHW 会在填充时换为 NHWC，其他布局或容量不符直接拒绝。
+
+构造阶段预计算三张 256 项 FP16 表，使用 `(pixel - mean[channel]) / std[channel]` 和 round-to-nearest-even；每次运行按字节查表写入 cacheable RKNN 内存，显式同步 TO_DEVICE，再运行。mean/std 必须由对应模型转换配置提供，不能凭模型名字推断。`pass_through=1` 会绕过 SDK 输入转换，因此填入的值已经归一化；未关闭 SDK 自动 cache flush。
+
+native 需要的 create_mem2、set_io_mem、mem_sync、destroy_mem 在使用时解析，默认路径不会因缺少可选符号而拒绝加载。分配失败或不支持的元数据明确报错，不自动换成另一种预处理；同步失败会阻止推理、使输出不可读。构造失败和析构都在释放 context 前释放 native 内存。输出仍由 SDK 转为预分配 Float32，不是整条推理链路零拷贝。
+
+启用前必须用匹配模型、runtime 和同一输入比较全部输出。固定整数输入一致只证明该输入的数值对照，仍需真实图像、多场景和持续运行验证。

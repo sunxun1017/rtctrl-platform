@@ -3,11 +3,16 @@
 
 #include "rtctrl/inference/backend.hpp"
 
+#include <array>
 #include <cstddef>
 #include <rknn_api.h>
 #include <vector>
 
 namespace rknn {
+struct NativeInputNormalization {
+    std::array<float, 3> mean;
+    std::array<float, 3> std;
+};
 // Synchronous, single-owner backend. Not for the real-time control loop.
 // Inputs are dense Float32 (default) or explicit UInt8 in the queried layout.
 class RknnBackend final : public rtctrl::inference::Backend {
@@ -16,6 +21,9 @@ class RknnBackend final : public rtctrl::inference::Backend {
     explicit RknnBackend(const char* model_path,
                          rtctrl::inference::TensorType input_type =
                              rtctrl::inference::TensorType::Float32);
+    // Explicit raw RGB UInt8 API, normalized into a validated native FP16 input.
+    RknnBackend(const char* model_path,
+                const NativeInputNormalization& normalization);
     ~RknnBackend() override;
     RknnBackend(const RknnBackend&) = delete;
     RknnBackend& operator=(const RknnBackend&) = delete;
@@ -64,6 +72,8 @@ class RknnBackend final : public rtctrl::inference::Backend {
     std::vector<TensorSpec> output_specs_;
     std::vector<std::vector<float>> output_buffers_;
     bool outputs_valid_ = false;
+    rknn_tensor_mem* native_input_ = nullptr;
+    std::array<std::array<unsigned short, 256>, 3> native_lut_{};
 };
 } // namespace rknn
 #endif

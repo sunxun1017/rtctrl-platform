@@ -12,6 +12,9 @@ void require(bool condition, const char* message) {
         throw std::runtime_error(message);
 }
 struct FakeSdk {
+    bool native = false, bad_stride = false, fail_sync = false, fail_bind = false;
+    int mem_destroys = 0, syncs = 0;
+    std::vector<unsigned short> native_values;
     int queries = 0;
     int sets = 0;
     int runs = 0;
@@ -50,8 +53,25 @@ int rknn_query(rknn_context, rknn_query_cmd cmd, void* info, uint32_t size) {
     if (cmd == RKNN_QUERY_IN_OUT_NUM) {
         require(size == sizeof(rknn_input_output_num), "I/O query size");
         auto* count = static_cast<rknn_input_output_num*>(info);
-        count->n_input = 2;
+        count->n_input = sdk.native ? 1 : 2;
         count->n_output = sdk.zero_outputs ? 0 : 1;
+    } else if (cmd == RKNN_QUERY_NATIVE_INPUT_ATTR ||
+               (sdk.native && cmd == RKNN_QUERY_INPUT_ATTR)) {
+        auto* a = static_cast<rknn_tensor_attr*>(info);
+        a->n_dims = 4;
+        a->dims[0] = 1;
+        a->dims[1] = 1;
+        a->dims[2] = 2;
+        a->dims[3] = 3;
+        a->n_elems = 6;
+        a->fmt = RKNN_TENSOR_NHWC;
+        a->type = RKNN_TENSOR_FLOAT16;
+        a->size = 12;
+        a->size_with_stride = sdk.bad_stride ? 16 : 12;
+        a->w_stride = 2;
+        a->qnt_type = RKNN_TENSOR_QNT_AFFINE_ASYMMETRIC;
+        a->zp = 0;
+        a->scale = 1;
     } else if (cmd == RKNN_QUERY_INPUT_ATTR || cmd == RKNN_QUERY_OUTPUT_ATTR) {
         require(size == sizeof(rknn_tensor_attr), "attribute query size");
         auto* attr = static_cast<rknn_tensor_attr*>(info);
@@ -147,6 +167,30 @@ int rknn_outputs_release(rknn_context, uint32_t count, rknn_output* outputs) {
     require(outputs[0].is_prealloc == 1, "release must not free caller memory");
     outputs[0].buf = nullptr;
     return sdk.fail_release ? -1 : RKNN_SUCC;
+}
+rknn_tensor_mem* rknn_create_mem2(rknn_context, uint64_t size, uint64_t flags) {
+    require(flags == RKNN_FLAG_MEMORY_CACHEABLE, "cacheable native allocation");
+    auto* m = new rknn_tensor_mem{};
+    m->size = size;
+    m->virt_addr = new unsigned short[size / 2];
+    return m;
+}
+int rknn_destroy_mem(rknn_context, rknn_tensor_mem* m) {
+    ++sdk.mem_destroys;
+    delete[] static_cast<unsigned short*>(m->virt_addr);
+    delete m;
+    return 0;
+}
+int rknn_set_io_mem(rknn_context, rknn_tensor_mem*, rknn_tensor_attr* a) {
+    require(a->pass_through == 1, "native bypass explicit");
+    return sdk.fail_bind ? -1 : 0;
+}
+int rknn_mem_sync(rknn_context, rknn_tensor_mem* m, rknn_mem_sync_mode mode) {
+    require(mode == RKNN_MEMORY_SYNC_TO_DEVICE, "flush input before run");
+    ++sdk.syncs;
+    auto* p = static_cast<unsigned short*>(m->virt_addr);
+    sdk.native_values.assign(p, p + m->size / 2);
+    return sdk.fail_sync ? -1 : 0;
 }
 int rknn_run(rknn_context, rknn_run_extend*) {
     ++sdk.runs;
@@ -341,6 +385,53 @@ int main(int argc, char** argv) {
             bad_type = true;
         }
         require(bad_type, "unsupported external type rejected");
+        sdk.native = true;
+        const rknn::NativeInputNormalization norm{{1, 2, 3}, {1, 2, 4}};
+        const int before_mem = sdk.mem_destroys;
+        {
+            rknn::RknnBackend backend(argv[1], norm);
+            unsigned char pixels[] = {1, 4, 7, 3, 6, 11};
+            require(backend.prepare_input_data(pixels, 6, 0), "native prepare");
+            int sets = sdk.sets;
+            require(backend.run(), "native run");
+            require(sdk.sets == sets, "native bypasses inputs_set");
+            require(sdk.native_values ==
+                        std::vector<unsigned short>(
+                            {0, 0x3c00, 0x3c00, 0x4000, 0x4000, 0x4000}),
+                    "normalized half pixels");
+            sdk.fail_sync = true;
+            require(backend.prepare_input_data(pixels, 6, 0), "refill native");
+            int runs = sdk.runs;
+            require(!backend.run() && sdk.runs == runs, "sync failure blocks run");
+            bool absent = false;
+            try {
+                backend.output_data(0);
+            } catch (const std::logic_error&) {
+                absent = true;
+            }
+            require(absent, "sync failure invalidates outputs");
+            sdk.fail_sync = false;
+        }
+        require(sdk.mem_destroys == before_mem + 1, "native cleanup");
+        for (int scenario = 0; scenario < 3; ++scenario) {
+            sdk.bad_stride = scenario == 0;
+            sdk.fail_bind = scenario == 1;
+            auto n = norm;
+            if (scenario == 2)
+                n.std[0] = 0;
+            bool rejected = false;
+            int before = sdk.mem_destroys;
+            try {
+                rknn::RknnBackend backend(argv[1], n);
+            } catch (const std::exception&) {
+                rejected = true;
+            }
+            require(rejected, "bad native setup rejected");
+            require(sdk.mem_destroys == before + (scenario == 1),
+                    "native setup cleanup");
+        }
+        sdk.bad_stride = false;
+        sdk.fail_bind = false;
         std::cout << "RKNN host contract tests passed\n";
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
