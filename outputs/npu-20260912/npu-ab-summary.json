@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "0": {
+      "input_us": 17503.58,
+      "run_us": 4406.9136,
+      "get_us": 778.05588,
+      "copy_us": 124.17414,
+      "release_us": 81.32828,
+      "total_us": 22894.056,
+      "count": 50
+    },
+    "1": {
+      "input_us": 17436.518,
+      "run_us": 4360.8304,
+      "get_us": 627.46834,
+      "copy_us": 0.69994,
+      "release_us": 0.71748,
+      "total_us": 22426.226,
+      "count": 50
+    },
+    "max_abs_error": 0.0
+  },
+  "recognizer": {
+    "0": {
+      "input_us": 2207.1992,
+      "run_us": 5084.1472,
+      "get_us": 55.13074,
+      "copy_us": 1.31846,
+      "release_us": 1.75572,
+      "total_us": 7349.551,
+      "count": 50
+    },
+    "1": {
+      "input_us": 2199.0324,
+      "run_us": 5078.2378,
+      "get_us": 49.91,
+      "copy_us": 0.50746,
+      "release_us": 0.65914,
+      "total_us": 7328.3468,
+      "count": 50
+    },
+    "max_abs_error": 0.0
+  }
+}

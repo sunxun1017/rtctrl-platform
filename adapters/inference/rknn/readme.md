@@ -20,7 +20,7 @@ MutableBufferView get_input_buffer(std::size_t index);
 
 `prepare_input_data(data, size_bytes, index)` 逐个复制输入到 backend 的私有缓冲区。
 它不调用 RKNN，不做 resize、重采样、归一化或类型转换。调用者提供的是准备好的张量。
-本版固定对外使用 IEEE Float32、紧密连续布局；`input_spec(index)` 描述这个对外表示，
+默认对外使用 IEEE Float32、紧密连续布局；构造时可以显式选择 UInt8。`input_spec(index)` 描述这个对外表示，
 不是模型的原生量化类型。布局沿用查询的 NCHW/NHWC/Undefined，Undefined 不代表 NHWC。
 只接受原生 Float32/Float16/UInt8/Int8 的模型输入，其他类型显式拒绝，避免整数 token 等语义被浮点化。
 不提供动态 shape 切换和 stride/零拷贝输入；模型预处理语义和板端转换正确性仍需验证。
@@ -32,16 +32,16 @@ bool a_ready = backend.prepare_input_data(a.data(), a.size() * sizeof(float), 0)
 bool b_ready = backend.prepare_input_data(b.data(), b.size() * sizeof(float), 1);
 if (a_ready && b_ready) {
     bool submitted = backend.run();
-    // submitted 包含执行、获取和复制所有输出成功。
+    // submitted 包含执行、获取所有输出并释放本轮 SDK 资源成功。
     if (submitted) { const auto& values = backend.output_data(0); /* 使用 values */ }
 }
 ```
 
 `run()` 要求全部输入 ready，然后将完整描述数组一次传给 `rknn_inputs_set`，成功后执行
-`rknn_run`。SDK 按 `type=FLOAT32, pass_through=0` 处理输入转换。每次提交尝试后清空
+`rknn_run`。SDK 按显式选择的 `type=FLOAT32` 或 `UINT8`、`pass_through=0` 处理输入转换。每次提交尝试后清空
 ready，即使 SDK 失败也须重新准备所有输入；缺少输入时不调用 SDK，也不清空已有输入。
 无效 index 返回 false；有效 index 的空指针/错误大小会清除该输入 ready，避免使用旧数据。
-size 参数不能验证源内存的实际长度或类型，调用者必须保证可读范围和 Float32 表示。
+size 参数不能验证源内存的实际长度或类型，调用者必须保证可读范围和 input_spec 声明的表示。
 
 也可 `get_input_buffer(index)` 直接写入 `float` 元素，然后 `commit_input(index)`。
 获取视图会清除该输入 ready；commit 是调用者对已完整填充的声明，不能自动检测漏写。
@@ -49,8 +49,12 @@ size 参数不能验证源内存的实际长度或类型，调用者必须保证
 输入描述在初始化后缓存，查询越界抛 `std::out_of_range`。backend 不可复制或移动。
 
 `output_spec(index)` 返回输出形状，`output_data(index)` 返回 backend 拥有的稠密 Float32 向量。
-每次 run 尝试均使旧输出无效；仅成功后可读。SDK 输出在复制后通过 `rknn_outputs_release`
-释放，包括复制失败路径。测试使用 SDK 替身，不证明 NPU、量化转换或模型精度。
+每次 run 尝试均使旧输出无效；仅成功后可读。输出向量在初始化时预分配，
+`rknn_outputs_get` 以 `want_float=1, is_prealloc=1` 直接写入这份存储。成功 get 后仍调用
+`rknn_outputs_release`，调用者拥有的向量保持有效；失败时清空输出并禁止读取旧结果。
+这省去应用层的一次输出复制，仍保留 SDK 的 Float32 转换，不属于 native tensor 零拷贝。
+测试使用 SDK 替身，不证明 NPU、量化转换或模型精度；RV1126B 两模型的实际对照数据见
+`outputs/npu-20260912/`。
 
 可选应用通过 `runtime_loader.cpp` 动态加载板端 `librknnrt.so`；可用环境变量
 `RTCTRL_RKNN_RUNTIME` 指定库路径。普通库消费者也可以直接链接匹配的 SDK runtime。
@@ -94,4 +98,10 @@ bool submit(rtctrl::inference::Backend& backend,
 ```
 
 通用层支持 UInt8/Int8/Float32 描述，并不要求所有后端使用 Float32。
-RKNN 当前的固定 Float32 提交策略仍是适配器自身的限制。
+RKNN 默认 Float32，也支持显式 UInt8；Int8 外部提交仍会拒绝。
+
+```cpp
+rknn::RknnBackend backend(model_path, rtctrl::inference::TensorType::UInt8);
+```
+
+UInt8 使用独立字节存储，input_spec、可写 view 与 prepare_input_data 的长度均按字节计算；不会把旧 Float32 指针当成字节。视频应用通过 `--input-type uint8` 显式开启，默认 `float32`。应用按输入布局把 BGR8 转为 RGB，直接写入借用缓冲，完整写入后 commit；输出仍为 Float32。模型内部预处理和量化由 SDK 处理，切换类型前应验证同一输入下的输出一致性。

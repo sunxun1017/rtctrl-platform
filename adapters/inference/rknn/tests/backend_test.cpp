@@ -18,6 +18,7 @@ struct FakeSdk {
     int destroys = 0;
     int gets = 0;
     int releases = 0;
+    bool uint8_input = false;
     bool fail_get = false;
     bool fail_release = false;
     bool bad_output_size = false;
@@ -100,13 +101,21 @@ int rknn_inputs_set(rknn_context, uint32_t count, rknn_input inputs[]) {
     sdk.submitted.clear();
     for (uint32_t i = 0; i < count; ++i) {
         require(inputs[i].index == i, "model input order");
-        require(inputs[i].type == RKNN_TENSOR_FLOAT32, "public float input format");
+        require(inputs[i].type ==
+                    (sdk.uint8_input ? RKNN_TENSOR_UINT8 : RKNN_TENSOR_FLOAT32),
+                "external input format");
         require(inputs[i].fmt == RKNN_TENSOR_UNDEFINED, "queried layout retained");
         require(inputs[i].pass_through == 0, "SDK conversion enabled");
-        require(inputs[i].size == (i == 0 ? 3 : 2) * sizeof(float),
+        require(inputs[i].size ==
+                    (i == 0 ? 3 : 2) * (sdk.uint8_input ? 1 : sizeof(float)),
                 "float byte size");
-        std::vector<float> values(inputs[i].size / sizeof(float));
-        std::memcpy(values.data(), inputs[i].buf, inputs[i].size);
+        std::vector<float> values(i == 0 ? 3 : 2);
+        if (sdk.uint8_input) {
+            auto* bytes = static_cast<unsigned char*>(inputs[i].buf);
+            for (size_t j = 0; j < values.size(); ++j)
+                values[j] = bytes[j];
+        } else
+            std::memcpy(values.data(), inputs[i].buf, inputs[i].size);
         sdk.submitted.push_back(values);
     }
     return sdk.fail_set ? -1 : RKNN_SUCC;
@@ -118,19 +127,24 @@ int rknn_outputs_get(rknn_context,
     ++sdk.gets;
     require(count == 1, "output count");
     require(outputs[0].want_float == 1 && outputs[0].index == 0 &&
-                outputs[0].is_prealloc == 0,
-            "float SDK-owned output requested");
-    if (sdk.fail_get)
+                outputs[0].is_prealloc == 1,
+            "float caller-owned output requested");
+    if (sdk.fail_get) {
+        // Failed retrieval may already have written into caller storage.
+        static_cast<float*>(outputs[0].buf)[0] = 99.0f;
         return -1;
-    auto* values = new float[3]{0.25f, 0.5f, 0.75f};
-    outputs[0].buf = values;
+    }
+    require(outputs[0].buf != nullptr && outputs[0].size == 3 * sizeof(float),
+            "preallocated output capacity");
+    const float values[] = {0.25f, 0.5f, 0.75f};
+    std::memcpy(outputs[0].buf, values, sizeof(values));
     outputs[0].size = sdk.bad_output_size ? 4 : 3 * sizeof(float);
     return RKNN_SUCC;
 }
 int rknn_outputs_release(rknn_context, uint32_t count, rknn_output* outputs) {
     ++sdk.releases;
     require(count == 1, "release output count");
-    delete[] static_cast<float*>(outputs[0].buf);
+    require(outputs[0].is_prealloc == 1, "release must not free caller memory");
     outputs[0].buf = nullptr;
     return sdk.fail_release ? -1 : RKNN_SUCC;
 }
@@ -189,7 +203,8 @@ int main(int argc, char** argv) {
             require(sdk.sets == 1 && sdk.runs == 1, "one set and run per batch");
             require(backend.output_data(0) ==
                         std::vector<float>({0.25f, 0.5f, 0.75f}),
-                    "outputs copied before release");
+                    "caller-owned outputs survive release");
+            const float* output_storage = backend.output_data(0).data();
             require(sdk.gets == 1 && sdk.releases == 1, "successful get released");
             require(!backend.run(), "repeated run needs new batch");
             unreadable();
@@ -243,6 +258,10 @@ int main(int argc, char** argv) {
             require(backend.commit_input(0), "explicit commit");
             require(!backend.commit_input(2), "invalid commit index");
             require(backend.run(), "committed view and preserved other input run");
+            require(backend.output_data(0).data() == output_storage,
+                    "output allocation survives failures and later reuse");
+            require(backend.output_data(0)[0] == 0.25f,
+                    "successful retrieval replaces partial failed output");
         }
         require(sdk.destroys == 1, "normal destruction");
         sdk.fail_query = true;
@@ -297,6 +316,31 @@ int main(int argc, char** argv) {
                         rknn::RknnBackend::TensorType::Float32,
                     "float16 native model accepts external float32");
         }
+        sdk.uint8_input = true;
+        {
+            rknn::RknnBackend backend(argv[1], rknn::RknnBackend::TensorType::UInt8);
+            require(backend.input_spec(0).byte_size() == 3, "uint8 byte size");
+            auto view = backend.get_input_buffer(0);
+            require(view.type == rknn::RknnBackend::TensorType::UInt8 &&
+                        view.size_bytes == 3,
+                    "uint8 view");
+            unsigned char a[] = {0, 127, 255}, b[] = {4, 5};
+            std::memcpy(view.data, a, sizeof(a));
+            require(backend.commit_input(0), "uint8 commit");
+            require(!backend.run(), "uint8 partial batch");
+            require(!backend.prepare_input_data(b, 1, 1), "uint8 wrong size");
+            require(backend.prepare_input_data(b, sizeof(b), 1) && backend.run(),
+                    "uint8 full batch");
+            require(sdk.submitted[0] == std::vector<float>({0, 127, 255}),
+                    "uint8 values preserved");
+        }
+        bool bad_type = false;
+        try {
+            rknn::RknnBackend backend(argv[1], rknn::RknnBackend::TensorType::Int8);
+        } catch (const std::invalid_argument&) {
+            bad_type = true;
+        }
+        require(bad_type, "unsupported external type rejected");
         std::cout << "RKNN host contract tests passed\n";
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';

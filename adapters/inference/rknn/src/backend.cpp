@@ -31,10 +31,12 @@ std::vector<unsigned char> load_model(const char* path) {
 }
 } // namespace
 
-RknnBackend::RknnBackend(const char* model_path)
+RknnBackend::RknnBackend(const char* model_path, TensorType input_type)
     : model_(load_model(model_path)) {
     static_assert(sizeof(float) == 4 && std::numeric_limits<float>::is_iec559,
                   "RKNN Float32 requires IEEE 754 32-bit float");
+    if (input_type != TensorType::Float32 && input_type != TensorType::UInt8)
+        throw std::invalid_argument("Unsupported external RKNN input type");
     try {
         if (rknn_init(&ctx_,
                       model_.data(),
@@ -51,6 +53,7 @@ RknnBackend::RknnBackend(const char* model_path)
         }
         input_specs_.reserve(counts.n_input);
         input_buffers_.resize(counts.n_input);
+        input_bytes_.resize(counts.n_input);
         inputs_.resize(counts.n_input);
         input_ready_.assign(counts.n_input, false);
         for (std::uint32_t i = 0; i < counts.n_input; ++i) {
@@ -67,6 +70,7 @@ RknnBackend::RknnBackend(const char* model_path)
                 throw std::runtime_error("Unsupported RKNN input type or rank");
             }
             TensorSpec spec{};
+            spec.type = input_type;
             spec.shape.assign(attr.dims, attr.dims + attr.n_dims);
             switch (attr.fmt) {
                 case RKNN_TENSOR_NCHW:
@@ -83,19 +87,26 @@ RknnBackend::RknnBackend(const char* model_path)
             }
             const auto bytes = spec.byte_size();
             if (bytes > std::numeric_limits<std::uint32_t>::max() ||
-                bytes / sizeof(float) != attr.n_elems) {
+                bytes / (input_type == TensorType::Float32 ? sizeof(float) : 1) !=
+                    attr.n_elems) {
                 throw std::runtime_error(
                     "Inconsistent or oversized RKNN input shape");
             }
-            input_buffers_[i].resize(bytes / sizeof(float));
+            if (input_type == TensorType::Float32)
+                input_buffers_[i].resize(bytes / sizeof(float));
+            else
+                input_bytes_[i].resize(bytes);
             input_specs_.push_back(spec);
             auto& input = inputs_[i];
             input.index = i;
-            input.type = RKNN_TENSOR_FLOAT32;
+            input.type = input_type == TensorType::Float32 ? RKNN_TENSOR_FLOAT32
+                                                           : RKNN_TENSOR_UINT8;
             input.fmt = attr.fmt;
             input.pass_through = 0;
             input.size = static_cast<std::uint32_t>(bytes);
-            input.buf = input_buffers_[i].data();
+            input.buf = input_type == TensorType::Float32
+                            ? static_cast<void*>(input_buffers_[i].data())
+                            : static_cast<void*>(input_bytes_[i].data());
         }
         output_specs_.reserve(counts.n_output);
         output_buffers_.resize(counts.n_output);
@@ -128,6 +139,7 @@ RknnBackend::RknnBackend(const char* model_path)
                 throw std::runtime_error(
                     "Inconsistent or oversized RKNN output shape");
             }
+            output_buffers_[i].resize(bytes / sizeof(float));
             output_specs_.push_back(spec);
         }
     } catch (...) {
@@ -154,9 +166,9 @@ const RknnBackend::TensorSpec& RknnBackend::input_spec(std::size_t index) const 
 }
 
 RknnBackend::MutableTensorView RknnBackend::get_input_buffer(std::size_t index) {
-    auto& buffer = input_buffers_.at(index);
+    const auto& input = inputs_.at(index);
     input_ready_[index] = false;
-    return {TensorType::Float32, buffer.data(), buffer.size() * sizeof(float)};
+    return {input_specs_[index].type, input.buf, input.size};
 }
 
 bool RknnBackend::commit_input(std::size_t index) {
@@ -174,12 +186,12 @@ bool RknnBackend::prepare_input_data(const void* data,
         return false;
     }
     input_ready_[index] = false;
-    auto& buffer = input_buffers_[index];
-    if (data == nullptr || size != buffer.size() * sizeof(float)) {
+    auto& input = inputs_[index];
+    if (data == nullptr || size != input.size) {
         return false;
     }
     // memmove also permits a caller to commit a borrowed buffer through this API.
-    std::memmove(buffer.data(), data, size);
+    std::memmove(input.buf, data, size);
     input_ready_[index] = true;
     return true;
 }
@@ -201,57 +213,54 @@ const std::vector<float>& RknnBackend::output_data(std::size_t index) const {
 
 bool RknnBackend::run() {
     outputs_valid_ = false;
-    for (auto& buffer : output_buffers_)
-        buffer.clear();
+    const auto failed = [&] {
+        for (auto& buffer : output_buffers_)
+            buffer.clear();
+        return false;
+    };
     if (!std::all_of(input_ready_.begin(), input_ready_.end(), [](bool ready) {
             return ready;
         })) {
-        return false;
+        return failed();
     }
     std::fill(input_ready_.begin(), input_ready_.end(), false);
     if (rknn_inputs_set(ctx_,
                         static_cast<std::uint32_t>(inputs_.size()),
                         inputs_.data()) != RKNN_SUCC) {
-        return false;
+        return failed();
     }
     if (rknn_run(ctx_, nullptr) != RKNN_SUCC)
-        return false;
+        return failed();
     std::vector<rknn_output> outputs(output_specs_.size());
     for (std::size_t i = 0; i < outputs.size(); ++i) {
+        // Successful runs keep this storage live. A prior failure cleared its
+        // size, but retained capacity; restore the Float32 destination then.
+        output_buffers_[i].resize(output_specs_[i].byte_size() / sizeof(float));
         outputs[i].index = static_cast<std::uint32_t>(i);
         outputs[i].want_float = 1;
+        outputs[i].is_prealloc = 1;
+        outputs[i].buf = output_buffers_[i].data();
+        outputs[i].size = static_cast<std::uint32_t>(output_specs_[i].byte_size());
     }
     if (rknn_outputs_get(ctx_,
                          static_cast<std::uint32_t>(outputs.size()),
                          outputs.data(),
                          nullptr) != RKNN_SUCC)
-        return false;
-    // A successful get transfers temporary SDK buffers to us. Release on every
-    // path, including allocation failure while copying to owned output storage.
-    bool copied = true;
-    try {
-        for (std::size_t i = 0; i < outputs.size(); ++i) {
-            const auto bytes = output_specs_[i].byte_size();
-            if (outputs[i].buf == nullptr || outputs[i].size != bytes) {
-                copied = false;
-                break;
-            }
-            output_buffers_[i].resize(bytes / sizeof(float));
-            std::memcpy(output_buffers_[i].data(), outputs[i].buf, bytes);
+        return failed();
+    bool valid = true;
+    for (std::size_t i = 0; i < outputs.size(); ++i) {
+        if (outputs[i].buf != output_buffers_[i].data() ||
+            outputs[i].size != output_specs_[i].byte_size()) {
+            valid = false;
         }
-    } catch (...) {
-        rknn_outputs_release(
-            ctx_, static_cast<std::uint32_t>(outputs.size()), outputs.data());
-        for (auto& buffer : output_buffers_)
-            buffer.clear();
-        throw;
     }
+    // Release the SDK's per-get resources even for caller-owned destinations.
+    // is_prealloc keeps these vectors owned by us; do not clear until release.
     const int released = rknn_outputs_release(
         ctx_, static_cast<std::uint32_t>(outputs.size()), outputs.data());
-    outputs_valid_ = copied && released == RKNN_SUCC;
-    if (!outputs_valid_)
-        for (auto& buffer : output_buffers_)
-            buffer.clear();
-    return outputs_valid_;
+    if (!valid || released != RKNN_SUCC)
+        return failed();
+    outputs_valid_ = true;
+    return true;
 }
 } // namespace rknn
