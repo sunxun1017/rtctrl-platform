@@ -1,0 +1,9 @@
+10421034326;;cycles;7533360949;100.00;1.388;GHz
+5156911897;;instructions;7533360949;100.00;0.49;insn per cycle
+2257115055;;armv8_cortex_a53/l1d_cache/;7533360949;100.00;300.544;M/sec
+24415251;;armv8_cortex_a53/l1d_cache_refill/;7533360949;100.00;3.251;M/sec
+250990181;;armv8_cortex_a53/l2d_cache/;7533360949;100.00;33.420;M/sec
+82203437;;armv8_cortex_a53/l2d_cache_refill/;7533360949;100.00;10.946;M/sec
+7510.09;msec;task-clock;7510091654;100.00;0.375;CPUs utilized
+0;;major-faults;7510091654;100.00;0.000;/sec
+0;;minor-faults;7510091654;100.00;0.000;/sec

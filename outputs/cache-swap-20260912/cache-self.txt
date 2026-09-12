@@ -1,0 +1,29 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'armv8_cortex_a53/l2d_cache_refill/'
+# Event count (approx.): 75563008
+#
+# Overhead  Command          Shared Object         Symbol
+# ........  ...............  ....................  ........................................................................................................................................................................................................................
+#
+    22.12%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddc8
+    19.95%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddd4
+    13.96%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face12_GLOBAL__N_18selectedEPKh
+     6.94%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+     5.98%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN4rknn11RknnBackend3runEv
+     4.94%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+     4.42%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddcc
+     1.82%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddc4
+     1.56%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddc0
+     1.56%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009dddc
+     0.87%  rtctrl_face_vid  [kernel.kallsyms]     [k] __pi_dcache_clean_poc
+     0.87%  rtctrl_face_vid  librknnrt.so          [.] 0x000000000035f494
+     0.61%  rtctrl_face_vid  rtctrl_face_video     [.] _ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

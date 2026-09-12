@@ -1,0 +1,8 @@
+
+ Performance counter stats for process id '27690':
+
+           7033.20 msec task-clock                       #    0.352 CPUs utilized
+                 0      major-faults                     #    0.000 /sec
+                 0      minor-faults                     #    0.000 /sec
+
+      20.002511677 seconds time elapsed

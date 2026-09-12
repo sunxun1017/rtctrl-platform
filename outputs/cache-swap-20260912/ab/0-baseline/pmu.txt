@@ -1,0 +1,6 @@
+9516717711;;cycles;6893174455;100.00;;
+4609539771;;instructions;6893174455;100.00;0.48;insn per cycle
+2030915454;;armv8_cortex_a53/l1d_cache/;6893174455;100.00;;
+19936565;;armv8_cortex_a53/l1d_cache_refill/;6893174455;100.00;;
+237533637;;armv8_cortex_a53/l2d_cache/;6893174455;100.00;;
+80322044;;armv8_cortex_a53/l2d_cache_refill/;6893174455;100.00;;

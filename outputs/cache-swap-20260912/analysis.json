@@ -1,0 +1,88 @@
+{
+  "pmu": {
+    "cycles": 10421034326.0,
+    "instructions": 5156911897.0,
+    "armv8_cortex_a53/l1d_cache/": 2257115055.0,
+    "armv8_cortex_a53/l1d_cache_refill/": 24415251.0,
+    "armv8_cortex_a53/l2d_cache/": 250990181.0,
+    "armv8_cortex_a53/l2d_cache_refill/": 82203437.0,
+    "task-clock": 7510.09,
+    "major-faults": 0.0,
+    "minor-faults": 0.0
+  },
+  "l1_refill_ratio": 0.01081701659200532,
+  "l2_refill_ratio": 0.3275165453584019,
+  "ipc": 0.4948560512974938,
+  "vmstat_delta": {
+    "pswpin": 0,
+    "pswpout": 0,
+    "allocstall_dma": 0,
+    "allocstall_dma32": 0,
+    "allocstall_normal": 0,
+    "allocstall_movable": 0,
+    "pgmajfault": 0,
+    "pgsteal_kswapd": 0,
+    "pgsteal_direct": 0,
+    "pgscan_kswapd": 0,
+    "pgscan_direct": 0,
+    "pgscan_direct_throttle": 0,
+    "pgscan_anon": 0,
+    "pgscan_file": 0,
+    "pgsteal_anon": 0,
+    "pgsteal_file": 0
+  },
+  "face_samples": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "prefetch_cpu_us": {
+    "(1, 'baseline')": {
+      "mean": 2262.153333333333,
+      "min": 2258.83,
+      "max": 2264.72
+    },
+    "(1, 'prefetch288')": {
+      "mean": 1821.8816666666667,
+      "min": 1820.16,
+      "max": 1824.24
+    },
+    "(1, 'prefetch576')": {
+      "mean": 1900.1766666666667,
+      "min": 1896.93,
+      "max": 1901.77
+    },
+    "(16, 'baseline')": {
+      "mean": 2248.295,
+      "min": 2203.75,
+      "max": 2263.16
+    },
+    "(16, 'prefetch288')": {
+      "mean": 1816.985,
+      "min": 1815.74,
+      "max": 1819.09
+    },
+    "(16, 'prefetch576')": {
+      "mean": 1894.3883333333333,
+      "min": 1891.63,
+      "max": 1896.83
+    }
+  }
+}
