@@ -71,6 +71,10 @@ RknnBackend::RknnBackend(const char* model_path, TensorType input_type)
                       nullptr) != RKNN_SUCC) {
             throw std::runtime_error("rknn_init failed");
         }
+        // flags=0 copies/loads the model during init, as in the SDK examples.
+        // This is invalid for RKNN_FLAG_MODEL_BUFFER_ZERO_COPY: revisit ownership
+        // before exposing that flag. Release capacity, not just vector size.
+        std::vector<unsigned char>().swap(model_);
         rknn_input_output_num counts{};
         if (rknn_query(ctx_, RKNN_QUERY_IN_OUT_NUM, &counts, sizeof(counts)) !=
                 RKNN_SUCC ||

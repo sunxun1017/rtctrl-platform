@@ -1,0 +1,4 @@
+init_flags=0 init_ret=0
+version_ret=0 api=2.3.2 (429f97ae6b@2025-04-09T09:09:27) driver=0.9.8
+mem_ret=0 weights=904128 internal=3072000 dma=4132864 total_sram=0 free_sram=0
+destroy_ret=0 inference_not_run=1

@@ -1,0 +1,16 @@
+{
+  "runs_per_model_per_variant": 20,
+  "heap_churn": "32MiB plus model file size, does not guarantee old allocation reuse",
+  "detector": {
+    "floats": 1344000,
+    "sha256": "db49237ed6356d86926a6d820ba7dfe3821b456b6454dc5aa2d5e35189f48ecd",
+    "before_after_cmp_equal": true
+  },
+  "recognizer": {
+    "floats": 10240,
+    "sha256": "a6a5145d85856aa6b7a3ac6c3075222b80c6eb21986fd491552b6e35eeeca5bc",
+    "before_after_cmp_equal": true
+  },
+  "finite": true,
+  "input": "deterministic synthetic RGB, no face photo"
+}
