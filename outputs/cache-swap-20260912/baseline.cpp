@@ -62,7 +62,7 @@ uint8x16_t vertical(uint8x16_t a, uint8x16_t b, uint16_t b0, uint16_t b1) {
 }
 #endif
 } // namespace
-cv::Mat detector_letterbox(const cv::Mat& source, int width, int height) {
+cv::Mat baseline(const cv::Mat& source, int width, int height) {
     if (source.empty() || source.type() != CV_8UC3 || width < 1 || width > 320 ||
         height < 1 || height > 320)
         throw std::invalid_argument("Invalid detector letterbox input");
@@ -95,17 +95,6 @@ cv::Mat detector_letterbox(const cv::Mat& source, int width, int height) {
         auto* destination = output.ptr<unsigned char>(y + top);
 #if defined(__aarch64__) && defined(__ARM_NEON)
         for (int x = 0; x < 320; x += 16) {
-            // Two vector groups ahead hides source-row latency on the validated
-            // Cortex-A53 path. Keep every prefetch address within the active row.
-            const int ahead = x * 9 + 288;
-            if (ahead + 128 < 960 * 3) {
-                __builtin_prefetch(a + ahead, 0, 3);
-                __builtin_prefetch(a + ahead + 64, 0, 3);
-                __builtin_prefetch(a + ahead + 128, 0, 3);
-                __builtin_prefetch(b + ahead, 0, 3);
-                __builtin_prefetch(b + ahead + 64, 0, 3);
-                __builtin_prefetch(b + ahead + 128, 0, 3);
-            }
             const auto av = selected(a + x * 9);
             const auto bv = selected(b + x * 9);
             uint8x16x3_t result;
