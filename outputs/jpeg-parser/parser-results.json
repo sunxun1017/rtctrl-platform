@@ -1,0 +1,38 @@
+[
+  {
+    "mode": "before",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 2.045211966666667
+  },
+  {
+    "mode": "after",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 0.47515688733333283
+  },
+  {
+    "mode": "after",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 0.4719168599999997
+  },
+  {
+    "mode": "before",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 2.0544292119999996
+  },
+  {
+    "mode": "before",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 2.033758991333334
+  },
+  {
+    "mode": "after",
+    "frames": 1500,
+    "jpeg_bytes": 49169,
+    "cpu_ms_per_frame": 0.4544018873333328
+  }
+]

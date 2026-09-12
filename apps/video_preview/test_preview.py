@@ -32,6 +32,18 @@ class PreviewTest(unittest.TestCase):
         self.assertEqual(list(JpegFrames().feed(JPEG * 3)), [JPEG] * 3)
         self.assertEqual(list(JpegFrames(limit=len(JPEG)).feed(JPEG * 2)), [JPEG] * 2)
 
+    def test_dense_entropy_markers_and_chunk_boundaries(self):
+        # Stuffed FF and all restart codes are entropy, including across reads.
+        entropy = (b"abc\xff\x00" + b"".join(
+            b"\xff" + bytes([code]) for code in range(0xD0, 0xD8))) * 20
+        frame = b"\xff\xd8\xff\xda\x00\x02" + entropy + b"\xff\xff\xd9"
+        for split in range(len(frame) + 1):
+            parser = JpegFrames()
+            result = list(parser.feed(frame[:split])) + list(parser.feed(frame[split:]))
+            self.assertEqual(result, [frame], split)
+        with self.assertRaises(ValueError):
+            list(JpegFrames(limit=32).feed(frame[:-3]))
+
     def test_invalid_and_oversized(self):
         with self.assertRaises(ValueError):
             list(JpegFrames().feed(b"\xff\xd8\xff\xe0\x00\x01"))

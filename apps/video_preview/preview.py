@@ -5,10 +5,14 @@ import collections
 import http.server
 import json
 import os
+import re
 import signal
 import subprocess
 import threading
 import time
+
+
+_ENTROPY_MARKER = re.compile(rb"\xff[^\x00\xd0-\xd7]")
 
 
 class JpegFrames:
@@ -34,12 +38,15 @@ class JpegFrames:
                 raise ValueError("JPEG exceeds size limit")
             p = self.pos
             if self.entropy:
-                p = self.data.find(b"\xff", p)
-                if p < 0:
+                # Skip stuffed FF bytes and restart markers inside entropy in C.
+                # A trailing FF must be reconsidered when the next chunk arrives.
+                marker_match = _ENTROPY_MARKER.search(self.data, p)
+                if marker_match is None:
                     if len(self.data) > self.limit:
                         raise ValueError("JPEG exceeds size limit")
-                    self.pos = len(self.data)
+                    self.pos = len(self.data) - (self.data[-1:] == b"\xff")
                     return
+                p = marker_match.start()
             if len(self.data) < p + 2:
                 self.pos = p
                 return

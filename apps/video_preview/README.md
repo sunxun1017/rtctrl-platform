@@ -9,6 +9,37 @@
 最多 8 个 HTTP 客户端，socket 超时 2 秒；网络发送不占用最新帧锁。
 服务不落盘摄像头画面；仅输出运行日志。没有鉴权和 TLS，沿用开发板直连预览用途。
 
+## 首次部署
+
+下面的复制命令在开发机 Linux / WSL 的项目根目录执行，先把示例 IP 换成板卡当前地址。
+需要已能 SSH 登录板卡；不在文档中保存登录凭据。
+
+```sh
+BOARD_IP=192.168.1.100  # 替换为板卡当前 IP
+ssh "root@$BOARD_IP" 'mkdir -p /userdata/rtctrl-video-preview'
+scp apps/video_preview/preview.py apps/video_preview/benchmark.py apps/video_preview/README.md \
+    "root@$BOARD_IP:/userdata/rtctrl-video-preview/"
+ssh "root@$BOARD_IP"
+```
+
+接下来在板卡终端检查运行依赖：
+
+```sh
+python3 --version
+gst-launch-1.0 --version
+gst-inspect-1.0 v4l2src
+gst-inspect-1.0 queue
+gst-inspect-1.0 fdsink
+gst-inspect-1.0 mppjpegenc
+v4l2-ctl --list-devices
+v4l2-ctl -d /dev/video31 --get-fmt-video
+```
+
+`v4l2src` 应提供 `io-mode=dmabuf`；`mppjpegenc` 应提供 `width`、`height`、
+`max-pending` 和 `q-factor` 属性。缺少插件时使用匹配板卡 BSP 的组件，
+不要把桌面 x86 库复制到板端。软件对比另外需要 `videoscale` 和 `jpegenc`。
+摄像头应已由传感器驱动、ISP 及板厂配套图像服务正常初始化；本程序不负责启动这些服务。
+
 ## 运行
 
 先停止占用同一视频节点的程序。已验证板端 `/dev/video31` 为 2112×1568 NV12，
@@ -34,6 +65,11 @@ echo $! > preview.pid
 可调整尺寸，要求为偶数。`--help` 查看全部参数。
 
 接口：`/`、`/stream.mjpg`、`/snapshot.jpg`、`/status.json`。
+首页使用串行快照请求，每次请求最多等待 3 秒，失败后自动重试；图片解码超时为 2 秒。
+后台标签页暂停取帧，返回前台恢复，页面分别显示编码 FPS 和成功加载的不同帧的显示 FPS。
+`/stream.mjpg` 仍供需要 MJPEG 的客户端使用。快照超过 2 秒未更新时返回 503，
+避免把旧帧当作正常画面。与原始 MJPEG 首页相比，逐帧 HTTP 请求有额外开销；
+前面的历史性能表来自原始版本，不能作为此页面的浏览器性能测量。
 状态 `encoded_frame_age_ms` 是收到编码包后的帧龄，不是摄像头到屏幕延迟。
 连续 5 秒没有 JPEG 或编码器结束时，服务报错并退出，不持续显示假运行状态。
 
@@ -82,3 +118,14 @@ python3 -m py_compile apps/video_preview/preview.py apps/video_preview/benchmark
 
 本次 6 项测试覆盖分片/合并 JPEG、段内伪结束标记、大小限制、HTTP 最新帧、慢请求
 释放槽位及线程启动失败清理。此应用直接由 Python 执行，不涉及 CMake/C++ 目标。
+
+页面恢复逻辑可用 Node.js 运行 `node apps/video_preview/test_frontend.cjs` 验证。
+测试模拟图片与状态请求挂起、后台暂停和前台恢复，并检查 Blob URL 释放；
+这不能替代真实 Edge 长时间运行测试。此次曾观测到用户报告画面卡顿时板端持续约
+30 FPS；旧页面缺少挂起请求的超时恢复，但尚未在 Edge 复现并确认唯一根因。
+
+### 2026-09-12：JPEG 分帧扫描
+
+压缩区的 FF00/restart 扫描改用预编译正则，段长度和帧边界仍由原解析器处理，跨 read 的末尾 FF 保留。
+板上固定样本、随机分块以及完整管线对照见 [实测记录](../../outputs/jpeg-parser/JPEG分帧优化实测.md)。
+这次仅修改 Python 分帧，不代表 RGA 输入已实现单 DMA-BUF 导入。
