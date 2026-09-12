@@ -1,8 +1,10 @@
+#include "detector_resize.hpp"
 #include "pipeline.hpp"
 #include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <opencv2/imgproc.hpp>
 #include <stdexcept>
 #include <unistd.h>
 using namespace rtctrl;
@@ -73,6 +75,29 @@ class Fake : public inference::Backend {
 };
 int main() {
     try {
+        cv::RNG resize_rng(0x918273);
+        for (int width : {960, 1000})
+            for (int height : {1, 2, 237, 479, 711, 712, 713, 720, 960})
+                for (int pattern = 0; pattern < 12; ++pattern) {
+                    cv::Mat storage(height, width + 7, CV_8UC3);
+                    if (pattern < 3)
+                        storage.setTo(
+                            cv::Scalar(pattern * 127, 255 - pattern * 127, pattern));
+                    else
+                        resize_rng.fill(storage, cv::RNG::UNIFORM, 0, 256);
+                    auto input = storage(cv::Rect(3, 0, width, height));
+                    float scale = std::min(320.f / input.cols, 320.f / input.rows);
+                    int w = std::max(1, int(std::round(input.cols * scale)));
+                    int h = std::max(1, int(std::round(input.rows * scale)));
+                    cv::Mat resized,
+                        expected(320, 320, CV_8UC3, cv::Scalar(0, 0, 0));
+                    cv::resize(input, resized, {w, h});
+                    resized.copyTo(
+                        expected(cv::Rect((320 - w) / 2, (320 - h) / 2, w, h)));
+                    check(cv::norm(expected,
+                                   face::detector_letterbox(input, w, h),
+                                   cv::NORM_INF) == 0);
+                }
         std::vector<float> v = {3, 4};
         face::normalize(v);
         check(std::abs(v[0] - .6f) < 1e-6);

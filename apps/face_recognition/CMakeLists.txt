@@ -1,5 +1,5 @@
 find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs)
-add_library(rtctrl_face_algorithms STATIC pipeline.cpp)
+add_library(rtctrl_face_algorithms STATIC pipeline.cpp detector_resize.cpp)
 target_compile_features(rtctrl_face_algorithms PUBLIC cxx_std_17)
 target_include_directories(rtctrl_face_algorithms PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}" ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(rtctrl_face_algorithms PUBLIC rtctrl_inference ${OpenCV_LIBS})

@@ -1,4 +1,5 @@
 #include "pipeline.hpp"
+#include "detector_resize.hpp"
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
@@ -129,9 +130,7 @@ std::vector<Face> detect(inference::Backend& backend,
     int w = std::max(1, int(std::round(bgr.cols * scale))),
         h = std::max(1, int(std::round(bgr.rows * scale)));
     int left = (320 - w) / 2, top = (320 - h) / 2;
-    cv::Mat image(320, 320, CV_8UC3, cv::Scalar(0, 0, 0)), resized;
-    cv::resize(bgr, resized, {w, h});
-    resized.copyTo(image(cv::Rect(left, top, w, h)));
+    cv::Mat image = detector_letterbox(bgr, w, h);
     submit(backend, image, 320);
     constexpr std::size_t count = 4200;
     const std::vector<float>*loc = nullptr, *conf = nullptr, *land = nullptr;
