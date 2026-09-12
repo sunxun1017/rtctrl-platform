@@ -1,0 +1,96 @@
+native_attr type=1 fmt=1 qnt=2 zp=0 scale=1 dims=1,320,320,3, size=614400 size_with_stride=614400 elems=307200 w_stride=320 h_stride=0
+native_attr type=1 fmt=1 qnt=2 zp=0 scale=1 dims=1,320,320,3, size=614400 size_with_stride=614400 elems=307200 w_stride=320 h_stride=0
+native_mem flags=1 size=614400 requested_cacheable=1 pass_through=1
+candidate normalized=0 finite=1 max_abs_error=3.99902 accepted=0
+candidate normalized=1 finite=1 max_abs_error=0 accepted=1
+sample pair=0 native=0 normalized=1 fill_or_set_wall_us=15731.6 fill_or_set_cpu_us=15734.8 sync_wall_us=7.875 sync_cpu_us=2.625 run_wall_us=5497.04 run_cpu_us=636.709 get_release_wall_us=1111.25 get_release_cpu_us=1110.96 total_wall_us=22347.8 total_cpu_us=17485.1
+sample pair=0 native=1 normalized=1 fill_or_set_wall_us=8279.83 fill_or_set_cpu_us=8282.46 sync_wall_us=103.25 sync_cpu_us=100.334 run_wall_us=5655.42 run_cpu_us=601.126 get_release_wall_us=1110.96 get_release_cpu_us=1111.25 total_wall_us=15149.5 total_cpu_us=10095.2
+comparison pair=0 normalized=1 max_abs_error=0
+sample pair=1 native=1 normalized=1 fill_or_set_wall_us=8344 fill_or_set_cpu_us=8346.92 sync_wall_us=103.542 sync_cpu_us=99.458 run_wall_us=5595.04 run_cpu_us=613.958 get_release_wall_us=1107.75 get_release_cpu_us=1108.04 total_wall_us=15150.3 total_cpu_us=10168.4
+sample pair=1 native=0 normalized=1 fill_or_set_wall_us=15727 fill_or_set_cpu_us=15732.2 sync_wall_us=8.167 sync_cpu_us=2.625 run_wall_us=5560.33 run_cpu_us=641.375 get_release_wall_us=1128.17 get_release_cpu_us=1128.17 total_wall_us=22423.6 total_cpu_us=17504.4
+comparison pair=1 normalized=1 max_abs_error=0
+sample pair=2 native=0 normalized=1 fill_or_set_wall_us=15774.8 fill_or_set_cpu_us=15778.3 sync_wall_us=7.875 sync_cpu_us=2.625 run_wall_us=5760.12 run_cpu_us=654.792 get_release_wall_us=1134.88 get_release_cpu_us=1134.58 total_wall_us=22677.7 total_cpu_us=17570.3
+sample pair=2 native=1 normalized=1 fill_or_set_wall_us=8263.79 fill_or_set_cpu_us=8267.58 sync_wall_us=98 sync_cpu_us=94.5 run_wall_us=5651.04 run_cpu_us=616.875 get_release_wall_us=1109.79 get_release_cpu_us=1109.5 total_wall_us=15122.6 total_cpu_us=10088.5
+comparison pair=2 normalized=1 max_abs_error=0
+sample pair=3 native=1 normalized=1 fill_or_set_wall_us=8292.08 fill_or_set_cpu_us=8292.96 sync_wall_us=100.625 sync_cpu_us=98 run_wall_us=5622.17 run_cpu_us=618.333 get_release_wall_us=1106.88 get_release_cpu_us=1106.58 total_wall_us=15121.8 total_cpu_us=10115.9
+sample pair=3 native=0 normalized=1 fill_or_set_wall_us=15714.7 fill_or_set_cpu_us=15718.5 sync_wall_us=7.291 sync_cpu_us=2.625 run_wall_us=5580.17 run_cpu_us=674.916 get_release_wall_us=1110.67 get_release_cpu_us=1110.96 total_wall_us=22412.8 total_cpu_us=17507
+comparison pair=3 normalized=1 max_abs_error=0
+sample pair=4 native=0 normalized=1 fill_or_set_wall_us=15771.3 fill_or_set_cpu_us=15773.9 sync_wall_us=7.292 sync_cpu_us=2.916 run_wall_us=5686.33 run_cpu_us=691.542 get_release_wall_us=1109.79 get_release_cpu_us=1109.79 total_wall_us=22574.7 total_cpu_us=17578.2
+sample pair=4 native=1 normalized=1 fill_or_set_wall_us=8303.17 fill_or_set_cpu_us=8305.79 sync_wall_us=88.084 sync_cpu_us=85.167 run_wall_us=5481.58 run_cpu_us=581.875 get_release_wall_us=1124.08 get_release_cpu_us=1123.79 total_wall_us=14996.9 total_cpu_us=10096.6
+comparison pair=4 normalized=1 max_abs_error=0
+sample pair=5 native=1 normalized=1 fill_or_set_wall_us=8319.79 fill_or_set_cpu_us=8322.42 sync_wall_us=96.833 sync_cpu_us=93.625 run_wall_us=5617.79 run_cpu_us=607.834 get_release_wall_us=1126.71 get_release_cpu_us=1126.71 total_wall_us=15161.1 total_cpu_us=10150.6
+sample pair=5 native=0 normalized=1 fill_or_set_wall_us=15704.2 fill_or_set_cpu_us=15709.8 sync_wall_us=8.459 sync_cpu_us=2.625 run_wall_us=5626.25 run_cpu_us=664.417 get_release_wall_us=1108.92 get_release_cpu_us=1108.33 total_wall_us=22447.8 total_cpu_us=17485.1
+comparison pair=5 normalized=1 max_abs_error=0
+sample pair=6 native=0 normalized=1 fill_or_set_wall_us=15810.4 fill_or_set_cpu_us=15812.7 sync_wall_us=7.583 sync_cpu_us=3.209 run_wall_us=5562.08 run_cpu_us=665 get_release_wall_us=1110.38 get_release_cpu_us=1110.08 total_wall_us=22490.4 total_cpu_us=17591
+sample pair=6 native=1 normalized=1 fill_or_set_wall_us=8280.12 fill_or_set_cpu_us=8283.04 sync_wall_us=95.375 sync_cpu_us=92.458 run_wall_us=5526.5 run_cpu_us=608.417 get_release_wall_us=1107.46 get_release_cpu_us=1106.88 total_wall_us=15009.5 total_cpu_us=10090.8
+comparison pair=6 normalized=1 max_abs_error=0
+sample pair=7 native=1 normalized=1 fill_or_set_wall_us=8337 fill_or_set_cpu_us=8337.88 sync_wall_us=101.5 sync_cpu_us=98.584 run_wall_us=5622.46 run_cpu_us=623.583 get_release_wall_us=1154.42 get_release_cpu_us=1154.71 total_wall_us=15215.4 total_cpu_us=10214.8
+sample pair=7 native=0 normalized=1 fill_or_set_wall_us=15871.9 fill_or_set_cpu_us=15877.2 sync_wall_us=8.459 sync_cpu_us=2.916 run_wall_us=5712.58 run_cpu_us=672.292 get_release_wall_us=1124.38 get_release_cpu_us=1124.08 total_wall_us=22717.3 total_cpu_us=17676.5
+comparison pair=7 normalized=1 max_abs_error=0
+sample pair=8 native=0 normalized=1 fill_or_set_wall_us=15784.7 fill_or_set_cpu_us=15787.3 sync_wall_us=7.292 sync_cpu_us=2.625 run_wall_us=5766.83 run_cpu_us=680.75 get_release_wall_us=1136.92 get_release_cpu_us=1136.62 total_wall_us=22695.8 total_cpu_us=17607.3
+sample pair=8 native=1 normalized=1 fill_or_set_wall_us=8264.08 fill_or_set_cpu_us=8266.42 sync_wall_us=97.708 sync_cpu_us=95.959 run_wall_us=5668.25 run_cpu_us=621.541 get_release_wall_us=1107.75 get_release_cpu_us=1107.17 total_wall_us=15137.8 total_cpu_us=10091.1
+comparison pair=8 normalized=1 max_abs_error=0
+sample pair=9 native=1 normalized=1 fill_or_set_wall_us=8275.46 fill_or_set_cpu_us=8276.04 sync_wall_us=99.458 sync_cpu_us=98 run_wall_us=5255.83 run_cpu_us=597.042 get_release_wall_us=1107.17 get_release_cpu_us=1106.29 total_wall_us=14737.9 total_cpu_us=10077.4
+sample pair=9 native=0 normalized=1 fill_or_set_wall_us=15784.7 fill_or_set_cpu_us=15788.8 sync_wall_us=7.292 sync_cpu_us=2.625 run_wall_us=5460.29 run_cpu_us=653.917 get_release_wall_us=1110.08 get_release_cpu_us=1110.38 total_wall_us=22362.4 total_cpu_us=17555.7
+comparison pair=9 normalized=1 max_abs_error=0
+sample pair=10 native=0 normalized=1 fill_or_set_wall_us=15776.2 fill_or_set_cpu_us=15780.9 sync_wall_us=9.625 sync_cpu_us=2.917 run_wall_us=5628.88 run_cpu_us=664.707 get_release_wall_us=1126.42 get_release_cpu_us=1126.12 total_wall_us=22541.2 total_cpu_us=17574.7
+sample pair=10 native=1 normalized=1 fill_or_set_wall_us=8285.96 fill_or_set_cpu_us=8288.88 sync_wall_us=95.959 sync_cpu_us=93.041 run_wall_us=5696.25 run_cpu_us=605.793 get_release_wall_us=1173.08 get_release_cpu_us=1172.79 total_wall_us=15251.2 total_cpu_us=10160.5
+comparison pair=10 normalized=1 max_abs_error=0
+sample pair=11 native=1 normalized=1 fill_or_set_wall_us=8287.71 fill_or_set_cpu_us=8290.62 sync_wall_us=100.042 sync_cpu_us=95.958 run_wall_us=5712.88 run_cpu_us=620.96 get_release_wall_us=1132.25 get_release_cpu_us=1132.25 total_wall_us=15232.9 total_cpu_us=10139.8
+sample pair=11 native=0 normalized=1 fill_or_set_wall_us=15797.5 fill_or_set_cpu_us=15802.2 sync_wall_us=7.292 sync_cpu_us=2.625 run_wall_us=6029.62 run_cpu_us=807.041 get_release_wall_us=1168.71 get_release_cpu_us=1169.29 total_wall_us=23003.2 total_cpu_us=17781.2
+comparison pair=11 normalized=1 max_abs_error=0
+sample pair=12 native=0 normalized=1 fill_or_set_wall_us=15924.1 fill_or_set_cpu_us=15924.1 sync_wall_us=7.875 sync_cpu_us=2.625 run_wall_us=5529.71 run_cpu_us=633.207 get_release_wall_us=1113.88 get_release_cpu_us=1113.88 total_wall_us=22575.6 total_cpu_us=17673.8
+sample pair=12 native=1 normalized=1 fill_or_set_wall_us=8281.29 fill_or_set_cpu_us=8285.38 sync_wall_us=94.208 sync_cpu_us=89.542 run_wall_us=5652.79 run_cpu_us=602 get_release_wall_us=1112.42 get_release_cpu_us=1112.42 total_wall_us=15140.7 total_cpu_us=10089.3
+comparison pair=12 normalized=1 max_abs_error=0
+sample pair=13 native=1 normalized=1 fill_or_set_wall_us=8334.08 fill_or_set_cpu_us=8336.71 sync_wall_us=95.958 sync_cpu_us=92.166 run_wall_us=5627.12 run_cpu_us=620.083 get_release_wall_us=1110.67 get_release_cpu_us=1110.08 total_wall_us=15167.8 total_cpu_us=10159
+sample pair=13 native=0 normalized=1 fill_or_set_wall_us=15875.7 fill_or_set_cpu_us=15880.1 sync_wall_us=7.875 sync_cpu_us=2.917 run_wall_us=5583.38 run_cpu_us=651.291 get_release_wall_us=1127.29 get_release_cpu_us=1127.29 total_wall_us=22594.2 total_cpu_us=17661.6
+comparison pair=13 normalized=1 max_abs_error=0
+sample pair=14 native=0 normalized=1 fill_or_set_wall_us=15764.3 fill_or_set_cpu_us=15765.5 sync_wall_us=5.833 sync_cpu_us=2.333 run_wall_us=5739.42 run_cpu_us=690.375 get_release_wall_us=1133.71 get_release_cpu_us=1133.71 total_wall_us=22643.2 total_cpu_us=17591.9
+sample pair=14 native=1 normalized=1 fill_or_set_wall_us=8271.67 fill_or_set_cpu_us=8274.58 sync_wall_us=94.208 sync_cpu_us=91.292 run_wall_us=5691.58 run_cpu_us=614.25 get_release_wall_us=1169 get_release_cpu_us=1169.29 total_wall_us=15226.5 total_cpu_us=10149.4
+comparison pair=14 normalized=1 max_abs_error=0
+sample pair=15 native=1 normalized=1 fill_or_set_wall_us=8276.04 fill_or_set_cpu_us=8277.5 sync_wall_us=91.292 sync_cpu_us=88.375 run_wall_us=5707.04 run_cpu_us=614.249 get_release_wall_us=1110.38 get_release_cpu_us=1110.08 total_wall_us=15184.8 total_cpu_us=10090.2
+sample pair=15 native=0 normalized=1 fill_or_set_wall_us=15846 fill_or_set_cpu_us=15851.2 sync_wall_us=8.75 sync_cpu_us=2.917 run_wall_us=5698.88 run_cpu_us=676.374 get_release_wall_us=1108.62 get_release_cpu_us=1108.92 total_wall_us=22662.2 total_cpu_us=17639.4
+comparison pair=15 normalized=1 max_abs_error=0
+sample pair=16 native=0 normalized=1 fill_or_set_wall_us=15766.6 fill_or_set_cpu_us=15771.6 sync_wall_us=10.792 sync_cpu_us=3.5 run_wall_us=5757.79 run_cpu_us=780.793 get_release_wall_us=1134.58 get_release_cpu_us=1134.29 total_wall_us=22669.8 total_cpu_us=17690.2
+sample pair=16 native=1 normalized=1 fill_or_set_wall_us=8272.83 fill_or_set_cpu_us=8275.46 sync_wall_us=96.833 sync_cpu_us=93.625 run_wall_us=5616.04 run_cpu_us=609 get_release_wall_us=1111.54 get_release_cpu_us=1110.96 total_wall_us=15097.2 total_cpu_us=10089
+comparison pair=16 normalized=1 max_abs_error=0
+sample pair=17 native=1 normalized=1 fill_or_set_wall_us=8336.71 fill_or_set_cpu_us=8340.21 sync_wall_us=102.083 sync_cpu_us=97.708 run_wall_us=5467 run_cpu_us=609.875 get_release_wall_us=1109.79 get_release_cpu_us=1109.79 total_wall_us=15015.6 total_cpu_us=10157.6
+sample pair=17 native=0 normalized=1 fill_or_set_wall_us=15723.5 fill_or_set_cpu_us=15726.7 sync_wall_us=5.834 sync_cpu_us=2.334 run_wall_us=5675.54 run_cpu_us=639.916 get_release_wall_us=1113 get_release_cpu_us=1113 total_wall_us=22517.8 total_cpu_us=17481.9
+comparison pair=17 normalized=1 max_abs_error=0
+sample pair=18 native=0 normalized=1 fill_or_set_wall_us=15779.2 fill_or_set_cpu_us=15782.1 sync_wall_us=9.041 sync_cpu_us=2.916 run_wall_us=5684.58 run_cpu_us=662.959 get_release_wall_us=1113.88 get_release_cpu_us=1113.29 total_wall_us=22586.7 total_cpu_us=17561.3
+sample pair=18 native=1 normalized=1 fill_or_set_wall_us=8295.88 fill_or_set_cpu_us=8298.79 sync_wall_us=93.334 sync_cpu_us=90.125 run_wall_us=5477.79 run_cpu_us=589.751 get_release_wall_us=1107.75 get_release_cpu_us=1107.75 total_wall_us=14974.8 total_cpu_us=10086.4
+comparison pair=18 normalized=1 max_abs_error=0
+sample pair=19 native=1 normalized=1 fill_or_set_wall_us=8318.92 fill_or_set_cpu_us=8320.67 sync_wall_us=102.375 sync_cpu_us=99.167 run_wall_us=5527.67 run_cpu_us=626.501 get_release_wall_us=1106 get_release_cpu_us=1105.71 total_wall_us=15055 total_cpu_us=10152
+sample pair=19 native=0 normalized=1 fill_or_set_wall_us=15728.4 fill_or_set_cpu_us=15732.5 sync_wall_us=7 sync_cpu_us=2.334 run_wall_us=5609.33 run_cpu_us=665.291 get_release_wall_us=1126.42 get_release_cpu_us=1125.83 total_wall_us=22471.2 total_cpu_us=17526
+comparison pair=19 normalized=1 max_abs_error=0
+sample pair=20 native=0 normalized=1 fill_or_set_wall_us=15915.1 fill_or_set_cpu_us=15918.9 sync_wall_us=7 sync_cpu_us=2.334 run_wall_us=5602.33 run_cpu_us=643.416 get_release_wall_us=1130.5 get_release_cpu_us=1129.92 total_wall_us=22654.9 total_cpu_us=17694.5
+sample pair=20 native=1 normalized=1 fill_or_set_wall_us=8264.38 fill_or_set_cpu_us=8267 sync_wall_us=95.666 sync_cpu_us=92.75 run_wall_us=5703.83 run_cpu_us=618.335 get_release_wall_us=1107.75 get_release_cpu_us=1107.75 total_wall_us=15171.6 total_cpu_us=10085.8
+comparison pair=20 normalized=1 max_abs_error=0
+sample pair=21 native=1 normalized=1 fill_or_set_wall_us=8294.12 fill_or_set_cpu_us=8296.17 sync_wall_us=98 sync_cpu_us=94.5 run_wall_us=5584.54 run_cpu_us=609.876 get_release_wall_us=1185.62 get_release_cpu_us=1185.33 total_wall_us=15162.3 total_cpu_us=10185.9
+sample pair=21 native=0 normalized=1 fill_or_set_wall_us=15716.5 fill_or_set_cpu_us=15722.6 sync_wall_us=9.625 sync_cpu_us=2.917 run_wall_us=5713.17 run_cpu_us=692.417 get_release_wall_us=1152.08 get_release_cpu_us=1152.08 total_wall_us=22591.3 total_cpu_us=17570
+comparison pair=21 normalized=1 max_abs_error=0
+sample pair=22 native=0 normalized=1 fill_or_set_wall_us=15818.8 fill_or_set_cpu_us=15821.8 sync_wall_us=7.875 sync_cpu_us=2.916 run_wall_us=5734.17 run_cpu_us=677.834 get_release_wall_us=1109.21 get_release_cpu_us=1109.21 total_wall_us=22670.1 total_cpu_us=17611.7
+sample pair=22 native=1 normalized=1 fill_or_set_wall_us=8305.21 fill_or_set_cpu_us=8308.12 sync_wall_us=92.75 sync_cpu_us=89.833 run_wall_us=5429.08 run_cpu_us=584.791 get_release_wall_us=1121.75 get_release_cpu_us=1121.75 total_wall_us=14948.8 total_cpu_us=10104.5
+comparison pair=22 normalized=1 max_abs_error=0
+sample pair=23 native=1 normalized=1 fill_or_set_wall_us=8334.96 fill_or_set_cpu_us=8338.46 sync_wall_us=87.792 sync_cpu_us=83.709 run_wall_us=5428.79 run_cpu_us=599.083 get_release_wall_us=1172.5 get_release_cpu_us=1173.67 total_wall_us=15024 total_cpu_us=10194.9
+sample pair=23 native=0 normalized=1 fill_or_set_wall_us=15884.5 fill_or_set_cpu_us=15887.4 sync_wall_us=5.542 sync_cpu_us=1.75 run_wall_us=5741.75 run_cpu_us=661.499 get_release_wall_us=1110.08 get_release_cpu_us=1109.79 total_wall_us=22741.8 total_cpu_us=17660.4
+comparison pair=23 normalized=1 max_abs_error=0
+sample pair=24 native=0 normalized=1 fill_or_set_wall_us=15777.4 fill_or_set_cpu_us=15780.3 sync_wall_us=7.584 sync_cpu_us=2.333 run_wall_us=5702.67 run_cpu_us=669.667 get_release_wall_us=1107.75 get_release_cpu_us=1107.75 total_wall_us=22595.4 total_cpu_us=17560.1
+sample pair=24 native=1 normalized=1 fill_or_set_wall_us=8293.54 fill_or_set_cpu_us=8296.17 sync_wall_us=101.792 sync_cpu_us=99.458 run_wall_us=5508.12 run_cpu_us=613.958 get_release_wall_us=1115.33 get_release_cpu_us=1115.04 total_wall_us=15018.8 total_cpu_us=10124.6
+comparison pair=24 normalized=1 max_abs_error=0
+sample pair=25 native=1 normalized=1 fill_or_set_wall_us=8305.79 fill_or_set_cpu_us=8306.96 sync_wall_us=98 sync_cpu_us=95.375 run_wall_us=5478.38 run_cpu_us=617.458 get_release_wall_us=1108.33 get_release_cpu_us=1108.33 total_wall_us=14990.5 total_cpu_us=10128.1
+sample pair=25 native=0 normalized=1 fill_or_set_wall_us=15855.6 fill_or_set_cpu_us=15860.8 sync_wall_us=8.75 sync_cpu_us=2.625 run_wall_us=5418 run_cpu_us=622.708 get_release_wall_us=1119.71 get_release_cpu_us=1120 total_wall_us=22402 total_cpu_us=17606.2
+comparison pair=25 normalized=1 max_abs_error=0
+sample pair=26 native=0 normalized=1 fill_or_set_wall_us=15766.3 fill_or_set_cpu_us=15770.7 sync_wall_us=8.458 sync_cpu_us=3.208 run_wall_us=5768 run_cpu_us=684.251 get_release_wall_us=1127.88 get_release_cpu_us=1127.58 total_wall_us=22670.7 total_cpu_us=17585.8
+sample pair=26 native=1 normalized=1 fill_or_set_wall_us=8286.54 fill_or_set_cpu_us=8289.75 sync_wall_us=90.125 sync_cpu_us=87.208 run_wall_us=5682.25 run_cpu_us=586.834 get_release_wall_us=1158.21 get_release_cpu_us=1157.62 total_wall_us=15217.1 total_cpu_us=10121.4
+comparison pair=26 normalized=1 max_abs_error=0
+sample pair=27 native=1 normalized=1 fill_or_set_wall_us=8289.17 fill_or_set_cpu_us=8290.04 sync_wall_us=95.375 sync_cpu_us=92.459 run_wall_us=5709.96 run_cpu_us=625.334 get_release_wall_us=1108.62 get_release_cpu_us=1108.62 total_wall_us=15203.1 total_cpu_us=10116.5
+sample pair=27 native=0 normalized=1 fill_or_set_wall_us=15734.5 fill_or_set_cpu_us=15738.3 sync_wall_us=6.416 sync_cpu_us=2.042 run_wall_us=5745.25 run_cpu_us=690.082 get_release_wall_us=1106 get_release_cpu_us=1106 total_wall_us=22592.2 total_cpu_us=17536.5
+comparison pair=27 normalized=1 max_abs_error=0
+sample pair=28 native=0 normalized=1 fill_or_set_wall_us=15788.2 fill_or_set_cpu_us=15792.9 sync_wall_us=9.625 sync_cpu_us=3.5 run_wall_us=5662.42 run_cpu_us=645.167 get_release_wall_us=1109.79 get_release_cpu_us=1109.5 total_wall_us=22570 total_cpu_us=17551
+sample pair=28 native=1 normalized=1 fill_or_set_wall_us=8296.46 fill_or_set_cpu_us=8299.08 sync_wall_us=92.166 sync_cpu_us=89.542 run_wall_us=5556.83 run_cpu_us=587.417 get_release_wall_us=1121.46 get_release_cpu_us=1122.04 total_wall_us=15066.9 total_cpu_us=10098.1
+comparison pair=28 normalized=1 max_abs_error=0
+sample pair=29 native=1 normalized=1 fill_or_set_wall_us=8327.38 fill_or_set_cpu_us=8331.17 sync_wall_us=104.125 sync_cpu_us=100.042 run_wall_us=5577.83 run_cpu_us=630.583 get_release_wall_us=1123.21 get_release_cpu_us=1108.04 total_wall_us=15132.5 total_cpu_us=10169.8
+sample pair=29 native=0 normalized=1 fill_or_set_wall_us=15721.7 fill_or_set_cpu_us=15727 sync_wall_us=8.167 sync_cpu_us=2.625 run_wall_us=5795.71 run_cpu_us=667.625 get_release_wall_us=1110.67 get_release_cpu_us=1110.38 total_wall_us=22636.2 total_cpu_us=17507.6
+comparison pair=29 normalized=1 max_abs_error=0
+completed candidates_accepted=1 flags_disable_flush=0 explicit_sync=1

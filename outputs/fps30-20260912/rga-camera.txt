@@ -1,0 +1,3 @@
+rga_api version 1.10.5_[4]
+header=rga_api version 1.10.1_[0] init_ms=8.12233 width=960 height=712 matrix=bt601 range=full interpolation=IM_INTERP_DEFAULT (NOT nearest guarantee)
+count=30 scalar_mean_ms=43.3628 stage_mean_ms=3.4569 rga_sync_mean_ms=5.63684 stage_plus_rga_mean_ms=9.09374 max_channel_delta=142 mean_channel_delta=2.62623 changed_channels=1747456 changed_pixels=673216 pixel_count=683520 bitexact=0

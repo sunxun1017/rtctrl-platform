@@ -1,0 +1,78 @@
+tensor input index=0 name=input0 elems=307200 type=1 fmt=1 dims=1,320,320,3,
+tensor output index=0 name=output0 elems=16800 type=1 fmt=3 dims=1,4200,4,
+tensor output index=1 name=572 elems=8400 type=1 fmt=3 dims=1,4200,2,
+tensor output index=2 name=571 elems=42000 type=1 fmt=3 dims=1,4200,10,
+version_query_ret=0 sdk=2.3.2 (429f97ae6b@2025-04-09T09:09:27) driver=0.9.8
+attr native=0 input=0 index=0 ret=0 name=output0 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=16800 size=33600 size_with_stride=33600 w_stride=0 h_stride=0 dims=1,4200,4,
+attr native=0 input=0 index=1 ret=0 name=572 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=8400 size=16800 size_with_stride=16800 w_stride=0 h_stride=0 dims=1,4200,2,
+attr native=0 input=0 index=2 ret=0 name=571 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=42000 size=84000 size_with_stride=84000 w_stride=0 h_stride=0 dims=1,4200,10,
+attr native=0 input=1 index=0 ret=0 name=input0 type=FP16 fmt=NHWC qnt=AFFINE zp=0 scale=1 fl=0 elems=307200 size=614400 size_with_stride=614400 w_stride=320 h_stride=0 dims=1,320,320,3,
+attr native=1 input=0 index=0 ret=0 name=output0 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=16800 size=33600 size_with_stride=33600 w_stride=0 h_stride=0 dims=1,4200,4,
+attr native=1 input=0 index=1 ret=0 name=572 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=8400 size=16832 size_with_stride=16832 w_stride=0 h_stride=0 dims=1,4200,2,
+attr native=1 input=0 index=2 ret=0 name=571 type=FP16 fmt=UNDEFINED qnt=AFFINE zp=0 scale=1 fl=0 elems=42000 size=84032 size_with_stride=84032 w_stride=0 h_stride=0 dims=1,4200,10,
+attr native=1 input=1 index=0 ret=0 name=input0 type=FP16 fmt=NHWC qnt=AFFINE zp=0 scale=1 fl=0 elems=307200 size=614400 size_with_stride=614400 w_stride=320 h_stride=0 dims=1,320,320,3,
+native_execution=not_attempted normalization_and_packing_require_validation
+input deterministic integer 0..255 float32 vs uint8; all outputs preallocated; no accuracy claim; timings_us
+sample pair=0 uint8=0 input_us=17300.5 run_us=5615.46 get_us=613.083 copy_us=2.917 release_us=0.875 total_us=23532.8 input_thread_cpu_us=17259.7 run_thread_cpu_us=641.083 get_thread_cpu_us=613.667 max_abs_error=0
+sample pair=0 uint8=1 input_us=15853.5 run_us=5705.29 get_us=614.25 copy_us=2.625 release_us=0.875 total_us=22176.6 input_thread_cpu_us=15861.1 run_thread_cpu_us=663.834 get_thread_cpu_us=613.958 max_abs_error=0
+sample pair=1 uint8=1 input_us=15892.3 run_us=5542.25 get_us=615.417 copy_us=3.208 release_us=0.875 total_us=22054.1 input_thread_cpu_us=15899.6 run_thread_cpu_us=641.375 get_thread_cpu_us=615.708 max_abs_error=0
+sample pair=1 uint8=0 input_us=17220.9 run_us=5628.29 get_us=613.667 copy_us=2.916 release_us=0.875 total_us=23466.6 input_thread_cpu_us=17230.2 run_thread_cpu_us=634.666 get_thread_cpu_us=613.375 max_abs_error=0
+sample pair=2 uint8=0 input_us=17226.4 run_us=5737.08 get_us=614.542 copy_us=2.917 release_us=1.166 total_us=23582.1 input_thread_cpu_us=17184.1 run_thread_cpu_us=634.666 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=2 uint8=1 input_us=15762.5 run_us=5762.17 get_us=612.792 copy_us=2.917 release_us=0.875 total_us=22141.3 input_thread_cpu_us=15770.7 run_thread_cpu_us=660.625 get_thread_cpu_us=612.5 max_abs_error=0
+sample pair=3 uint8=1 input_us=15697.8 run_us=5672.92 get_us=613.667 copy_us=2.625 release_us=0.875 total_us=21987.9 input_thread_cpu_us=15704.2 run_thread_cpu_us=632.917 get_thread_cpu_us=613.375 max_abs_error=0
+sample pair=3 uint8=0 input_us=17143 run_us=5639.08 get_us=614.542 copy_us=2.917 release_us=0.583 total_us=23400.1 input_thread_cpu_us=17152 run_thread_cpu_us=644.876 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=4 uint8=0 input_us=17147.1 run_us=5443.96 get_us=683.958 copy_us=2.917 release_us=0.875 total_us=23278.8 input_thread_cpu_us=17156.1 run_thread_cpu_us=637.582 get_thread_cpu_us=642.251 max_abs_error=0
+sample pair=4 uint8=1 input_us=15767.2 run_us=5755.17 get_us=612.792 copy_us=2.625 release_us=1.166 total_us=22139 input_thread_cpu_us=15775.4 run_thread_cpu_us=660.336 get_thread_cpu_us=612.5 max_abs_error=0
+sample pair=5 uint8=1 input_us=15745.3 run_us=5770.04 get_us=616.292 copy_us=3.208 release_us=0.583 total_us=22135.5 input_thread_cpu_us=15755 run_thread_cpu_us=668.79 get_thread_cpu_us=616.292 max_abs_error=0
+sample pair=5 uint8=0 input_us=17157 run_us=5653.38 get_us=633.5 copy_us=2.625 release_us=0.875 total_us=23447.4 input_thread_cpu_us=17166.3 run_thread_cpu_us=646.333 get_thread_cpu_us=632.625 max_abs_error=0
+sample pair=6 uint8=0 input_us=17218 run_us=5723.38 get_us=618.041 copy_us=2.917 release_us=0.875 total_us=23563.2 input_thread_cpu_us=17227.3 run_thread_cpu_us=662.959 get_thread_cpu_us=617.75 max_abs_error=0
+sample pair=6 uint8=1 input_us=15823.8 run_us=5681.67 get_us=613.666 copy_us=2.917 release_us=0.875 total_us=22122.9 input_thread_cpu_us=15778.9 run_thread_cpu_us=636.415 get_thread_cpu_us=613.667 max_abs_error=0
+sample pair=7 uint8=1 input_us=15741.8 run_us=5666.5 get_us=627.959 copy_us=2.916 release_us=1.167 total_us=22040.4 input_thread_cpu_us=15749.7 run_thread_cpu_us=655.375 get_thread_cpu_us=627.958 max_abs_error=0
+sample pair=7 uint8=0 input_us=17431.2 run_us=5713.17 get_us=614.542 copy_us=2.625 release_us=1.166 total_us=23762.7 input_thread_cpu_us=17441.1 run_thread_cpu_us=630.291 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=8 uint8=0 input_us=17205.1 run_us=5708.79 get_us=613.958 copy_us=3.209 release_us=0.875 total_us=23532 input_thread_cpu_us=17214.2 run_thread_cpu_us=659.75 get_thread_cpu_us=613.958 max_abs_error=0
+sample pair=8 uint8=1 input_us=15743.3 run_us=5554.5 get_us=613.667 copy_us=2.916 release_us=1.167 total_us=21915.5 input_thread_cpu_us=15751.8 run_thread_cpu_us=647.5 get_thread_cpu_us=613.084 max_abs_error=0
+sample pair=9 uint8=1 input_us=15711.5 run_us=5618.67 get_us=611.625 copy_us=2.916 release_us=0.875 total_us=21945.6 input_thread_cpu_us=15718.8 run_thread_cpu_us=665.585 get_thread_cpu_us=611.916 max_abs_error=0
+sample pair=9 uint8=0 input_us=17168.7 run_us=5711.12 get_us=614.541 copy_us=2.917 release_us=0.875 total_us=23498.1 input_thread_cpu_us=17178 run_thread_cpu_us=663.25 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=10 uint8=0 input_us=17251.8 run_us=5625.67 get_us=614.25 copy_us=2.916 release_us=0.584 total_us=23495.2 input_thread_cpu_us=17262 run_thread_cpu_us=653.916 get_thread_cpu_us=613.958 max_abs_error=0
+sample pair=10 uint8=1 input_us=15816.8 run_us=5502.58 get_us=613.375 copy_us=2.625 release_us=0.875 total_us=21936.2 input_thread_cpu_us=15824.1 run_thread_cpu_us=649.248 get_thread_cpu_us=613.667 max_abs_error=0
+sample pair=11 uint8=1 input_us=15909.8 run_us=5504.62 get_us=612.791 copy_us=2.625 release_us=0.875 total_us=22030.8 input_thread_cpu_us=15856.2 run_thread_cpu_us=626.501 get_thread_cpu_us=613.083 max_abs_error=0
+sample pair=11 uint8=0 input_us=17184.1 run_us=5492.08 get_us=613.667 copy_us=2.625 release_us=0.875 total_us=23293.4 input_thread_cpu_us=17193.8 run_thread_cpu_us=602 get_thread_cpu_us=613.666 max_abs_error=0
+sample pair=12 uint8=0 input_us=17184.4 run_us=5663.58 get_us=613.083 copy_us=2.625 release_us=0.583 total_us=23464.3 input_thread_cpu_us=17193.5 run_thread_cpu_us=658.876 get_thread_cpu_us=612.791 max_abs_error=0
+sample pair=12 uint8=1 input_us=15699 run_us=5600 get_us=613.083 copy_us=2.625 release_us=0.875 total_us=21915.5 input_thread_cpu_us=15707.1 run_thread_cpu_us=629.707 get_thread_cpu_us=612.792 max_abs_error=0
+sample pair=13 uint8=1 input_us=15787 run_us=5529.12 get_us=614.542 copy_us=2.625 release_us=1.166 total_us=21934.5 input_thread_cpu_us=15748 run_thread_cpu_us=639.334 get_thread_cpu_us=614.25 max_abs_error=0
+sample pair=13 uint8=0 input_us=17197.2 run_us=5618.38 get_us=614.25 copy_us=2.916 release_us=0.875 total_us=23433.7 input_thread_cpu_us=17206 run_thread_cpu_us=632.624 get_thread_cpu_us=613.958 max_abs_error=0
+sample pair=14 uint8=0 input_us=17146.2 run_us=5767.42 get_us=614.542 copy_us=2.917 release_us=1.166 total_us=23532.2 input_thread_cpu_us=17156.7 run_thread_cpu_us=666.457 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=14 uint8=1 input_us=15794.3 run_us=5764.21 get_us=612.792 copy_us=2.625 release_us=0.875 total_us=22174.8 input_thread_cpu_us=15801.9 run_thread_cpu_us=663.249 get_thread_cpu_us=612.5 max_abs_error=0
+sample pair=15 uint8=1 input_us=15823.5 run_us=5684.88 get_us=612.792 copy_us=2.625 release_us=1.167 total_us=22125 input_thread_cpu_us=15783 run_thread_cpu_us=641.667 get_thread_cpu_us=612.792 max_abs_error=0
+sample pair=15 uint8=0 input_us=17203.4 run_us=5642.29 get_us=614.542 copy_us=2.625 release_us=1.166 total_us=23464 input_thread_cpu_us=17211 run_thread_cpu_us=634.666 get_thread_cpu_us=614.541 max_abs_error=0
+sample pair=16 uint8=0 input_us=17169.5 run_us=5592.12 get_us=627.083 copy_us=3.209 release_us=0.583 total_us=23392.5 input_thread_cpu_us=17180.3 run_thread_cpu_us=637.583 get_thread_cpu_us=627.375 max_abs_error=0
+sample pair=16 uint8=1 input_us=15746.2 run_us=5676.71 get_us=631.166 copy_us=2.625 release_us=0.875 total_us=22057.6 input_thread_cpu_us=15755 run_thread_cpu_us=657.709 get_thread_cpu_us=630.875 max_abs_error=0
+sample pair=17 uint8=1 input_us=15729.9 run_us=5599.71 get_us=614.25 copy_us=2.917 release_us=0.583 total_us=21947.3 input_thread_cpu_us=15738.6 run_thread_cpu_us=644.583 get_thread_cpu_us=614.25 max_abs_error=0
+sample pair=17 uint8=0 input_us=17333.5 run_us=6203.75 get_us=663.833 copy_us=6.709 release_us=1.166 total_us=24208.9 input_thread_cpu_us=17341.6 run_thread_cpu_us=821.042 get_thread_cpu_us=662.667 max_abs_error=0
+sample pair=18 uint8=0 input_us=17291.2 run_us=5789 get_us=617.458 copy_us=2.625 release_us=0.875 total_us=23701.1 input_thread_cpu_us=17302.5 run_thread_cpu_us=672.583 get_thread_cpu_us=616.584 max_abs_error=0
+sample pair=18 uint8=1 input_us=15776.8 run_us=5682.83 get_us=618.625 copy_us=2.916 release_us=0.875 total_us=22082.1 input_thread_cpu_us=15786.5 run_thread_cpu_us=664.416 get_thread_cpu_us=617.459 max_abs_error=0
+sample pair=19 uint8=1 input_us=15871.9 run_us=5728.04 get_us=614.25 copy_us=2.625 release_us=0.875 total_us=22217.7 input_thread_cpu_us=15880.7 run_thread_cpu_us=652.751 get_thread_cpu_us=613.958 max_abs_error=0
+sample pair=19 uint8=0 input_us=17266.7 run_us=5698.58 get_us=613.375 copy_us=2.625 release_us=0.875 total_us=23582.1 input_thread_cpu_us=17221.2 run_thread_cpu_us=639.916 get_thread_cpu_us=612.792 max_abs_error=0
+sample pair=20 uint8=0 input_us=17187.3 run_us=5628.58 get_us=613.667 copy_us=2.917 release_us=0.875 total_us=23433.4 input_thread_cpu_us=17197.2 run_thread_cpu_us=641.083 get_thread_cpu_us=613.667 max_abs_error=0
+sample pair=20 uint8=1 input_us=15846.2 run_us=5709.67 get_us=615.125 copy_us=2.625 release_us=0.875 total_us=22174.5 input_thread_cpu_us=15854.4 run_thread_cpu_us=639.041 get_thread_cpu_us=614.833 max_abs_error=0
+sample pair=21 uint8=1 input_us=15764 run_us=5524.75 get_us=614.25 copy_us=2.625 release_us=0.875 total_us=21906.5 input_thread_cpu_us=15771.6 run_thread_cpu_us=637.292 get_thread_cpu_us=613.667 max_abs_error=0
+sample pair=21 uint8=0 input_us=17255.6 run_us=5617.79 get_us=615.125 copy_us=2.917 release_us=0.875 total_us=23492.3 input_thread_cpu_us=17211 run_thread_cpu_us=622.416 get_thread_cpu_us=615.125 max_abs_error=0
+sample pair=22 uint8=0 input_us=17159 run_us=5702.08 get_us=613.375 copy_us=2.625 release_us=1.167 total_us=23478.3 input_thread_cpu_us=17168.1 run_thread_cpu_us=657.417 get_thread_cpu_us=613.666 max_abs_error=0
+sample pair=22 uint8=1 input_us=15723.2 run_us=5759.25 get_us=613.667 copy_us=2.625 release_us=0.875 total_us=22099.6 input_thread_cpu_us=15732.8 run_thread_cpu_us=662.956 get_thread_cpu_us=613.666 max_abs_error=0
+sample pair=23 uint8=1 input_us=15733.7 run_us=5696.54 get_us=613.666 copy_us=2.625 release_us=0.875 total_us=22047.4 input_thread_cpu_us=15741.8 run_thread_cpu_us=671.709 get_thread_cpu_us=613.666 max_abs_error=0
+sample pair=23 uint8=0 input_us=17220.9 run_us=5570.25 get_us=614.834 copy_us=2.916 release_us=0.875 total_us=23409.8 input_thread_cpu_us=17229.9 run_thread_cpu_us=617.749 get_thread_cpu_us=613.959 max_abs_error=0
+sample pair=24 uint8=0 input_us=17360.3 run_us=5626.83 get_us=614.541 copy_us=2.625 release_us=1.167 total_us=23605.5 input_thread_cpu_us=17369.9 run_thread_cpu_us=643.126 get_thread_cpu_us=614.541 max_abs_error=0
+sample pair=24 uint8=1 input_us=15756.1 run_us=5678.75 get_us=629.708 copy_us=2.625 release_us=0.583 total_us=22067.8 input_thread_cpu_us=15764.9 run_thread_cpu_us=660.624 get_thread_cpu_us=629.416 max_abs_error=0
+sample pair=25 uint8=1 input_us=15876 run_us=5730.67 get_us=612.792 copy_us=15.75 release_us=0.875 total_us=22236.1 input_thread_cpu_us=15883.3 run_thread_cpu_us=672.001 get_thread_cpu_us=626.209 max_abs_error=0
+sample pair=25 uint8=0 input_us=17356.8 run_us=5625.08 get_us=614.833 copy_us=2.625 release_us=0.875 total_us=23600.2 input_thread_cpu_us=17366.1 run_thread_cpu_us=662.959 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=26 uint8=0 input_us=17359.4 run_us=5714.04 get_us=615.125 copy_us=2.625 release_us=0.583 total_us=23691.8 input_thread_cpu_us=17304.9 run_thread_cpu_us=667.041 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=26 uint8=1 input_us=15787.3 run_us=5705.58 get_us=614.542 copy_us=2.916 release_us=0.875 total_us=22111.2 input_thread_cpu_us=15796.1 run_thread_cpu_us=660.916 get_thread_cpu_us=614.542 max_abs_error=0
+sample pair=27 uint8=1 input_us=15740.7 run_us=5771.21 get_us=614.834 copy_us=3.208 release_us=0.583 total_us=22130.5 input_thread_cpu_us=15748 run_thread_cpu_us=671.709 get_thread_cpu_us=614.834 max_abs_error=0
+sample pair=27 uint8=0 input_us=17202.2 run_us=5729.21 get_us=613.958 copy_us=2.625 release_us=0.875 total_us=23548.9 input_thread_cpu_us=17211.2 run_thread_cpu_us=674.042 get_thread_cpu_us=613.375 max_abs_error=0
+sample pair=28 uint8=0 input_us=17317.1 run_us=5597.38 get_us=615.416 copy_us=2.917 release_us=0.875 total_us=23533.7 input_thread_cpu_us=17276.3 run_thread_cpu_us=625.625 get_thread_cpu_us=615.416 max_abs_error=0
+sample pair=28 uint8=1 input_us=15841.9 run_us=5681.08 get_us=615.417 copy_us=2.625 release_us=0.875 total_us=22141.9 input_thread_cpu_us=15850.6 run_thread_cpu_us=648.959 get_thread_cpu_us=615.125 max_abs_error=0
+sample pair=29 uint8=1 input_us=15741.2 run_us=5558.58 get_us=611.917 copy_us=2.916 release_us=0.875 total_us=21915.5 input_thread_cpu_us=15749.4 run_thread_cpu_us=653.917 get_thread_cpu_us=611.917 max_abs_error=0
+sample pair=29 uint8=0 input_us=17179.8 run_us=5653.08 get_us=614.833 copy_us=2.333 release_us=1.167 total_us=23451.2 input_thread_cpu_us=17189.1 run_thread_cpu_us=654.5 get_thread_cpu_us=613.958 max_abs_error=0
+perf_query_ret=0 run_duration_us=5636
+mem_query_ret=0 weights=904128 internal=3072000 dma=4890624
+result finite=1 max_abs_error=0 exact_equal=1

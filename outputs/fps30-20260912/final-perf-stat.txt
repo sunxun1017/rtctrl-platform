@@ -1,0 +1,9 @@
+
+ Performance counter stats for process id '32198':
+
+          23258.89 msec task-clock                       #    1.163 CPUs utilized
+              6491      context-switches                 #  279.076 /sec
+               105      cpu-migrations                   #    4.514 /sec
+                 0      page-faults                      #    0.000 /sec
+
+      20.002005634 seconds time elapsed

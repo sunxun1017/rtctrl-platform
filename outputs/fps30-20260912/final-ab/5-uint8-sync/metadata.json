@@ -1,0 +1,9 @@
+{
+  "pid": 32005,
+  "duration_requested_s": 20,
+  "cmdline": "/userdata/rtctrl-face-video/fps30-test/rtctrl_face_video_final --device /dev/video31 --detector models/detector.rknn --recognizer models/recognizer.rknn --gallery gallery.json --threshold 0.5 --input-type uint8 --jpeg-encoder turbojpeg --yuv-matrix bt601 --yuv-range full --frame-converter rga --jpeg-mode sync ",
+  "clock": "monotonic",
+  "sample_interval_s": 1,
+  "client": "one local continuous MJPEG reader, plus any browser clients",
+  "model_gallery_modified": false
+}

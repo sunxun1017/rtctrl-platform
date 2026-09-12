@@ -101,3 +101,45 @@ scripts/face-recognition/build_rv1126b.sh /path/to/atk_dlrv1126b_linux6.1_sdk bu
 代码入口为 `apps/face_recognition/video_main.cpp`、`video_frame.cpp`、`preview_server.cpp`。启动/停止脚本在 `scripts/face-recognition`。
 
 新增视频源文件的 clang-format 检查通过，`git diff --check` 通过；全仓库 format-check 仍报告其他既有代码的格式差异，未进行全仓重排。
+
+## 30 FPS 路径（2026-09-12）
+
+新增三个显式选项，旧默认不变：`--frame-converter rga`、`--input-type native-fp16`、`--jpeg-mode async`。
+板端已验证组合的启动入口：
+
+```sh
+cd /userdata/rtctrl-face-video
+sh stop-video.sh
+sh start-optimized-video.sh 0.5
+```
+
+`start-optimized-video.sh` 固定启用 RGA、native FP16、TurboJPEG 和异步编码；阈值仍由调用者传入。
+native 模式只接受这次验证的两份模型 SHA256，使用转换时的 RGB mean/std。其他模型会拒绝启动，不能按形状猜归一化。
+该输入路径仍显式同步缓存，不使用禁用 flush 的标志。
+
+RGA 先把单/双平面 NV12/NV21 拷入可复用 staging，复用 import handle，同步转换后返回独立 BGR。
+它不是摄像头到模型的全链路零拷贝。插值与 CPU 最近邻不同：同一张实拍图的人脸框 IoU 0.984752、embedding cosine 0.981797，不能当作准确率验证。
+异步编码只保留一个待编码帧；图像和结果 JSON 一起交给编码线程，慢消费者不形成无限队列。
+
+页面区分采集、识别、发布 FPS。`dropped` 保持兼容，等于 `latest_overwrites`，不是驱动丢帧。
+`capture_sequence_gaps` 是预热后 V4L2 序号前向缺口；`encode_overwrites` 是等待编码时被新帧替换的数量。
+`capture_convert_ms` 包含 staging、RGA 和独立输出复制；`processing_ms` 不含编码。
+`ready_age_ms` 从用户态 DQBUF 返回计到 JPEG 完成，未覆盖曝光、驱动排队、网络和浏览器显示。
+`publish_fps` 与 `published` 表示服务器发布，不是 Edge 实际绘制帧率。
+
+同一二进制、RGA 输入、TurboJPEG、单人脸的反向对照：UInt8 同步 17.36 FPS，native 同步 24.06 FPS，native 异步两轮 30.02 FPS。
+两轮异步采样各 20 秒，21/21 状态样本有人脸，三种缺口/覆盖均为 0。不同轮次画面仍可能变化。
+详细数据在 `outputs/fps30-20260912/`，一分钟部署后检查与 perf 复查单独记录，不替代长期压力测试。
+
+交叉构建时沿用厂家 SDK，并显式配置可选依赖：
+
+```sh
+cmake -S . -B build/face-video-rv1126b \
+  -DRTCTRL_RGA_INCLUDE_DIR="$SDK/external/rknpu2/examples/3rdparty/rga/include" \
+  -DRTCTRL_RGA_LIBRARY="$SDK/external/rknpu2/examples/3rdparty/rga/libs/Linux/gcc-aarch64/librga.so" \
+  -DRTCTRL_TURBOJPEG_INCLUDE_DIR="$TURBOJPEG_HEADERS"
+cmake --build build/face-video-rv1126b --target rtctrl_face_video -j4
+```
+
+此命令接在前文交叉工具链配置后，`SDK`、`TURBOJPEG_HEADERS` 指向匹配的本地依赖；没有相应依赖时普通路径仍可构建。
+回退可停止后执行 `RKNN_INPUT_TYPE=uint8 PREVIEW_JPEG_ENCODER=turbojpeg PREVIEW_FRAME_CONVERTER=cpu PREVIEW_JPEG_MODE=sync sh start-video.sh 0.5`。

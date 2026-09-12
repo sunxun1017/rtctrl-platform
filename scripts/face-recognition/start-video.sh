@@ -19,7 +19,9 @@ set -- ./rtctrl_face_video --device "${CAMERA_DEVICE:-/dev/video31}" \
     --threshold "$threshold" --gap "${FACE_GAP:-0}" \
     --bind "${PREVIEW_BIND:-0.0.0.0}" --port "${PREVIEW_PORT:-8080}" \
     --width "${PREVIEW_WIDTH:-960}" --yuv-matrix "${YUV_MATRIX:-bt601}" --yuv-range "${YUV_RANGE:-full}" \
-    --input-type "${RKNN_INPUT_TYPE:-float32}" --jpeg-encoder "${PREVIEW_JPEG_ENCODER:-opencv}"
+    --input-type "${RKNN_INPUT_TYPE:-float32}" --jpeg-encoder "${PREVIEW_JPEG_ENCODER:-opencv}" \
+    --frame-converter "${PREVIEW_FRAME_CONVERTER:-cpu}" \
+    --jpeg-mode "${PREVIEW_JPEG_MODE:-sync}"
 if [ -f gallery.json ] || [ -n "$enroll_name" ]; then
     set -- "$@" --gallery gallery.json
 fi

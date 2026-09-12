@@ -30,9 +30,18 @@ document.getElementById('video').onerror=function(){setTimeout(()=>{this.src='/s
 async function update(){try{let r=await fetch('/status.json',{cache:'no-store'});
 if(!r.ok)throw Error('HTTP '+r.status);let s=await r.json();
 document.getElementById('status').textContent=
-(s.running?'运行中':'等待 / 已停止')+' | '+Number(s.fps||0).toFixed(1)+' FPS'+
-' | 处理 '+Number(s.processing_ms||0).toFixed(1)+' ms'+
-' | 帧龄 '+Number(s.frame_age_ms||0).toFixed(0)+' ms'+' | 帧 '+(s.frame||0)+' | 已处理 '+(s.processed||0)+' | 丢帧 '+(s.dropped||0)+'\n'+
+(s.running?'运行中':'等待 / 已停止')+
+' | 采集 '+Number(s.capture_fps||0).toFixed(1)+' FPS'+
+' | 识别 '+Number(s.fps||0).toFixed(1)+' FPS'+
+' | 发布 '+Number(s.publish_fps||0).toFixed(1)+' FPS'+
+'\n转换 '+Number(s.capture_convert_ms||0).toFixed(1)+' ms'+
+' | 推理 '+Number(s.processing_ms||0).toFixed(1)+' ms'+
+' | JPEG '+Number(s.encode_ms||0).toFixed(1)+' ms'+
+' | 发布前帧龄 '+Number(s.ready_age_ms||0).toFixed(0)+' ms'+
+'\n采集序号缺口 '+(s.capture_sequence_gaps||0)+
+' | 待识别覆盖 '+(s.latest_overwrites||0)+
+' | 待编码覆盖 '+(s.encode_overwrites||0)+
+' | 已识别 '+(s.processed||0)+' | 已发布 '+(s.published||0)+'\n'+
 (s.faces||[]).map(f=>(f.name||'unknown')+'  相似度 '+Number(f.similarity||0).toFixed(3)).join('\n')+
 (s.note?'\n'+s.note:'');
 }catch(e){document.getElementById('status').textContent='连接中断：'+e.message}

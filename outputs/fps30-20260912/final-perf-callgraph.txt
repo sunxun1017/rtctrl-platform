@@ -1,0 +1,1880 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 2K of event 'cpu-clock'
+# Event count (approx.): 23444444210
+#
+# Children      Self  Command          Shared Object          Symbol
+# ........  ........  ...............  .....................  ..........................................................................................................................................................................................................
+#
+    55.11%     0.00%  rtctrl_face_vid  libc.so.6              [.] 0x0000007fb3de020c
+            |
+            ---0x7fb3de020c
+               0x7fb3d815c4
+               0x7fb401d55c
+               |
+               |--38.91%--_ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |          |
+               |           --38.86%--_ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |                     |
+               |                      --38.69%--_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               |                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |                                |
+               |                                 --38.56%--tjCompress2
+               |                                           |
+               |                                            --38.30%--0x7fb1761c40
+               |                                                      |
+               |                                                      |--30.25%--0x7fb1771a54
+               |                                                      |          |
+               |                                                      |          |--14.95%--0x7fb1761ed8
+               |                                                      |          |          |
+               |                                                      |          |          |--6.64%--0x7fb17641fb
+               |                                                      |          |          |
+               |                                                      |          |          |--5.51%--0x7fb176420f
+               |                                                      |          |          |
+               |                                                      |          |           --1.94%--0x7fb17641ef
+               |                                                      |          |
+               |                                                      |           --14.39%--0x7fb1761f84
+               |                                                      |                     |
+               |                                                      |                      --12.54%--0x7fb1770a9c
+               |                                                      |
+               |                                                       --8.06%--0x7fb1771ab0
+               |                                                                 |
+               |                                                                 |--6.38%--0x7fb17759ec
+               |                                                                 |          |
+               |                                                                 |           --1.16%--0x7fb17ad9cc
+               |                                                                 |
+               |                                                                  --1.42%--0x7fb1775a38
+               |                                                                            |
+               |                                                                             --1.03%--0x7fb1775e67
+               |
+                --15.86%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          |
+                          |--12.15%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                          |          |
+                          |          |--7.28%--0x7fb3d9bdd4
+                          |          |
+                          |           --2.20%--_Z8imresize12rga_buffer_tS_ddiiPi
+                          |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     ioctl
+                          |                     el0t_64_sync
+                          |                     el0t_64_sync_handler
+                          |                     el0_svc
+                          |                     do_el0_svc
+                          |                     el0_svc_common.constprop.0
+                          |                     invoke_syscall
+                          |                     |
+                          |                      --2.15%--__arm64_sys_ioctl
+                          |                                |
+                          |                                 --2.07%--rga_ioctl
+                          |                                           rga_ioctl_blit
+                          |                                           |
+                          |                                            --1.90%--rga_request_submit
+                          |                                                      rga_request_commit
+                          |                                                      |
+                          |                                                       --1.85%--rga_job_commit
+                          |                                                                 |
+                          |                                                                  --1.72%--rga_mm_map_job_info
+                          |                                                                            rga_mm_get_channel_handle_info
+                          |                                                                            rga_mm_get_buffer
+                          |                                                                            rga_mm_sync_dma_sg_for_device
+                          |                                                                            dma_sync_sg_for_device
+                          |                                                                            |
+                          |                                                                             --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                                                       __pi_dcache_clean_poc
+                          |
+                          |--2.15%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                          |          |
+                          |           --1.68%--0x7fb3d9bdd4
+                          |
+                           --1.21%--rtctrl_camera_release
+                                     v4l2_release
+                                     ioctl
+                                     el0t_64_sync
+                                     el0t_64_sync_handler
+                                     el0_svc
+                                     do_el0_svc
+                                     el0_svc_common.constprop.0
+                                     invoke_syscall
+                                     __arm64_sys_ioctl
+                                     |
+                                      --1.16%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+    55.11%     0.00%  rtctrl_face_vid  libc.so.6              [.] 0x0000007fb3d815c4
+            |
+            ---0x7fb3d815c4
+               0x7fb401d55c
+               |
+               |--38.91%--_ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |          |
+               |           --38.86%--_ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |                     |
+               |                      --38.69%--_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               |                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |                                |
+               |                                 --38.56%--tjCompress2
+               |                                           |
+               |                                            --38.30%--0x7fb1761c40
+               |                                                      |
+               |                                                      |--30.25%--0x7fb1771a54
+               |                                                      |          |
+               |                                                      |          |--14.95%--0x7fb1761ed8
+               |                                                      |          |          |
+               |                                                      |          |          |--6.64%--0x7fb17641fb
+               |                                                      |          |          |
+               |                                                      |          |          |--5.51%--0x7fb176420f
+               |                                                      |          |          |
+               |                                                      |          |           --1.94%--0x7fb17641ef
+               |                                                      |          |
+               |                                                      |           --14.39%--0x7fb1761f84
+               |                                                      |                     |
+               |                                                      |                      --12.54%--0x7fb1770a9c
+               |                                                      |
+               |                                                       --8.06%--0x7fb1771ab0
+               |                                                                 |
+               |                                                                 |--6.38%--0x7fb17759ec
+               |                                                                 |          |
+               |                                                                 |           --1.16%--0x7fb17ad9cc
+               |                                                                 |
+               |                                                                  --1.42%--0x7fb1775a38
+               |                                                                            |
+               |                                                                             --1.03%--0x7fb1775e67
+               |
+                --15.86%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          |
+                          |--12.15%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                          |          |
+                          |          |--7.28%--0x7fb3d9bdd4
+                          |          |
+                          |           --2.20%--_Z8imresize12rga_buffer_tS_ddiiPi
+                          |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     ioctl
+                          |                     el0t_64_sync
+                          |                     el0t_64_sync_handler
+                          |                     el0_svc
+                          |                     do_el0_svc
+                          |                     el0_svc_common.constprop.0
+                          |                     invoke_syscall
+                          |                     |
+                          |                      --2.15%--__arm64_sys_ioctl
+                          |                                |
+                          |                                 --2.07%--rga_ioctl
+                          |                                           rga_ioctl_blit
+                          |                                           |
+                          |                                            --1.90%--rga_request_submit
+                          |                                                      rga_request_commit
+                          |                                                      |
+                          |                                                       --1.85%--rga_job_commit
+                          |                                                                 |
+                          |                                                                  --1.72%--rga_mm_map_job_info
+                          |                                                                            rga_mm_get_channel_handle_info
+                          |                                                                            rga_mm_get_buffer
+                          |                                                                            rga_mm_sync_dma_sg_for_device
+                          |                                                                            dma_sync_sg_for_device
+                          |                                                                            |
+                          |                                                                             --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                                                       __pi_dcache_clean_poc
+                          |
+                          |--2.15%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                          |          |
+                          |           --1.68%--0x7fb3d9bdd4
+                          |
+                           --1.21%--rtctrl_camera_release
+                                     v4l2_release
+                                     ioctl
+                                     el0t_64_sync
+                                     el0t_64_sync_handler
+                                     el0_svc
+                                     do_el0_svc
+                                     el0_svc_common.constprop.0
+                                     invoke_syscall
+                                     __arm64_sys_ioctl
+                                     |
+                                      --1.16%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+    55.11%     0.00%  rtctrl_face_vid  libstdc++.so.6.0.32    [.] 0x0000007fb401d55c
+            |
+            ---0x7fb401d55c
+               |
+               |--38.91%--_ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |          |
+               |           --38.86%--_ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |                     |
+               |                      --38.69%--_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               |                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |                                |
+               |                                 --38.56%--tjCompress2
+               |                                           |
+               |                                            --38.30%--0x7fb1761c40
+               |                                                      |
+               |                                                      |--30.25%--0x7fb1771a54
+               |                                                      |          |
+               |                                                      |          |--14.95%--0x7fb1761ed8
+               |                                                      |          |          |
+               |                                                      |          |          |--6.64%--0x7fb17641fb
+               |                                                      |          |          |
+               |                                                      |          |          |--5.51%--0x7fb176420f
+               |                                                      |          |          |
+               |                                                      |          |           --1.94%--0x7fb17641ef
+               |                                                      |          |
+               |                                                      |           --14.39%--0x7fb1761f84
+               |                                                      |                     |
+               |                                                      |                      --12.54%--0x7fb1770a9c
+               |                                                      |
+               |                                                       --8.06%--0x7fb1771ab0
+               |                                                                 |
+               |                                                                 |--6.38%--0x7fb17759ec
+               |                                                                 |          |
+               |                                                                 |           --1.16%--0x7fb17ad9cc
+               |                                                                 |
+               |                                                                  --1.42%--0x7fb1775a38
+               |                                                                            |
+               |                                                                             --1.03%--0x7fb1775e67
+               |
+                --15.86%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          |
+                          |--12.15%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                          |          |
+                          |          |--7.28%--0x7fb3d9bdd4
+                          |          |
+                          |           --2.20%--_Z8imresize12rga_buffer_tS_ddiiPi
+                          |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                          |                     ioctl
+                          |                     el0t_64_sync
+                          |                     el0t_64_sync_handler
+                          |                     el0_svc
+                          |                     do_el0_svc
+                          |                     el0_svc_common.constprop.0
+                          |                     invoke_syscall
+                          |                     |
+                          |                      --2.15%--__arm64_sys_ioctl
+                          |                                |
+                          |                                 --2.07%--rga_ioctl
+                          |                                           rga_ioctl_blit
+                          |                                           |
+                          |                                            --1.90%--rga_request_submit
+                          |                                                      rga_request_commit
+                          |                                                      |
+                          |                                                       --1.85%--rga_job_commit
+                          |                                                                 |
+                          |                                                                  --1.72%--rga_mm_map_job_info
+                          |                                                                            rga_mm_get_channel_handle_info
+                          |                                                                            rga_mm_get_buffer
+                          |                                                                            rga_mm_sync_dma_sg_for_device
+                          |                                                                            dma_sync_sg_for_device
+                          |                                                                            |
+                          |                                                                             --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                                                       __pi_dcache_clean_poc
+                          |
+                          |--2.15%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                          |          |
+                          |           --1.68%--0x7fb3d9bdd4
+                          |
+                           --1.21%--rtctrl_camera_release
+                                     v4l2_release
+                                     ioctl
+                                     el0t_64_sync
+                                     el0t_64_sync_handler
+                                     el0_svc
+                                     do_el0_svc
+                                     el0_svc_common.constprop.0
+                                     invoke_syscall
+                                     __arm64_sys_ioctl
+                                     |
+                                      --1.16%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+    44.89%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _start
+            |
+            ---_start
+               __libc_start_main
+               0x7fb3d2a49c
+               |
+                --43.60%--main
+                          |
+                          |--17.84%--_ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+                          |
+                          |--17.54%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |          |
+                          |          |--16.11%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |
+                          |          |          |--12.93%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |          |
+                          |          |          |           --3.62%--_ZN4rknn11RknnBackend3runEv
+                          |          |          |
+                          |          |           --3.19%--_ZN4rknn11RknnBackend3runEv
+                          |          |                     |
+                          |          |                     |--1.64%--rknn_outputs_get
+                          |          |                     |          |
+                          |          |                     |           --1.34%--0x7fb35383d0
+                          |          |                     |                     0x7fb37bf50b
+                          |          |                     |
+                          |          |                      --1.46%--rknn_run
+                          |          |                                |
+                          |          |                                 --1.38%--0x7fb37837f0
+                          |          |
+                          |           --1.42%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |
+                           --7.11%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                                     |
+                                     |--3.06%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |          |--1.59%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |           --1.46%--_ZN4rknn11RknnBackend3runEv
+                                     |                     |
+                                     |                      --1.29%--rknn_run
+                                     |                                |
+                                     |                                 --1.21%--0x7fb37837f0
+                                     |
+                                      --2.67%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+    44.89%     0.00%  rtctrl_face_vid  libc.so.6              [.] __libc_start_main
+            |
+            ---__libc_start_main
+               0x7fb3d2a49c
+               |
+                --43.60%--main
+                          |
+                          |--17.84%--_ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+                          |
+                          |--17.54%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |          |
+                          |          |--16.11%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |
+                          |          |          |--12.93%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |          |
+                          |          |          |           --3.62%--_ZN4rknn11RknnBackend3runEv
+                          |          |          |
+                          |          |           --3.19%--_ZN4rknn11RknnBackend3runEv
+                          |          |                     |
+                          |          |                     |--1.64%--rknn_outputs_get
+                          |          |                     |          |
+                          |          |                     |           --1.34%--0x7fb35383d0
+                          |          |                     |                     0x7fb37bf50b
+                          |          |                     |
+                          |          |                      --1.46%--rknn_run
+                          |          |                                |
+                          |          |                                 --1.38%--0x7fb37837f0
+                          |          |
+                          |           --1.42%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |
+                           --7.11%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                                     |
+                                     |--3.06%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |          |--1.59%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |           --1.46%--_ZN4rknn11RknnBackend3runEv
+                                     |                     |
+                                     |                      --1.29%--rknn_run
+                                     |                                |
+                                     |                                 --1.21%--0x7fb37837f0
+                                     |
+                                      --2.67%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+    44.89%     0.00%  rtctrl_face_vid  libc.so.6              [.] 0x0000007fb3d2a49c
+            |
+            ---0x7fb3d2a49c
+               |
+                --43.60%--main
+                          |
+                          |--17.84%--_ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+                          |
+                          |--17.54%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |          |
+                          |          |--16.11%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |
+                          |          |          |--12.93%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                          |          |          |          |
+                          |          |          |           --3.62%--_ZN4rknn11RknnBackend3runEv
+                          |          |          |
+                          |          |           --3.19%--_ZN4rknn11RknnBackend3runEv
+                          |          |                     |
+                          |          |                     |--1.64%--rknn_outputs_get
+                          |          |                     |          |
+                          |          |                     |           --1.34%--0x7fb35383d0
+                          |          |                     |                     0x7fb37bf50b
+                          |          |                     |
+                          |          |                      --1.46%--rknn_run
+                          |          |                                |
+                          |          |                                 --1.38%--0x7fb37837f0
+                          |          |
+                          |           --1.42%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                          |
+                           --7.11%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                                     |
+                                     |--3.06%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |          |--1.59%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                     |          |
+                                     |           --1.46%--_ZN4rknn11RknnBackend3runEv
+                                     |                     |
+                                     |                      --1.29%--rknn_run
+                                     |                                |
+                                     |                                 --1.21%--0x7fb37837f0
+                                     |
+                                      --2.67%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+    43.60%     0.09%  rtctrl_face_vid  rtctrl_face_video      [.] main
+            |
+             --43.52%--main
+                       |
+                       |--17.84%--_ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+                       |
+                       |--17.54%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                       |          |
+                       |          |--16.11%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                       |          |          |
+                       |          |          |--12.93%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                       |          |          |          |
+                       |          |          |           --3.62%--_ZN4rknn11RknnBackend3runEv
+                       |          |          |
+                       |          |           --3.19%--_ZN4rknn11RknnBackend3runEv
+                       |          |                     |
+                       |          |                     |--1.64%--rknn_outputs_get
+                       |          |                     |          |
+                       |          |                     |           --1.34%--0x7fb35383d0
+                       |          |                     |                     0x7fb37bf50b
+                       |          |                     |
+                       |          |                      --1.46%--rknn_run
+                       |          |                                |
+                       |          |                                 --1.38%--0x7fb37837f0
+                       |          |
+                       |           --1.42%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                       |
+                        --7.11%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                                  |
+                                  |--3.06%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                  |          |
+                                  |          |--1.59%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                  |          |
+                                  |           --1.46%--_ZN4rknn11RknnBackend3runEv
+                                  |                     |
+                                  |                      --1.29%--rknn_run
+                                  |                                |
+                                  |                                 --1.21%--0x7fb37837f0
+                                  |
+                                   --2.67%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+    38.91%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |
+            ---_ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |
+                --38.86%--_ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                          |
+                           --38.69%--_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                                     |
+                                      --38.56%--tjCompress2
+                                                |
+                                                 --38.30%--0x7fb1761c40
+                                                           |
+                                                           |--30.25%--0x7fb1771a54
+                                                           |          |
+                                                           |          |--14.95%--0x7fb1761ed8
+                                                           |          |          |
+                                                           |          |          |--6.64%--0x7fb17641fb
+                                                           |          |          |
+                                                           |          |          |--5.51%--0x7fb176420f
+                                                           |          |          |
+                                                           |          |           --1.94%--0x7fb17641ef
+                                                           |          |
+                                                           |           --14.39%--0x7fb1761f84
+                                                           |                     |
+                                                           |                      --12.54%--0x7fb1770a9c
+                                                           |
+                                                            --8.06%--0x7fb1771ab0
+                                                                      |
+                                                                      |--6.38%--0x7fb17759ec
+                                                                      |          |
+                                                                      |           --1.16%--0x7fb17ad9cc
+                                                                      |
+                                                                       --1.42%--0x7fb1775a38
+                                                                                 |
+                                                                                  --1.03%--0x7fb1775e67
+
+    38.86%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |
+            ---_ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |
+                --38.69%--_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                          |
+                           --38.56%--tjCompress2
+                                     |
+                                      --38.30%--0x7fb1761c40
+                                                |
+                                                |--30.25%--0x7fb1771a54
+                                                |          |
+                                                |          |--14.95%--0x7fb1761ed8
+                                                |          |          |
+                                                |          |          |--6.64%--0x7fb17641fb
+                                                |          |          |
+                                                |          |          |--5.51%--0x7fb176420f
+                                                |          |          |
+                                                |          |           --1.94%--0x7fb17641ef
+                                                |          |
+                                                |           --14.39%--0x7fb1761f84
+                                                |                     |
+                                                |                      --12.54%--0x7fb1770a9c
+                                                |
+                                                 --8.06%--0x7fb1771ab0
+                                                           |
+                                                           |--6.38%--0x7fb17759ec
+                                                           |          |
+                                                           |           --1.16%--0x7fb17ad9cc
+                                                           |
+                                                            --1.42%--0x7fb1775a38
+                                                                      |
+                                                                       --1.03%--0x7fb1775e67
+
+    38.69%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |
+            ---_ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |
+                --38.56%--tjCompress2
+                          |
+                           --38.30%--0x7fb1761c40
+                                     |
+                                     |--30.25%--0x7fb1771a54
+                                     |          |
+                                     |          |--14.95%--0x7fb1761ed8
+                                     |          |          |
+                                     |          |          |--6.64%--0x7fb17641fb
+                                     |          |          |
+                                     |          |          |--5.51%--0x7fb176420f
+                                     |          |          |
+                                     |          |           --1.94%--0x7fb17641ef
+                                     |          |
+                                     |           --14.39%--0x7fb1761f84
+                                     |                     |
+                                     |                      --12.54%--0x7fb1770a9c
+                                     |
+                                      --8.06%--0x7fb1771ab0
+                                                |
+                                                |--6.38%--0x7fb17759ec
+                                                |          |
+                                                |           --1.16%--0x7fb17ad9cc
+                                                |
+                                                 --1.42%--0x7fb1775a38
+                                                           |
+                                                            --1.03%--0x7fb1775e67
+
+    38.69%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |
+            ---_ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |
+                --38.56%--tjCompress2
+                          |
+                           --38.30%--0x7fb1761c40
+                                     |
+                                     |--30.25%--0x7fb1771a54
+                                     |          |
+                                     |          |--14.95%--0x7fb1761ed8
+                                     |          |          |
+                                     |          |          |--6.64%--0x7fb17641fb
+                                     |          |          |
+                                     |          |          |--5.51%--0x7fb176420f
+                                     |          |          |
+                                     |          |           --1.94%--0x7fb17641ef
+                                     |          |
+                                     |           --14.39%--0x7fb1761f84
+                                     |                     |
+                                     |                      --12.54%--0x7fb1770a9c
+                                     |
+                                      --8.06%--0x7fb1771ab0
+                                                |
+                                                |--6.38%--0x7fb17759ec
+                                                |          |
+                                                |           --1.16%--0x7fb17ad9cc
+                                                |
+                                                 --1.42%--0x7fb1775a38
+                                                           |
+                                                            --1.03%--0x7fb1775e67
+
+    38.56%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] tjCompress2
+            |
+            ---tjCompress2
+               |
+                --38.30%--0x7fb1761c40
+                          |
+                          |--30.25%--0x7fb1771a54
+                          |          |
+                          |          |--14.95%--0x7fb1761ed8
+                          |          |          |
+                          |          |          |--6.64%--0x7fb17641fb
+                          |          |          |
+                          |          |          |--5.51%--0x7fb176420f
+                          |          |          |
+                          |          |           --1.94%--0x7fb17641ef
+                          |          |
+                          |           --14.39%--0x7fb1761f84
+                          |                     |
+                          |                      --12.54%--0x7fb1770a9c
+                          |
+                           --8.06%--0x7fb1771ab0
+                                     |
+                                     |--6.38%--0x7fb17759ec
+                                     |          |
+                                     |           --1.16%--0x7fb17ad9cc
+                                     |
+                                      --1.42%--0x7fb1775a38
+                                                |
+                                                 --1.03%--0x7fb1775e67
+
+    38.30%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1761c40
+            |
+            ---0x7fb1761c40
+               |
+               |--30.25%--0x7fb1771a54
+               |          |
+               |          |--14.95%--0x7fb1761ed8
+               |          |          |
+               |          |          |--6.64%--0x7fb17641fb
+               |          |          |
+               |          |          |--5.51%--0x7fb176420f
+               |          |          |
+               |          |           --1.94%--0x7fb17641ef
+               |          |
+               |           --14.39%--0x7fb1761f84
+               |                     |
+               |                      --12.54%--0x7fb1770a9c
+               |
+                --8.06%--0x7fb1771ab0
+                          |
+                          |--6.38%--0x7fb17759ec
+                          |          |
+                          |           --1.16%--0x7fb17ad9cc
+                          |
+                           --1.42%--0x7fb1775a38
+                                     |
+                                      --1.03%--0x7fb1775e67
+
+    30.25%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1771a54
+            |
+            ---0x7fb1771a54
+               |
+               |--14.95%--0x7fb1761ed8
+               |          |
+               |          |--6.64%--0x7fb17641fb
+               |          |
+               |          |--5.51%--0x7fb176420f
+               |          |
+               |           --1.94%--0x7fb17641ef
+               |
+                --14.39%--0x7fb1761f84
+                          |
+                           --12.54%--0x7fb1770a9c
+
+    19.17%    10.25%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |
+            |--10.25%--_start
+            |          __libc_start_main
+            |          0x7fb3d2a49c
+            |          main
+            |          |
+            |          |--9.13%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |          |          _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |          |
+            |           --1.12%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |                     _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |
+             --8.92%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                       |
+                       |--4.65%--_ZN4rknn11RknnBackend3runEv
+                       |          |
+                       |          |--2.76%--rknn_run
+                       |          |          |
+                       |          |           --2.59%--0x7fb37837f0
+                       |          |
+                       |           --1.77%--rknn_outputs_get
+                       |                     |
+                       |                      --1.34%--0x7fb35383d0
+                       |                                0x7fb37bf50b
+                       |
+                        --4.27%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                  |
+                                   --4.09%--_ZN4rknn11RknnBackend3runEv
+
+    17.84%    17.71%  rtctrl_face_vid  rtctrl_face_video      [.] _ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+            |
+             --17.71%--_start
+                       __libc_start_main
+                       0x7fb3d2a49c
+                       main
+                       _ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+
+    17.54%     1.42%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |
+            |--16.11%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |          |
+            |          |--12.93%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+            |          |          |
+            |          |           --3.62%--_ZN4rknn11RknnBackend3runEv
+            |          |
+            |           --3.19%--_ZN4rknn11RknnBackend3runEv
+            |                     |
+            |                     |--1.64%--rknn_outputs_get
+            |                     |          |
+            |                     |           --1.34%--0x7fb35383d0
+            |                     |                     0x7fb37bf50b
+            |                     |
+            |                      --1.46%--rknn_run
+            |                                |
+            |                                 --1.38%--0x7fb37837f0
+            |
+             --1.42%--_start
+                       __libc_start_main
+                       0x7fb3d2a49c
+                       main
+                       _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                       _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+
+    15.86%     0.04%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |
+             --15.81%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                       |
+                       |--12.15%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                       |          |
+                       |          |--7.28%--0x7fb3d9bdd4
+                       |          |
+                       |           --2.20%--_Z8imresize12rga_buffer_tS_ddiiPi
+                       |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       |                     ioctl
+                       |                     el0t_64_sync
+                       |                     el0t_64_sync_handler
+                       |                     el0_svc
+                       |                     do_el0_svc
+                       |                     el0_svc_common.constprop.0
+                       |                     invoke_syscall
+                       |                     |
+                       |                      --2.15%--__arm64_sys_ioctl
+                       |                                |
+                       |                                 --2.07%--rga_ioctl
+                       |                                           rga_ioctl_blit
+                       |                                           |
+                       |                                            --1.90%--rga_request_submit
+                       |                                                      rga_request_commit
+                       |                                                      |
+                       |                                                       --1.85%--rga_job_commit
+                       |                                                                 |
+                       |                                                                  --1.72%--rga_mm_map_job_info
+                       |                                                                            rga_mm_get_channel_handle_info
+                       |                                                                            rga_mm_get_buffer
+                       |                                                                            rga_mm_sync_dma_sg_for_device
+                       |                                                                            dma_sync_sg_for_device
+                       |                                                                            |
+                       |                                                                             --1.51%--iommu_dma_sync_sg_for_device
+                       |                                                                                       __pi_dcache_clean_poc
+                       |
+                       |--2.15%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                       |          |
+                       |           --1.68%--0x7fb3d9bdd4
+                       |
+                        --1.21%--rtctrl_camera_release
+                                  v4l2_release
+                                  ioctl
+                                  el0t_64_sync
+                                  el0t_64_sync_handler
+                                  el0_svc
+                                  do_el0_svc
+                                  el0_svc_common.constprop.0
+                                  invoke_syscall
+                                  __arm64_sys_ioctl
+                                  |
+                                   --1.16%--v4l2_ioctl
+                                             video_ioctl2
+                                             video_usercopy
+                                             __video_do_ioctl
+                                             v4l_qbuf
+                                             |
+                                              --1.12%--vb2_ioctl_qbuf
+                                                        vb2_qbuf
+                                                        |
+                                                         --1.08%--vb2_core_qbuf
+                                                                   __buf_prepare
+                                                                   vb2_cma_sg_prepare
+                                                                   dma_sync_sg_for_device
+                                                                   iommu_dma_sync_sg_for_device
+                                                                   __pi_dcache_clean_poc
+
+    14.95%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1761ed8
+            |
+            ---0x7fb1761ed8
+               |
+               |--6.64%--0x7fb17641fb
+               |
+               |--5.51%--0x7fb176420f
+               |
+                --1.94%--0x7fb17641ef
+
+    14.39%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1761f84
+            |
+            ---0x7fb1761f84
+               |
+                --12.54%--0x7fb1770a9c
+
+    12.54%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1770a9c
+            |
+            ---0x7fb1770a9c
+
+    12.15%     0.26%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |
+             --11.89%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                       |
+                       |--7.28%--0x7fb3d9bdd4
+                       |
+                        --2.20%--_Z8imresize12rga_buffer_tS_ddiiPi
+                                  _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                                  _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                                  ioctl
+                                  el0t_64_sync
+                                  el0t_64_sync_handler
+                                  el0_svc
+                                  do_el0_svc
+                                  el0_svc_common.constprop.0
+                                  invoke_syscall
+                                  |
+                                   --2.15%--__arm64_sys_ioctl
+                                             |
+                                              --2.07%--rga_ioctl
+                                                        rga_ioctl_blit
+                                                        |
+                                                         --1.90%--rga_request_submit
+                                                                   rga_request_commit
+                                                                   |
+                                                                    --1.85%--rga_job_commit
+                                                                              |
+                                                                               --1.72%--rga_mm_map_job_info
+                                                                                         rga_mm_get_channel_handle_info
+                                                                                         rga_mm_get_buffer
+                                                                                         rga_mm_sync_dma_sg_for_device
+                                                                                         dma_sync_sg_for_device
+                                                                                         |
+                                                                                          --1.51%--iommu_dma_sync_sg_for_device
+                                                                                                    __pi_dcache_clean_poc
+
+     9.44%     9.44%  rtctrl_face_vid  libc.so.6              [.] 0x000000000009ddd4
+            |
+             --9.13%--0x7fb3de020c
+                       0x7fb3d815c4
+                       0x7fb401d55c
+                       |
+                        --8.96%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                                  |
+                                  |--7.28%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                                  |          0x7fb3d9bdd4
+                                  |
+                                   --1.68%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                                             0x7fb3d9bdd4
+
+     9.44%     0.00%  rtctrl_face_vid  libc.so.6              [.] 0x0000007fb3d9bdd4
+            |
+            ---0x7fb3d9bdd4
+
+     8.75%     4.09%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN4rknn11RknnBackend3runEv
+            |
+            |--4.65%--_ZN4rknn11RknnBackend3runEv
+            |          |
+            |          |--2.76%--rknn_run
+            |          |          |
+            |          |           --2.59%--0x7fb37837f0
+            |          |
+            |           --1.77%--rknn_outputs_get
+            |                     |
+            |                      --1.34%--0x7fb35383d0
+            |                                0x7fb37bf50b
+            |
+             --4.09%--_start
+                       __libc_start_main
+                       0x7fb3d2a49c
+                       main
+                       |
+                        --3.62%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                                  _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                  _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                                  _ZN4rknn11RknnBackend3runEv
+
+     8.06%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1771ab0
+            |
+            ---0x7fb1771ab0
+               |
+               |--6.38%--0x7fb17759ec
+               |          |
+               |           --1.16%--0x7fb17ad9cc
+               |
+                --1.42%--0x7fb1775a38
+                          |
+                           --1.03%--0x7fb1775e67
+
+     7.11%     0.04%  rtctrl_face_vid  rtctrl_face_video      [.] _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |
+             --7.07%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                       |
+                       |--3.06%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                       |          |
+                       |          |--1.59%--_ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+                       |          |
+                       |           --1.46%--_ZN4rknn11RknnBackend3runEv
+                       |                     |
+                       |                      --1.29%--rknn_run
+                       |                                |
+                       |                                 --1.21%--0x7fb37837f0
+                       |
+                        --2.67%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+     6.64%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb17641fb
+            |
+            ---0x7fb17641fb
+
+     6.38%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb17759ec
+            |
+            ---0x7fb17759ec
+               |
+                --1.16%--0x7fb17ad9cc
+
+     5.51%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb176420f
+            |
+            ---0x7fb176420f
+
+     4.83%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] el0t_64_sync
+            |
+            ---el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               |
+                --4.65%--do_el0_svc
+                          el0_svc_common.constprop.0
+                          invoke_syscall
+                          |
+                           --4.09%--__arm64_sys_ioctl
+                                     |
+                                     |--2.07%--rga_ioctl
+                                     |          rga_ioctl_blit
+                                     |          |
+                                     |           --1.90%--rga_request_submit
+                                     |                     rga_request_commit
+                                     |                     |
+                                     |                      --1.85%--rga_job_commit
+                                     |                                |
+                                     |                                 --1.72%--rga_mm_map_job_info
+                                     |                                           rga_mm_get_channel_handle_info
+                                     |                                           rga_mm_get_buffer
+                                     |                                           rga_mm_sync_dma_sg_for_device
+                                     |                                           dma_sync_sg_for_device
+                                     |                                           |
+                                     |                                            --1.51%--iommu_dma_sync_sg_for_device
+                                     |                                                      __pi_dcache_clean_poc
+                                     |
+                                      --1.21%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                |
+                                                 --1.16%--v4l_qbuf
+                                                           |
+                                                            --1.12%--vb2_ioctl_qbuf
+                                                                      vb2_qbuf
+                                                                      |
+                                                                       --1.08%--vb2_core_qbuf
+                                                                                 __buf_prepare
+                                                                                 vb2_cma_sg_prepare
+                                                                                 dma_sync_sg_for_device
+                                                                                 iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     4.83%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] el0t_64_sync_handler
+            |
+            ---el0t_64_sync_handler
+               el0_svc
+               |
+                --4.65%--do_el0_svc
+                          el0_svc_common.constprop.0
+                          invoke_syscall
+                          |
+                           --4.09%--__arm64_sys_ioctl
+                                     |
+                                     |--2.07%--rga_ioctl
+                                     |          rga_ioctl_blit
+                                     |          |
+                                     |           --1.90%--rga_request_submit
+                                     |                     rga_request_commit
+                                     |                     |
+                                     |                      --1.85%--rga_job_commit
+                                     |                                |
+                                     |                                 --1.72%--rga_mm_map_job_info
+                                     |                                           rga_mm_get_channel_handle_info
+                                     |                                           rga_mm_get_buffer
+                                     |                                           rga_mm_sync_dma_sg_for_device
+                                     |                                           dma_sync_sg_for_device
+                                     |                                           |
+                                     |                                            --1.51%--iommu_dma_sync_sg_for_device
+                                     |                                                      __pi_dcache_clean_poc
+                                     |
+                                      --1.21%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                |
+                                                 --1.16%--v4l_qbuf
+                                                           |
+                                                            --1.12%--vb2_ioctl_qbuf
+                                                                      vb2_qbuf
+                                                                      |
+                                                                       --1.08%--vb2_core_qbuf
+                                                                                 __buf_prepare
+                                                                                 vb2_cma_sg_prepare
+                                                                                 dma_sync_sg_for_device
+                                                                                 iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     4.83%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] el0_svc
+            |
+            ---el0_svc
+               |
+                --4.65%--do_el0_svc
+                          el0_svc_common.constprop.0
+                          invoke_syscall
+                          |
+                           --4.09%--__arm64_sys_ioctl
+                                     |
+                                     |--2.07%--rga_ioctl
+                                     |          rga_ioctl_blit
+                                     |          |
+                                     |           --1.90%--rga_request_submit
+                                     |                     rga_request_commit
+                                     |                     |
+                                     |                      --1.85%--rga_job_commit
+                                     |                                |
+                                     |                                 --1.72%--rga_mm_map_job_info
+                                     |                                           rga_mm_get_channel_handle_info
+                                     |                                           rga_mm_get_buffer
+                                     |                                           rga_mm_sync_dma_sg_for_device
+                                     |                                           dma_sync_sg_for_device
+                                     |                                           |
+                                     |                                            --1.51%--iommu_dma_sync_sg_for_device
+                                     |                                                      __pi_dcache_clean_poc
+                                     |
+                                      --1.21%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                |
+                                                 --1.16%--v4l_qbuf
+                                                           |
+                                                            --1.12%--vb2_ioctl_qbuf
+                                                                      vb2_qbuf
+                                                                      |
+                                                                       --1.08%--vb2_core_qbuf
+                                                                                 __buf_prepare
+                                                                                 vb2_cma_sg_prepare
+                                                                                 dma_sync_sg_for_device
+                                                                                 iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     4.65%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] do_el0_svc
+            |
+            ---do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               |
+                --4.09%--__arm64_sys_ioctl
+                          |
+                          |--2.07%--rga_ioctl
+                          |          rga_ioctl_blit
+                          |          |
+                          |           --1.90%--rga_request_submit
+                          |                     rga_request_commit
+                          |                     |
+                          |                      --1.85%--rga_job_commit
+                          |                                |
+                          |                                 --1.72%--rga_mm_map_job_info
+                          |                                           rga_mm_get_channel_handle_info
+                          |                                           rga_mm_get_buffer
+                          |                                           rga_mm_sync_dma_sg_for_device
+                          |                                           dma_sync_sg_for_device
+                          |                                           |
+                          |                                            --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                      __pi_dcache_clean_poc
+                          |
+                           --1.21%--v4l2_ioctl
+                                     video_ioctl2
+                                     video_usercopy
+                                     __video_do_ioctl
+                                     |
+                                      --1.16%--v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+     4.65%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] el0_svc_common.constprop.0
+            |
+            ---el0_svc_common.constprop.0
+               invoke_syscall
+               |
+                --4.09%--__arm64_sys_ioctl
+                          |
+                          |--2.07%--rga_ioctl
+                          |          rga_ioctl_blit
+                          |          |
+                          |           --1.90%--rga_request_submit
+                          |                     rga_request_commit
+                          |                     |
+                          |                      --1.85%--rga_job_commit
+                          |                                |
+                          |                                 --1.72%--rga_mm_map_job_info
+                          |                                           rga_mm_get_channel_handle_info
+                          |                                           rga_mm_get_buffer
+                          |                                           rga_mm_sync_dma_sg_for_device
+                          |                                           dma_sync_sg_for_device
+                          |                                           |
+                          |                                            --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                      __pi_dcache_clean_poc
+                          |
+                           --1.21%--v4l2_ioctl
+                                     video_ioctl2
+                                     video_usercopy
+                                     __video_do_ioctl
+                                     |
+                                      --1.16%--v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+     4.65%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] invoke_syscall
+            |
+            ---invoke_syscall
+               |
+                --4.09%--__arm64_sys_ioctl
+                          |
+                          |--2.07%--rga_ioctl
+                          |          rga_ioctl_blit
+                          |          |
+                          |           --1.90%--rga_request_submit
+                          |                     rga_request_commit
+                          |                     |
+                          |                      --1.85%--rga_job_commit
+                          |                                |
+                          |                                 --1.72%--rga_mm_map_job_info
+                          |                                           rga_mm_get_channel_handle_info
+                          |                                           rga_mm_get_buffer
+                          |                                           rga_mm_sync_dma_sg_for_device
+                          |                                           dma_sync_sg_for_device
+                          |                                           |
+                          |                                            --1.51%--iommu_dma_sync_sg_for_device
+                          |                                                      __pi_dcache_clean_poc
+                          |
+                           --1.21%--v4l2_ioctl
+                                     video_ioctl2
+                                     video_usercopy
+                                     __video_do_ioctl
+                                     |
+                                      --1.16%--v4l_qbuf
+                                                |
+                                                 --1.12%--vb2_ioctl_qbuf
+                                                           vb2_qbuf
+                                                           |
+                                                            --1.08%--vb2_core_qbuf
+                                                                      __buf_prepare
+                                                                      vb2_cma_sg_prepare
+                                                                      dma_sync_sg_for_device
+                                                                      iommu_dma_sync_sg_for_device
+                                                                      __pi_dcache_clean_poc
+
+     4.22%     0.00%  rtctrl_face_vid  libc.so.6              [.] ioctl
+            |
+            ---ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               |
+                --4.14%--do_el0_svc
+                          el0_svc_common.constprop.0
+                          invoke_syscall
+                          |
+                           --4.09%--__arm64_sys_ioctl
+                                     |
+                                     |--2.07%--rga_ioctl
+                                     |          rga_ioctl_blit
+                                     |          |
+                                     |           --1.90%--rga_request_submit
+                                     |                     rga_request_commit
+                                     |                     |
+                                     |                      --1.85%--rga_job_commit
+                                     |                                |
+                                     |                                 --1.72%--rga_mm_map_job_info
+                                     |                                           rga_mm_get_channel_handle_info
+                                     |                                           rga_mm_get_buffer
+                                     |                                           rga_mm_sync_dma_sg_for_device
+                                     |                                           dma_sync_sg_for_device
+                                     |                                           |
+                                     |                                            --1.51%--iommu_dma_sync_sg_for_device
+                                     |                                                      __pi_dcache_clean_poc
+                                     |
+                                      --1.21%--v4l2_ioctl
+                                                video_ioctl2
+                                                video_usercopy
+                                                __video_do_ioctl
+                                                |
+                                                 --1.16%--v4l_qbuf
+                                                           |
+                                                            --1.12%--vb2_ioctl_qbuf
+                                                                      vb2_qbuf
+                                                                      |
+                                                                       --1.08%--vb2_core_qbuf
+                                                                                 __buf_prepare
+                                                                                 vb2_cma_sg_prepare
+                                                                                 dma_sync_sg_for_device
+                                                                                 iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     4.09%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] __arm64_sys_ioctl
+            |
+            ---__arm64_sys_ioctl
+               |
+               |--2.07%--rga_ioctl
+               |          rga_ioctl_blit
+               |          |
+               |           --1.90%--rga_request_submit
+               |                     rga_request_commit
+               |                     |
+               |                      --1.85%--rga_job_commit
+               |                                |
+               |                                 --1.72%--rga_mm_map_job_info
+               |                                           rga_mm_get_channel_handle_info
+               |                                           rga_mm_get_buffer
+               |                                           rga_mm_sync_dma_sg_for_device
+               |                                           dma_sync_sg_for_device
+               |                                           |
+               |                                            --1.51%--iommu_dma_sync_sg_for_device
+               |                                                      __pi_dcache_clean_poc
+               |
+                --1.21%--v4l2_ioctl
+                          video_ioctl2
+                          video_usercopy
+                          __video_do_ioctl
+                          |
+                           --1.16%--v4l_qbuf
+                                     |
+                                      --1.12%--vb2_ioctl_qbuf
+                                                vb2_qbuf
+                                                |
+                                                 --1.08%--vb2_core_qbuf
+                                                           __buf_prepare
+                                                           vb2_cma_sg_prepare
+                                                           dma_sync_sg_for_device
+                                                           iommu_dma_sync_sg_for_device
+                                                           __pi_dcache_clean_poc
+
+     2.80%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] dma_sync_sg_for_device
+            |
+            ---dma_sync_sg_for_device
+               |
+                --2.59%--iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     2.76%     0.00%  rtctrl_face_vid  librknnrt.so           [.] rknn_run
+            |
+            ---rknn_run
+               |
+                --2.59%--0x7fb37837f0
+
+     2.67%     2.67%  rtctrl_face_vid  [kernel.kallsyms]      [k] __pi_dcache_clean_poc
+            |
+             --2.59%--0x7fb3de020c
+                       0x7fb3d815c4
+                       0x7fb401d55c
+                       _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                       |
+                       |--1.51%--_ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                       |          _Z8imresize12rga_buffer_tS_ddiiPi
+                       |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       |          ioctl
+                       |          el0t_64_sync
+                       |          el0t_64_sync_handler
+                       |          el0_svc
+                       |          do_el0_svc
+                       |          el0_svc_common.constprop.0
+                       |          invoke_syscall
+                       |          __arm64_sys_ioctl
+                       |          rga_ioctl
+                       |          rga_ioctl_blit
+                       |          rga_request_submit
+                       |          rga_request_commit
+                       |          rga_job_commit
+                       |          rga_mm_map_job_info
+                       |          rga_mm_get_channel_handle_info
+                       |          rga_mm_get_buffer
+                       |          rga_mm_sync_dma_sg_for_device
+                       |          dma_sync_sg_for_device
+                       |          iommu_dma_sync_sg_for_device
+                       |          __pi_dcache_clean_poc
+                       |
+                        --1.08%--rtctrl_camera_release
+                                  v4l2_release
+                                  ioctl
+                                  el0t_64_sync
+                                  el0t_64_sync_handler
+                                  el0_svc
+                                  do_el0_svc
+                                  el0_svc_common.constprop.0
+                                  invoke_syscall
+                                  __arm64_sys_ioctl
+                                  v4l2_ioctl
+                                  video_ioctl2
+                                  video_usercopy
+                                  __video_do_ioctl
+                                  v4l_qbuf
+                                  vb2_ioctl_qbuf
+                                  vb2_qbuf
+                                  vb2_core_qbuf
+                                  __buf_prepare
+                                  vb2_cma_sg_prepare
+                                  dma_sync_sg_for_device
+                                  iommu_dma_sync_sg_for_device
+                                  __pi_dcache_clean_poc
+
+     2.67%     2.67%  rtctrl_face_vid  rtctrl_face_video      [.] _ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+            |
+            ---_start
+               __libc_start_main
+               0x7fb3d2a49c
+               main
+               _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+               _ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+
+     2.59%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] iommu_dma_sync_sg_for_device
+            |
+            ---iommu_dma_sync_sg_for_device
+               __pi_dcache_clean_poc
+
+     2.59%     0.00%  rtctrl_face_vid  librknnrt.so           [.] 0x0000007fb37837f0
+            |
+            ---0x7fb37837f0
+
+     2.50%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] _ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |
+            ---_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+               |
+                --1.98%--0x7fb3d9bdd4
+
+     2.20%     0.00%  rtctrl_face_vid  librga.so.2.1.0        [.] _Z8imresize12rga_buffer_tS_ddiiPi
+            |
+            ---_Z8imresize12rga_buffer_tS_ddiiPi
+               _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+               _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+               ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               |
+                --2.15%--__arm64_sys_ioctl
+                          |
+                           --2.07%--rga_ioctl
+                                     rga_ioctl_blit
+                                     |
+                                      --1.90%--rga_request_submit
+                                                rga_request_commit
+                                                |
+                                                 --1.85%--rga_job_commit
+                                                           |
+                                                            --1.72%--rga_mm_map_job_info
+                                                                      rga_mm_get_channel_handle_info
+                                                                      rga_mm_get_buffer
+                                                                      rga_mm_sync_dma_sg_for_device
+                                                                      dma_sync_sg_for_device
+                                                                      |
+                                                                       --1.51%--iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     2.20%     0.00%  rtctrl_face_vid  librga.so.2.1.0        [.] _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |
+            ---_Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+               _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+               ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               |
+                --2.15%--__arm64_sys_ioctl
+                          |
+                           --2.07%--rga_ioctl
+                                     rga_ioctl_blit
+                                     |
+                                      --1.90%--rga_request_submit
+                                                rga_request_commit
+                                                |
+                                                 --1.85%--rga_job_commit
+                                                           |
+                                                            --1.72%--rga_mm_map_job_info
+                                                                      rga_mm_get_channel_handle_info
+                                                                      rga_mm_get_buffer
+                                                                      rga_mm_sync_dma_sg_for_device
+                                                                      dma_sync_sg_for_device
+                                                                      |
+                                                                       --1.51%--iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     2.20%     0.00%  rtctrl_face_vid  librga.so.2.1.0        [.] _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |
+            ---_Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+               ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               |
+                --2.15%--__arm64_sys_ioctl
+                          |
+                           --2.07%--rga_ioctl
+                                     rga_ioctl_blit
+                                     |
+                                      --1.90%--rga_request_submit
+                                                rga_request_commit
+                                                |
+                                                 --1.85%--rga_job_commit
+                                                           |
+                                                            --1.72%--rga_mm_map_job_info
+                                                                      rga_mm_get_channel_handle_info
+                                                                      rga_mm_get_buffer
+                                                                      rga_mm_sync_dma_sg_for_device
+                                                                      dma_sync_sg_for_device
+                                                                      |
+                                                                       --1.51%--iommu_dma_sync_sg_for_device
+                                                                                 __pi_dcache_clean_poc
+
+     2.07%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_ioctl
+            |
+            ---rga_ioctl
+               rga_ioctl_blit
+               |
+                --1.90%--rga_request_submit
+                          rga_request_commit
+                          |
+                           --1.85%--rga_job_commit
+                                     |
+                                      --1.72%--rga_mm_map_job_info
+                                                rga_mm_get_channel_handle_info
+                                                rga_mm_get_buffer
+                                                rga_mm_sync_dma_sg_for_device
+                                                dma_sync_sg_for_device
+                                                |
+                                                 --1.51%--iommu_dma_sync_sg_for_device
+                                                           __pi_dcache_clean_poc
+
+     2.07%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_ioctl_blit
+            |
+            ---rga_ioctl_blit
+               |
+                --1.90%--rga_request_submit
+                          rga_request_commit
+                          |
+                           --1.85%--rga_job_commit
+                                     |
+                                      --1.72%--rga_mm_map_job_info
+                                                rga_mm_get_channel_handle_info
+                                                rga_mm_get_buffer
+                                                rga_mm_sync_dma_sg_for_device
+                                                dma_sync_sg_for_device
+                                                |
+                                                 --1.51%--iommu_dma_sync_sg_for_device
+                                                           __pi_dcache_clean_poc
+
+     1.94%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb17641ef
+            |
+            ---0x7fb17641ef
+
+     1.90%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_request_submit
+            |
+            ---rga_request_submit
+               rga_request_commit
+               |
+                --1.85%--rga_job_commit
+                          |
+                           --1.72%--rga_mm_map_job_info
+                                     rga_mm_get_channel_handle_info
+                                     rga_mm_get_buffer
+                                     rga_mm_sync_dma_sg_for_device
+                                     dma_sync_sg_for_device
+                                     |
+                                      --1.51%--iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.90%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_request_commit
+            |
+            ---rga_request_commit
+               |
+                --1.85%--rga_job_commit
+                          |
+                           --1.72%--rga_mm_map_job_info
+                                     rga_mm_get_channel_handle_info
+                                     rga_mm_get_buffer
+                                     rga_mm_sync_dma_sg_for_device
+                                     dma_sync_sg_for_device
+                                     |
+                                      --1.51%--iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.85%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_job_commit
+            |
+            ---rga_job_commit
+               |
+                --1.72%--rga_mm_map_job_info
+                          rga_mm_get_channel_handle_info
+                          rga_mm_get_buffer
+                          rga_mm_sync_dma_sg_for_device
+                          dma_sync_sg_for_device
+                          |
+                           --1.51%--iommu_dma_sync_sg_for_device
+                                     __pi_dcache_clean_poc
+
+     1.77%     0.00%  rtctrl_face_vid  librknnrt.so           [.] rknn_outputs_get
+            |
+            ---rknn_outputs_get
+               |
+                --1.34%--0x7fb35383d0
+                          0x7fb37bf50b
+
+     1.72%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_mm_map_job_info
+            |
+            ---rga_mm_map_job_info
+               rga_mm_get_channel_handle_info
+               rga_mm_get_buffer
+               rga_mm_sync_dma_sg_for_device
+               dma_sync_sg_for_device
+               |
+                --1.51%--iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.72%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_mm_get_channel_handle_info
+            |
+            ---rga_mm_get_channel_handle_info
+               rga_mm_get_buffer
+               rga_mm_sync_dma_sg_for_device
+               dma_sync_sg_for_device
+               |
+                --1.51%--iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.72%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_mm_get_buffer
+            |
+            ---rga_mm_get_buffer
+               rga_mm_sync_dma_sg_for_device
+               dma_sync_sg_for_device
+               |
+                --1.51%--iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.72%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] rga_mm_sync_dma_sg_for_device
+            |
+            ---rga_mm_sync_dma_sg_for_device
+               dma_sync_sg_for_device
+               |
+                --1.51%--iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.42%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1775a38
+            |
+            ---0x7fb1775a38
+               |
+                --1.03%--0x7fb1775e67
+
+     1.34%     0.00%  rtctrl_face_vid  librknnrt.so           [.] 0x0000007fb35383d0
+            |
+            ---0x7fb35383d0
+               0x7fb37bf50b
+
+     1.34%     0.00%  rtctrl_face_vid  librknnrt.so           [.] 0x0000007fb37bf50b
+            |
+            ---0x7fb37bf50b
+
+     1.21%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] rtctrl_camera_release
+            |
+            ---rtctrl_camera_release
+               v4l2_release
+               ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               __arm64_sys_ioctl
+               |
+                --1.16%--v4l2_ioctl
+                          video_ioctl2
+                          video_usercopy
+                          __video_do_ioctl
+                          v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.21%     0.00%  rtctrl_face_vid  rtctrl_face_video      [.] v4l2_release
+            |
+            ---v4l2_release
+               ioctl
+               el0t_64_sync
+               el0t_64_sync_handler
+               el0_svc
+               do_el0_svc
+               el0_svc_common.constprop.0
+               invoke_syscall
+               __arm64_sys_ioctl
+               |
+                --1.16%--v4l2_ioctl
+                          video_ioctl2
+                          video_usercopy
+                          __video_do_ioctl
+                          v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.21%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] v4l2_ioctl
+            |
+            ---v4l2_ioctl
+               video_ioctl2
+               video_usercopy
+               __video_do_ioctl
+               |
+                --1.16%--v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.21%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] video_ioctl2
+            |
+            ---video_ioctl2
+               video_usercopy
+               __video_do_ioctl
+               |
+                --1.16%--v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.21%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] video_usercopy
+            |
+            ---video_usercopy
+               __video_do_ioctl
+               |
+                --1.16%--v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.21%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] __video_do_ioctl
+            |
+            ---__video_do_ioctl
+               |
+                --1.16%--v4l_qbuf
+                          |
+                           --1.12%--vb2_ioctl_qbuf
+                                     vb2_qbuf
+                                     |
+                                      --1.08%--vb2_core_qbuf
+                                                __buf_prepare
+                                                vb2_cma_sg_prepare
+                                                dma_sync_sg_for_device
+                                                iommu_dma_sync_sg_for_device
+                                                __pi_dcache_clean_poc
+
+     1.16%     1.16%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x000000000004f9cc
+            |
+            ---0x7fb3de020c
+               0x7fb3d815c4
+               0x7fb401d55c
+               _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               tjCompress2
+               0x7fb1761c40
+               0x7fb1771ab0
+               0x7fb17759ec
+               0x7fb17ad9cc
+
+     1.16%     0.04%  rtctrl_face_vid  [kernel.kallsyms]      [k] v4l_qbuf
+            |
+             --1.12%--v4l_qbuf
+                       vb2_ioctl_qbuf
+                       vb2_qbuf
+                       |
+                        --1.08%--vb2_core_qbuf
+                                  __buf_prepare
+                                  vb2_cma_sg_prepare
+                                  dma_sync_sg_for_device
+                                  iommu_dma_sync_sg_for_device
+                                  __pi_dcache_clean_poc
+
+     1.16%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb17ad9cc
+            |
+            ---0x7fb17ad9cc
+
+     1.12%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] vb2_ioctl_qbuf
+            |
+            ---vb2_ioctl_qbuf
+               vb2_qbuf
+               |
+                --1.08%--vb2_core_qbuf
+                          __buf_prepare
+                          vb2_cma_sg_prepare
+                          dma_sync_sg_for_device
+                          iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.12%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] vb2_qbuf
+            |
+            ---vb2_qbuf
+               |
+                --1.08%--vb2_core_qbuf
+                          __buf_prepare
+                          vb2_cma_sg_prepare
+                          dma_sync_sg_for_device
+                          iommu_dma_sync_sg_for_device
+                          __pi_dcache_clean_poc
+
+     1.08%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] vb2_core_qbuf
+            |
+            ---vb2_core_qbuf
+               __buf_prepare
+               vb2_cma_sg_prepare
+               dma_sync_sg_for_device
+               iommu_dma_sync_sg_for_device
+               __pi_dcache_clean_poc
+
+     1.08%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] __buf_prepare
+            |
+            ---__buf_prepare
+               vb2_cma_sg_prepare
+               dma_sync_sg_for_device
+               iommu_dma_sync_sg_for_device
+               __pi_dcache_clean_poc
+
+     1.08%     0.00%  rtctrl_face_vid  [kernel.kallsyms]      [k] vb2_cma_sg_prepare
+            |
+            ---vb2_cma_sg_prepare
+               dma_sync_sg_for_device
+               iommu_dma_sync_sg_for_device
+               __pi_dcache_clean_poc
+
+     1.03%     0.00%  rtctrl_face_vid  libturbojpeg.so.0.2.0  [.] 0x0000007fb1775e67
+            |
+            ---0x7fb1775e67
+
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#
