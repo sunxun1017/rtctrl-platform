@@ -1,0 +1,24 @@
+{
+  "decoded_jpegs": 180,
+  "network_received_fps": 30.226274907132805,
+  "dimensions": [
+    [
+      960,
+      712
+    ]
+  ],
+  "bytes": 11171128,
+  "status": {
+    "fps": 29.8758,
+    "publish_fps": 29.8719,
+    "capture_fps": 30.0481,
+    "processed": 2613,
+    "published": 2613,
+    "latest_overwrites": 0,
+    "capture_sequence_gaps": 0,
+    "encode_overwrites": 0,
+    "input_type": "native-fp16",
+    "frame_converter": "rga",
+    "jpeg_mode": "async"
+  }
+}

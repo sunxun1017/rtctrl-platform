@@ -1,0 +1,14 @@
+{
+  "iterations_per_batch": 100,
+  "all_128_batches_equal": true,
+  "uint8_nhwc_contiguous": {
+    "112": {
+      "before_us": 426.246,
+      "after_us": 11.895624999999999
+    },
+    "320": {
+      "before_us": 3530.75,
+      "after_us": 98.6854
+    }
+  }
+}

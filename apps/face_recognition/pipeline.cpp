@@ -13,6 +13,30 @@ void require(bool ok, const char* message) {
     if (!ok)
         throw std::runtime_error(message);
 }
+template <typename T, bool Planar>
+void copy_rgb_input(const cv::Mat& bgr, T* destination, int side) {
+    const std::size_t plane = static_cast<std::size_t>(side) * side;
+    for (int y = 0; y < side; ++y) {
+        const auto* source = bgr.ptr<unsigned char>(y);
+        if constexpr (Planar) {
+            auto* red = destination + static_cast<std::size_t>(y) * side;
+            auto* green = red + plane;
+            auto* blue = green + plane;
+            for (int x = 0; x < side; ++x) {
+                red[x] = source[3 * x + 2];
+                green[x] = source[3 * x + 1];
+                blue[x] = source[3 * x];
+            }
+        } else {
+            auto* target = destination + static_cast<std::size_t>(y) * side * 3;
+            for (int x = 0; x < side; ++x) {
+                target[3 * x] = source[3 * x + 2];
+                target[3 * x + 1] = source[3 * x + 1];
+                target[3 * x + 2] = source[3 * x];
+            }
+        }
+    }
+}
 void submit(inference::Backend& backend, const cv::Mat& bgr, int side) {
     require(!bgr.empty() && bgr.type() == CV_8UC3, "expected nonempty BGR8 image");
     require(backend.input_count() == 1, "model must have exactly one input");
@@ -31,17 +55,19 @@ void submit(inference::Backend& backend, const cv::Mat& bgr, int side) {
     auto view = backend.get_input_buffer(0);
     require(view.data && view.type == s.type && view.size_bytes == s.byte_size(),
             "invalid writable input view");
-    for (int y = 0; y < side; ++y)
-        for (int x = 0; x < side; ++x)
-            for (int c = 0; c < 3; ++c) {
-                auto i = s.layout == L::NCHW ? c * side * side + y * side + x
-                                             : (y * side + x) * 3 + c;
-                const auto value = bgr.at<cv::Vec3b>(y, x)[2 - c];
-                if (s.type == inference::TensorType::Float32)
-                    static_cast<float*>(view.data)[i] = value;
-                else
-                    static_cast<unsigned char*>(view.data)[i] = value;
-            }
+    if (s.type == inference::TensorType::Float32) {
+        if (s.layout == L::NCHW)
+            copy_rgb_input<float, true>(bgr, static_cast<float*>(view.data), side);
+        else
+            copy_rgb_input<float, false>(bgr, static_cast<float*>(view.data), side);
+    } else {
+        if (s.layout == L::NCHW)
+            copy_rgb_input<unsigned char, true>(
+                bgr, static_cast<unsigned char*>(view.data), side);
+        else
+            copy_rgb_input<unsigned char, false>(
+                bgr, static_cast<unsigned char*>(view.data), side);
+    }
     require(backend.commit_input(0) && backend.run(), "inference failed");
 }
 float iou(const cv::Rect2f& a, const cv::Rect2f& b) {

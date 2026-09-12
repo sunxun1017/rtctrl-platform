@@ -27,3 +27,13 @@ perf stat -e task-clock,context-switches,cpu-migrations,page-faults -p "$PID" --
 ```
 
 采样文件与符号报告对应上面的二进制；升级后二进制发生变化，不能拿新程序的地址解释旧perf.data。
+
+
+## 再次perf后的输入循环优化
+
+`copy-ab/` 的final代表6f7b4e0三十帧版本，copy代表仅把submit类型/布局分支移到循环外的版本。四轮各20秒，前3轮21/21样本无人脸；最后旧版有1/21样本出现人脸，故无脸CPU对照用case0与case1/2。
+case0旧CPU102.0008%，新两轮平均91.2454%，约下降10.54%，各轮发布/识别均30.015FPS左右。
+128个微基准批次覆盖112/320、Float32/UInt8、NHWC/NCHW、连续/ROI，全部写入逐值一致；`submit-summary.json`概括当前模型使用的UInt8 NHWC连续输入。
+`copy-monitor/` 是部署后20秒无人脸验证；`copy-perf*`为随后20秒独立perf。与前一轮有脸perf负载不同，不直接相减Self百分比。
+新二进制SHA256：`d768237f4a9d70eac73b27ec9bab53ffba882ce18cdba0732eee4d113294c4ed`。
+`network-preview.json`是Windows端连续读取并解码180张JPEG，约30FPS，无原图保存；这也不等于Edge绘制帧率。

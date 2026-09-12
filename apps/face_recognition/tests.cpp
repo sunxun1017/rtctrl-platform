@@ -116,6 +116,22 @@ int main() {
                 const size_t step =
                     layout == inference::TensorLayout::NCHW ? 320 * 320 : 1;
                 check(value(0) == 1 && value(step) == 2 && value(step * 2) == 3);
+                cv::Mat backing(320, 327, CV_8UC3);
+                for (int y = 0; y < backing.rows; ++y)
+                    for (int x = 0; x < backing.cols; ++x)
+                        backing.at<cv::Vec3b>(y, x) = cv::Vec3b(
+                            (x + y) % 256, (2 * x + y) % 256, (x + 3 * y) % 256);
+                auto roi = backing(cv::Rect(3, 0, 320, 320));
+                check(!roi.isContinuous());
+                check(face::detect(probe, roi).empty());
+                for (int y = 0; y < 320; ++y)
+                    for (int x = 0; x < 320; ++x)
+                        for (int c = 0; c < 3; ++c) {
+                            size_t i = layout == inference::TensorLayout::NCHW
+                                           ? c * 320 * 320 + y * 320 + x
+                                           : (y * 320 + x) * 3 + c;
+                            check(value(i) == roi.at<cv::Vec3b>(y, x)[2 - c]);
+                        }
                 probe.bad_view = true;
                 rejects([&] { face::detect(probe, image); });
                 check(!probe.ready);

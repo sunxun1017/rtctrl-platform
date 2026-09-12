@@ -143,3 +143,8 @@ cmake --build build/face-video-rv1126b --target rtctrl_face_video -j4
 
 此命令接在前文交叉工具链配置后，`SDK`、`TURBOJPEG_HEADERS` 指向匹配的本地依赖；没有相应依赖时普通路径仍可构建。
 回退可停止后执行 `RKNN_INPUT_TYPE=uint8 PREVIEW_JPEG_ENCODER=turbojpeg PREVIEW_FRAME_CONVERTER=cpu PREVIEW_JPEG_MODE=sync sh start-video.sh 0.5`。
+
+
+再次perf后，submit的类型/布局分支移到像素循环外，RGB逐值结果保持一致。
+UInt8 NHWC 320输入微基准3530.75→98.69μs，112输入426.25→11.90μs；完整无人脸视频30FPS下CPU102.00%→91.25%（两轮新版本均值）。
+这轮无脸结果不能当成单脸CPU；单脸三十帧验证见上一批。新版本部署后20秒约30.016FPS，电脑端180张JPEG全部解码成功。

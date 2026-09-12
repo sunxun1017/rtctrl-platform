@@ -1,0 +1,4 @@
+WARNING: Ignored open failure for pid 823
+Couldn't synthesize bpf events.
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.264 MB /userdata/rtctrl-face-video/fps30-test/copy-perf.data (1801 samples) ]
