@@ -1,0 +1,142 @@
+[
+  {
+    "pss_kb": 22614,
+    "rss_kb": 32064,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22662,
+    "rss_kb": 32112,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22574,
+    "rss_kb": 32024,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22638,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22637,
+    "rss_kb": 32088,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22594,
+    "rss_kb": 32044,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22666,
+    "rss_kb": 32116,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22642,
+    "rss_kb": 32092,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22690,
+    "rss_kb": 32140,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  },
+  {
+    "pss_kb": 22674,
+    "rss_kb": 32124,
+    "dma_objects": 4,
+    "dma_bytes": 12017664,
+    "npu": "NPU load:  0%"
+  }
+]

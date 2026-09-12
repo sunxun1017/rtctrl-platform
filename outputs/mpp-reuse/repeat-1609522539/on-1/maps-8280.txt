@@ -1,0 +1,142 @@
+5594658000-5594660000 r-xp 00000000 b3:06 1203                           /usr/bin/gst-launch-1.0
+5594660000-5594661000 r--p 00008000 b3:06 1203                           /usr/bin/gst-launch-1.0
+5594661000-5594662000 rw-p 00009000 b3:06 1203                           /usr/bin/gst-launch-1.0
+55cb5b8000-55cb7e4000 rw-p 00000000 00:00 0                              [heap]
+7f68000000-7f68021000 rw-p 00000000 00:00 0
+7f68021000-7f6c000000 ---p 00000000 00:00 0
+7f6c000000-7f6c021000 rw-p 00000000 00:00 0
+7f6c021000-7f70000000 ---p 00000000 00:00 0
+7f70000000-7f70021000 rw-p 00000000 00:00 0
+7f70021000-7f74000000 ---p 00000000 00:00 0
+7f74000000-7f74021000 rw-p 00000000 00:00 0
+7f74021000-7f78000000 ---p 00000000 00:00 0
+7f78000000-7f78021000 rw-p 00000000 00:00 0
+7f78021000-7f7c000000 ---p 00000000 00:00 0
+7f7c000000-7f7c988000 rw-p 00000000 00:00 0
+7f7c988000-7f80000000 ---p 00000000 00:00 0
+7f81ec2000-7f81ed2000 ---p 00000000 00:00 0
+7f81ed2000-7f826d2000 rw-p 00000000 00:00 0
+7f826d2000-7f827d0000 rw-s 00000000 00:08 544626                         /dmabuf:8280-gst-launch-1.0
+7f827d0000-7f827e0000 ---p 00000000 00:00 0
+7f827e0000-7f82fe0000 rw-p 00000000 00:00 0
+7f82fe0000-7f82ff0000 ---p 00000000 00:00 0
+7f82ff0000-7f837f0000 rw-p 00000000 00:00 0
+7f837f0000-7f83800000 ---p 00000000 00:00 0
+7f83800000-7f84021000 rw-p 00000000 00:00 0
+7f84021000-7f88000000 ---p 00000000 00:00 0
+7f88344000-7f88442000 rw-s 00000000 00:08 544627                         /dmabuf:8280-gst-launch-1.0
+7f88442000-7f88540000 r--s 00000000 00:08 544627                         /dmabuf:8280-gst-launch-1.0
+7f88540000-7f88550000 ---p 00000000 00:00 0
+7f88550000-7f88d50000 rw-p 00000000 00:00 0
+7f88d50000-7f88d60000 ---p 00000000 00:00 0
+7f88d60000-7f89560000 rw-p 00000000 00:00 0
+7f89560000-7f89570000 ---p 00000000 00:00 0
+7f89570000-7f89d70000 rw-p 00000000 00:00 0
+7f89d70000-7f89d84000 r-xp 00000000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f89d84000-7f89d85000 r--p 00013000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f89d85000-7f89d86000 rw-p 00014000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f89d86000-7f89db6000 r-xp 00000000 b3:06 2556                           /usr/lib/libmvec.so.1
+7f89db6000-7f89db7000 r--p 0002f000 b3:06 2556                           /usr/lib/libmvec.so.1
+7f89db7000-7f89db8000 rw-p 00030000 b3:06 2556                           /usr/lib/libmvec.so.1
+7f89db8000-7f89df2000 r-xp 00000000 b3:06 2415                           /usr/lib/libgsttag-1.0.so.0.2411.0
+7f89df2000-7f89df4000 r--p 00039000 b3:06 2415                           /usr/lib/libgsttag-1.0.so.0.2411.0
+7f89df4000-7f89df5000 rw-p 0003b000 b3:06 2415                           /usr/lib/libgsttag-1.0.so.0.2411.0
+7f89df5000-7f89e5f000 r-xp 00000000 b3:06 2340                           /usr/lib/libgstaudio-1.0.so.0.2411.0
+7f89e5f000-7f89e63000 r--p 0006a000 b3:06 2340                           /usr/lib/libgstaudio-1.0.so.0.2411.0
+7f89e63000-7f89e64000 rw-p 0006e000 b3:06 2340                           /usr/lib/libgstaudio-1.0.so.0.2411.0
+7f89e64000-7f8a089000 r-xp 00000000 b3:06 2717                           /usr/lib/librockchip_mpp.so.0
+7f8a089000-7f8a090000 r--p 00224000 b3:06 2717                           /usr/lib/librockchip_mpp.so.0
+7f8a090000-7f8a0a2000 rw-p 0022b000 b3:06 2717                           /usr/lib/librockchip_mpp.so.0
+7f8a0a2000-7f8a0a3000 rw-p 00000000 00:00 0
+7f8a0a3000-7f8a0dc000 r-xp 00000000 b3:06 2382                           /usr/lib/libgstpbutils-1.0.so.0.2411.0
+7f8a0dc000-7f8a0df000 r--p 00039000 b3:06 2382                           /usr/lib/libgstpbutils-1.0.so.0.2411.0
+7f8a0df000-7f8a0e0000 rw-p 0003c000 b3:06 2382                           /usr/lib/libgstpbutils-1.0.so.0.2411.0
+7f8a0e0000-7f8a0fa000 r-xp 00000000 b3:08 206                            /userdata/rtctrl-video-preview/reuse-test/plugins/libgstrockchipmpp.so
+7f8a0fa000-7f8a10a000 ---p 0001a000 b3:08 206                            /userdata/rtctrl-video-preview/reuse-test/plugins/libgstrockchipmpp.so
+7f8a10a000-7f8a10b000 r--p 0001a000 b3:08 206                            /userdata/rtctrl-video-preview/reuse-test/plugins/libgstrockchipmpp.so
+7f8a10b000-7f8a10c000 rw-p 0001b000 b3:08 206                            /userdata/rtctrl-video-preview/reuse-test/plugins/libgstrockchipmpp.so
+7f8a10f000-7f8a177000 r-xp 00000000 b3:06 1975                           /usr/lib/gstreamer-1.0/libgstcoreelements.so
+7f8a177000-7f8a179000 r--p 00068000 b3:06 1975                           /usr/lib/gstreamer-1.0/libgstcoreelements.so
+7f8a179000-7f8a17a000 rw-p 0006a000 b3:06 1975                           /usr/lib/gstreamer-1.0/libgstcoreelements.so
+7f8a17a000-7f8a1cc000 r-xp 00000000 b3:06 2484                           /usr/lib/libjpeg.so.8.2.2
+7f8a1cc000-7f8a1cd000 r--p 00051000 b3:06 2484                           /usr/lib/libjpeg.so.8.2.2
+7f8a1cd000-7f8a1ce000 rw-p 00052000 b3:06 2484                           /usr/lib/libjpeg.so.8.2.2
+7f8a1ce000-7f8a1e6000 r-xp 00000000 b3:06 2286                           /usr/lib/libgcc_s.so.1
+7f8a1e6000-7f8a1e7000 r--p 00017000 b3:06 2286                           /usr/lib/libgcc_s.so.1
+7f8a1e7000-7f8a1e8000 rw-p 00018000 b3:06 2286                           /usr/lib/libgcc_s.so.1
+7f8a1e8000-7f8a41b000 r-xp 00000000 b3:06 2795                           /usr/lib/libstdc++.so.6.0.32
+7f8a41b000-7f8a426000 r--p 00233000 b3:06 2795                           /usr/lib/libstdc++.so.6.0.32
+7f8a426000-7f8a429000 rw-p 0023e000 b3:06 2795                           /usr/lib/libstdc++.so.6.0.32
+7f8a429000-7f8a42d000 rw-p 00000000 00:00 0
+7f8a42d000-7f8a451000 r-xp 00000000 b3:06 2861                           /usr/lib/libv4lconvert.so.0.0.0
+7f8a451000-7f8a453000 r--p 00024000 b3:06 2861                           /usr/lib/libv4lconvert.so.0.0.0
+7f8a453000-7f8a454000 rw-p 00026000 b3:06 2861                           /usr/lib/libv4lconvert.so.0.0.0
+7f8a454000-7f8a4a6000 rw-p 00000000 00:00 0
+7f8a4a6000-7f8a4cd000 r-xp 00000000 b3:06 2836                           /usr/lib/libudev.so.1.6.3
+7f8a4cd000-7f8a4ce000 r--p 00027000 b3:06 2836                           /usr/lib/libudev.so.1.6.3
+7f8a4ce000-7f8a4cf000 rw-p 00028000 b3:06 2836                           /usr/lib/libudev.so.1.6.3
+7f8a4cf000-7f8a4e5000 r-xp 00000000 b3:06 2218                           /usr/lib/libdrm.so.2.124.0
+7f8a4e5000-7f8a4e6000 r--p 00016000 b3:06 2218                           /usr/lib/libdrm.so.2.124.0
+7f8a4e6000-7f8a4e7000 rw-p 00017000 b3:06 2218                           /usr/lib/libdrm.so.2.124.0
+7f8a4e7000-7f8a51e000 r-xp 00000000 b3:06 2710                           /usr/lib/librga.so.2.1.0
+7f8a51e000-7f8a520000 r--p 00036000 b3:06 2710                           /usr/lib/librga.so.2.1.0
+7f8a520000-7f8a521000 rw-p 00038000 b3:06 2710                           /usr/lib/librga.so.2.1.0
+7f8a521000-7f8a52b000 r-xp 00000000 b3:06 2855                           /usr/lib/libv4l2.so.0.0.0
+7f8a52b000-7f8a52c000 r--p 0000a000 b3:06 2855                           /usr/lib/libv4l2.so.0.0.0
+7f8a52c000-7f8a532000 rw-p 0000b000 b3:06 2855                           /usr/lib/libv4l2.so.0.0.0
+7f8a532000-7f8a53d000 r-xp 00000000 b3:06 2438                           /usr/lib/libgudev-1.0.so.0.3.0
+7f8a53d000-7f8a53e000 r--p 0000a000 b3:06 2438                           /usr/lib/libgudev-1.0.so.0.3.0
+7f8a53e000-7f8a53f000 rw-p 0000b000 b3:06 2438                           /usr/lib/libgudev-1.0.so.0.3.0
+7f8a53f000-7f8a545000 r-xp 00000000 b3:06 2331                           /usr/lib/libgstallocators-1.0.so.0.2411.0
+7f8a545000-7f8a546000 r--p 00006000 b3:06 2331                           /usr/lib/libgstallocators-1.0.so.0.2411.0
+7f8a546000-7f8a547000 rw-p 00007000 b3:06 2331                           /usr/lib/libgstallocators-1.0.so.0.2411.0
+7f8a547000-7f8a5e5000 r-xp 00000000 b3:06 2423                           /usr/lib/libgstvideo-1.0.so.0.2411.0
+7f8a5e5000-7f8a5f8000 r--p 0009d000 b3:06 2423                           /usr/lib/libgstvideo-1.0.so.0.2411.0
+7f8a5f8000-7f8a5f9000 rw-p 000b0000 b3:06 2423                           /usr/lib/libgstvideo-1.0.so.0.2411.0
+7f8a5f9000-7f8a66c000 r-xp 00000000 b3:06 2346                           /usr/lib/libgstbase-1.0.so.0.2411.0
+7f8a66c000-7f8a66e000 r--p 00072000 b3:06 2346                           /usr/lib/libgstbase-1.0.so.0.2411.0
+7f8a66e000-7f8a66f000 rw-p 00074000 b3:06 2346                           /usr/lib/libgstbase-1.0.so.0.2411.0
+7f8a66f000-7f8a6c1000 r-xp 00000000 b3:06 2034                           /usr/lib/gstreamer-1.0/libgstvideo4linux2.so
+7f8a6c1000-7f8a6c3000 r--p 00052000 b3:06 2034                           /usr/lib/gstreamer-1.0/libgstvideo4linux2.so
+7f8a6c3000-7f8a6c4000 rw-p 00054000 b3:06 2034                           /usr/lib/gstreamer-1.0/libgstvideo4linux2.so
+7f8a6c4000-7f8a6d8000 r-xp 00000000 b3:06 1976                           /usr/lib/gstreamer-1.0/libgstcoretracers.so
+7f8a6d8000-7f8a6d9000 r--p 00014000 b3:06 1976                           /usr/lib/gstreamer-1.0/libgstcoretracers.so
+7f8a6d9000-7f8a6da000 rw-p 00015000 b3:06 1976                           /usr/lib/gstreamer-1.0/libgstcoretracers.so
+7f8a6da000-7f8a6dc000 rw-p 00000000 00:00 0
+7f8a6dc000-7f8a6e4000 r-xp 00000000 b3:06 2260                           /usr/lib/libffi.so.8.1.2
+7f8a6e4000-7f8a6e5000 r--p 00007000 b3:06 2260                           /usr/lib/libffi.so.8.1.2
+7f8a6e5000-7f8a6e6000 rw-p 00008000 b3:06 2260                           /usr/lib/libffi.so.8.1.2
+7f8a6e6000-7f8a73b000 r-xp 00000000 b3:06 2662                           /usr/lib/libpcre2-8.so.0.11.2
+7f8a73b000-7f8a73c000 r--p 00054000 b3:06 2662                           /usr/lib/libpcre2-8.so.0.11.2
+7f8a73c000-7f8a73d000 rw-p 00055000 b3:06 2662                           /usr/lib/libpcre2-8.so.0.11.2
+7f8a73d000-7f8a73f000 rw-p 00000000 00:00 0
+7f8a73f000-7f8a7cb000 r-xp 00000000 b3:06 2505                           /usr/lib/libm.so.6
+7f8a7cb000-7f8a7cc000 r--p 0008b000 b3:06 2505                           /usr/lib/libm.so.6
+7f8a7cc000-7f8a7cd000 rw-p 0008c000 b3:06 2505                           /usr/lib/libm.so.6
+7f8a7cd000-7f8a7d0000 r-xp 00000000 b3:06 2301                           /usr/lib/libgmodule-2.0.so.0.7600.1
+7f8a7d0000-7f8a7d1000 r--p 00002000 b3:06 2301                           /usr/lib/libgmodule-2.0.so.0.7600.1
+7f8a7d1000-7f8a7d2000 rw-p 00003000 b3:06 2301                           /usr/lib/libgmodule-2.0.so.0.7600.1
+7f8a7d2000-7f8a958000 r-xp 00000000 b3:06 2169                           /usr/lib/libc.so.6
+7f8a958000-7f8a95b000 r--p 00186000 b3:06 2169                           /usr/lib/libc.so.6
+7f8a95b000-7f8a95d000 rw-p 00189000 b3:06 2169                           /usr/lib/libc.so.6
+7f8a95d000-7f8a96a000 rw-p 00000000 00:00 0
+7f8a96a000-7f8a9cc000 r-xp 00000000 b3:06 2319                           /usr/lib/libgobject-2.0.so.0.7600.1
+7f8a9cc000-7f8a9cf000 r--p 00061000 b3:06 2319                           /usr/lib/libgobject-2.0.so.0.7600.1
+7f8a9cf000-7f8a9d0000 rw-p 00064000 b3:06 2319                           /usr/lib/libgobject-2.0.so.0.7600.1
+7f8a9d0000-7f8a9d1000 rw-p 00000000 00:00 0
+7f8a9d1000-7f8ab1b000 r-xp 00000000 b3:06 2298                           /usr/lib/libglib-2.0.so.0.7600.1
+7f8ab1b000-7f8ab1c000 r--p 0014a000 b3:06 2298                           /usr/lib/libglib-2.0.so.0.7600.1
+7f8ab1c000-7f8ab1d000 rw-p 0014b000 b3:06 2298                           /usr/lib/libglib-2.0.so.0.7600.1
+7f8ab1d000-7f8ab1e000 rw-p 00000000 00:00 0
+7f8ab1e000-7f8ac3d000 r-xp 00000000 b3:06 2394                           /usr/lib/libgstreamer-1.0.so.0.2411.0
+7f8ac3d000-7f8ac44000 r--p 0011f000 b3:06 2394                           /usr/lib/libgstreamer-1.0.so.0.2411.0
+7f8ac44000-7f8ac46000 rw-p 00126000 b3:06 2394                           /usr/lib/libgstreamer-1.0.so.0.2411.0
+7f8ac46000-7f8ac47000 rw-p 00000000 00:00 0
+7f8ac52000-7f8ac54000 rw-p 00000000 00:00 0
+7f8ac54000-7f8ac56000 r--p 00000000 00:00 0                              [vvar]
+7f8ac56000-7f8ac57000 r-xp 00000000 00:00 0                              [vdso]
+7f8ac57000-7f8ac7e000 r-xp 00000000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f8ac7e000-7f8ac80000 r--p 00026000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f8ac80000-7f8ac81000 rw-p 00028000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f8ac81000-7f8ac82000 rw-p 00000000 00:00 0
+7fe12cf000-7fe12f0000 rw-p 00000000 00:00 0                              [stack]

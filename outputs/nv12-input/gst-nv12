@@ -1,0 +1,3 @@
+#!/bin/sh
+export LD_PRELOAD=/userdata/rtctrl-video-preview/reuse-test/nv12_probe.so
+exec /usr/bin/gst-launch-1.0 "$@"

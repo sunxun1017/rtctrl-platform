@@ -1,0 +1,12 @@
+--- a/gst/rockchipmpp/gstmppenc.c
++++ b/gst/rockchipmpp/gstmppenc.c
+@@ -496,7 +496,8 @@
+   if (!self->allocator)
+     return FALSE;
+
+-  gst_mpp_allocator_set_cacheable (self->allocator, FALSE);
++  gst_mpp_allocator_set_cacheable (self->allocator,
++      g_strcmp0 (g_getenv ("RTCTRL_MPP_REUSE"), "1") == 0);
+
+   if (mpp_create (&self->mpp_ctx, &self->mpi))
+     goto err_unref_alloc;

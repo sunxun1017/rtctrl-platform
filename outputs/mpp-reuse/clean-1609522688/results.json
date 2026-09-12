@@ -1,0 +1,68 @@
+[
+  {
+    "mode": "hardware",
+    "seconds": 20.09245059299792,
+    "samples": 20,
+    "fps": 30.06104194231488,
+    "cpu_percent_one_core": 35.48596507428893,
+    "combined_rss_kb": 36616,
+    "mean_jpeg_bytes": 50314.15,
+    "label": "off-1",
+    "cpu_ms_per_frame": 11.804635761589404
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.0949924680026,
+    "samples": 20,
+    "fps": 30.057239432249276,
+    "cpu_percent_one_core": 32.54542150445535,
+    "combined_rss_kb": 35660,
+    "mean_jpeg_bytes": 49461.8,
+    "label": "on-1",
+    "cpu_ms_per_frame": 10.827814569536427
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.0914530930022,
+    "samples": 20,
+    "fps": 30.06253441222584,
+    "cpu_percent_one_core": 33.546602969934135,
+    "combined_rss_kb": 35520,
+    "mean_jpeg_bytes": 49867.05,
+    "label": "on-2",
+    "cpu_ms_per_frame": 11.158940397350994
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.094021510001767,
+    "samples": 20,
+    "fps": 30.058691820318792,
+    "cpu_percent_one_core": 35.73202107117366,
+    "combined_rss_kb": 35428,
+    "mean_jpeg_bytes": 49840.6,
+    "label": "off-2",
+    "cpu_ms_per_frame": 11.887417218543046
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.094896801001596,
+    "samples": 20,
+    "fps": 30.057382527582558,
+    "cpu_percent_one_core": 35.28258975505966,
+    "combined_rss_kb": 35716,
+    "mean_jpeg_bytes": 49835.75,
+    "label": "off-3",
+    "cpu_ms_per_frame": 11.73841059602649
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.093796633998863,
+    "samples": 20,
+    "fps": 30.0590282166003,
+    "cpu_percent_one_core": 34.28918947224769,
+    "combined_rss_kb": 35588,
+    "mean_jpeg_bytes": 49995.35,
+    "label": "on-3",
+    "cpu_ms_per_frame": 11.407284768211921
+  }
+]

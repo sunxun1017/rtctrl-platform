@@ -1,0 +1,3 @@
+Couldn't synthesize bpf events.
+[ perf record: Woken up 393627 times to write data ]
+[ perf record: Captured and wrote 0.074 MB /userdata/rtctrl-video-preview/reuse-test/nv12-1609523792/on-2/perf.data (226 samples) ]

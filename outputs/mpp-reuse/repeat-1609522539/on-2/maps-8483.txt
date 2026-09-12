@@ -1,0 +1,115 @@
+5559d25000-5559d26000 r-xp 00000000 b3:06 1569                           /usr/bin/python3.11
+5559d26000-5559d27000 r--p 00000000 b3:06 1569                           /usr/bin/python3.11
+5559d27000-5559d28000 rw-p 00001000 b3:06 1569                           /usr/bin/python3.11
+55806c0000-55809b5000 rw-p 00000000 00:00 0                              [heap]
+7f68000000-7f68021000 rw-p 00000000 00:00 0
+7f68021000-7f6c000000 ---p 00000000 00:00 0
+7f70000000-7f70021000 rw-p 00000000 00:00 0
+7f70021000-7f74000000 ---p 00000000 00:00 0
+7f74000000-7f74021000 rw-p 00000000 00:00 0
+7f74021000-7f78000000 ---p 00000000 00:00 0
+7f7afe0000-7f7aff0000 ---p 00000000 00:00 0
+7f7aff0000-7f7b7f0000 rw-p 00000000 00:00 0
+7f7b7f0000-7f7b800000 ---p 00000000 00:00 0
+7f7b800000-7f7c065000 rw-p 00000000 00:00 0
+7f7c065000-7f80000000 ---p 00000000 00:00 0
+7f8015b000-7f80163000 rw-p 00000000 00:00 0
+7f80163000-7f80173000 ---p 00000000 00:00 0
+7f80173000-7f80977000 rw-p 00000000 00:00 0
+7f80977000-7f80987000 ---p 00000000 00:00 0
+7f80987000-7f81187000 rw-p 00000000 00:00 0
+7f81187000-7f81299000 r-xp 00000000 b3:06 5426                           /usr/lib/python3.11/lib-dynload/unicodedata.cpython-311-aarch64-linux-gnu.so
+7f81299000-7f8129a000 r--p 00112000 b3:06 5426                           /usr/lib/python3.11/lib-dynload/unicodedata.cpython-311-aarch64-linux-gnu.so
+7f8129a000-7f8129b000 rw-p 00113000 b3:06 5426                           /usr/lib/python3.11/lib-dynload/unicodedata.cpython-311-aarch64-linux-gnu.so
+7f8129b000-7f8129f000 r-xp 00000000 b3:06 5395                           /usr/lib/python3.11/lib-dynload/_posixsubprocess.cpython-311-aarch64-linux-gnu.so
+7f8129f000-7f812a0000 r--p 00004000 b3:06 5395                           /usr/lib/python3.11/lib-dynload/_posixsubprocess.cpython-311-aarch64-linux-gnu.so
+7f812a0000-7f812a1000 rw-p 00005000 b3:06 5395                           /usr/lib/python3.11/lib-dynload/_posixsubprocess.cpython-311-aarch64-linux-gnu.so
+7f812a1000-7f812a5000 r-xp 00000000 b3:06 5414                           /usr/lib/python3.11/lib-dynload/fcntl.cpython-311-aarch64-linux-gnu.so
+7f812a5000-7f812a6000 r--p 00003000 b3:06 5414                           /usr/lib/python3.11/lib-dynload/fcntl.cpython-311-aarch64-linux-gnu.so
+7f812a6000-7f812a7000 rw-p 00004000 b3:06 5414                           /usr/lib/python3.11/lib-dynload/fcntl.cpython-311-aarch64-linux-gnu.so
+7f812a7000-7f813a7000 rw-p 00000000 00:00 0
+7f813a7000-7f813d2000 r-xp 00000000 b3:06 2504                           /usr/lib/liblzma.so.5.4.5
+7f813d2000-7f813d3000 r--p 0002b000 b3:06 2504                           /usr/lib/liblzma.so.5.4.5
+7f813d3000-7f813d4000 rw-p 0002c000 b3:06 2504                           /usr/lib/liblzma.so.5.4.5
+7f813d5000-7f813dd000 r-xp 00000000 b3:06 5386                           /usr/lib/python3.11/lib-dynload/_json.cpython-311-aarch64-linux-gnu.so
+7f813dd000-7f813de000 r--p 00007000 b3:06 5386                           /usr/lib/python3.11/lib-dynload/_json.cpython-311-aarch64-linux-gnu.so
+7f813de000-7f813df000 rw-p 00008000 b3:06 5386                           /usr/lib/python3.11/lib-dynload/_json.cpython-311-aarch64-linux-gnu.so
+7f813df000-7f813ef000 r-xp 00000000 b3:06 2168                           /usr/lib/libbz2.so.1.0.8
+7f813ef000-7f813f0000 r--p 0000f000 b3:06 2168                           /usr/lib/libbz2.so.1.0.8
+7f813f0000-7f813f1000 rw-p 00010000 b3:06 2168                           /usr/lib/libbz2.so.1.0.8
+7f813f2000-7f813fa000 r-xp 00000000 b3:06 5388                           /usr/lib/python3.11/lib-dynload/_lzma.cpython-311-aarch64-linux-gnu.so
+7f813fa000-7f813fb000 r--p 00007000 b3:06 5388                           /usr/lib/python3.11/lib-dynload/_lzma.cpython-311-aarch64-linux-gnu.so
+7f813fb000-7f813fc000 rw-p 00008000 b3:06 5388                           /usr/lib/python3.11/lib-dynload/_lzma.cpython-311-aarch64-linux-gnu.so
+7f813fc000-7f81400000 r-xp 00000000 b3:06 5368                           /usr/lib/python3.11/lib-dynload/_bz2.cpython-311-aarch64-linux-gnu.so
+7f81400000-7f81401000 r--p 00004000 b3:06 5368                           /usr/lib/python3.11/lib-dynload/_bz2.cpython-311-aarch64-linux-gnu.so
+7f81401000-7f81402000 rw-p 00005000 b3:06 5368                           /usr/lib/python3.11/lib-dynload/_bz2.cpython-311-aarch64-linux-gnu.so
+7f81402000-7f8186d000 r-xp 00000000 b3:06 2189                           /usr/lib/libcrypto.so.3
+7f8186d000-7f818c7000 r--p 0046a000 b3:06 2189                           /usr/lib/libcrypto.so.3
+7f818c7000-7f818ca000 rw-p 004c4000 b3:06 2189                           /usr/lib/libcrypto.so.3
+7f818ca000-7f818cd000 rw-p 00000000 00:00 0
+7f818cd000-7f819a6000 r-xp 00000000 b3:06 2792                           /usr/lib/libssl.so.3
+7f819a6000-7f819b1000 r--p 000d8000 b3:06 2792                           /usr/lib/libssl.so.3
+7f819b1000-7f819b5000 rw-p 000e3000 b3:06 2792                           /usr/lib/libssl.so.3
+7f819b5000-7f819e4000 r-xp 00000000 b3:06 5404                           /usr/lib/python3.11/lib-dynload/_ssl.cpython-311-aarch64-linux-gnu.so
+7f819e4000-7f819e5000 r--p 0002f000 b3:06 5404                           /usr/lib/python3.11/lib-dynload/_ssl.cpython-311-aarch64-linux-gnu.so
+7f819e5000-7f819ed000 rw-p 00030000 b3:06 5404                           /usr/lib/python3.11/lib-dynload/_ssl.cpython-311-aarch64-linux-gnu.so
+7f819ed000-7f81aed000 rw-p 00000000 00:00 0
+7f81aed000-7f81b01000 r-xp 00000000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f81b01000-7f81b02000 r--p 00013000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f81b02000-7f81b03000 rw-p 00014000 b3:06 2913                           /usr/lib/libz.so.1.3.1
+7f81b03000-7f81b0c000 r-xp 00000000 b3:06 5429                           /usr/lib/python3.11/lib-dynload/zlib.cpython-311-aarch64-linux-gnu.so
+7f81b0c000-7f81b0d000 r--p 00008000 b3:06 5429                           /usr/lib/python3.11/lib-dynload/zlib.cpython-311-aarch64-linux-gnu.so
+7f81b0d000-7f81b0e000 rw-p 00009000 b3:06 5429                           /usr/lib/python3.11/lib-dynload/zlib.cpython-311-aarch64-linux-gnu.so
+7f81b0e000-7f81b14000 r-xp 00000000 b3:06 5412                           /usr/lib/python3.11/lib-dynload/binascii.cpython-311-aarch64-linux-gnu.so
+7f81b14000-7f81b15000 r--p 00005000 b3:06 5412                           /usr/lib/python3.11/lib-dynload/binascii.cpython-311-aarch64-linux-gnu.so
+7f81b15000-7f81b16000 rw-p 00006000 b3:06 5412                           /usr/lib/python3.11/lib-dynload/binascii.cpython-311-aarch64-linux-gnu.so
+7f81b16000-7f81b20000 r-xp 00000000 b3:06 5406                           /usr/lib/python3.11/lib-dynload/_struct.cpython-311-aarch64-linux-gnu.so
+7f81b20000-7f81b21000 r--p 0000a000 b3:06 5406                           /usr/lib/python3.11/lib-dynload/_struct.cpython-311-aarch64-linux-gnu.so
+7f81b21000-7f81b22000 rw-p 0000b000 b3:06 5406                           /usr/lib/python3.11/lib-dynload/_struct.cpython-311-aarch64-linux-gnu.so
+7f81b22000-7f81c22000 rw-p 00000000 00:00 0
+7f81c22000-7f81c2f000 r-xp 00000000 b3:06 5410                           /usr/lib/python3.11/lib-dynload/array.cpython-311-aarch64-linux-gnu.so
+7f81c2f000-7f81c30000 r--p 0000d000 b3:06 5410                           /usr/lib/python3.11/lib-dynload/array.cpython-311-aarch64-linux-gnu.so
+7f81c30000-7f81c31000 rw-p 0000e000 b3:06 5410                           /usr/lib/python3.11/lib-dynload/array.cpython-311-aarch64-linux-gnu.so
+7f81c31000-7f81c38000 r-xp 00000000 b3:06 5422                           /usr/lib/python3.11/lib-dynload/select.cpython-311-aarch64-linux-gnu.so
+7f81c38000-7f81c39000 r--p 00006000 b3:06 5422                           /usr/lib/python3.11/lib-dynload/select.cpython-311-aarch64-linux-gnu.so
+7f81c39000-7f81c3a000 rw-p 00007000 b3:06 5422                           /usr/lib/python3.11/lib-dynload/select.cpython-311-aarch64-linux-gnu.so
+7f81c3a000-7f81c52000 r-xp 00000000 b3:06 5402                           /usr/lib/python3.11/lib-dynload/_socket.cpython-311-aarch64-linux-gnu.so
+7f81c52000-7f81c53000 r--p 00017000 b3:06 5402                           /usr/lib/python3.11/lib-dynload/_socket.cpython-311-aarch64-linux-gnu.so
+7f81c53000-7f81c54000 rw-p 00018000 b3:06 5402                           /usr/lib/python3.11/lib-dynload/_socket.cpython-311-aarch64-linux-gnu.so
+7f81c54000-7f81c59000 r-xp 00000000 b3:06 5401                           /usr/lib/python3.11/lib-dynload/_sha512.cpython-311-aarch64-linux-gnu.so
+7f81c59000-7f81c5a000 r--p 00005000 b3:06 5401                           /usr/lib/python3.11/lib-dynload/_sha512.cpython-311-aarch64-linux-gnu.so
+7f81c5a000-7f81c5b000 rw-p 00006000 b3:06 5401                           /usr/lib/python3.11/lib-dynload/_sha512.cpython-311-aarch64-linux-gnu.so
+7f81c5b000-7f81c5e000 r-xp 00000000 b3:06 5397                           /usr/lib/python3.11/lib-dynload/_random.cpython-311-aarch64-linux-gnu.so
+7f81c5e000-7f81c5f000 r--p 00002000 b3:06 5397                           /usr/lib/python3.11/lib-dynload/_random.cpython-311-aarch64-linux-gnu.so
+7f81c5f000-7f81c60000 rw-p 00003000 b3:06 5397                           /usr/lib/python3.11/lib-dynload/_random.cpython-311-aarch64-linux-gnu.so
+7f81c60000-7f81c77000 r-xp 00000000 b3:06 5381                           /usr/lib/python3.11/lib-dynload/_datetime.cpython-311-aarch64-linux-gnu.so
+7f81c77000-7f81c78000 r--p 00016000 b3:06 5381                           /usr/lib/python3.11/lib-dynload/_datetime.cpython-311-aarch64-linux-gnu.so
+7f81c78000-7f81c7a000 rw-p 00017000 b3:06 5381                           /usr/lib/python3.11/lib-dynload/_datetime.cpython-311-aarch64-linux-gnu.so
+7f81c7a000-7f81c88000 r-xp 00000000 b3:06 5416                           /usr/lib/python3.11/lib-dynload/math.cpython-311-aarch64-linux-gnu.so
+7f81c88000-7f81c89000 r--p 0000d000 b3:06 5416                           /usr/lib/python3.11/lib-dynload/math.cpython-311-aarch64-linux-gnu.so
+7f81c89000-7f81c8a000 rw-p 0000e000 b3:06 5416                           /usr/lib/python3.11/lib-dynload/math.cpython-311-aarch64-linux-gnu.so
+7f81c8a000-7f8201f000 rw-p 00000000 00:00 0
+7f8201f000-7f8230b000 r--p 00000000 b3:06 2929                           /usr/lib/locale/locale-archive
+7f8230b000-7f8230d000 rw-p 00000000 00:00 0
+7f8230d000-7f82493000 r-xp 00000000 b3:06 2169                           /usr/lib/libc.so.6
+7f82493000-7f82496000 r--p 00186000 b3:06 2169                           /usr/lib/libc.so.6
+7f82496000-7f82498000 rw-p 00189000 b3:06 2169                           /usr/lib/libc.so.6
+7f82498000-7f824a5000 rw-p 00000000 00:00 0
+7f824a5000-7f82531000 r-xp 00000000 b3:06 2505                           /usr/lib/libm.so.6
+7f82531000-7f82532000 r--p 0008b000 b3:06 2505                           /usr/lib/libm.so.6
+7f82532000-7f82533000 rw-p 0008c000 b3:06 2505                           /usr/lib/libm.so.6
+7f82533000-7f8290e000 r-xp 00000000 b3:06 2702                           /usr/lib/libpython3.11.so.1.0
+7f8290e000-7f8293f000 r--p 003da000 b3:06 2702                           /usr/lib/libpython3.11.so.1.0
+7f8293f000-7f82a62000 rw-p 0040b000 b3:06 2702                           /usr/lib/libpython3.11.so.1.0
+7f82a62000-7f82aa5000 rw-p 00000000 00:00 0
+7f82aa7000-7f82aaa000 r-xp 00000000 b3:06 5366                           /usr/lib/python3.11/lib-dynload/_bisect.cpython-311-aarch64-linux-gnu.so
+7f82aaa000-7f82aab000 r--p 00003000 b3:06 5366                           /usr/lib/python3.11/lib-dynload/_bisect.cpython-311-aarch64-linux-gnu.so
+7f82aab000-7f82aac000 rw-p 00004000 b3:06 5366                           /usr/lib/python3.11/lib-dynload/_bisect.cpython-311-aarch64-linux-gnu.so
+7f82aac000-7f82ab2000 rw-p 00000000 00:00 0
+7f82ab2000-7f82ab4000 r--p 00000000 00:00 0                              [vvar]
+7f82ab4000-7f82ab5000 r-xp 00000000 00:00 0                              [vdso]
+7f82ab5000-7f82adc000 r-xp 00000000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f82adc000-7f82ade000 r--p 00026000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f82ade000-7f82adf000 rw-p 00028000 b3:06 2049                           /usr/lib/ld-linux-aarch64.so.1
+7f82adf000-7f82ae0000 rw-p 00000000 00:00 0
+7fdc5d5000-7fdc5f6000 rw-p 00000000 00:00 0                              [stack]

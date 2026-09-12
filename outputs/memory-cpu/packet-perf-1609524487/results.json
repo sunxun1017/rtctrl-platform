@@ -1,0 +1,48 @@
+[
+  {
+    "mode": "hardware",
+    "seconds": 20.305675260002317,
+    "samples": 20,
+    "fps": 29.991615260369848,
+    "cpu_percent_one_core": 9.504731929805224,
+    "combined_rss_kb": 30344,
+    "mean_jpeg_bytes": 48214.2,
+    "label": "zero1",
+    "cpu_ms_per_frame": 3.169129720853859,
+    "memory": {
+      "pss_mean_kb": 22357.6,
+      "pss_min_kb": 22314,
+      "pss_max_kb": 22382,
+      "dma_min_bytes": 13058048,
+      "dma_max_bytes": 13058048,
+      "dma_objects_min": 5,
+      "dma_objects_max": 5,
+      "npu_loads": [
+        "NPU load:  0%"
+      ]
+    }
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.299747426997783,
+    "samples": 20,
+    "fps": 30.000373265238583,
+    "cpu_percent_one_core": 8.078918252051112,
+    "combined_rss_kb": 30752,
+    "mean_jpeg_bytes": 48144.25,
+    "label": "zero0",
+    "cpu_ms_per_frame": 2.6929392446633824,
+    "memory": {
+      "pss_mean_kb": 22499.5,
+      "pss_min_kb": 22469,
+      "pss_max_kb": 22521,
+      "dma_min_bytes": 12017664,
+      "dma_max_bytes": 12017664,
+      "dma_objects_min": 4,
+      "dma_objects_max": 4,
+      "npu_loads": [
+        "NPU load:  0%"
+      ]
+    }
+  }
+]

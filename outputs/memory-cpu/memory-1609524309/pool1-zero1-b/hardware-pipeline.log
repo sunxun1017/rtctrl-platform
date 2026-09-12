@@ -1,0 +1,11 @@
+mpp[30623]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[30623]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[30623]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[30623]: mpp: unable to create enc vp8 for soc rv1126b unsupported
+mpp[30623]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[30623]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[30623]: mpp: Only rk3588's h264/265/jpeg and rk3576's h264/265 encoder can use frame parallel
+mpp[30623]: mpp_enc: MPP_ENC_SET_RC_CFG bps 10252800 [9612000 : 10893600] fps [120:120] gop 120
+RTCTRL_PROBE input memories=1
+RTCTRL_PROBE memory=0 dmabuf=1 size=4967424 offset=0 maxsize=4967424
+RTCTRL_PROBE RGA source=dmabuf-fd

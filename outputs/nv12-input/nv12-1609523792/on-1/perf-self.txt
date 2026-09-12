@@ -1,0 +1,150 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 227  of event 'cpu-clock'
+# Event count (approx.): 2292929270
+#
+# Overhead  Command          Shared Object                     Symbol
+# ........  ...............  ................................  .......................................
+#
+    19.38%  mppjpegenc0:src  [kernel.kallsyms]                 [k] __arch_copy_from_user
+     5.29%  mppjpegenc0:src  [kernel.kallsyms]                 [k] __pi_dcache_clean_poc
+     4.41%  python3          libpython3.11.so.1.0              [.] _PyEval_EvalFrameDefault
+     3.52%  queue0:src       [kernel.kallsyms]                 [k] __pi_clear_page
+     3.08%  python3          libpython3.11.so.1.0              [.] 0x00000000002ce4b4
+     1.76%  queue0:src       [kernel.kallsyms]                 [k] __pi_dcache_clean_poc
+     1.32%  mpp_mjpege_231   librockchip_mpp.so.0              [.] jpege_bits_put
+     1.32%  python3          libc.so.6                         [.] 0x000000000009ddc8
+     1.32%  python3          libc.so.6                         [.] 0x000000000009ddd4
+     1.32%  python3          libpython3.11.so.1.0              [.] 0x00000000002ce4ac
+     1.32%  queue0:src       [kernel.kallsyms]                 [k] __pi_dcache_inval_poc
+     0.88%  mppjpegenc0:src  [kernel.kallsyms]                 [k] unmap_page_range
+     0.88%  python3          libpython3.11.so.1.0              [.] 0x00000000002ce4b0
+     0.88%  queue0:src       [kernel.kallsyms]                 [k] rga2_set_reg
+     0.88%  queue0:src       [kernel.kallsyms]                 [k] rk_iommu_map
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] __fget_light
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] __iommu_map_sg
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] __kmem_cache_alloc_node
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] iommu_dma_map_sg
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] kthread_queue_work
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] mpp_dma_import_fd
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] rk_iommu_map
+     0.44%  mpp_mjpege_231   [kernel.kallsyms]                 [k] rkvenc_alloc_task
+     0.44%  mpp_mjpege_231   librockchip_mpp.so.0              [.] hal_jpege_vepu511_get_task
+     0.44%  mpp_mjpege_231   librockchip_mpp.so.0              [.] mpp_frame_get_buffer
+     0.44%  mpp_mjpege_231   librockchip_mpp.so.0              [.] rc_model_v2_hal_start
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] __ext4_journal_get_write_access
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] __find_get_block
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] __free_pages_ok
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] dma_buf_release
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] handle_softirqs
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] iommu_dma_unmap_sg
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] mas_find
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] mas_wr_store_entry.isra.0
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] mlock_page_drain_local
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] pipe_write
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] plist_add
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] ring_buffer_event_data
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] ring_buffer_lock_reserve
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] rk_iommu_unmap
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] sg_next
+     0.44%  mppjpegenc0:src  [kernel.kallsyms]                 [k] sysfs_remove_groups
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x0000000000059a94
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x0000000000059e88
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x000000000005a304
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x0000000000090b18
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x000000000009dcc0
+     0.44%  mppjpegenc0:src  libc.so.6                         [.] 0x000000000012ebbc
+     0.44%  mppjpegenc0:src  libglib-2.0.so.0.7600.1           [.] strlen@plt
+     0.44%  mppjpegenc0:src  libglib-2.0.so.0.7600.1           [.] 0x0000000000039ce0
+     0.44%  mppjpegenc0:src  libgobject-2.0.so.0.7600.1        [.] g_type_check_instance_is_a
+     0.44%  mppjpegenc0:src  libgstbase-1.0.so.0.2411.0        [.] 0x000000000003e7f8
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] g_mutex_lock@plt
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] gst_debug_level_get_name
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] gst_object_ref
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] gst_object_unref
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] gst_pad_push_event
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] 0x0000000000075f24
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] 0x00000000000d55f4
+     0.44%  mppjpegenc0:src  libgstreamer-1.0.so.0.2411.0      [.] 0x00000000000d67dc
+     0.44%  mppjpegenc0:src  libgstrockchipmpp.so              [.] dup@plt
+     0.44%  mppjpegenc0:src  libgstrockchipmpp.so              [.] gst_mpp_allocator_import_mppbuf
+     0.44%  mppjpegenc0:src  libgstrockchipmpp.so              [.] gst_mpp_enc_loop
+     0.44%  mppjpegenc0:src  libgstrockchipmpp.so              [.] mpp_buffer_get_size_with_caller@plt
+     0.44%  mppjpegenc0:src  libgstvideo4linux2.so             [.] gst_buffer_n_memory@plt
+     0.44%  mppjpegenc0:src  libgstvideo4linux2.so             [.] 0x000000000001fad8
+     0.44%  mppjpegenc0:src  librockchip_mpp.so.0              [.] _ZN3Mpp10get_packetEPPv
+     0.44%  mppjpegenc0:src  librockchip_mpp.so.0              [.] _ZN3Mpp9put_frameEPv@plt
+     0.44%  mppjpegenc0:src  librockchip_mpp.so.0              [.] mpp_mem_pool_get@plt
+     0.44%  python3          [kernel.kallsyms]                 [k] __arch_copy_to_user
+     0.44%  python3          [kernel.kallsyms]                 [k] __mod_timer
+     0.44%  python3          [kernel.kallsyms]                 [k] futex_wait_setup
+     0.44%  python3          [kernel.kallsyms]                 [k] ip_rcv_core
+     0.44%  python3          [kernel.kallsyms]                 [k] ip_skb_dst_mtu
+     0.44%  python3          [kernel.kallsyms]                 [k] skb_push
+     0.44%  python3          [kernel.kallsyms]                 [k] tcp_sendmsg_locked
+     0.44%  python3          [kernel.kallsyms]                 [k] tcp_write_xmit
+     0.44%  python3          libc.so.6                         [.] cfree
+     0.44%  python3          libc.so.6                         [.] pthread_cond_signal
+     0.44%  python3          libc.so.6                         [.] pthread_mutex_lock
+     0.44%  python3          libc.so.6                         [.] 0x0000000000090aa0
+     0.44%  python3          libc.so.6                         [.] 0x0000000000092400
+     0.44%  python3          libpython3.11.so.1.0              [.] PyMem_RawMalloc@plt
+     0.44%  python3          libpython3.11.so.1.0              [.] PyObject_GetItem@plt
+     0.44%  python3          libpython3.11.so.1.0              [.] PySequence_Check
+     0.44%  python3          libpython3.11.so.1.0              [.] PySequence_GetItem
+     0.44%  python3          libpython3.11.so.1.0              [.] _PyObject_Call@plt
+     0.44%  python3          libpython3.11.so.1.0              [.] _Py_Dealloc@plt
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x000000000013d640
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x000000000017f3fc
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x000000000017f458
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x000000000019d0f8
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x00000000001d5910
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x000000000021f900
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x0000000000240ec0
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x0000000000292ccc
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x00000000002a7980
+     0.44%  python3          libpython3.11.so.1.0              [.] 0x00000000002cd048
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] __kmalloc_node_track_caller
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] __kmem_cache_alloc_node
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] __radix_tree_delete
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] arch_local_irq_enable
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] arch_local_irq_save
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] el0_svc_common.constprop.0
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] fd_install
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] idr_get_free
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] kmem_cache_alloc_lru
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] radix_tree_iter_replace
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] rga_mm_map_job_info
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] ring_buffer_unlock_commit
+     0.44%  queue0:src       [kernel.kallsyms]                 [k] wake_q_add_safe
+     0.44%  queue0:src       libc.so.6                         [.] malloc
+     0.44%  queue0:src       libc.so.6                         [.] 0x0000000000078990
+     0.44%  queue0:src       libc.so.6                         [.] 0x0000000000091bd0
+     0.44%  queue0:src       libglib-2.0.so.0.7600.1           [.] g_hash_table_lookup
+     0.44%  queue0:src       libgstallocators-1.0.so.0.2411.0  [.] gst_fd_allocator_alloc
+     0.44%  queue0:src       libgstcoreelements.so             [.] 0x0000000000047090
+     0.44%  queue0:src       libgstrockchipmpp.so              [.] gst_mpp_allocator_get_type
+     0.44%  queue0:src       librga.so.2.1.0                   [.] _Z11isRectValid8rga_rect
+     0.44%  queue0:src       librga.so.2.1.0                   [.] _Z23NormalRgaFormatHasAlphai
+     0.44%  queue0:src       librockchip_mpp.so.0              [.] mpp_mem_pool_get
+     0.44%  queue0:src       nv12_probe.so                     [.] ioctl
+     0.44%  v4l2src0:src     [kernel.kallsyms]                 [k] fpsimd_restore_current_state
+     0.44%  v4l2src0:src     libgstbase-1.0.so.0.2411.0        [.] 0x000000000003f804
+     0.44%  v4l2src0:src     libgstbase-1.0.so.0.2411.0        [.] 0x000000000003fe98
+     0.44%  v4l2src0:src     libgstbase-1.0.so.0.2411.0        [.] 0x000000000004c7c0
+     0.44%  v4l2src0:src     libgstbase-1.0.so.0.2411.0        [.] 0x0000000000059320
+     0.44%  v4l2src0:src     libgstcoreelements.so             [.] gst_mini_object_ref@plt
+     0.44%  v4l2src0:src     libgstreamer-1.0.so.0.2411.0      [.] gst_memory_resize
+     0.44%  v4l2src0:src     libgstreamer-1.0.so.0.2411.0      [.] gst_mini_object_unref
+     0.44%  v4l2src0:src     libgstreamer-1.0.so.0.2411.0      [.] gst_object_ref
+     0.44%  v4l2src0:src     libgstreamer-1.0.so.0.2411.0      [.] 0x00000000000828d8
+     0.44%  v4l2src0:src     libgstreamer-1.0.so.0.2411.0      [.] 0x00000000000a8140
+     0.44%  v4l2src0:src     libgstvideo4linux2.so             [.] 0x0000000000022200
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

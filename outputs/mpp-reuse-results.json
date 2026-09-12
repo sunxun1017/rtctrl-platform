@@ -1,0 +1,47 @@
+[
+  {
+    "mode": "hardware",
+    "seconds": 20.096412592996785,
+    "samples": 20,
+    "fps": 30.154635669212894,
+    "cpu_percent_one_core": 33.687604534747734,
+    "combined_rss_kb": 40652,
+    "mean_jpeg_bytes": 46593.2,
+    "pipeline_latency_mean_ms": 13.790705802047782,
+    "pipeline_latency_p95_ms": 14.601125,
+    "pipeline_latency_samples": 586,
+    "label": "system",
+    "allocations": 604,
+    "releases": 603
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.091970217999915,
+    "samples": 20,
+    "fps": 30.161302919765387,
+    "cpu_percent_one_core": 34.4416198357717,
+    "combined_rss_kb": 41736,
+    "mean_jpeg_bytes": 47019.65,
+    "pipeline_latency_mean_ms": 14.011074445945946,
+    "pipeline_latency_p95_ms": 14.515375,
+    "pipeline_latency_samples": 592,
+    "label": "rebuilt-off",
+    "allocations": 604,
+    "releases": 603
+  },
+  {
+    "mode": "hardware",
+    "seconds": 20.095983843002614,
+    "samples": 20,
+    "fps": 30.15527902163437,
+    "cpu_percent_one_core": 33.83760682295606,
+    "combined_rss_kb": 40280,
+    "mean_jpeg_bytes": 47045.6,
+    "pipeline_latency_mean_ms": 13.7798135443686,
+    "pipeline_latency_p95_ms": 14.319667,
+    "pipeline_latency_samples": 586,
+    "label": "rebuilt-on",
+    "allocations": 0,
+    "releases": 0
+  }
+]
