@@ -24,3 +24,11 @@
 - 结论：帧归还前完成自有 BGR 转换，异步推理只保留最新待处理帧；NV12 的 full/limited 和 BT.601/709 应依据元数据或显式配置，不能默认 OpenCV 限幅转换。空人员库输出 unknown；等待单人登记时检测上限至少为 2。
 - 测试结论：glibc fortified 构建可能调用 `__poll_chk` 而非 `poll`，mock 须同时包装这两个符号，否则伪造 fd 进入真实 poll 导致错误失败；不要以关闭 sanitizer 处理。
 - 失效条件：采集 API、glibc/toolchain、颜色元数据或 BSP 变化时重验。
+
+## 2026-09-12：RV1126B 独立硬件视频预览
+
+- 适用条件：仅采集、缩放、编码、浏览器预览的独立应用。
+- 证据：`apps/video_preview/README.md` 的板端对比；`gst-inspect-1.0 mppjpegenc` 支持 width/height/max-pending，debug 确认 `using RGA converted buffer`。
+- 结论：该 BSP 可使用 V4L2 DMA-BUF、编码器内置 RGA 缩放、MPP JPEG；不需要把原始 NV12 转成 CPU BGR 再编码。不能把硬件缩放或编码包零拷贝属性描述为整个 HTTP 链路零拷贝。
+- 实现注意：厂商库可能向 stdout 写诊断，二进制视频使用独立 FD；板端可缺少 `/proc/PID/task/PID/children`，性能工具用 `/proc/PID/stat` 的父进程字段定位子进程。
+- 失效条件：BSP、插件构建选项、采集格式或尺寸变化时重验；独立预览的结果不代表其他处理应用性能。
