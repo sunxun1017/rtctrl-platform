@@ -30,6 +30,9 @@ class Fake : public inference::Backend {
                                                std::vector<float>(8400),
                                                std::vector<float>(42000)};
     bool ready = false;
+    std::vector<float> floats;
+    std::vector<unsigned char> bytes;
+    bool bad_view = false;
     std::size_t input_count() const noexcept override {
         return 1;
     }
@@ -37,10 +40,18 @@ class Fake : public inference::Backend {
         return input;
     }
     inference::MutableTensorView get_input_buffer(std::size_t) override {
-        return {inference::TensorType::Float32, nullptr, 0};
+        ready = false;
+        floats.resize(input.byte_size() / sizeof(float));
+        bytes.resize(input.byte_size());
+        return {input.type,
+                input.type == inference::TensorType::Float32
+                    ? static_cast<void*>(floats.data())
+                    : static_cast<void*>(bytes.data()),
+                bad_view ? 1 : input.byte_size()};
     }
     bool commit_input(std::size_t) override {
-        return false;
+        ready = true;
+        return true;
     }
     bool
     prepare_input_data(const void* p, std::size_t size, std::size_t i) override {
@@ -86,6 +97,33 @@ int main() {
         Fake f;
         cv::Mat image(320, 320, CV_8UC3, cv::Scalar(3, 2, 1));
         check(face::detect(f, image).empty());
+        check(f.floats[0] == 1 && f.floats[1] == 2 && f.floats[2] == 3);
+        for (auto type :
+             {inference::TensorType::Float32, inference::TensorType::UInt8}) {
+            for (auto layout :
+                 {inference::TensorLayout::NHWC, inference::TensorLayout::NCHW}) {
+                Fake probe;
+                probe.input.type = type;
+                probe.input.layout = layout;
+                if (layout == inference::TensorLayout::NCHW)
+                    probe.input.shape = {1, 3, 320, 320};
+                check(face::detect(probe, image).empty());
+                auto value = [&](size_t i) {
+                    return type == inference::TensorType::UInt8
+                               ? float(probe.bytes[i])
+                               : probe.floats[i];
+                };
+                const size_t step =
+                    layout == inference::TensorLayout::NCHW ? 320 * 320 : 1;
+                check(value(0) == 1 && value(step) == 2 && value(step * 2) == 3);
+                probe.bad_view = true;
+                rejects([&] { face::detect(probe, image); });
+                check(!probe.ready);
+            }
+        }
+        Fake bad_type;
+        bad_type.input.type = inference::TensorType::Int8;
+        rejects([&] { face::detect(bad_type, image); });
         rejects([&] { face::enroll(g, "Test", f, f, image); });
         f.outputs[1][2 * (20 * 40 + 20) * 2 + 1] = .99;
         auto faces = face::detect(f, image);

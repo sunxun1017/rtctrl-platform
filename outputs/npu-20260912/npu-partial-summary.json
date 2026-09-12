@@ -1,0 +1,53 @@
+{
+  "status": "stopped_early_at_user_request",
+  "requested_s": 600,
+  "last_sample_s": 386.00012605899974,
+  "sample_count": 387,
+  "samples_with_faces": 334,
+  "errors": [],
+  "statistics": {
+    "cpu_percent_one_core": {
+      "mean": 192.15542403969582,
+      "min": 189.01248257346307,
+      "max": 197.01272367283033
+    },
+    "VmHWM": {
+      "mean": 57738.687338501295,
+      "min": 53256,
+      "max": 58276
+    },
+    "pss_kb": {
+      "mean": 49691.364341085275,
+      "min": 46829,
+      "max": 55517
+    },
+    "fds": {
+      "mean": 20.912144702842376,
+      "min": 18,
+      "max": 21
+    },
+    "global_dma_bytes": {
+      "mean": 21371234.563307494,
+      "min": 21291008,
+      "max": 21372928
+    },
+    "temperature_c": {
+      "mean": 39.002558139534884,
+      "min": 37.77,
+      "max": 40.3
+    },
+    "npu_load_percent": {
+      "mean": 7.506459948320414,
+      "min": 3,
+      "max": 9
+    },
+    "no_advance_s": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    }
+  },
+  "effective_fps": 10.857802637263788,
+  "pss_first_minute_kb": 48938.7,
+  "pss_last_minute_kb": 49682.54098360656
+}

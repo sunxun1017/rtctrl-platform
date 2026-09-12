@@ -1,0 +1,9 @@
+{
+  "pid": 18658,
+  "binary_sha256": "2c18b1ad804bc405e0f0b6a7b60051e3b653fbdfa5b03c99ccecca349eb274e7",
+  "gallery_unchanged": true,
+  "input_type": "uint8",
+  "jpeg_encoder": "turbojpeg",
+  "processed": 66,
+  "encode_ms": 14.8412
+}

@@ -1,4 +1,5 @@
 #include "digest.hpp"
+#include "jpeg_encoder.hpp"
 #include "pipeline.hpp"
 #include "preview_server.hpp"
 #include "rtctrl/adapters/rknn/backend.hpp"
@@ -31,10 +32,13 @@ double millis(Clock::time_point a, Clock::time_point b) {
 struct Options {
     std::string device, detector, recognizer, gallery, bind = "0.0.0.0", enrollment,
                                                        enrollment_image;
+    std::string jpeg_encoder = "opencv";
     int port = 8080, width = 960, quality = 75, duration = 0, frames = 0,
         max_faces = 8, enrollment_samples = 5;
     float threshold = 0, gap = 0;
     rtctrl::face::VideoColor color;
+    rtctrl::inference::TensorType input_type =
+        rtctrl::inference::TensorType::Float32;
 };
 Options parse(int argc, char** argv) {
     std::map<std::string, std::string> args;
@@ -45,7 +49,8 @@ Options parse(int argc, char** argv) {
     const std::string allowed =
         " --device --detector --recognizer --gallery --threshold --gap --bind "
         "--port --width --quality --duration --frames --max-faces --yuv-matrix "
-        "--yuv-range --enroll-name --enroll-image --enroll-samples ";
+        "--jpeg-encoder --yuv-range --input-type --enroll-name --enroll-image "
+        "--enroll-samples ";
     for (auto& a : args)
         if (allowed.find(" " + a.first + " ") == std::string::npos)
             throw std::runtime_error("unknown option: " + a.first);
@@ -68,6 +73,14 @@ Options parse(int argc, char** argv) {
         return static_cast<int>(v);
     };
     Options o;
+    auto input_type = get("--input-type", "float32");
+    if (input_type == "uint8")
+        o.input_type = rtctrl::inference::TensorType::UInt8;
+    else if (input_type != "float32")
+        throw std::runtime_error("invalid --input-type");
+    o.jpeg_encoder = get("--jpeg-encoder", "opencv");
+    if (o.jpeg_encoder != "opencv" && o.jpeg_encoder != "turbojpeg")
+        throw std::runtime_error("invalid --jpeg-encoder");
     o.device = get("--device");
     o.detector = get("--detector");
     o.recognizer = get("--recognizer");
@@ -214,15 +227,17 @@ int main(int argc, char** argv) {
                    "960 --quality 75 --max-faces 8] [--yuv-matrix auto|bt601|bt709 "
                    "--yuv-range auto|full|limited] [--duration SECONDS --frames "
                    "COUNT] [--enroll-name NAME --enroll-image snapshot "
-                   "--enroll-samples 5]\n";
+                   "--enroll-samples 5] [--input-type float32|uint8] "
+                   "[--jpeg-encoder opencv|turbojpeg]\n";
             return 0;
         }
         auto options = parse(argc, argv);
+        rtctrl::face::JpegEncoder jpeg_encoder(options.jpeg_encoder);
         std::signal(SIGINT, interrupt);
         std::signal(SIGTERM, interrupt);
         cv::setNumThreads(1);
-        rknn::RknnBackend detector(options.detector.c_str()),
-            recognizer(options.recognizer.c_str());
+        rknn::RknnBackend detector(options.detector.c_str(), options.input_type),
+            recognizer(options.recognizer.c_str(), options.input_type);
         rtctrl::face::Gallery gallery;
         if (!options.gallery.empty())
             gallery = rtctrl::face::load_gallery(
@@ -347,15 +362,20 @@ int main(int argc, char** argv) {
                             ? "尚未加载人员库，当前仅检测并显示 unknown"
                             : "相似度不是准确率；当前阈值仍需用独立样本标定")
                  << "}";
-            std::vector<unsigned char> jpeg;
-            if (!cv::imencode(".jpg",
-                              image,
-                              jpeg,
-                              {cv::IMWRITE_JPEG_QUALITY, options.quality}))
-                throw std::runtime_error("JPEG encoding failed");
-            preview.publish(std::move(jpeg), json.str());
+            const auto encode_begin = Clock::now();
+            auto jpeg = jpeg_encoder.encode(image, options.quality);
+            const double encode_ms = millis(encode_begin, Clock::now());
+            // Encoding includes the independent output copy, excludes drawing,
+            // JSON construction, HTTP publishing and inference/processing_ms.
+            auto status = json.str();
+            status.pop_back();
+            std::ostringstream encoded_status;
+            encoded_status << status << ",\"jpeg_encoder\":"
+                           << rtctrl::face::json_string(options.jpeg_encoder)
+                           << ",\"encode_ms\":" << encode_ms << '}';
+            preview.publish(std::move(jpeg), encoded_status.str());
             if (processed == 1 || processed % 30 == 0)
-                std::cout << json.str() << std::endl;
+                std::cout << encoded_status.str() << std::endl;
             if (options.frames && processed >= static_cast<uint64_t>(options.frames))
                 break;
         }

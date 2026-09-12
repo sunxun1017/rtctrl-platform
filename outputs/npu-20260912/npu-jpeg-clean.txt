@@ -1,0 +1,6 @@
+loaded=/usr/lib/libturbojpeg.so.0 capacity=2075648
+opencv bytes=25711 dimensions=960x712 subsampling=2 colorspace=1
+turbojpeg bytes=25711 dimensions=960x712 subsampling=2 colorspace=1
+opencv count=100 total_ms=4906.72 mean_ms=49.0672 median_ms=49.0324 p95_ms=49.3762
+turbojpeg count=100 total_ms=1369.66 mean_ms=13.6966 median_ms=13.685 p95_ms=13.8052
+init_ms=2.02417 input_ms=10.3145 save_ms=0.3535 decode_ms=62.911 decoded_max_delta=0 decoded_mean_abs_delta=0 byte_equal=1

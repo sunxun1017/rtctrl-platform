@@ -18,7 +18,9 @@ void submit(inference::Backend& backend, const cv::Mat& bgr, int side) {
     require(backend.input_count() == 1, "model must have exactly one input");
     const auto& s = backend.input_spec(0);
     using L = inference::TensorLayout;
-    require(s.type == inference::TensorType::Float32, "expected float32 submission");
+    require(s.type == inference::TensorType::Float32 ||
+                s.type == inference::TensorType::UInt8,
+            "expected float32 or uint8 submission");
     std::vector<std::uint32_t> expected =
         s.layout == L::NCHW
             ? std::vector<std::uint32_t>{1, 3, (unsigned)side, (unsigned)side}
@@ -26,18 +28,21 @@ void submit(inference::Backend& backend, const cv::Mat& bgr, int side) {
     require((s.layout == L::NCHW || s.layout == L::NHWC) && s.shape == expected,
             "unexpected model input shape/layout");
     require(bgr.rows == side && bgr.cols == side, "unexpected image size");
-    std::vector<float> data(side * side * 3);
+    auto view = backend.get_input_buffer(0);
+    require(view.data && view.type == s.type && view.size_bytes == s.byte_size(),
+            "invalid writable input view");
     for (int y = 0; y < side; ++y)
         for (int x = 0; x < side; ++x)
             for (int c = 0; c < 3; ++c) {
                 auto i = s.layout == L::NCHW ? c * side * side + y * side + x
                                              : (y * side + x) * 3 + c;
-                data[i] = bgr.at<cv::Vec3b>(y, x)[2 - c];
+                const auto value = bgr.at<cv::Vec3b>(y, x)[2 - c];
+                if (s.type == inference::TensorType::Float32)
+                    static_cast<float*>(view.data)[i] = value;
+                else
+                    static_cast<unsigned char*>(view.data)[i] = value;
             }
-    require(
-        backend.prepare_input_data(data.data(), data.size() * sizeof(float), 0) &&
-            backend.run(),
-        "inference failed");
+    require(backend.commit_input(0) && backend.run(), "inference failed");
 }
 float iou(const cv::Rect2f& a, const cv::Rect2f& b) {
     float intersection = (a & b).area();

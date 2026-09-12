@@ -1,10 +1,10 @@
 # RV1126B 视频人脸识别
 
-已部署到正点原子板卡 `/userdata/rtctrl-face-video`，当前浏览器地址：
+正点原子板卡部署目录为 `/userdata/rtctrl-face-video`。本次直连固定地址：
 
-**http://169.254.77.52:8080/**
+**http://192.168.50.2:8080/**
 
-程序正在后台运行，已登记 `test-person`。模型、人员库与登记图片保存在持久目录；程序未设置开机自启动。板卡 IP 在重启后可能变化，重新用 `ip a` 确认。
+模型、已有人员库与登记图片保存在持久目录；程序未设置开机自启动。旧的链路本地动态 IP 记录只适用于此前环境，当前使用固定直连地址；其他网络用 `ip a` 确认。
 
 ## 板端启动与停止
 
@@ -54,6 +54,33 @@ CAMERA_DEVICE=/dev/video31 PREVIEW_PORT=8080 PREVIEW_WIDTH=960 sh start-video.sh
 - SIGTERM 正常停止后可重新启动，已有人员库能重新加载；应用未改固件、ISP 参数或板端运行库。
 
 采集线程独占相机，在归还借用帧前转换为自有 BGR；推理只取最新待处理帧，旧帧可主动丢弃。慢浏览器不阻塞推理。当前是 CPU 像素转换/预处理和 JPEG 编码，不是端到端零拷贝。
+
+## 2026-09-12 的输入与编码优化
+
+`--input-type float32|uint8` 默认仍为 Float32。只有确认模型使用 0～255 RGB 像素、
+并完成输出对照后才选择 UInt8。本次两个现有模型的 50 对确定性输入输出完全一致；
+这不代表其他模型可以忽略归一化或直接改输入类型。
+
+输入直接填写 backend 借用缓冲后 commit，输出用预分配 Float32 存储；不属于 native IO 零拷贝。
+`--jpeg-encoder opencv|turbojpeg` 可选择系统 TurboJPEG，默认 OpenCV。头文件与构建要求见
+[JPEG_ENCODER.md](JPEG_ENCODER.md)。系统缺少所需运行库或符号时明确报错，不自动换编码器。
+
+在已构建 TurboJPEG 支持的部署包中，显式启用本轮组合：
+
+```sh
+sh stop-video.sh
+RKNN_INPUT_TYPE=uint8 PREVIEW_JPEG_ENCODER=turbojpeg sh start-video.sh 0.5
+```
+
+不设置这两个环境变量即保留 Float32/OpenCV。脚本仍读取已有人员库，未改变登记规则。
+`encode_ms` 只统计编码及独立输出复制；`processing_ms` 仍不含 JPEG，二者都不是浏览器端到端延迟。
+
+perf、API 配对、颜色转换未采用实验和视频短对照原始数据保存于 `outputs/npu-20260912/`。
+本轮八次 20 秒视频短测中，Float32/OpenCV 均值 11.48 FPS，UInt8/TurboJPEG 19.43 FPS；
+CPU 单核口径均值约 194.27% → 188.87%，每帧 CPU 时间约 169.19 → 97.18 ms。
+画面的人脸负载会变化，主要收益来自 JPEG，不能把独立 API 收益直接叠加为总 FPS。
+部署后仍读取已有人员库，未新增登记。
+本轮原计划的十分钟测试已按要求在约 386 秒停止，最终组合不能记为十分钟稳定性通过。
 
 ## 项目构建与测试
 

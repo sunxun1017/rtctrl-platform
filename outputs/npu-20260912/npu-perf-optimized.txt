@@ -1,0 +1,22 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 3K of event 'cpu-clock'
+# Event count (approx.): 38191918810
+#
+# Overhead  Command          Shared Object                Symbol
+# ........  ...............  ...........................  ..................................................................................................................................................................................
+#
+    51.76%  rtctrl_face_vid  rtctrl_face_video_optimized  [.] _ZN6rtctrl4face15video_frame_bgrERK19rtctrl_camera_frameiNS0_10VideoColorE
+     7.35%  rtctrl_face_vid  rtctrl_face_video_optimized  [.] _ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+     3.86%  rtctrl_face_vid  rtctrl_face_video_optimized  [.] _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+     1.30%  rtctrl_face_vid  librknnrt.so                 [.] 0x00000000003b7704
+     1.24%  rtctrl_face_vid  librknnrt.so                 [.] 0x00000000003b7728
+     1.11%  rtctrl_face_vid  librknnrt.so                 [.] 0x00000000003b7730
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

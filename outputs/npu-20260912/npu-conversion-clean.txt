@@ -1,0 +1,8 @@
+max_channel_delta=0
+scalar frames=100 total_ms=4391.29 mean_ms=43.9129 checksum=12577
+max_channel_delta=0
+lut frames=100 total_ms=4479.32 mean_ms=44.7932 checksum=12577
+max_channel_delta=0
+lut frames=100 total_ms=4477.42 mean_ms=44.7742 checksum=12577
+max_channel_delta=0
+scalar frames=100 total_ms=4393.48 mean_ms=43.9348 checksum=12577

@@ -1,0 +1,26 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 3K of event 'cpu-clock'
+# Event count (approx.): 38222221840
+#
+# Overhead  Command          Shared Object               Symbol
+# ........  ...............  ..........................  ..................................................................................................................................................................................
+#
+    51.66%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] _ZN6rtctrl4face15video_frame_bgrERK19rtctrl_camera_frameiNS0_10VideoColorE
+     9.20%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] rgb_ycc_convert
+     7.53%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] jpeg_fdct_islow
+     5.58%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] quantize
+     3.91%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] _ZNK2cv21resizeGeneric_InvokerINS_13HResizeLinearIhisLi2048ENS_12HResizeNoVecEEENS_13VResizeLinearIhisNS_11FixedPtCastIihLi22EEENS_22VResizeLinearVec_32s8uEEEEclERKNS_5RangeE
+     2.25%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] encode_mcu_huff
+     1.64%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] h2v2_downsample
+     1.59%  rtctrl_face_vid  librknnrt.so                [.] 0x00000000003c11f0
+     1.11%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] convsamp
+     1.08%  rtctrl_face_vid  rtctrl_face_video_prealloc  [.] _ZN6rtctrl4face12_GLOBAL__N_16submitERNS_9inference7BackendERKN2cv3MatEi
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#
