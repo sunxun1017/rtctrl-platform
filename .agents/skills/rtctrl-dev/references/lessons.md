@@ -15,3 +15,12 @@
 - 证据：本地 Toolkit2 User Guide 英文版第 135、158–159 页说明普通 API 输入执行配置的 mean/std；第 69–72 页要求 native 内存匹配 stride/type，RKNNRT API 英文版第 38 页描述缓存同步。
 - 结论：普通 `pass_through=0` 的 raw RGB Float32 不能再手工重复模型转换配置中的归一化。native IO 按 `size_with_stride` 分配并保留完整 SDK 属性，不能直接复用稠密 Float32 描述。拥有 DMA fd 或通过宿主替身测试不证明端到端零拷贝。
 - 失效条件：SDK 版本、模型预处理或 IO 路径变化时重新核对。代码说明见 `adapters/inference/rknn/readme.md`。
+
+
+## 2026-09-12：视频识别与 fortified poll 测试
+
+- 适用条件：视频识别复用 V4L2 采集、或 ASan 构建中使用系统调用 mock。
+- 证据：face-video 与 face-video ASan/UBSan 各 24 项通过；RV1126B 实机连续识别与浏览器 MJPEG 预览、停止重启已验证，见 `apps/face_recognition/VIDEO.md`。
+- 结论：帧归还前完成自有 BGR 转换，异步推理只保留最新待处理帧；NV12 的 full/limited 和 BT.601/709 应依据元数据或显式配置，不能默认 OpenCV 限幅转换。空人员库输出 unknown；等待单人登记时检测上限至少为 2。
+- 测试结论：glibc fortified 构建可能调用 `__poll_chk` 而非 `poll`，mock 须同时包装这两个符号，否则伪造 fd 进入真实 poll 导致错误失败；不要以关闭 sanitizer 处理。
+- 失效条件：采集 API、glibc/toolchain、颜色元数据或 BSP 变化时重验。

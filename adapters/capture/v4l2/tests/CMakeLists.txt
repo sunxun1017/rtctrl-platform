@@ -3,7 +3,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     target_link_libraries(rtctrl_camera_test PRIVATE rtctrl_vision_v4l2)
     target_link_options(rtctrl_camera_test PRIVATE
         -Wl,--wrap=open -Wl,--wrap=close -Wl,--wrap=mmap -Wl,--wrap=munmap
-        -Wl,--wrap=poll -Wl,--wrap=ioctl)
+        -Wl,--wrap=poll -Wl,--wrap=__poll_chk -Wl,--wrap=ioctl)
     add_test(NAME rtctrl_camera_test COMMAND rtctrl_camera_test)
 endif()
 add_executable(rtctrl_v4l2_format_test test_v4l2_format.c)

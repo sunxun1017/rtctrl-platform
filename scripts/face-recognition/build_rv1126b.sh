@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the static-image CLI using the ATK RV1126B SDK's AArch64 dependencies.
+# Build static-image and video CLIs using the ATK RV1126B SDK's AArch64 dependencies.
 set -euo pipefail
 if [[ $# -lt 1 || $# -gt 2 ]]; then
     echo "Usage: $0 SDK_ROOT [BUILD_DIRECTORY]" >&2
@@ -26,9 +26,9 @@ cmake -S "$project_dir" -B "$build_dir" -G Ninja \
     -DRTCTRL_TOOLCHAIN_BIN="$toolchain_bin" \
     -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -DRTCTRL_BUILD_TESTS=OFF -DRTCTRL_ENABLE_FACE_RECOGNITION=ON \
-    -DRTCTRL_ENABLE_RKNN=ON -DRTCTRL_FACE_BUILD_CLI=ON \
+    -DRTCTRL_ENABLE_RKNN=ON -DRTCTRL_FACE_BUILD_CLI=ON -DRTCTRL_FACE_BUILD_VIDEO=ON \
     -DOpenCV_DIR="$opencv_dir" \
     -DOPENSSL_INCLUDE_DIR="$openssl_dir/include" \
     -DOPENSSL_CRYPTO_LIBRARY="$openssl_dir/lib/aarch64/libcrypto.a"
-cmake --build "$build_dir" --target rtctrl_face --parallel
-printf 'Built: %s/rtctrl_face\n' "$build_dir"
+cmake --build "$build_dir" --target rtctrl_face rtctrl_face_video --parallel
+printf 'Built: %s/rtctrl_face and rtctrl_face_video\n' "$build_dir"

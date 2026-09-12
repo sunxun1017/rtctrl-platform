@@ -37,3 +37,11 @@ option(RTCTRL_FACE_BUILD_CLI "Build the face CLI with the RKNN runtime loader" O
 if(RTCTRL_ENABLE_FACE_RECOGNITION AND RTCTRL_FACE_BUILD_CLI AND NOT RTCTRL_ENABLE_RKNN)
     message(FATAL_ERROR "Face CLI requires RTCTRL_ENABLE_RKNN=ON")
 endif()
+
+option(RTCTRL_FACE_BUILD_VIDEO "Build camera face recognition with browser preview" OFF)
+if(RTCTRL_FACE_BUILD_VIDEO)
+    if(NOT RTCTRL_ENABLE_FACE_RECOGNITION OR NOT RTCTRL_FACE_BUILD_CLI OR NOT RTCTRL_ENABLE_V4L2)
+        message(FATAL_ERROR "Face video requires face recognition, face CLI, and V4L2")
+    endif()
+    set(RTCTRL_BUILD_VISION ON)
+endif()

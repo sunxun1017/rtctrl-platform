@@ -56,6 +56,12 @@ int __wrap_poll(struct pollfd* fds, nfds_t count, int timeout) {
     fds[0].revents = POLLIN;
     return 1;
 }
+/* Fortified glibc builds may route poll through __poll_chk. Keep the
+ * syscall fake effective under ASan/UBSan as well as release builds. */
+int __wrap___poll_chk(struct pollfd* fds, nfds_t count, int timeout, size_t size) {
+    (void)size;
+    return __wrap_poll(fds, count, timeout);
+}
 int __wrap_ioctl(int fd, unsigned long request, ...) {
     (void)fd;
     va_list ap;

@@ -137,6 +137,14 @@
         "RTCTRL_FACE_BUILD_CLI": "ON",
         "RTCTRL_BUILD_TESTS": "ON"
       }
+    },
+    {
+      "name": "face-video",
+      "inherits": "face-host",
+      "binaryDir": "${sourceDir}/build/face-video",
+      "cacheVariables": {
+        "RTCTRL_FACE_BUILD_VIDEO": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -191,6 +199,10 @@
     {
       "name": "face-host",
       "configurePreset": "face-host"
+    },
+    {
+      "name": "face-video",
+      "configurePreset": "face-video"
     }
   ],
   "testPresets": [
@@ -260,6 +272,13 @@
     {
       "name": "face-host",
       "configurePreset": "face-host",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "face-video",
+      "configurePreset": "face-video",
       "output": {
         "outputOnFailure": true
       }
