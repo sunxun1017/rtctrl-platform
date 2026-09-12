@@ -15,6 +15,7 @@
 struct mapping {
     void* data;
     size_t length;
+    int dmabuf_fd;
 };
 struct camera_buffer {
     struct mapping planes[RTCTRL_CAMERA_MAX_PLANES];
@@ -66,6 +67,9 @@ static int v4l2_close(struct v4l2_camera* c) {
         for (uint32_t i = 0; i < c->count; ++i) {
             for (uint32_t p = 0; p < c->format.plane_count; ++p) {
                 struct mapping* m = &c->buffers[i].planes[p];
+                if (m->dmabuf_fd >= 0 && close(m->dmabuf_fd) < 0 && !result) {
+                    result = -errno;
+                }
                 if (m->length && munmap(m->data, m->length) < 0 && !result) {
                     result = -errno;
                 }
@@ -155,6 +159,12 @@ static int v4l2_open(const struct rtctrl_v4l2_config* cfg,
         result = -ENOMEM;
         goto fail;
     }
+    /* Initialize every descriptor before any partial startup can fail. */
+    for (uint32_t i = 0; i < c->count; ++i) {
+        for (uint32_t p = 0; p < c->format.plane_count; ++p) {
+            c->buffers[i].planes[p].dmabuf_fd = -1;
+        }
+    }
     for (uint32_t i = 0; i < c->count; ++i) {
         struct v4l2_buffer b;
         struct v4l2_plane planes[VIDEO_MAX_PLANES];
@@ -182,7 +192,26 @@ static int v4l2_open(const struct rtctrl_v4l2_config* cfg,
                 result = -errno;
                 goto fail;
             }
-            c->buffers[i].planes[p] = (struct mapping){data, planes[p].length};
+            struct mapping* mapping = &c->buffers[i].planes[p];
+            mapping->data = data;
+            mapping->length = planes[p].length;
+            if (cfg->export_dmabuf) {
+                struct v4l2_exportbuffer exported = {0};
+                exported.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+                exported.index = i;
+                exported.plane = p;
+                exported.flags = O_CLOEXEC | O_RDWR;
+                exported.fd = -1;
+                result = camera_ioctl(c->fd, VIDIOC_EXPBUF, &exported);
+                if (result) {
+                    goto fail;
+                }
+                if (exported.fd < 0) {
+                    result = -EPROTO;
+                    goto fail;
+                }
+                mapping->dmabuf_fd = exported.fd;
+            }
         }
         result = camera_ioctl(c->fd, VIDIOC_QBUF, &b);
         if (result) {
@@ -262,6 +291,10 @@ static int v4l2_acquire(struct v4l2_camera* c,
             planes[p].data_offset;
         frame->planes[p].size = planes[p].bytesused - planes[p].data_offset;
         frame->planes[p].stride = c->strides[p];
+        frame->planes[p].dmabuf_fd = c->buffers[b.index].planes[p].dmabuf_fd;
+        frame->planes[p].dmabuf_valid = frame->planes[p].dmabuf_fd >= 0;
+        frame->planes[p].allocation_size = c->buffers[b.index].planes[p].length;
+        frame->planes[p].data_offset = planes[p].data_offset;
     }
     struct timespec now;
     if (clock_gettime(CLOCK_MONOTONIC, &now) < 0) {

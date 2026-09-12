@@ -116,3 +116,31 @@ ctest --preset vision-synthetic
 4. 关闭原生适配器时 target 不存在；纯控制/协议测试不依赖缺失实现。
 5. 安装后的 C 消费者分别只链接通用核心、或显式链接 synthetic 后端。
 6. CMake 依赖闭包和递归头文件检查禁止通用层重新引入具体后端。
+
+## 2026-09-12: Optional borrowed DMA-BUF
+
+V4L2 export_dmabuf defaults to zero (MMAP only). Nonzero requires VIDIOC_EXPBUF
+for every buffer plane with O_CLOEXEC | O_RDWR. Unsupported or partially failed
+export fails open and cleans all acquired descriptors, mappings and the device;
+there is no silent fallback.
+
+Consumers must check dmabuf_valid; descriptor 0 is valid. The backend owns the
+descriptor and consumers must not close it. Device consumers must finish before
+frame release or camera close. Copying or duplicating the descriptor does not
+extend the frame contents' lifetime: QBUF permits the producer to overwrite it.
+
+allocation_size describes the full exported allocation. data_offset locates the
+payload in that allocation; data already points to the payload and size excludes
+the offset. CPU consumers must not apply the offset twice. Export alone does not
+prove downstream format compatibility, cache synchronization or end-to-end
+zero-copy operation.
+
+Adding fields changes public structure sizes and nested array layouts. Existing
+binaries are incompatible: rebuild all producers, consumers and adapters together.
+Zero-initialize configurations and frames; source consumers using zero-initialized
+configuration retain MMAP behavior.
+
+The syscall-fake camera test covers default MMAP, exports, descriptor 0, payload
+offset, release without descriptor close, close with an outstanding lease, partial
+export failure and invalid export results. Real device import, synchronization and
+performance require board validation.

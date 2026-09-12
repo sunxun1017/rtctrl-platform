@@ -5,7 +5,7 @@
 struct rtctrl_camera {
     struct rtctrl_capture_backend backend;
     void* context;
-    uint64_t token;
+    uint64_t token; // token相当于票号，这样能够区分不同生命周期的资源
     uint64_t backend_token;
     int held;
     int failed;

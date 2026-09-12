@@ -17,6 +17,13 @@ struct rtctrl_frame_plane {
     const void* data;
     size_t size;
     uint32_t stride;
+    /* Optional borrowed DMA-BUF. Check dmabuf_valid before using fd (zero is a
+     * valid descriptor). Do not close it. Device consumers must finish before
+     * frame release; the exporter retains descriptor ownership. */
+    int dmabuf_valid;
+    int dmabuf_fd;
+    size_t allocation_size; /* Full exported allocation, including data_offset. */
+    size_t data_offset;     /* Payload offset in allocation; data points here. */
 };
 struct rtctrl_camera_format {
     uint32_t width;

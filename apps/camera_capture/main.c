@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
     rtctrl_capture_prepare_signals();
     struct rtctrl_camera* camera = NULL;
     const struct rtctrl_v4l2_config config = {argv[1], 0, 0, 0, 4};
-    const int result = rtctrl_v4l2_open(&config, &camera);
+    const int result =
+        rtctrl_v4l2_open(&config, &camera); // 这个就是真正的注入依赖的函数
     if (result) {
         fprintf(stderr, "camera open: %s\n", strerror(-result));
         return 1;
