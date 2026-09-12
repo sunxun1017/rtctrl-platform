@@ -1,0 +1,9 @@
+{
+  "pid": 17454,
+  "duration_requested_s": 20,
+  "cmdline": "/userdata/rtctrl-face-video/ftrace-next/rtctrl_face_video_neon --device /dev/video31 --detector models/detector.rknn --recognizer models/recognizer.rknn --gallery gallery.json --threshold 0.5 --input-type native-fp16 --jpeg-encoder mpp --yuv-matrix bt601 --yuv-range full --frame-converter rga-direct --capture-width 2112 --capture-height 1568 --jpeg-mode async ",
+  "clock": "monotonic",
+  "sample_interval_s": 1,
+  "client": "one local continuous MJPEG reader, plus any browser clients",
+  "model_gallery_modified": false
+}

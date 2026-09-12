@@ -5,9 +5,6 @@
 #include <opencv2/imgproc.hpp>
 #include <stdexcept>
 #include <string>
-#if defined(__aarch64__) && defined(__ARM_NEON)
-#include <arm_neon.h>
-#endif
 namespace rtctrl::face {
 namespace {
 bool verified_build() {
@@ -20,49 +17,8 @@ bool verified_build() {
     return false;
 #endif
 }
-#if defined(__aarch64__) && defined(__ARM_NEON)
-// Gather every third RGB pixel from 48 source pixels. Loading from 3*x rather
-// than 3*x+1 keeps the final vector entirely inside the 960-pixel source row.
-uint8x16x3_t selected(const unsigned char* row) {
-    const auto a = vld3q_u8(row);
-    const auto b = vld3q_u8(row + 48);
-    const auto c = vld3q_u8(row + 96);
-    const uint8_t positions[16] = {
-        1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46};
-    const auto index = vld1q_u8(positions);
-    uint8x16x3_t result;
-    for (int channel = 0; channel < 3; ++channel) {
-        uint8x16x3_t table;
-        table.val[0] = a.val[channel];
-        table.val[1] = b.val[channel];
-        table.val[2] = c.val[channel];
-        result.val[channel] = vqtbl3q_u8(table, index);
-    }
-    return result;
-}
-uint16x8_t vertical_half(uint16x8_t a, uint16x8_t b, uint16_t b0, uint16_t b1) {
-    // Products need 19 bits. Truncate each product independently, matching
-    // OpenCV 3.4.5 before adding the final rounding bias.
-    const auto al = vshrn_n_u32(vmull_n_u16(vget_low_u16(a), b0), 9);
-    const auto ah = vshrn_n_u32(vmull_n_u16(vget_high_u16(a), b0), 9);
-    const auto bl = vshrn_n_u32(vmull_n_u16(vget_low_u16(b), b1), 9);
-    const auto bh = vshrn_n_u32(vmull_n_u16(vget_high_u16(b), b1), 9);
-    return vaddq_u16(vaddq_u16(vcombine_u16(al, ah), vcombine_u16(bl, bh)),
-                     vdupq_n_u16(2));
-}
-uint8x16_t vertical(uint8x16_t a, uint8x16_t b, uint16_t b0, uint16_t b1) {
-    return vcombine_u8(
-        vshrn_n_u16(vertical_half(
-                        vmovl_u8(vget_low_u8(a)), vmovl_u8(vget_low_u8(b)), b0, b1),
-                    2),
-        vshrn_n_u16(
-            vertical_half(
-                vmovl_u8(vget_high_u8(a)), vmovl_u8(vget_high_u8(b)), b0, b1),
-            2));
-}
-#endif
 } // namespace
-cv::Mat detector_letterbox(const cv::Mat& source, int width, int height) {
+cv::Mat scalar_letterbox(const cv::Mat& source, int width, int height) {
     if (source.empty() || source.type() != CV_8UC3 || width < 1 || width > 320 ||
         height < 1 || height > 320)
         throw std::invalid_argument("Invalid detector letterbox input");
@@ -93,23 +49,12 @@ cv::Mat detector_letterbox(const cv::Mat& source, int width, int height) {
         const auto* b =
             source.ptr<unsigned char>(std::clamp(sy + 1, 0, source.rows - 1));
         auto* destination = output.ptr<unsigned char>(y + top);
-#if defined(__aarch64__) && defined(__ARM_NEON)
-        for (int x = 0; x < 320; x += 16) {
-            const auto av = selected(a + x * 9);
-            const auto bv = selected(b + x * 9);
-            uint8x16x3_t result;
-            for (int c = 0; c < 3; ++c)
-                result.val[c] = vertical(av.val[c], bv.val[c], b0, b1);
-            vst3q_u8(destination + x * 3, result);
-        }
-#else
         for (int x = 0; x < 320; ++x)
             for (int c = 0; c < 3; ++c) {
                 const int index = (3 * x + 1) * 3 + c;
                 destination[x * 3 + c] = static_cast<unsigned char>(
                     (((a[index] * b0) >> 9) + ((b[index] * b1) >> 9) + 2) >> 2);
             }
-#endif
     }
     return output;
 }
