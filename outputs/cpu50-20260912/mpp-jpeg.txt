@@ -1,0 +1,5 @@
+mpp[2821]: mpp_info: mpp version: unknown mpp version for missing VCS info
+mpp[2821]: mpp_enc: MPP_ENC_SET_RC_CFG bps 0 [0 : 0] fps [30:30] gop 0
+rga_api version 1.10.5_[4]
+count=50 init_ms=4.08975 turbo_ms=13.8836 rga_bgr_nv12_ms=1.49259 mpp_encode_copy_ms=1.32579 hardware_total_ms=2.81839 turbo_cpu_ms=13.8805 hardware_process_cpu_ms=0.81837 turbo_bytes=25711 mpp_bytes=17784 decoded_width=960 decoded_height=712 decoded_max_delta=69 decoded_mean_delta=1.505
+NOTE: MPP q_factor=75 min=max75 is not guaranteed equivalent to libjpeg quality75; RGA BT601 full-range chroma conversion may differ. Validate output appearance and quality independently.

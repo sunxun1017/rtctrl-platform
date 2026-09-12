@@ -1,0 +1,44 @@
+{
+  "application_pid": 11800,
+  "application_tids": [
+    11800,
+    11802,
+    11803,
+    11804,
+    11815
+  ],
+  "steady_window_s": 20.000127593000798,
+  "application_calls": {
+    "system_heap_do_allocate.constprop.0": 0,
+    "system_heap_dma_buf_release": 0,
+    "rockchip_gem_create_object": 0,
+    "rockchip_gem_free_object": 0
+  },
+  "control_pid": 12615,
+  "control_calls": {
+    "system_heap_do_allocate.constprop.0": 1,
+    "system_heap_dma_buf_release": 1,
+    "rockchip_gem_create_object": 0,
+    "rockchip_gem_free_object": 0
+  },
+  "other_calls": {
+    "system_heap_do_allocate.constprop.0": 0,
+    "system_heap_dma_buf_release": 0,
+    "rockchip_gem_create_object": 0,
+    "rockchip_gem_free_object": 0
+  },
+  "header": [
+    "# tracer: function",
+    "#",
+    "# entries-in-buffer/entries-written: 2/2   #P:4",
+    "#",
+    "#                                _-----=> irqs-off/BH-disabled",
+    "#                               / _----=> need-resched",
+    "#                              | / _---=> hardirq/softirq",
+    "#                              || / _--=> preempt-depth",
+    "#                              ||| / _-=> migrate-disable",
+    "#                              |||| /     delay",
+    "#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION",
+    "#              | |         |   |||||     |         |"
+  ]
+}

@@ -86,7 +86,8 @@ Options parse(int argc, char** argv) {
     else if (input_type != "float32")
         throw std::runtime_error("invalid --input-type");
     o.jpeg_encoder = get("--jpeg-encoder", "opencv");
-    if (o.jpeg_encoder != "opencv" && o.jpeg_encoder != "turbojpeg")
+    if (o.jpeg_encoder != "opencv" && o.jpeg_encoder != "turbojpeg" &&
+        o.jpeg_encoder != "mpp")
         throw std::runtime_error("invalid --jpeg-encoder");
     const auto jpeg_mode = get("--jpeg-mode", "sync");
     if (jpeg_mode != "sync" && jpeg_mode != "async")
@@ -299,7 +300,7 @@ int main(int argc, char** argv) {
                    "--yuv-range auto|full|limited] [--duration SECONDS --frames "
                    "COUNT] [--enroll-name NAME --enroll-image snapshot "
                    "--enroll-samples 5] [--input-type float32|uint8|native-fp16] "
-                   "[--jpeg-encoder opencv|turbojpeg] [--frame-converter "
+                   "[--jpeg-encoder opencv|turbojpeg|mpp] [--frame-converter "
                    "cpu|rga|rga-direct] [--capture-width W --capture-height H] "
                    "[--jpeg-mode sync|async]\n";
             return 0;

@@ -1,4 +1,5 @@
 #include "jpeg_encoder.hpp"
+#include "mpp_jpeg.hpp"
 #include <climits>
 #include <opencv2/imgcodecs.hpp>
 #include <stdexcept>
@@ -9,6 +10,7 @@
 namespace rtctrl::face {
 struct JpegEncoder::Impl {
     bool turbo = false;
+    std::unique_ptr<MppJpegEncoder> mpp;
 #ifdef RTCTRL_HAVE_TURBOJPEG
     void* library = nullptr;
     tjhandle context = nullptr;
@@ -59,6 +61,10 @@ bool JpegEncoder::turbojpeg_compiled() {
 }
 JpegEncoder::JpegEncoder(const std::string& encoder, const std::string& library)
     : impl_(std::make_unique<Impl>()) {
+    if (encoder == "mpp") {
+        impl_->mpp = std::make_unique<MppJpegEncoder>();
+        return;
+    }
     if (encoder == "opencv")
         return;
     if (encoder != "turbojpeg")
@@ -77,6 +83,8 @@ std::vector<unsigned char> JpegEncoder::encode(const cv::Mat& bgr, int quality) 
     if (bgr.empty() || bgr.dims != 2 || bgr.type() != CV_8UC3 || bgr.cols > 8192 ||
         bgr.rows > 8192 || bgr.step > INT_MAX || quality < 1 || quality > 100)
         throw std::runtime_error("invalid JPEG BGR image/quality");
+    if (impl_->mpp)
+        return impl_->mpp->encode(bgr, quality);
     std::vector<unsigned char> result;
     if (!impl_->turbo) {
         if (!cv::imencode(".jpg", bgr, result, {cv::IMWRITE_JPEG_QUALITY, quality}))

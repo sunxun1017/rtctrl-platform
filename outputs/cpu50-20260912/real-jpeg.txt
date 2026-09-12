@@ -1,0 +1,5 @@
+rga_api version 1.10.5_[4]
+count=50 init_ms=4.22625 turbo_ms=14.8369 rga_bgr_nv12_ms=1.4882 mpp_encode_copy_ms=1.43113 hardware_total_ms=2.91933 turbo_cpu_ms=14.7488 hardware_process_cpu_ms=0.889087 turbo_bytes=48352 mpp_bytes=35895 decoded_width=960 decoded_height=712 decoded_max_delta=39 decoded_mean_delta=1.70561
+turbo_source psnr_db=41.2042 mae=1.63011
+mpp_source psnr_db=39.4584 mae=1.9554
+NOTE: MPP q_factor=75 min=max75 is not guaranteed equivalent to libjpeg quality75; RGA BT601 full-range chroma conversion may differ. Validate output appearance and quality independently.

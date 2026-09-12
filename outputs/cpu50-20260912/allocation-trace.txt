@@ -1,0 +1,14 @@
+# tracer: function
+#
+# entries-in-buffer/entries-written: 2/2   #P:4
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+         python3-12615   [003] ..... 29524.788266: system_heap_do_allocate.constprop.0 <-system_uncached_heap_allocate
+         python3-12615   [003] ..... 29524.788388: system_heap_dma_buf_release <-dma_buf_release

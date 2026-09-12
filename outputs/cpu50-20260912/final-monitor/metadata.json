@@ -1,0 +1,9 @@
+{
+  "pid": 11800,
+  "duration_requested_s": 60,
+  "cmdline": "./rtctrl_face_video --device /dev/video31 --detector models/detector.rknn --recognizer models/recognizer.rknn --threshold 0.5 --gap 0 --bind 0.0.0.0 --port 8080 --width 960 --yuv-matrix bt601 --yuv-range full --input-type native-fp16 --jpeg-encoder mpp --frame-converter rga-direct --jpeg-mode async --capture-width 2112 --capture-height 1568 --gallery gallery.json ",
+  "clock": "monotonic",
+  "sample_interval_s": 1,
+  "client": "one local continuous MJPEG reader, plus any browser clients",
+  "model_gallery_modified": false
+}
