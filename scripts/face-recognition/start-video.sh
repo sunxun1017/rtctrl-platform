@@ -22,6 +22,10 @@ set -- ./rtctrl_face_video --device "${CAMERA_DEVICE:-/dev/video31}" \
     --input-type "${RKNN_INPUT_TYPE:-float32}" --jpeg-encoder "${PREVIEW_JPEG_ENCODER:-opencv}" \
     --frame-converter "${PREVIEW_FRAME_CONVERTER:-cpu}" \
     --jpeg-mode "${PREVIEW_JPEG_MODE:-sync}"
+if [ -n "${CAMERA_WIDTH:-}" ] || [ -n "${CAMERA_HEIGHT:-}" ]; then
+    set -- "$@" --capture-width "${CAMERA_WIDTH:?set CAMERA_WIDTH and CAMERA_HEIGHT together}" \
+        --capture-height "${CAMERA_HEIGHT:?set CAMERA_WIDTH and CAMERA_HEIGHT together}"
+fi
 if [ -f gallery.json ] || [ -n "$enroll_name" ]; then
     set -- "$@" --gallery gallery.json
 fi

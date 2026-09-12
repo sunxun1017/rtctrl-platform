@@ -2,11 +2,14 @@
 #include "video_frame.hpp"
 #include <memory>
 namespace rtctrl::face {
-// One owner thread; staging buffers are internal, returned pixels are owned.
+// One owner thread; staging is default, direct DMA-BUF is explicit.
+// Returned pixels are independently owned in either mode.
 // RGA default interpolation differs from the CPU nearest-neighbor path.
 class RgaFrameConverter {
   public:
-    RgaFrameConverter();
+    // Direct mode borrows DMA-BUFs from one fixed camera configuration.
+    // Destroy this converter before closing/reconfiguring that camera.
+    explicit RgaFrameConverter(bool direct_dmabuf = false);
     ~RgaFrameConverter();
     RgaFrameConverter(const RgaFrameConverter&) = delete;
     RgaFrameConverter& operator=(const RgaFrameConverter&) = delete;

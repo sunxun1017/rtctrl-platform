@@ -1,0 +1,31 @@
+original width=2112 height=1568 fourcc=NM12 planes=2 stride0=2112 allocation0=3311616 stride1=2112 allocation1=1655808
+test_actual width=2112 height=1568 fourcc=NV12 planes=1 stride0=2112 allocation0=4967424
+rga_api version 1.10.5_[4]
+import fd=5 plane=0 allocation=4967424 offset=0 stride=2112
+import fd=6 plane=0 allocation=4967424 offset=0 stride=2112
+import fd=7 plane=0 allocation=4967424 offset=0 stride=2112
+import fd=8 plane=0 allocation=4967424 offset=0 stride=2112
+sample=0 fd=7 stage_wall_ms=10.5575 stage_cpu_ms=5.74087 direct_wall_ms=7.55329 direct_cpu_ms=2.72037 equal=1
+sample=1 fd=8 stage_wall_ms=10.582 stage_cpu_ms=5.72454 direct_wall_ms=7.52879 direct_cpu_ms=2.69063 equal=1
+sample=2 fd=5 stage_wall_ms=10.5414 stage_cpu_ms=5.72804 direct_wall_ms=7.43808 direct_cpu_ms=2.60196 equal=1
+sample=3 fd=6 stage_wall_ms=10.5645 stage_cpu_ms=5.74904 direct_wall_ms=7.49904 direct_cpu_ms=2.66642 equal=1
+sample=4 fd=7 stage_wall_ms=10.5747 stage_cpu_ms=5.77004 direct_wall_ms=7.53929 direct_cpu_ms=2.70608 equal=1
+sample=5 fd=8 stage_wall_ms=10.4399 stage_cpu_ms=5.63179 direct_wall_ms=7.46404 direct_cpu_ms=2.60721 equal=1
+sample=6 fd=5 stage_wall_ms=10.579 stage_cpu_ms=5.76392 direct_wall_ms=7.42583 direct_cpu_ms=2.59146 equal=1
+sample=7 fd=6 stage_wall_ms=11.3275 stage_cpu_ms=6.37525 direct_wall_ms=7.42642 direct_cpu_ms=2.63142 equal=1
+sample=8 fd=7 stage_wall_ms=10.4262 stage_cpu_ms=5.61225 direct_wall_ms=7.46258 direct_cpu_ms=2.62412 equal=1
+sample=9 fd=8 stage_wall_ms=10.5843 stage_cpu_ms=5.78492 direct_wall_ms=7.56204 direct_cpu_ms=2.75596 equal=1
+sample=10 fd=5 stage_wall_ms=10.5866 stage_cpu_ms=5.76421 direct_wall_ms=7.51187 direct_cpu_ms=2.6775 equal=1
+sample=11 fd=6 stage_wall_ms=10.4749 stage_cpu_ms=5.63821 direct_wall_ms=7.4655 direct_cpu_ms=2.64571 equal=1
+sample=12 fd=7 stage_wall_ms=10.4609 stage_cpu_ms=5.656 direct_wall_ms=7.50371 direct_cpu_ms=2.69296 equal=1
+sample=13 fd=8 stage_wall_ms=10.5779 stage_cpu_ms=5.75575 direct_wall_ms=7.59704 direct_cpu_ms=2.71921 equal=1
+sample=14 fd=5 stage_wall_ms=10.4717 stage_cpu_ms=5.64229 direct_wall_ms=7.46638 direct_cpu_ms=2.64483 equal=1
+sample=15 fd=6 stage_wall_ms=10.4408 stage_cpu_ms=5.63179 direct_wall_ms=7.50546 direct_cpu_ms=2.6915 equal=1
+sample=16 fd=7 stage_wall_ms=10.6435 stage_cpu_ms=5.82371 direct_wall_ms=7.52033 direct_cpu_ms=2.70025 equal=1
+sample=17 fd=8 stage_wall_ms=10.4714 stage_cpu_ms=5.65075 direct_wall_ms=7.52937 direct_cpu_ms=2.70404 equal=1
+sample=18 fd=5 stage_wall_ms=10.4775 stage_cpu_ms=5.67029 direct_wall_ms=7.50458 direct_cpu_ms=2.67925 equal=1
+sample=19 fd=6 stage_wall_ms=10.5659 stage_cpu_ms=5.74613 direct_wall_ms=7.53142 direct_cpu_ms=2.69296 equal=1
+samples=20 all_equal=1 stage_wall_mean_ms=10.5674 stage_cpu_mean_ms=5.74299 direct_wall_mean_ms=7.50175 direct_cpu_mean_ms=2.67219
+camera_close_rc=0
+restored_actual width=2112 height=1568 fourcc=NM12 planes=2 stride0=2112 allocation0=3311616 stride1=2112 allocation1=1655808
+restore_ok=1

@@ -1,11 +1,15 @@
 #include "rga_frame.hpp"
+#include <cstdio>
 #include <im2d.h>
 #include <iostream>
 #include <map>
 #include <stdexcept>
+#include <unistd.h>
 #include <vector>
 static std::map<rga_buffer_handle_t, void*> memory;
 static unsigned serial = 0;
+static void* fd_memory = nullptr;
+static unsigned fd_imports = 0;
 static bool fail = false;
 static int fail_import_after = -1;
 static int expected_format = RK_FORMAT_YCbCr_420_SP;
@@ -18,8 +22,15 @@ rga_buffer_handle_t importbuffer_virtualaddr(void* p, int) {
     memory[++serial] = p;
     return serial;
 }
+rga_buffer_handle_t importbuffer_fd(int fd, int size) {
+    if (fd != 0 || size < 96)
+        throw std::runtime_error("unexpected fd import");
+    ++fd_imports;
+    return importbuffer_virtualaddr(fd_memory, size);
+}
 IM_STATUS releasebuffer_handle(rga_buffer_handle_t h) {
-    memory.erase(h);
+    if (memory.erase(h) != 1)
+        throw std::runtime_error("handle released twice");
     return IM_STATUS_SUCCESS;
 }
 rga_buffer_t wrapbuffer_handle(
@@ -159,6 +170,91 @@ int main() {
                   recovered.at<cv::Vec3b>(0, 0) == retained.at<cv::Vec3b>(0, 0));
         }
         check(memory.empty());
+        {
+            // Use real descriptor identities while RGA calls remain mocked.
+            struct ZeroFd {
+                int saved = dup(0);
+                FILE* file = tmpfile();
+                ZeroFd() {
+                    check(file != nullptr && dup2(fileno(file), 0) == 0);
+                }
+                ~ZeroFd() {
+                    if (saved >= 0) {
+                        dup2(saved, 0);
+                        close(saved);
+                    } else
+                        close(0);
+                    fclose(file);
+                }
+            } descriptor;
+            std::vector<unsigned char> pixels(16 * 6, 55);
+            fd_memory = pixels.data();
+            rtctrl_camera_frame f{};
+            f.format = {16,
+                        4,
+                        RTCTRL_PIXEL_NV12,
+                        0,
+                        1,
+                        0,
+                        RTCTRL_RANGE_FULL,
+                        0,
+                        RTCTRL_YCBCR_BT601};
+            f.planes[0].data = pixels.data();
+            f.planes[0].size = pixels.size();
+            f.planes[0].stride = 16;
+            f.planes[0].allocation_size = pixels.size();
+            f.planes[0].dmabuf_valid = 1;
+            f.planes[0].dmabuf_fd = 0;
+            {
+                rtctrl::face::RgaFrameConverter c(true);
+                auto a = c.convert(f, 16);
+                auto count = serial;
+                pixels[0] = 66;
+                auto b = c.convert(f, 16);
+                check(serial == count && fd_imports == 1 &&
+                      a.at<cv::Vec3b>(0, 0)[0] == 55 &&
+                      b.at<cv::Vec3b>(0, 0)[0] == 66);
+                f.planes[0].dmabuf_valid = 0;
+                rejects([&] { c.convert(f, 16); });
+                f.planes[0].dmabuf_valid = 1;
+                f.planes[0].data_offset = 1;
+                rejects([&] { c.convert(f, 16); });
+                f.planes[0].data_offset = 0;
+                f.planes[0].allocation_size = 95;
+                rejects([&] { c.convert(f, 16); });
+                f.planes[0].allocation_size = 97;
+                rejects([&] { c.convert(f, 16); });
+                f.planes[0].allocation_size = 96;
+                f.planes[0].stride = 17;
+                rejects([&] { c.convert(f, 16); });
+                f.planes[0].stride = 16;
+                f.format.width = 14;
+                rejects([&] { c.convert(f, 16); });
+                f.format.width = 16;
+                fail = true;
+                rejects([&] { c.convert(f, 16); });
+                fail = false;
+                c.convert(f, 16);
+                FILE* other = tmpfile();
+                check(other != nullptr);
+                check(dup2(fileno(other), 0) == 0);
+                fclose(other);
+                rejects([&] { c.convert(f, 16); });
+            }
+            check(memory.empty());
+            {
+                rtctrl::face::RgaFrameConverter c(true);
+                fail_import_after = 0;
+                rejects([&] { c.convert(f, 16); });
+                check(memory.empty());
+                fail_import_after = 1;
+                rejects([&] { c.convert(f, 16); });
+                check(memory.size() == 1);
+                fail_import_after = -1;
+                c.convert(f, 16);
+            }
+            check(memory.empty());
+        }
         std::cout << "RGA converter ownership/validation tests passed\n";
     } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";

@@ -1,7 +1,10 @@
 #include "rga_frame.hpp"
 #include <algorithm>
 #include <cstring>
+#include <limits>
+#include <map>
 #include <stdexcept>
+#include <sys/stat.h>
 #include <vector>
 #ifdef RTCTRL_HAVE_RGA
 #include <im2d.h>
@@ -23,6 +26,7 @@ void plane(const rtctrl_frame_plane& p, size_t rows, size_t width) {
 }
 } // namespace
 struct RgaFrameConverter::Impl {
+    bool direct = false;
 #ifdef RTCTRL_HAVE_RGA
     struct Buffer {
         std::vector<unsigned char> bytes;
@@ -43,6 +47,61 @@ struct RgaFrameConverter::Impl {
             require(handle != 0, "RGA staging virtual-address import failed");
         }
     } source, destination;
+    struct Imported {
+        rga_buffer_handle_t handle;
+        dev_t device;
+        ino_t inode;
+        size_t allocation;
+    };
+    std::map<int, Imported> imported;
+    unsigned width = 0, height = 0, stride = 0, format = 0;
+    ~Impl() {
+        for (const auto& item : imported)
+            releasebuffer_handle(item.second.handle);
+    }
+    rga_buffer_handle_t direct_source(const rtctrl_camera_frame& f) {
+        const auto& p = f.planes[0];
+        require(f.format.plane_count == 1 && p.dmabuf_valid && p.dmabuf_fd >= 0 &&
+                    p.data_offset == 0,
+                "direct RGA requires one DMA-BUF plane with zero offset");
+        require(p.stride >= f.format.width && p.stride % 16 == 0 && p.stride <= 8192,
+                "direct RGA requires a valid aligned pixel stride");
+        const size_t required = size_t(p.stride) * f.format.height * 3 / 2;
+        require(p.size >= required && p.allocation_size >= required &&
+                    p.allocation_size <= size_t(std::numeric_limits<int>::max()),
+                "direct RGA allocation/payload is insufficient");
+        require(!width || (width == f.format.width && height == f.format.height &&
+                           stride == p.stride && format == f.format.pixel_format),
+                "direct RGA camera layout changed; recreate converter");
+        struct stat identity {};
+        require(fstat(p.dmabuf_fd, &identity) == 0,
+                "direct RGA cannot inspect DMA-BUF identity");
+        auto found = imported.find(p.dmabuf_fd);
+        if (found != imported.end()) {
+            require(found->second.device == identity.st_dev &&
+                        found->second.inode == identity.st_ino &&
+                        found->second.allocation == p.allocation_size,
+                    "direct RGA descriptor reused or allocation changed");
+            return found->second.handle;
+        }
+        require(imported.size() < 32, "direct RGA buffer count exceeds limit");
+        auto handle = importbuffer_fd(p.dmabuf_fd, int(p.allocation_size));
+        require(handle != 0, "direct RGA DMA-BUF import failed");
+        try {
+            imported.emplace(
+                p.dmabuf_fd,
+                Imported{
+                    handle, identity.st_dev, identity.st_ino, p.allocation_size});
+        } catch (...) {
+            releasebuffer_handle(handle);
+            throw;
+        }
+        width = f.format.width;
+        height = f.format.height;
+        stride = p.stride;
+        format = f.format.pixel_format;
+        return handle;
+    }
 #endif
 };
 bool RgaFrameConverter::compiled() {
@@ -52,8 +111,9 @@ bool RgaFrameConverter::compiled() {
     return false;
 #endif
 }
-RgaFrameConverter::RgaFrameConverter()
+RgaFrameConverter::RgaFrameConverter(bool direct_dmabuf)
     : impl_(std::make_unique<Impl>()) {
+    impl_->direct = direct_dmabuf;
     require(compiled(),
             "RGA support not compiled; configure RTCTRL_RGA_INCLUDE_DIR and "
             "RTCTRL_RGA_LIBRARY or select cpu");
@@ -95,23 +155,31 @@ cv::Mat RgaFrameConverter::convert(const rtctrl_camera_frame& f,
     const int ow = std::min(static_cast<int>(w), max_width);
     const int oh = std::max(1, static_cast<int>(static_cast<uint64_t>(h) * ow / w));
     // RGA pixel strides must meet hardware alignment even for odd output widths.
-    const int src_stride = (static_cast<int>(w) + 15) & ~15;
+    const int src_stride = impl_->direct ? static_cast<int>(p.stride)
+                                         : (static_cast<int>(w) + 15) & ~15;
     const int dst_stride = (ow + 15) & ~15;
     auto& source = impl_->source;
     auto& destination = impl_->destination;
-    source.resize(static_cast<size_t>(src_stride) * h * 3 / 2);
+    rga_buffer_handle_t source_handle = 0;
+    if (impl_->direct)
+        source_handle = impl_->direct_source(f);
+    else
+        source.resize(static_cast<size_t>(src_stride) * h * 3 / 2);
     destination.resize(static_cast<size_t>(dst_stride) * oh * 3);
-    for (unsigned row = 0; row < h; ++row)
-        std::memcpy(source.bytes.data() + static_cast<size_t>(row) * src_stride,
-                    y + static_cast<size_t>(row) * p.stride,
-                    w);
-    for (unsigned row = 0; row < h / 2; ++row)
-        std::memcpy(source.bytes.data() + static_cast<size_t>(src_stride) * h +
-                        static_cast<size_t>(row) * src_stride,
-                    uv + static_cast<size_t>(row) * uvstride,
-                    w);
+    if (!impl_->direct) {
+        for (unsigned row = 0; row < h; ++row)
+            std::memcpy(source.bytes.data() + static_cast<size_t>(row) * src_stride,
+                        y + static_cast<size_t>(row) * p.stride,
+                        w);
+        for (unsigned row = 0; row < h / 2; ++row)
+            std::memcpy(source.bytes.data() + static_cast<size_t>(src_stride) * h +
+                            static_cast<size_t>(row) * src_stride,
+                        uv + static_cast<size_t>(row) * uvstride,
+                        w);
+        source_handle = source.handle;
+    }
     auto src =
-        wrapbuffer_handle(source.handle,
+        wrapbuffer_handle(source_handle,
                           w,
                           h,
                           nv21 ? RK_FORMAT_YCrCb_420_SP : RK_FORMAT_YCbCr_420_SP,
@@ -129,7 +197,7 @@ cv::Mat RgaFrameConverter::convert(const rtctrl_camera_frame& f,
         src.color_space_mode = IM_YUV_BT709_FULL_RANGE;
         dst.color_space_mode = IM_RGB_FULL;
     }
-    // Synchronous completion is required before reusing staging or releasing the
+    // Synchronous completion is required before reusing buffers or releasing the
     // camera frame. DEFAULT interpolation is intentionally not called nearest.
     const auto status = imresize(src, dst, 0, 0, IM_INTERP_DEFAULT, 1);
     if (status != IM_STATUS_SUCCESS && status != IM_STATUS_NOERROR)

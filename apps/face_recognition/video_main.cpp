@@ -15,6 +15,7 @@
 #include <csignal>
 #include <cstring>
 #include <iostream>
+#include <linux/videodev2.h>
 #include <map>
 #include <mutex>
 #include <opencv2/imgcodecs.hpp>
@@ -35,6 +36,7 @@ struct Options {
     std::string device, detector, recognizer, gallery, bind = "0.0.0.0", enrollment,
                                                        enrollment_image;
     std::string jpeg_encoder = "opencv", frame_converter = "cpu";
+    int capture_width = 0, capture_height = 0;
     int port = 8080, width = 960, quality = 75, duration = 0, frames = 0,
         max_faces = 8, enrollment_samples = 5;
     float threshold = 0, gap = 0;
@@ -53,7 +55,8 @@ Options parse(int argc, char** argv) {
         " --device --detector --recognizer --gallery --threshold --gap --bind "
         "--port --width --quality --duration --frames --max-faces --yuv-matrix "
         "--jpeg-encoder --yuv-range --input-type --enroll-name --enroll-image "
-        "--enroll-samples --frame-converter --jpeg-mode ";
+        "--enroll-samples --frame-converter --jpeg-mode --capture-width "
+        "--capture-height ";
     for (auto& a : args)
         if (allowed.find(" " + a.first + " ") == std::string::npos)
             throw std::runtime_error("unknown option: " + a.first);
@@ -90,8 +93,19 @@ Options parse(int argc, char** argv) {
         throw std::runtime_error("invalid --jpeg-mode");
     o.async_jpeg = jpeg_mode == "async";
     o.frame_converter = get("--frame-converter", "cpu");
-    if (o.frame_converter != "cpu" && o.frame_converter != "rga")
+    if (o.frame_converter != "cpu" && o.frame_converter != "rga" &&
+        o.frame_converter != "rga-direct")
         throw std::runtime_error("invalid --frame-converter");
+    o.capture_width = integer("--capture-width", 0, 0, 8192);
+    o.capture_height = integer("--capture-height", 0, 0, 8192);
+    if (o.frame_converter == "rga-direct") {
+        if (o.capture_width < 2 || o.capture_height < 2 || o.capture_width % 2 ||
+            o.capture_height % 2)
+            throw std::runtime_error("rga-direct requires explicit even "
+                                     "--capture-width/--capture-height");
+    } else if (o.capture_width || o.capture_height) {
+        throw std::runtime_error("capture dimensions require rga-direct");
+    }
     o.device = get("--device");
     o.detector = get("--detector");
     o.recognizer = get("--recognizer");
@@ -148,11 +162,18 @@ void capture(Latest& latest, const Options& options) {
     rtctrl_camera* camera = nullptr;
     try {
         std::unique_ptr<rtctrl::face::RgaFrameConverter> converter;
-        if (options.frame_converter == "rga")
-            converter = std::make_unique<rtctrl::face::RgaFrameConverter>();
+        if (options.frame_converter != "cpu")
+            converter = std::make_unique<rtctrl::face::RgaFrameConverter>(
+                options.frame_converter == "rga-direct");
         rtctrl_v4l2_config config{};
         config.device = options.device.c_str();
         config.buffer_count = 4;
+        if (options.frame_converter == "rga-direct") {
+            config.width = options.capture_width;
+            config.height = options.capture_height;
+            config.fourcc = V4L2_PIX_FMT_NV12;
+            config.export_dmabuf = 1;
+        }
         int rc = rtctrl_v4l2_open(&config, &camera);
         if (rc)
             throw std::runtime_error(std::string("camera open: ") +
@@ -278,7 +299,8 @@ int main(int argc, char** argv) {
                    "--yuv-range auto|full|limited] [--duration SECONDS --frames "
                    "COUNT] [--enroll-name NAME --enroll-image snapshot "
                    "--enroll-samples 5] [--input-type float32|uint8|native-fp16] "
-                   "[--jpeg-encoder opencv|turbojpeg] [--frame-converter cpu|rga] "
+                   "[--jpeg-encoder opencv|turbojpeg] [--frame-converter "
+                   "cpu|rga|rga-direct] [--capture-width W --capture-height H] "
                    "[--jpeg-mode sync|async]\n";
             return 0;
         }
