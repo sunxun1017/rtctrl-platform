@@ -1,0 +1,2650 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 735  of event 'cpu-clock'
+# Event count (approx.): 7424242350
+#
+# Overhead  Shared Object
+# ........  ....................
+#
+    54.29%  rtctrl_face_video
+            |
+            |--16.87%--_ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+            |          _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--12.65%--_ZN4rknn11RknnBackend3runEv
+            |          |
+            |          |--11.43%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --1.22%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--10.61%--_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--6.67%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--1.90%--_ZN2cvL13remapBilinearINS_11FixedPtCastIihLi15EEENS_11RemapVec_8uEsEEvRKNS_3MatERS4_S6_S6_PKviRKNS_7Scalar_IdEE
+            |          |
+            |          |--1.77%--0xb43
+            |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--_ZN2cvL13remapBilinearINS_11FixedPtCastIihLi15EEENS_11RemapVec_8uEsEEvRKNS_3MatERS4_S6_S6_PKviRKNS_7Scalar_IdEE
+            |                     _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--1.36%--_ZN2cvL14FillConvexPolyERNS_3MatEPKNS_6Point_IlEEiPKvii
+            |          |
+            |          |--1.22%--0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--_ZN2cvL9ThickLineERNS_3MatENS_6Point_IlEES3_PKviiii
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.95%--_ZN2cvL5Line2ERNS_3MatENS_6Point_IlEES3_PKv
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.54%--_ZN6rtctrl4face9normalizeERSt6vectorIfSaIfEE
+            |          _ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+            |          _ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.41%--_ZNK2cv17WarpAffineInvokerclERKNS_5RangeE
+            |          _ZNK2cv17WarpAffineInvokerclERKNS_5RangeE
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--_ZN2cv5solveERKNS_11_InputArrayES2_RKNS_12_OutputArrayEi
+            |          _ZN2cv5solveERKNS_11_InputArrayES2_RKNS_12_OutputArrayEi
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--_ZN2cv10warpAffineERKNS_11_InputArrayERKNS_12_OutputArrayES2_NS_5Size_IiEEiiRKNS_7Scalar_IdEE
+            |          _ZN2cv10warpAffineERKNS_11_InputArrayERKNS_12_OutputArrayES2_NS_5Size_IiEEiiRKNS_7Scalar_IdEE
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--_ZN2cv8clipLineENS_5Size_IlEERNS_6Point_IlEES4_
+            |          |
+            |          |--0.14%--_ZN2cvL5Line2ERNS_3MatENS_6Point_IlEES3_PKv
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--_ZN2cv8clipLineENS_5Size_IlEERNS_6Point_IlEES4_
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.14%--_ZN2cv5utils5trace7details6RegionC2ERKNS3_21LocationStaticStorageE
+            |          _ZN2cv8clipLineENS_5Size_IlEERNS_6Point_IlEES4_
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN2cv7setSizeERNS_3MatEiPKiPKmb.constprop.30
+            |          _ZN2cv3Mat6createEiPKii
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_ZN2cv14JacobiSVDImpl_IdEEvPT_mS2_S2_miiidS1_
+            |          _ZN2cv14JacobiSVDImpl_IdEEvPT_mS2_S2_miiidS1_
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN2cv7putTextERKNS_17_InputOutputArrayERKNS_6StringENS_6Point_IiEEidNS_7Scalar_IdEEiib
+            |          _ZN2cv7putTextERKNS_17_InputOutputArrayERKNS_6StringENS_6Point_IiEEidNS_7Scalar_IdEEiib
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN2cvL9ThickLineERNS_3MatENS_6Point_IlEES3_PKviiii
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN2cvL11ICV_HLINE_XEPhiiPKhi
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+            |          _ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_ZNSt6localeD1Ev@plt
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+             --0.14%--memcpy@plt
+                       _ZN2cvL6CircleERNS_3MatENS_6Point_IiEEiPKvi.constprop.164
+                       0x7facaa649c
+                       __libc_start_main
+                       _start
+
+    22.04%  libc.so.6
+            |
+            |--11.97%--0x7facb17dd4
+            |          |
+            |          |--6.39%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --5.58%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |                     _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--1.36%--0x7facb17dcc
+            |          |
+            |          |--0.68%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--1.36%--0x7facb17dc8
+            |          |
+            |          |--0.68%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--1.22%--0x7facb17dc4
+            |          |
+            |          |--0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.54%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |                     _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.68%--malloc
+            |          _Znwm
+            |          |
+            |          |--0.27%--0x7fac4c689c
+            |          |          0x7fac4c0b4c
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          |
+            |          |          |--0.14%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          |          main
+            |          |          |          0x7facaa649c
+            |          |          |          __libc_start_main
+            |          |          |          _start
+            |          |          |
+            |          |           --0.14%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |                     main
+            |          |                     0x7facaa649c
+            |          |                     __libc_start_main
+            |          |                     _start
+            |          |
+            |          |--0.14%--_ZN2cv3Mat6createEiPKii
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |          |--0.14%--_ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac29a42c
+            |                     0x7fac4c0c24
+            |                     0x7fac4c37f0
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.54%--memcmp
+            |          |
+            |          |--0.41%--_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc
+            |          |          |
+            |          |          |--0.14%--0x7fac490348
+            |          |          |          0x7fac4c3920
+            |          |          |          rknn_run
+            |          |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          |          main
+            |          |          |          0x7facaa649c
+            |          |          |          __libc_start_main
+            |          |          |          _start
+            |          |          |
+            |          |          |--0.14%--0x7fac490268
+            |          |          |          0x7fac4c3920
+            |          |          |          rknn_run
+            |          |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          |          main
+            |          |          |          0x7facaa649c
+            |          |          |          __libc_start_main
+            |          |          |          _start
+            |          |          |
+            |          |           --0.14%--0x7fac490028
+            |          |                     0x7fac276fc8
+            |          |                     rknn_outputs_get
+            |          |                     _ZN4rknn11RknnBackend3runEv
+            |          |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |                     main
+            |          |                     0x7facaa649c
+            |          |                     __libc_start_main
+            |          |                     _start
+            |          |
+            |           --0.14%--_ZSteqIcEN9__gnu_cxx11__enable_ifIXsrSt9__is_charIT_E7__valueEbE6__typeERKNSt7__cxx1112basic_stringIS3_St11char_traitsIS3_ESaIS3_EEESE_
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.41%--0x7facb17ddc
+            |          |
+            |          |--0.27%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.14%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.41%--0x7facb17dbc
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.27%--0x7facb18c58
+            |          _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc
+            |          |
+            |          |--0.14%--0x7fac4b929c
+            |          |          0x7fac4c03a4
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac2770b4
+            |                     rknn_outputs_get
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--0x7facb17dc0
+            |          |
+            |          |--0.14%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.14%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.27%--0x7facb17d00
+            |          _ZNSt6vectorIiSaIiEEC2ERKS1_
+            |          |
+            |          |--0.14%--0x7fac29a46c
+            |          |          0x7fac4c0c24
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac29a458
+            |                     0x7fac4c0c24
+            |                     0x7fac4c37f0
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--cfree
+            |          |
+            |          |--0.14%--_ZN2cv3Mat10deallocateEv
+            |          |          _ZNK2cv12RemapInvokerclERKNS_5RangeE
+            |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac29280f
+            |                     0x7fac4c0c68
+            |                     0x7fac4c37f0
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.14%--0x7facba8bdc
+            |          pthread_mutex_lock
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--ioctl
+            |          v4l2_release
+            |          rtctrl_camera_release
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--0x7facb18bd8
+            |          _ZN2cv3MataSERKNS_7Scalar_IdEE
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17e08
+            |          _ZNSt6vectorIiSaIiEEC2ERKS1_
+            |          0x7fac29a484
+            |          0x7fac4c0c24
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17db4
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--0x7facb17da0
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--0x7facb17d44
+            |          _ZN2cvL11ICV_HLINE_XEPhiiPKhi
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17d3c
+            |          _ZN2cvL6CircleERNS_3MatENS_6Point_IiEEiPKvi.constprop.164
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17d34
+            |          _ZN2cvL11ICV_HLINE_XEPhiiPKhi
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17cd8
+            |          _ZN2cvL11ICV_HLINE_XEPhiiPKhi
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb17cc0
+            |          0x7fac4b4733
+            |          0x7fac4c0e8c
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--strchrnul
+            |          0x7facad3d4f
+            |          vsnprintf
+            |          0x7facdb7168
+            |          _ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+            |          _ZNSo9_M_insertIdEERSoT_
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb0d508
+            |          posix_memalign
+            |          _ZN2cv10fastMallocEm
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb0c7a0
+            |          0x7facb0cdd0
+            |          0x7facb0d564
+            |          posix_memalign
+            |          _ZN2cv10fastMallocEm
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--0x7facb0c390
+            |          0x7facb0cdd0
+            |          0x7facb0d564
+            |          posix_memalign
+            |          _ZN2cv10fastMallocEm
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb0c068
+            |          malloc
+            |          _Znwm
+            |          _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_mutateEmmPKcm
+            |          _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facb0b000
+            |          cfree
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--pthread_mutex_lock
+            |          0x7fac4836c0
+            |          0x7fac25f338
+            |          0x7fac276e88
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facad3d40
+            |          vsnprintf
+            |          0x7facdb7168
+            |          _ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+            |          _ZNSo9_M_insertIdEERSoT_
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7facacef10
+            |          0x7facad4ae0
+            |          vsnprintf
+            |          0x7facdb7168
+            |          _ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+            |          _ZNSo9_M_insertIdEERSoT_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--0x7facacd240
+            |          0x7facacdfb8
+            |          0x7facacef3c
+            |          0x7facad4ae0
+            |          vsnprintf
+            |          0x7facdb7168
+            |          _ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+            |          _ZNSo9_M_insertIdEERSoT_
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+             --0.14%--0x7facacb5a0
+                       0x7facacd7c7
+                       0x7facacef3c
+                       0x7facad4ae0
+                       vsnprintf
+                       0x7facdb7168
+                       _ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+                       _ZNSo9_M_insertIdEERSoT_
+                       main
+                       0x7facaa649c
+                       __libc_start_main
+                       _start
+
+    13.61%  [kernel.kallsyms]
+            |
+            |--5.03%--__pi_dcache_clean_poc
+            |          |
+            |          |--4.63%--iommu_dma_sync_sg_for_device
+            |          |          dma_sync_sg_for_device
+            |          |          |
+            |          |          |--2.45%--vb2_cma_sg_prepare
+            |          |          |          __buf_prepare
+            |          |          |          vb2_core_qbuf
+            |          |          |          vb2_qbuf
+            |          |          |          vb2_ioctl_qbuf
+            |          |          |          v4l_qbuf
+            |          |          |          __video_do_ioctl
+            |          |          |          video_usercopy
+            |          |          |          video_ioctl2
+            |          |          |          v4l2_ioctl
+            |          |          |          __arm64_sys_ioctl
+            |          |          |          invoke_syscall
+            |          |          |          el0_svc_common.constprop.0
+            |          |          |          do_el0_svc
+            |          |          |          el0_svc
+            |          |          |          el0t_64_sync_handler
+            |          |          |          el0t_64_sync
+            |          |          |          ioctl
+            |          |          |          v4l2_release
+            |          |          |          rtctrl_camera_release
+            |          |          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |          |          0x7facd9755c
+            |          |          |          0x7facafd5c4
+            |          |          |          0x7facb5c20c
+            |          |          |
+            |          |           --2.18%--rga_mm_sync_dma_sg_for_device
+            |          |                     rga_mm_get_buffer
+            |          |                     rga_mm_get_channel_handle_info
+            |          |                     rga_mm_map_job_info
+            |          |                     rga_job_commit
+            |          |                     rga_request_commit
+            |          |                     rga_request_submit
+            |          |                     rga_ioctl_blit
+            |          |                     rga_ioctl
+            |          |                     __arm64_sys_ioctl
+            |          |                     invoke_syscall
+            |          |                     el0_svc_common.constprop.0
+            |          |                     do_el0_svc
+            |          |                     el0_svc
+            |          |                     el0t_64_sync_handler
+            |          |                     el0t_64_sync
+            |          |                     ioctl
+            |          |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          |                     |
+            |          |                     |--1.36%--_Z8imresize12rga_buffer_tS_ddiiPi
+            |          |                     |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          |                     |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          |                     |          0x7facd9755c
+            |          |                     |          0x7facafd5c4
+            |          |                     |          0x7facb5c20c
+            |          |                     |
+            |          |                      --0.82%--_Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          |                                _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          |                                _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          |                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          |                                _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          |                                _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          |                                _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |                                0x7facd9755c
+            |          |                                0x7facafd5c4
+            |          |                                0x7facb5c20c
+            |          |
+            |           --0.41%--dma_sync_single_for_device
+            |                     system_heap_sgl_sync_range
+            |                     system_heap_dma_buf_end_cpu_access_partial
+            |                     rknpu_mem_sync_ioctl
+            |                     rknpu_ioctl
+            |                     __arm64_sys_ioctl
+            |                     invoke_syscall
+            |                     el0_svc_common.constprop.0
+            |                     do_el0_svc
+            |                     el0_svc
+            |                     el0t_64_sync_handler
+            |                     el0t_64_sync
+            |                     ioctl
+            |                     0x7fac489e3b
+            |                     rknn_mem_sync
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.68%--arch_local_irq_enable
+            |          __schedule
+            |          schedule
+            |          |
+            |          |--0.41%--futex_wait_queue
+            |          |          futex_wait
+            |          |          do_futex
+            |          |          __arm64_sys_futex
+            |          |          invoke_syscall
+            |          |          el0_svc_common.constprop.0
+            |          |          do_el0_svc
+            |          |          el0_svc
+            |          |          el0t_64_sync_handler
+            |          |          el0t_64_sync
+            |          |          0x7facb058ac
+            |          |          0x7facafa153
+            |          |          0x7facafa4b0
+            |          |          |
+            |          |          |--0.27%--pthread_cond_clockwait
+            |          |          |          main
+            |          |          |          0x7facaa649c
+            |          |          |          __libc_start_main
+            |          |          |          _start
+            |          |          |
+            |          |           --0.14%--pthread_cond_wait
+            |          |                     _ZNSt18condition_variable4waitERSt11unique_lockISt5mutexE
+            |          |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |                     0x7facd9755c
+            |          |                     0x7facafd5c4
+            |          |                     0x7facb5c20c
+            |          |
+            |           --0.27%--schedule_timeout
+            |                     |
+            |                     |--0.14%--rknpu_submit_ioctl
+            |                     |          rknpu_ioctl
+            |                     |          __arm64_sys_ioctl
+            |                     |          invoke_syscall
+            |                     |          el0_svc_common.constprop.0
+            |                     |          do_el0_svc
+            |                     |          el0_svc
+            |                     |          el0t_64_sync_handler
+            |                     |          el0t_64_sync
+            |                     |          ioctl
+            |                     |          0x7fac4899cf
+            |                     |          0x7fac4b3690
+            |                     |          0x7fac4aa638
+            |                     |          0x7fac4c00ec
+            |                     |          0x7fac4c37f0
+            |                     |          rknn_run
+            |                     |          _ZN4rknn11RknnBackend3runEv
+            |                     |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     |          main
+            |                     |          0x7facaa649c
+            |                     |          __libc_start_main
+            |                     |          _start
+            |                     |
+            |                      --0.14%--rga_request_wait
+            |                                rga_request_commit
+            |                                rga_request_submit
+            |                                rga_ioctl_blit
+            |                                rga_ioctl
+            |                                __arm64_sys_ioctl
+            |                                invoke_syscall
+            |                                el0_svc_common.constprop.0
+            |                                do_el0_svc
+            |                                el0_svc
+            |                                el0t_64_sync_handler
+            |                                el0t_64_sync
+            |                                ioctl
+            |                                _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |                                _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |                                _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |                                _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                                _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                                _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                                _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                                _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                                0x7facd9755c
+            |                                0x7facafd5c4
+            |                                0x7facb5c20c
+            |
+            |--0.41%--__arch_copy_to_user
+            |          |
+            |          |--0.27%--rknpu_ioctl
+            |          |          __arm64_sys_ioctl
+            |          |          invoke_syscall
+            |          |          el0_svc_common.constprop.0
+            |          |          do_el0_svc
+            |          |          el0_svc
+            |          |          el0t_64_sync_handler
+            |          |          el0t_64_sync
+            |          |          ioctl
+            |          |          0x7fac4899cf
+            |          |          0x7fac4b3690
+            |          |          0x7fac4aa638
+            |          |          0x7fac4c00ec
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--rkvenc2_wait_result
+            |                     mpp_dev_ioctl
+            |                     __arm64_sys_ioctl
+            |                     invoke_syscall
+            |                     el0_svc_common.constprop.0
+            |                     do_el0_svc
+            |                     el0_svc
+            |                     el0t_64_sync_handler
+            |                     el0t_64_sync
+            |                     ioctl
+            |                     mpp_service_cmd_poll
+            |                     hal_jpege_vepu511_wait
+            |                     mpp_enc_thread
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.41%--__fget_light
+            |          __fdget
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          |
+            |          |--0.14%--mpp_service_cmd_send
+            |          |          hal_jpege_vepu511_start
+            |          |          mpp_enc_thread
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |          |--0.14%--0x7fac489e3b
+            |          |          0x7fac4b9364
+            |          |          0x7fac4c03a4
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac4899cf
+            |                     0x7fac4b3690
+            |                     0x7fac4aa638
+            |                     0x7fac4c00ec
+            |                     0x7fac4c37f0
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--__arch_copy_from_user
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac489e3b
+            |          |
+            |          |--0.14%--0x7fac4b9364
+            |          |          0x7fac4c03a4
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--rknn_mem_sync
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--rga_job_commit
+            |          |
+            |          |--0.14%--rga_request_submit
+            |          |          rga_ioctl_blit
+            |          |          rga_ioctl
+            |          |          __arm64_sys_ioctl
+            |          |          invoke_syscall
+            |          |          el0_svc_common.constprop.0
+            |          |          do_el0_svc
+            |          |          el0_svc
+            |          |          el0t_64_sync_handler
+            |          |          el0t_64_sync
+            |          |          ioctl
+            |          |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.14%--rga_request_commit
+            |                     rga_request_submit
+            |                     rga_ioctl_blit
+            |                     rga_ioctl
+            |                     __arm64_sys_ioctl
+            |                     invoke_syscall
+            |                     el0_svc_common.constprop.0
+            |                     do_el0_svc
+            |                     el0_svc
+            |                     el0t_64_sync_handler
+            |                     el0t_64_sync
+            |                     ioctl
+            |                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |                     _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |                     _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.27%--kfree
+            |          rknpu_job_free
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          |
+            |          |--0.14%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--__mod_timer
+            |          schedule_timeout
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--dma_sync_single_for_device
+            |          system_heap_sgl_sync_range
+            |          system_heap_dma_buf_end_cpu_access_partial
+            |          rknpu_mem_sync_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac489e3b
+            |          rknn_mem_sync
+            |          _ZN4rknn11RknnBackend3runEv
+            |          |
+            |          |--0.14%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--arch_local_irq_restore
+            |          wake_up_q
+            |          futex_wake
+            |          do_futex
+            |          __arm64_sys_futex
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          pthread_cond_signal
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--mutex_lock
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--schedule
+            |          schedule_timeout
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--rknpu_job_schedule
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--rknpu_job_next.part.0
+            |          rknpu_job_schedule
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac489e3b
+            |          rknn_mem_sync
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--rknpu_power_get
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac489e3b
+            |          0x7fac4b9364
+            |          0x7fac4c03a4
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--__video_do_ioctl
+            |          video_usercopy
+            |          video_ioctl2
+            |          v4l2_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          v4l2_release
+            |          rtctrl_camera_release
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--v4l2_poll
+            |          do_sys_poll
+            |          __arm64_sys_ppoll
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa19c
+            |          __poll
+            |          v4l2_acquire
+            |          rtctrl_camera_acquire
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--__pm_runtime_idle
+            |          rpm_resume
+            |          __pm_runtime_resume
+            |          rga_power_enable
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rk_iommu_enable
+            |          pm_generic_runtime_resume
+            |          __rpm_callback
+            |          rpm_callback
+            |          rpm_resume
+            |          __pm_runtime_resume
+            |          rpm_get_suppliers
+            |          __rpm_callback
+            |          rpm_callback
+            |          rpm_resume
+            |          __pm_runtime_resume
+            |          rga_power_enable
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--clk_enable_unlock
+            |          clk_bulk_enable
+            |          rk_iommu_enable
+            |          rk_iommu_resume
+            |          pm_generic_runtime_resume
+            |          __rpm_callback
+            |          rpm_callback
+            |          rpm_resume
+            |          __pm_runtime_resume
+            |          rpm_get_suppliers
+            |          __rpm_callback
+            |          rpm_callback
+            |          rpm_resume
+            |          __pm_runtime_resume
+            |          rga_power_enable
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--mpp_dma_find_buffer_fd
+            |          rkvenc_alloc_task
+            |          mpp_process_task_default
+            |          task_msgs_add
+            |          mpp_dev_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          mpp_service_cmd_send
+            |          hal_jpege_vepu511_start
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--mpp_dev_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          mpp_service_cmd_send
+            |          hal_jpege_vepu511_start
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga_mm_map_job_info
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga2_init_reg
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga_request_kref_release
+            |          rga_request_put
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga_request_config
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga_is_yuv422_packed_format
+            |          rga2_init_reg
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rga_is_yuv420_packed_format
+            |          rga2_init_reg
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--sg_next
+            |          dma_sync_sg_for_device
+            |          rga_mm_sync_dma_sg_for_device
+            |          rga_mm_get_buffer
+            |          rga_mm_get_channel_handle_info
+            |          rga_mm_map_job_info
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--do_sys_poll
+            |          __arm64_sys_ppoll
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa19c
+            |          __poll
+            |          v4l2_acquire
+            |          rtctrl_camera_acquire
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--poll_freewait
+            |          do_sys_poll
+            |          __arm64_sys_ppoll
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa19c
+            |          __poll
+            |          v4l2_acquire
+            |          rtctrl_camera_acquire
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--fput
+            |          poll_freewait
+            |          do_sys_poll
+            |          __arm64_sys_ppoll
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa19c
+            |          __poll
+            |          v4l2_acquire
+            |          rtctrl_camera_acquire
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--__kmem_cache_free
+            |          kfree
+            |          rga_request_free
+            |          rga_request_kref_release
+            |          rga_request_put
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--dma_pool_alloc
+            |          rga_dma_buf_pool_alloc
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--timer_delete_sync
+            |          schedule_timeout
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--get_timespec64
+            |          __arm64_sys_futex
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa4b0
+            |          pthread_cond_timedwait
+            |          mpp_cond_timedwait
+            |          _mpp_port_poll
+            |          0x7facf84714
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--call_rcu
+            |          __radix_tree_delete
+            |          radix_tree_delete_item
+            |          idr_remove
+            |          rga_request_free
+            |          rga_request_kref_release
+            |          rga_request_put
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--rcu_do_batch
+            |          rcu_core_si
+            |          handle_softirqs
+            |          __do_softirq
+            |          ____do_softirq
+            |          call_on_irq_stack
+            |          do_softirq_own_stack
+            |          __irq_exit_rcu
+            |          irq_exit_rcu
+            |          el0_interrupt
+            |          __el0_irq_handler_common
+            |          el0t_64_irq_handler
+            |          el0t_64_irq
+            |          0x7facb17dd4
+            |          _ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--arch_local_irq_restore
+            |          rcu_report_qs_rdp
+            |          rcu_core
+            |          rcu_core_si
+            |          handle_softirqs
+            |          __do_softirq
+            |          ____do_softirq
+            |          call_on_irq_stack
+            |          do_softirq_own_stack
+            |          __irq_exit_rcu
+            |          irq_exit_rcu
+            |          el0_interrupt
+            |          __el0_irq_handler_common
+            |          el0t_64_irq_handler
+            |          el0t_64_irq
+            |          _ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--swake_up_one
+            |          swake_up_one_online
+            |          rcu_gp_kthread_wake
+            |          note_gp_changes
+            |          rcu_core
+            |          rcu_core_si
+            |          handle_softirqs
+            |          __do_softirq
+            |          ____do_softirq
+            |          call_on_irq_stack
+            |          do_softirq_own_stack
+            |          __irq_exit_rcu
+            |          irq_exit_rcu
+            |          el0_interrupt
+            |          __el0_irq_handler_common
+            |          el0t_64_irq_handler
+            |          el0t_64_irq
+            |          0x7facb17dd4
+            |          _ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--finish_wait
+            |          rknpu_submit_ioctl
+            |          rknpu_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--arch_local_irq_restore
+            |          run_rebalance_domains
+            |          handle_softirqs
+            |          __do_softirq
+            |          ____do_softirq
+            |          call_on_irq_stack
+            |          do_softirq_own_stack
+            |          __irq_exit_rcu
+            |          irq_exit_rcu
+            |          el0_interrupt
+            |          __el0_irq_handler_common
+            |          el0t_64_irq_handler
+            |          el0t_64_irq
+            |          _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+            |          _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--arch_sync_dma_for_device
+            |          dma_sync_sg_for_device
+            |          rga_mm_sync_dma_sg_for_device
+            |          rga_mm_get_buffer
+            |          rga_mm_get_channel_handle_info
+            |          rga_mm_map_job_info
+            |          rga_job_commit
+            |          rga_request_commit
+            |          rga_request_submit
+            |          rga_ioctl_blit
+            |          rga_ioctl
+            |          __arm64_sys_ioctl
+            |          invoke_syscall
+            |          el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--el0_svc_common.constprop.0
+            |          do_el0_svc
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          v4l2_release
+            |          rtctrl_camera_release
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--do_notify_resume
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          0x7facb058ac
+            |          0x7facafa153
+            |          0x7facafa4b0
+            |          pthread_cond_clockwait
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--fpsimd_load_state
+            |          fpsimd_restore_current_state
+            |          do_notify_resume
+            |          el0_svc
+            |          el0t_64_sync_handler
+            |          el0t_64_sync
+            |          ioctl
+            |          0x7fac4899cf
+            |          0x7fac4b3690
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+             --0.14%--fpsimd_restore_current_state
+                       el0_svc
+                       el0t_64_sync_handler
+                       el0t_64_sync
+                       ioctl
+                       0x7fac4899cf
+                       0x7fac4b3690
+                       0x7fac4aa638
+                       0x7fac4c00ec
+                       0x7fac4c37f0
+                       rknn_run
+                       _ZN4rknn11RknnBackend3runEv
+                       _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                       main
+                       0x7facaa649c
+                       __libc_start_main
+                       _start
+
+     6.67%  librknnrt.so
+            |
+            |--0.82%--0x7fac4ff47c
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.54%--0x7fac4ff4b0
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.54%--0x7fac4ff494
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.41%--0x7fac4ff4a0
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.41%--0x7fac4ff48c
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--0x7fac4ff498
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.27%--0x7fac4ff484
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac63b388
+            |          0x7fac4b984f
+            |          0x7fac4b9850
+            |          0x7fac4c03a4
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac63b308
+            |          0x7fac63b0cf
+            |          0x7fac4b96dc
+            |          0x7fac4c03a4
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac60ac18
+            |          0x7fac4c0c53
+            |          0x7fac4c0c54
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac60ac0c
+            |          0x7fac4c0c53
+            |          0x7fac4c0c54
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4ff4a8
+            |          0x7fac4ff50b
+            |          0x7fac2783d0
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c698c
+            |          0x7fac4c0b4b
+            |          0x7fac4c0b4c
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZNSt6vectorIhSaIhEEC1ERKS1_
+            |          0x7fac4c0c37
+            |          0x7fac4c0c38
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c4cdc
+            |          0x7fac4c0da7
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c4c80
+            |          0x7fac4c0af3
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c49d4
+            |          0x7fac4c0d33
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c37f0
+            |          0x7fac4c37ef
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c0dc0
+            |          0x7fac4c0da7
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c0d68
+            |          0x7fac4c0ec3
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c0bcc
+            |          0x7fac4c0b4b
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4c0b54
+            |          0x7fac4c0b4b
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4b46b0
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4b3550
+            |          0x7fac4aa637
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac4b3480
+            |          0x7fac4aa637
+            |          0x7fac4aa638
+            |          0x7fac4c00ec
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac490260
+            |          0x7fac490427
+            |          0x7fac4c3920
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac284b5c
+            |          0x7fac284b53
+            |          0x7fac286a34
+            |          0x7fac286a84
+            |          0x7fac26f39c
+            |          0x7fac27712c
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac27b004
+            |          0x7fac4c68c3
+            |          0x7fac4c0b4c
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac27afe4
+            |          0x7fac4c69b7
+            |          0x7fac4c0b4c
+            |          0x7fac4c37f0
+            |          rknn_run
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--0x7fac25e6a0
+            |          0x7fac286bc7
+            |          0x7fac286bc8
+            |          0x7fac286a84
+            |          0x7fac286a84
+            |          0x7fac26f39c
+            |          0x7fac27712c
+            |          rknn_outputs_get
+            |          _ZN4rknn11RknnBackend3runEv
+            |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+             --0.14%--_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc@plt
+                       0x7fac490027
+                       0x7fac276fc8
+                       rknn_outputs_get
+                       _ZN4rknn11RknnBackend3runEv
+                       _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+                       main
+                       0x7facaa649c
+                       __libc_start_main
+                       _start
+
+     1.63%  libstdc++.so.6.0.32
+            |
+            |--0.54%--_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc
+            |          |
+            |          |--0.27%--0x7fac490428
+            |          |          0x7fac4c3920
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.27%--0x7fac490268
+            |                     0x7fac4c3920
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--_Znwm
+            |          |
+            |          |--0.14%--0x7fac29a42c
+            |          |          0x7fac4c0c24
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac28691b
+            |                     0x7fac286aa8
+            |                     0x7fac286a84
+            |                     0x7fac26f39c
+            |                     0x7fac27712c
+            |                     rknn_outputs_get
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.27%--free@plt
+            |          |
+            |          |--0.14%--0x7fac4c0c77
+            |          |          0x7fac4c37f0
+            |          |          rknn_run
+            |          |          _ZN4rknn11RknnBackend3runEv
+            |          |          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+            |          |          main
+            |          |          0x7facaa649c
+            |          |          __libc_start_main
+            |          |          _start
+            |          |
+            |           --0.14%--0x7fac4c0c5f
+            |                     0x7fac4c37f0
+            |                     rknn_run
+            |                     _ZN4rknn11RknnBackend3runEv
+            |                     _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |                     main
+            |                     0x7facaa649c
+            |                     __libc_start_main
+            |                     _start
+            |
+            |--0.14%--_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm
+            |          _ZNSt7__cxx1115basic_stringbufIcSt11char_traitsIcESaIcEE8overflowEi
+            |          _ZNSt15basic_streambufIcSt11char_traitsIcEE6xsputnEPKcl
+            |          _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l
+            |          main
+            |          0x7facaa649c
+            |          __libc_start_main
+            |          _start
+            |
+            |--0.14%--_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6resizeEmc
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_ZNSt6chrono3_V212steady_clock3nowEv
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+             --0.14%--_ZNSt6localeC1Ev
+                       _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                       _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+                       0x7facd9755c
+                       0x7facafd5c4
+                       0x7facb5c20c
+
+     1.22%  librockchip_mpp.so.0
+            |
+            |--0.27%--mpp_enc_notify_v2
+            |          |
+            |          |--0.14%--_ZN3Mpp7enqueueE11MppPortTypePv
+            |          |          0x7facf8516c
+            |          |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          |          0x7facd9755c
+            |          |          0x7facafd5c4
+            |          |          0x7facb5c20c
+            |          |
+            |           --0.14%--_ZN3Mpp7dequeueE11MppPortTypePPv
+            |                     0x7facf852ac
+            |                     _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |                     _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |                     _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |                     _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |                     _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |                     0x7facd9755c
+            |                     0x7facafd5c4
+            |                     0x7facb5c20c
+            |
+            |--0.14%--0x7fad0e4f2c
+            |          mpp_meta_set_s32
+            |          0x7facf86380
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--jpege_bits_put
+            |          write_jpeg_header
+            |          hal_jpege_vepu511_gen_regs
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--hal_jpege_vepu511_gen_regs
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--mpp_thread_wait
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--mpp_task_meta_get_frame
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_mpp_port_poll
+            |          mpp_enc_thread
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+             --0.14%--mpp_enc_refs_get_cpb
+                       mpp_enc_thread
+                       0x7facafd5c4
+                       0x7facb5c20c
+
+     0.41%  librga.so.2.1.0
+            |
+            |--0.14%--_Z17generate_blit_reqP7rga_reqP8rga_infoS2_S2_
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z8imresize12rga_buffer_tS_ddiiPi
+            |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+            |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+            |--0.14%--_Z9rga_check12rga_buffer_tS_S_7im_rectS0_S0_i@plt
+            |          _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+            |          _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+            |          _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+            |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+            |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+            |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+            |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+            |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+            |          0x7facd9755c
+            |          0x7facafd5c4
+            |          0x7facb5c20c
+            |
+             --0.14%--_Z13is_rgb_formati@plt
+                       _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                       _Z10imcvtcolor12rga_buffer_tS_iiiiPi
+                       _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+                       _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+                       _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                       _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                       _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                       _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+                       0x7facd9755c
+                       0x7facafd5c4
+                       0x7facb5c20c
+
+     0.14%  libm.so.6
+            |
+            ---lrintf32
+               _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

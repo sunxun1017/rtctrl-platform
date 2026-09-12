@@ -1,0 +1,14 @@
+{
+  "baseline_commit": "93a6f79",
+  "code_commits": [
+    "cb63129",
+    "4b172c8",
+    "06a4470"
+  ],
+  "baseline_binary_sha256": "d768237f4a9d70eac73b27ec9bab53ffba882ce18cdba0732eee4d113294c4ed",
+  "deployed_binary_sha256": "59732949714e091979a3849a6af928399fb597e24a6b8188dd44d4f697f9dfb8",
+  "long_soak_completed": false,
+  "board_result": "final-monitor/summary.json",
+  "image_quality_difference": "real-jpeg.txt",
+  "saved_face_images": false
+}

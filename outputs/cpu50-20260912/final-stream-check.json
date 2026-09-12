@@ -1,0 +1,15 @@
+{
+  "decoded_frames": 210,
+  "warmup_frames": 30,
+  "timed_frames": 180,
+  "dimensions": [
+    [
+      960,
+      712
+    ]
+  ],
+  "interval_s": 5.9689999999973224,
+  "decoded_fps": 29.988272742516383,
+  "saved_images": false,
+  "client": "Windows Python urllib/Pillow, not browser paint FPS"
+}

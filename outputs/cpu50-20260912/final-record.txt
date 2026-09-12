@@ -1,0 +1,3 @@
+Couldn't synthesize bpf events.
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.105 MB /userdata/rtctrl-face-video/cpu50-test/final.data (735 samples) ]

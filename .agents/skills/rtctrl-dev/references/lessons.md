@@ -61,3 +61,13 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 - 原生FP16的恒等AFFINE属性仍需明确归一化；只按shape或直接写raw FP16会错。输出逐值对照和模型指纹约束先于启用，换模型/SDK后重新验证。
 - 新perf显示submit热点后，外提类型/布局分支，所有类型布局及ROI逐值一致，再用无人脸A/B确认CPU下降。不要把微基准几十倍当整链提速，也不要把不同人脸数的CPU/Self直接相减。
 - 单分钟稳定和短A/B只能覆盖当时负载；被用户停止的长期采样不能写成完成。
+
+
+## 2026-09-12：30 FPS 下继续降低人脸视频 CPU
+
+- 适用：已验证RV1126B、OpenCV3.4.5、960宽预览、native两模型；证据 `outputs/cpu50-20260912/README.md`。
+- 精确缩放特例、单内存camera DMA直接导入、MPP JPEG分别对照，单脸CPU约101→87→78→38%，保留30FPS。前两项逐像素一致；硬件JPEG像素不同且在推理后，不宣称等画质。
+- EXPBUF会让已有MMAP缓冲进入bufinfo统计；核对exporter/大小/对象数和SDK get_dmabuf源码，再解释全局DMA增量。PSS与DMA不可直接相加。
+- MPP简单put/get在超时后所有权可能已转移；显式task enqueue/pop划分责任，mock需模拟SDK真正释放queued资源。poll成功可能为正任务数量，只有负值报错。当前noncacheable路径不代表未来cacheable也无需同步。
+- sanitizer缓存开关不证明每个目标都已插桩；核对实际编译与最终链接选项，特别是只链接OpenCV的独立适配器/测试。
+- 失效边界：换模型/输入几何/OpenCV/SDK或改cacheable需重新验证；短测与每秒峰值不替代长时/多脸/微秒级峰值测试。

@@ -1,0 +1,306 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 735  of event 'cpu-clock'
+# Event count (approx.): 7424242350
+#
+# Overhead  Command          Shared Object         Symbol
+# ........  ...............  ....................  ...................................................................................................................
+#
+    16.87%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+            |
+            ---_ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+               _ZN6rtctrl4face18detector_letterboxERKN2cv3MatEii
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+    12.65%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN4rknn11RknnBackend3runEv
+            |
+            ---_ZN4rknn11RknnBackend3runEv
+               |
+               |--11.43%--_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               |          _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               |          main
+               |          0x7facaa649c
+               |          __libc_start_main
+               |          _start
+               |
+                --1.22%--_ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                          main
+                          0x7facaa649c
+                          __libc_start_main
+                          _start
+
+    11.97%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddd4
+            |
+            ---0x7facb17dd4
+               |
+               |--6.39%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+               |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+               |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |          0x7facd9755c
+               |          0x7facafd5c4
+               |          0x7facb5c20c
+               |
+                --5.58%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          0x7facd9755c
+                          0x7facafd5c4
+                          0x7facb5c20c
+
+    10.61%  rtctrl_face_vid  rtctrl_face_video     [.] _ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+            |
+            ---_ZNK2cv11RemapVec_8uclERKNS_3MatEPvPKsPKtPKvi
+               _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     6.67%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+            |
+            ---_ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     5.03%  rtctrl_face_vid  [kernel.kallsyms]     [k] __pi_dcache_clean_poc
+            |
+            ---__pi_dcache_clean_poc
+               |
+                --4.63%--iommu_dma_sync_sg_for_device
+                          dma_sync_sg_for_device
+                          |
+                          |--2.45%--vb2_cma_sg_prepare
+                          |          __buf_prepare
+                          |          vb2_core_qbuf
+                          |          vb2_qbuf
+                          |          vb2_ioctl_qbuf
+                          |          v4l_qbuf
+                          |          __video_do_ioctl
+                          |          video_usercopy
+                          |          video_ioctl2
+                          |          v4l2_ioctl
+                          |          __arm64_sys_ioctl
+                          |          invoke_syscall
+                          |          el0_svc_common.constprop.0
+                          |          do_el0_svc
+                          |          el0_svc
+                          |          el0t_64_sync_handler
+                          |          el0t_64_sync
+                          |          ioctl
+                          |          v4l2_release
+                          |          rtctrl_camera_release
+                          |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          |          0x7facd9755c
+                          |          0x7facafd5c4
+                          |          0x7facb5c20c
+                          |
+                           --2.18%--rga_mm_sync_dma_sg_for_device
+                                     rga_mm_get_buffer
+                                     rga_mm_get_channel_handle_info
+                                     rga_mm_map_job_info
+                                     rga_job_commit
+                                     rga_request_commit
+                                     rga_request_submit
+                                     rga_ioctl_blit
+                                     rga_ioctl
+                                     __arm64_sys_ioctl
+                                     invoke_syscall
+                                     el0_svc_common.constprop.0
+                                     do_el0_svc
+                                     el0_svc
+                                     el0t_64_sync_handler
+                                     el0t_64_sync
+                                     ioctl
+                                     _Z15rga_task_submitj12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                                     _Z22rga_single_task_submit12rga_buffer_tS_S_7im_rectS0_S0_iPiP6im_opti
+                                     |
+                                     |--1.36%--_Z8imresize12rga_buffer_tS_ddiiPi
+                                     |          _ZN6rtctrl4face17RgaFrameConverter7convertERK19rtctrl_camera_frameiNS0_10VideoColorE
+                                     |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                                     |          0x7facd9755c
+                                     |          0x7facafd5c4
+                                     |          0x7facb5c20c
+                                     |
+                                      --0.82%--_Z10imcvtcolor12rga_buffer_tS_iiiiPi
+                                                _ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+                                                _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+                                                _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                                                _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                                                _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                                                _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+                                                0x7facd9755c
+                                                0x7facafd5c4
+                                                0x7facb5c20c
+
+     1.90%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN2cvL13remapBilinearINS_11FixedPtCastIihLi15EEENS_11RemapVec_8uEsEEvRKNS_3MatERS4_S6_S6_PKviRKNS_7Scalar_IdEE
+            |
+            ---_ZN2cvL13remapBilinearINS_11FixedPtCastIihLi15EEENS_11RemapVec_8uEsEEvRKNS_3MatERS4_S6_S6_PKviRKNS_7Scalar_IdEE
+               |
+                --1.77%--0xb43
+                          _ZN6rtctrl4face5embedERNS_9inference7BackendERKN2cv3MatERKNS0_4FaceE
+                          main
+                          0x7facaa649c
+                          __libc_start_main
+                          _start
+
+     1.36%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddc8
+            |
+            ---0x7facb17dc8
+               |
+               |--0.68%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+               |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+               |          0x7facd9755c
+               |          0x7facafd5c4
+               |          0x7facb5c20c
+               |
+                --0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+                          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+                          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+                          0x7facd9755c
+                          0x7facafd5c4
+                          0x7facb5c20c
+
+     1.36%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddcc
+            |
+            ---0x7facb17dcc
+               |
+               |--0.68%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+               |          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+               |          0x7facd9755c
+               |          0x7facafd5c4
+               |          0x7facb5c20c
+               |
+                --0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+                          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+                          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+                          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+                          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+                          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+                          0x7facd9755c
+                          0x7facafd5c4
+                          0x7facb5c20c
+
+     1.36%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN2cvL14FillConvexPolyERNS_3MatEPKNS_6Point_IlEEiPKvii
+            |
+            ---_ZN2cvL14FillConvexPolyERNS_3MatEPKNS_6Point_IlEEiPKvii
+               |
+                --1.22%--0x7facaa649c
+                          __libc_start_main
+                          _start
+
+     1.22%  rtctrl_face_vid  libc.so.6             [.] 0x000000000009ddc4
+            |
+            ---0x7facb17dc4
+               |
+               |--0.68%--_ZN6rtctrl4face12_GLOBAL__N_17Session6encodeERKN2cv3MatE
+               |          _ZN6rtctrl4face14MppJpegEncoder6encodeERKN2cv3MatEi
+               |          _ZN6rtctrl4face11JpegEncoder6encodeERKN2cv3MatEi
+               |          _ZNSt17_Function_handlerIFSt6vectorIhSaIhEERKN2cv3MatEEZN6rtctrl4face12_GLOBAL__N_17encoderERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiEUlS6_E_E9_M_invokeERKSt9_Any_dataS6_
+               |          _ZN6rtctrl4face16PreviewPublisher7publishERKN2cv3MatENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENSt6chrono10time_pointINSC_3_V212steady_clockENSC_8durationIlSt5ratioILl1ELl1000000000EEEEEEm
+               |          _ZN6rtctrl4face12AsyncPreview4Impl3runEv
+               |          0x7facd9755c
+               |          0x7facafd5c4
+               |          0x7facb5c20c
+               |
+                --0.54%--_ZNK2cv3Mat6copyToERKNS_12_OutputArrayE
+                          _ZN12_GLOBAL__N_17captureERNS_6LatestERKNS_7OptionsE
+                          0x7facd9755c
+                          0x7facafd5c4
+                          0x7facb5c20c
+
+     0.95%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN2cvL5Line2ERNS_3MatENS_6Point_IlEES3_PKv
+            |
+            ---_ZN2cvL5Line2ERNS_3MatENS_6Point_IlEES3_PKv
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     0.82%  rtctrl_face_vid  librknnrt.so          [.] 0x000000000035f47c
+            |
+            ---0x7fac4ff47c
+               0x7fac4ff50b
+               0x7fac2783d0
+               rknn_outputs_get
+               _ZN4rknn11RknnBackend3runEv
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     0.68%  rtctrl_face_vid  [kernel.kallsyms]     [k] arch_local_irq_enable
+            |
+            ---arch_local_irq_enable
+               __schedule
+               schedule
+
+     0.68%  rtctrl_face_vid  libc.so.6             [.] malloc
+            |
+            ---malloc
+               _Znwm
+
+     0.54%  rtctrl_face_vid  libc.so.6             [.] memcmp
+            |
+            ---memcmp
+
+     0.54%  rtctrl_face_vid  librknnrt.so          [.] 0x000000000035f494
+            |
+            ---0x7fac4ff494
+               0x7fac4ff50b
+               0x7fac2783d0
+               rknn_outputs_get
+               _ZN4rknn11RknnBackend3runEv
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     0.54%  rtctrl_face_vid  librknnrt.so          [.] 0x000000000035f4b0
+            |
+            ---0x7fac4ff4b0
+               0x7fac4ff50b
+               0x7fac2783d0
+               rknn_outputs_get
+               _ZN4rknn11RknnBackend3runEv
+               _ZN6rtctrl4face6detectERNS_9inference7BackendERKN2cv3MatEfm
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+     0.54%  rtctrl_face_vid  libstdc++.so.6.0.32   [.] _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc
+            |
+            ---_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc
+
+     0.54%  rtctrl_face_vid  rtctrl_face_video     [.] _ZN6rtctrl4face9normalizeERSt6vectorIfSaIfEE
+            |
+            ---_ZN6rtctrl4face9normalizeERSt6vectorIfSaIfEE
+               _ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+               _ZN6rtctrl4face5matchERKNS0_7GalleryERKSt6vectorIfSaIfEEff
+               main
+               0x7facaa649c
+               __libc_start_main
+               _start
+
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

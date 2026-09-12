@@ -113,7 +113,7 @@ sh stop-video.sh
 sh start-optimized-video.sh 0.5
 ```
 
-`start-optimized-video.sh` 固定启用 RGA、native FP16、TurboJPEG 和异步编码；阈值仍由调用者传入。
+这一阶段的 `start-optimized-video.sh` 启用 staging RGA、native FP16、TurboJPEG 和异步编码；后续硬件组合见末节，阈值仍由调用者传入。
 native 模式只接受这次验证的两份模型 SHA256，使用转换时的 RGB mean/std。其他模型会拒绝启动，不能按形状猜归一化。
 该输入路径仍显式同步缓存，不使用禁用 flush 的标志。
 
@@ -148,3 +148,28 @@ cmake --build build/face-video-rv1126b --target rtctrl_face_video -j4
 再次perf后，submit的类型/布局分支移到像素循环外，RGB逐值结果保持一致。
 UInt8 NHWC 320输入微基准3530.75→98.69μs，112输入426.25→11.90μs；完整无人脸视频30FPS下CPU102.00%→91.25%（两轮新版本均值）。
 这轮无脸结果不能当成单脸CPU；单脸三十帧验证见上一批。新版本部署后20秒约30.016FPS，电脑端180张JPEG全部解码成功。
+
+## CPU 50% 以下的硬件组合（2026-09-12）
+
+`start-optimized-video.sh` 现选择 native FP16、rga-direct、MPP JPEG、异步编码，显式请求相机 2112×1568 单内存 NV12；预览仍为 960×712。`CAMERA_WIDTH`、`CAMERA_HEIGHT` 可共同覆盖相机尺寸，必须先验证对应设备。普通 `start-video.sh` 的默认仍不变。
+
+新增 `--frame-converter rga-direct --capture-width 2112 --capture-height 1568` 与 `--jpeg-encoder mpp`。前者只接受可完整导出的单平面 NV12/NV21，缓存 import handle 并验证 fd 身份，RGA 同步完成后才归还相机帧；独立 BGR 输出仍保留。S_FMT 格式选择会在退出后留在设备上，staging 回退支持该 NV12 格式。
+
+MPP 通过匹配 SDK 的 RGA 和 MPP 库链接，采用非 cacheable DRM 输入/输出缓冲、固定 BGR staging、显式 task 所有权与独立 JPEG 返回值。尺寸/质量变化时重建会话；目前只支持偶数图像尺寸与质量 1–99。未来改为 cacheable 缓冲时，必须重新核对 advanced API 的输出同步，不能沿用当前假设。1000 ms poll 超时不代表驱动异常下整个析构有硬性一秒上限。
+
+在前文交叉构建配置后增加：
+
+```sh
+cmake -S . -B build/face-video-rv1126b \
+  -DRTCTRL_MPP_INCLUDE_DIR="$SDK/external/rknpu2/examples/3rdparty/mpp/include/rockchip" \
+  -DRTCTRL_MPP_LIBRARY="$SDK/external/rknpu2/examples/3rdparty/mpp/Linux/aarch64/librockchip_mpp.so"
+cmake --build build/face-video-rv1126b --target rtctrl_face_video -j4
+```
+
+同场景八段正反向对照，每段 20 秒：原版约 101% 单核 CPU，精确缩放约 87%，直接 DMA 约 78%，MPP 约 38%，都约 30 FPS。缩放和直接 DMA 固定输入逐像素相同；MPP JPEG 解码像素不同，实拍固定图 PSNR 41.20→39.46 dB，不是完全相同的画质，但编码发生在推理之后。没有修改模型、人员库或系统运行库。
+
+部署后一分钟全单脸：CPU 平均 37.839%、每秒最大 39.001%，处理/发布约 30.038 FPS，PSS 约 47.3–47.4 MiB，NPU 24%/800 MHz，三种缺口/覆盖均零。DMA-BUF 新可见的四块摄像头缓冲不是新增图像页；MPP 另占约 2.97 MiB DMA，不能把 PSS 和全局 DMA 相加。20 秒 ftrace 未见应用重复申请/释放 heap/GEM 缓冲，正对照有效。
+
+电脑端 30 帧预热后连续解码 180 张约 29.99 FPS；不是 Edge 绘制帧率。此次短测不能替代十分钟或长期峰值测试。完整配置、样本、质量与 perf 证据见 [CPU 优化记录](../../outputs/cpu50-20260912/README.md)。
+
+只回退 JPEG：停止后设置 `RKNN_INPUT_TYPE=native-fp16 PREVIEW_FRAME_CONVERTER=rga-direct CAMERA_WIDTH=2112 CAMERA_HEIGHT=1568 PREVIEW_JPEG_ENCODER=turbojpeg PREVIEW_JPEG_MODE=async sh start-video.sh 0.5`。回退直接 DMA：清除 CAMERA_WIDTH/HEIGHT，converter 改为 rga。
