@@ -130,17 +130,62 @@ body{background:#101820;color:#edf2f7;font:17px system-ui;margin:24px}
 main{max-width:1100px;margin:auto}img{width:100%;background:#000;border-radius:12px}
 p{color:#bbc7d3}strong{color:#7fe0bb}#status{min-height:28px}</style>
 <main><h1>摄像头实时预览</h1><p id="status">正在连接…</p>
-<img id="video" alt="摄像头实时画面"><p>独立视频预览 · 仅保留最新帧</p>
+<img id="video" alt="摄像头实时画面"><p id="connection">正在获取画面…</p>
+<p>独立视频预览 · 仅保留最新帧</p>
 <p>帧龄从服务器收到 JPEG 起算，不代表摄像头到屏幕的总延迟。</p></main>
 <script>
 const video=document.getElementById('video'), status=document.getElementById('status');
-video.onerror=()=>setTimeout(()=>video.src='/stream.mjpg?t='+Date.now(),1500);
-video.src='/stream.mjpg';
-async function poll(){try{const s=await(await fetch('/status.json',{cache:'no-store'})).json();
+const connection=document.getElementById('connection');
+let active=null, frameTimer=null, lastSequence=null, shown=[];
+function scheduleFrame(delay){clearTimeout(frameTimer);
+ frameTimer=setTimeout(()=>{frameTimer=null;frame()},delay)}
+async function request(path, consume){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),3000);
+ try{const response=await fetch(path,{cache:'no-store',signal:controller.signal});
+ if(!response.ok)throw new Error('HTTP '+response.status);
+ return await consume(response);
+ }finally{clearTimeout(timer)}
+}
+async function frame(){
+ if(document.hidden)return;
+ const started=performance.now();let retry=0,url=null;
+ const controller=new AbortController();active=controller;
+ const timer=setTimeout(()=>controller.abort(),3000);
+ try{
+ const response=await fetch('/snapshot.jpg',{cache:'no-store',signal:controller.signal});
+ if(!response.ok)throw new Error('HTTP '+response.status);
+ const sequence=response.headers.get('X-Frame-Sequence');
+ const blob=await response.blob();
+ url=URL.createObjectURL(blob);
+ await new Promise((resolve,reject)=>{
+   const finish=(error)=>{clearTimeout(decodeTimer);video.onload=null;video.onerror=null;
+     error?reject(error):resolve()};
+   const decodeTimer=setTimeout(()=>finish(new Error('decode timeout')),2000);
+   video.onload=()=>finish();video.onerror=()=>finish(new Error('decode failed'));video.src=url;
+ });
+ if(sequence!==lastSequence){shown.push(performance.now());lastSequence=sequence}
+ shown=shown.filter(t=>performance.now()-t<2000);
+ const fps=shown.length>1?(shown.length-1)*1000/(shown[shown.length-1]-shown[0]):0;
+ connection.textContent='画面已连接 · 显示约 '+fps.toFixed(1)+' FPS';
+ }catch(e){shown=[];retry=1000;
+ connection.textContent=document.hidden?'页面在后台，已暂停取帧。':
+ '画面连接中断，正在重试；当前可能是上一帧。';
+ }finally{clearTimeout(timer);if(url)URL.revokeObjectURL(url);active=null;
+ if(!document.hidden)scheduleFrame(Math.max(retry,33-(performance.now()-started)))}
+}
+document.addEventListener('visibilitychange',()=>{
+ clearTimeout(frameTimer);frameTimer=null;
+ if(active)active.abort();shown=[];
+ connection.textContent=document.hidden?'页面在后台，已暂停取帧。':'正在恢复画面…';
+ if(!document.hidden&&!active)scheduleFrame(0);
+});
+async function poll(){try{if(document.hidden)return;
+const s=await request('/status.json',r=>r.json());
 status.textContent=(s.mode==='hardware'?'硬件缩放 / JPEG':'软件缩放 / JPEG')+
-' · '+s.fps.toFixed(1)+' FPS · '+Math.round(s.jpeg_bytes/1024)+' KB/帧'+
+' · 编码 '+s.fps.toFixed(1)+' FPS · '+Math.round(s.jpeg_bytes/1024)+' KB/帧'+
 (s.error?' · '+s.error:(!s.running?' · 已停止':''));}catch(e){status.textContent='连接中断，正在重试…'}
-setTimeout(poll,1000)}poll();</script></html>""".encode()
+finally{setTimeout(poll,1000)}}frame();poll();</script></html>""".encode()
 
 
 class Server(http.server.ThreadingHTTPServer):
@@ -177,11 +222,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
-    def reply(self, code, kind, data):
+    def reply(self, code, kind, data, headers=None):
         self.send_response(code)
         self.send_header("Content-Type", kind)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
+        for name, value in (headers or {}).items():
+            self.send_header(name, str(value))
         self.end_headers()
         self.wfile.write(data)
 
@@ -196,7 +243,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif path == "/snapshot.jpg":
                 with latest.condition:
                     jpeg = latest.jpeg
-                self.reply(200 if jpeg else 503, "image/jpeg", jpeg)
+                    sequence = latest.sequence
+                    fresh = latest.running and time.monotonic() - latest.received < 2
+                if not jpeg or not fresh:
+                    self.reply(503, "text/plain", b"No fresh camera frame")
+                else:
+                    self.reply(200, "image/jpeg", jpeg, {"X-Frame-Sequence": sequence})
             elif path == "/stream.mjpg":
                 self.send_response(200)
                 self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")

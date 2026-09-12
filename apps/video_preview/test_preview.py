@@ -53,6 +53,7 @@ class PreviewTest(unittest.TestCase):
             with urllib.request.urlopen(base + "/status.json", timeout=2) as response:
                 self.assertEqual(json.load(response)["frames"], 1000)
             with urllib.request.urlopen(base + "/snapshot.jpg", timeout=2) as response:
+                self.assertEqual(response.headers["X-Frame-Sequence"], "1000")
                 self.assertEqual(response.read(), JPEG)
             with urllib.request.urlopen(base + "/stream.mjpg", timeout=2) as response:
                 self.assertEqual(response.readline(), b"--frame\r\n")
@@ -61,7 +62,12 @@ class PreviewTest(unittest.TestCase):
                 response.readline()
                 self.assertEqual(response.read(len(JPEG)), JPEG)
             with urllib.request.urlopen(base, timeout=2) as response:
-                self.assertIn(b"/stream.mjpg", response.read())
+                self.assertIn(b"/snapshot.jpg", response.read())
+            with latest.condition:
+                latest.received = time.monotonic() - 3
+            with self.assertRaises(urllib.error.HTTPError) as stale:
+                urllib.request.urlopen(base + "/snapshot.jpg", timeout=2)
+            self.assertEqual(stale.exception.code, 503)
         finally:
             with latest.condition:
                 latest.running = False
