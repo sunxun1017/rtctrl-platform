@@ -173,3 +173,12 @@ cmake --build build/face-video-rv1126b --target rtctrl_face_video -j4
 电脑端 30 帧预热后连续解码 180 张约 29.99 FPS；不是 Edge 绘制帧率。此次短测不能替代十分钟或长期峰值测试。完整配置、样本、质量与 perf 证据见 [CPU 优化记录](../../outputs/cpu50-20260912/README.md)。
 
 只回退 JPEG：停止后设置 `RKNN_INPUT_TYPE=native-fp16 PREVIEW_FRAME_CONVERTER=rga-direct CAMERA_WIDTH=2112 CAMERA_HEIGHT=1568 PREVIEW_JPEG_ENCODER=turbojpeg PREVIEW_JPEG_MODE=async sh start-video.sh 0.5`。回退直接 DMA：清除 CAMERA_WIDTH/HEIGHT，converter 改为 rga。
+
+
+## ftrace 后续与模型副本释放（2026-09-12）
+
+AArch64精确NEON缩放保持108组完整letterbox逐像素一致，无脸正反向短测CPU29.32%→27.92%，仍约30FPS。普通flags0初始化成功后释放应用模型文件副本，两模型各20次固定合成输入输出字节一致；不适用于MODEL_BUFFER_ZERO_COPY等加载模式。
+
+新部署单脸一分钟CPU37.556%、PSS约41.1MiB、30.038FPS，NPU仍24%/800MHz。不能把无脸CPU与之前单脸CPU直接比较；这轮NPU收益是应用侧内存，未降低模型计算负载。当前MEM_SIZE查询SRAM为0，未尝试盲开或修改固件。
+
+独立ftrace实例记录调度、唤醒、NPU提交/IRQ；主线程唤醒P95约16us，无明显调度拥塞。配对时间是驱动近似区间，短测不保证长期无卡顿。完整证据见 [ftrace记录](../../outputs/ftrace-20260912/README.md)。启动脚本、模型与人员库保持原约定。

@@ -1,0 +1,35 @@
+{
+  "pid": 11800,
+  "tids": [
+    11800,
+    11802,
+    11803,
+    11804,
+    11815
+  ],
+  "elapsed_s": 20.031173759998637,
+  "before": {
+    "processed": 17607,
+    "published": 17607,
+    "capture_sequence_gaps": 13,
+    "latest_overwrites": 1,
+    "encode_overwrites": 0,
+    "processing_ms": 9.64104
+  },
+  "after": {
+    "processed": 18209,
+    "published": 18209,
+    "capture_sequence_gaps": 13,
+    "latest_overwrites": 1,
+    "encode_overwrites": 0,
+    "processing_ms": 9.34587
+  },
+  "stats": {
+    "cpu3": "entries: 8782\noverrun: 0\ncommit overrun: 0\nbytes: 459348\noldest event ts: 29979.802079\nnow ts: 30000.084191\ndropped events: 0\nread events: 0\n",
+    "cpu2": "entries: 5011\noverrun: 0\ncommit overrun: 0\nbytes: 243248\noldest event ts: 29979.796941\nnow ts: 30000.084674\ndropped events: 0\nread events: 0\n",
+    "cpu1": "entries: 6460\noverrun: 0\ncommit overrun: 0\nbytes: 336228\noldest event ts: 29979.796745\nnow ts: 30000.085074\ndropped events: 0\nread events: 0\n",
+    "cpu0": "entries: 8006\noverrun: 0\ncommit overrun: 0\nbytes: 357556\noldest event ts: 29979.796753\nnow ts: 30000.085409\ndropped events: 0\nread events: 0\n"
+  },
+  "npu_load": "NPU load: 10%\n",
+  "npu_freq": "800000000\n"
+}

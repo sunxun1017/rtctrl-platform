@@ -1,0 +1,219 @@
+{
+  "pid": 20111,
+  "tids": [
+    20111,
+    20113,
+    20114,
+    20115,
+    20127
+  ],
+  "elapsed_s": 20.003356343000632,
+  "before": {
+    "processed": 2017,
+    "published": 2017,
+    "capture_sequence_gaps": 13,
+    "latest_overwrites": 3,
+    "encode_overwrites": 0,
+    "processing_ms": 16.1779,
+    "face_count": 1
+  },
+  "after": {
+    "processed": 2618,
+    "published": 2618,
+    "capture_sequence_gaps": 13,
+    "latest_overwrites": 3,
+    "encode_overwrites": 0,
+    "processing_ms": 15.771,
+    "face_count": 1
+  },
+  "samples": [
+    {
+      "processed": 2047,
+      "published": 2047,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.6657,
+      "face_count": 1
+    },
+    {
+      "processed": 2077,
+      "published": 2077,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 16.0807,
+      "face_count": 1
+    },
+    {
+      "processed": 2107,
+      "published": 2107,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.8098,
+      "face_count": 1
+    },
+    {
+      "processed": 2137,
+      "published": 2137,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.7943,
+      "face_count": 1
+    },
+    {
+      "processed": 2167,
+      "published": 2167,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 16.035,
+      "face_count": 1
+    },
+    {
+      "processed": 2197,
+      "published": 2197,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.6675,
+      "face_count": 1
+    },
+    {
+      "processed": 2227,
+      "published": 2227,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 16.1572,
+      "face_count": 1
+    },
+    {
+      "processed": 2257,
+      "published": 2257,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.9612,
+      "face_count": 1
+    },
+    {
+      "processed": 2287,
+      "published": 2287,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.9055,
+      "face_count": 1
+    },
+    {
+      "processed": 2317,
+      "published": 2317,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 16.0221,
+      "face_count": 1
+    },
+    {
+      "processed": 2347,
+      "published": 2347,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.7013,
+      "face_count": 1
+    },
+    {
+      "processed": 2378,
+      "published": 2378,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.8328,
+      "face_count": 1
+    },
+    {
+      "processed": 2408,
+      "published": 2408,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.9965,
+      "face_count": 1
+    },
+    {
+      "processed": 2438,
+      "published": 2438,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.9562,
+      "face_count": 1
+    },
+    {
+      "processed": 2468,
+      "published": 2468,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.89,
+      "face_count": 1
+    },
+    {
+      "processed": 2498,
+      "published": 2498,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.7911,
+      "face_count": 1
+    },
+    {
+      "processed": 2528,
+      "published": 2528,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.6812,
+      "face_count": 1
+    },
+    {
+      "processed": 2558,
+      "published": 2558,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.9956,
+      "face_count": 1
+    },
+    {
+      "processed": 2588,
+      "published": 2588,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.8465,
+      "face_count": 1
+    },
+    {
+      "processed": 2618,
+      "published": 2618,
+      "capture_sequence_gaps": 13,
+      "latest_overwrites": 3,
+      "encode_overwrites": 0,
+      "processing_ms": 15.771,
+      "face_count": 1
+    }
+  ],
+  "stats": {
+    "cpu3": "entries: 9399\noverrun: 0\ncommit overrun: 0\nbytes: 462440\noldest event ts: 30703.868418\nnow ts: 30724.207545\ndropped events: 0\nread events: 0\n",
+    "cpu2": "entries: 8544\noverrun: 0\ncommit overrun: 0\nbytes: 377640\noldest event ts: 30703.871453\nnow ts: 30724.207889\ndropped events: 0\nread events: 0\n",
+    "cpu1": "entries: 12967\noverrun: 0\ncommit overrun: 0\nbytes: 614640\noldest event ts: 30703.884706\nnow ts: 30724.208288\ndropped events: 0\nread events: 0\n",
+    "cpu0": "entries: 8246\noverrun: 0\ncommit overrun: 0\nbytes: 393720\noldest event ts: 30703.880938\nnow ts: 30724.208631\ndropped events: 0\nread events: 0\n"
+  },
+  "npu_load": "NPU load: 24%\n",
+  "npu_freq": "800000000\n"
+}

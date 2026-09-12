@@ -1,0 +1,10 @@
+{
+  "binary_sha256": "0fe147ee04852669d792be0eda75ec36624d7f440792b061bf782838ede5e9f8",
+  "protected_hashes_unchanged": {
+    "/userdata/rtctrl-face-video/gallery.json": "3e282460d51f7002a7f029d725646a3fb7ca2d6f44d30d48485ba807f809961f",
+    "/userdata/rtctrl-face-video/models/detector.rknn": "08545518668f8254e9cbfc1914ac756b3fcb9a284ef7da08986e0232619ad443",
+    "/userdata/rtctrl-face-video/models/recognizer.rknn": "7171d26112ac09b4b27008e3ea36a3861a9d3576b7b3c8fda458e3623ddb40d5"
+  },
+  "pid": "20111",
+  "long_soak": false
+}

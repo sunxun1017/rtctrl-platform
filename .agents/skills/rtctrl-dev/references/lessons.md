@@ -71,3 +71,11 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 - MPP简单put/get在超时后所有权可能已转移；显式task enqueue/pop划分责任，mock需模拟SDK真正释放queued资源。poll成功可能为正任务数量，只有负值报错。当前noncacheable路径不代表未来cacheable也无需同步。
 - sanitizer缓存开关不证明每个目标都已插桩；核对实际编译与最终链接选项，特别是只链接OpenCV的独立适配器/测试。
 - 失效边界：换模型/输入几何/OpenCV/SDK或改cacheable需重新验证；短测与每秒峰值不替代长时/多脸/微秒级峰值测试。
+
+
+## 2026-09-12：ftrace忙时与RKNN模型文件副本
+
+- 证据：outputs/ftrace-20260912/；任务占用load不同于MAC利用率，先同步记录脸数、FPS、频率和trace丢失。无脸10%与单脸24%不能当优化前后。
+- function+sched_switch不足以分离睡眠与唤醒排队；补sched_wakeup→switch-in，当前单脸主线程P95约16us，无明显绑核依据。无job ID的schedule→IRQ配对只适用观察到无重叠的窗口。
+- 匹配SDK2.3.2普通rknn_init flags0初始化后可释放文件副本；两模型各20次合成输入完整输出字节一致，单脸PSS约47.4→41.1MiB。特殊MODEL_BUFFER_ZERO_COPY等模式必须重审生命周期，不能复制此结论。
+- 当前实际MEM_SIZE查询total/free SRAM均0，不根据头文件宏盲开SRAM。NEON固定点缩放逐像素一致，整机无脸CPU29.32→27.92%；没有NPU算术负载降低结论。
