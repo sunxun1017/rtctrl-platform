@@ -1,0 +1,15 @@
+#!/bin/sh
+# OPTIONAL template only. Nothing installs or enables this automatically.
+set -eu
+ROOT="${RTCTRL_COMPANION_ROOT:-/userdata/rtctrl-companion}"
+CONFIG="${RTCTRL_COMPANION_CONFIG:-$ROOT/config/companion/rv1126b.json}"
+ENV_FILE="${RTCTRL_COMPANION_ENV:-$ROOT/service.env}"
+STATE="${RTCTRL_COMPANION_STATE:-/run/rtctrl-companion}"
+case "${1:-}" in
+    start|stop|restart|status)
+        exec python3 -B "$ROOT/deploy/companion/service-control.py" "$1" \
+            --bundle "$ROOT" --config "$CONFIG" --env-file "$ENV_FILE" \
+            --state-dir "$STATE"
+        ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" >&2; exit 2 ;;
+esac

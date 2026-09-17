@@ -70,3 +70,16 @@ ConnMan可按系统机制保存成功认证凭据，应用关闭不撤销daemon�
 13项网络回归通过，release/asan各17项CTest通过；真实认证/DHCP/重连尚未验收。
 安卓侧实际系统配网服务com.patchx_sys不在参考仓库中，Linux实现不假定其内部二维码/蓝牙机制。
 证据见[验证记录](../docs/verification-companion-20260918.md)与[使用说明](../apps/companion/README.md)。
+
+## 2026-09-18 产品诊断与服务生命周期
+
+语音增加voice_progress与分阶段超时，tts.start不代表已经收到音频；原后端故障仍未解决。
+ConnMan网络状态5秒只读刷新、过期撤销；用户“暂不连接”的限制继续有效。
+新增deploy/companion/service-control.py、SERVICE.md与可选S95模板；未安装开机启动项。
+有界日志约192KiB、PID身份校验、进程组退出；崩溃不自动重启。
+最终99项companion测试通过，release/asan CTest各18/18通过。详见验证记录追加章节。
+已在实物执行启动、重复启动、停止、再次启动和重启；最后状态supervisor7090/child7091，
+HTTP offline/muted/idle，音频帧0，人脸服务976仍约30FPS。PID仅当时快照，下次重新核实。
+板端service.env权限0600；运行目录/run/rtctrl-companion；访问仍依赖临时SSH隧道。
+剩余后端闭环、实际Wi-Fi认证（本轮禁止连接）、LCD、离线唤醒/AEC与长时间验收见
+[产品检查清单](../docs/companion-readiness.md)。不把本轮宿主测试当作整机量产验收。

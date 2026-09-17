@@ -88,3 +88,24 @@ release/asan重新配置、构建通过，CTest各17/17通过。浏览器真机8
 API busy=false/status=idle/error为空，connected_wifi=0；eth0仍为192.168.50.2/24。
 页面布局检查通过，网络区展开且密码为空，未点击连接或断开。Wi-Fi包SHA256：
 e14f37a3bd6bd43238e5fa4cdd50fa29b318b24b5230df6dd9cd8d17b265339a，板端manifest逐文件验证通过。
+
+## 状态诊断与服务管理追加验收
+
+语音状态现在区分录音、等待识别、等待回答、等待语音数据及实际收音频；tts.start不再被当作已有声音。
+分阶段超时带具体原因，迟到的STT不会把已接收音频状态退回。没有重新录音或重试原后端。
+Wi-Fi最多每5秒发起一次只读ConnMan状态刷新；超时或过期撤销连接/IP显示，后台刷新不隐式开启、扫描或连接。
+新增service-control.py及可选S95模板；PID身份核验、独立进程组、有界退出和日志轮转通过测试。
+日志3份、每份64KiB；崩溃不会自动重启。不安装启动项、不重启板卡。
+
+最终99项companion测试通过（32.914秒）；release/asan配置及构建成功，CTest各18/18通过
+（40.28/40.56秒）。其中包含9项真实子进程服务管理测试和20项网络测试。
+浏览器真机页面检查：语音默认未连接/静音，网络区只读刷新显示11个热点，没有连接任何热点。
+
+部署包SHA256为8ba00703c237489d28bf306b12a1364a0e5f3a561ee23a8703518f7f6d87cab6，传输后校验一致。
+板端目录/userdata/rtctrl-companion-20260918；service.env权限0600，运行状态位于/run/rtctrl-companion。
+原手动进程被正常停止；实际执行start、重复start、stop、start和restart均通过。
+重复start保留同一child PID；stop后status返回未运行；最后restart后supervisor PID7090、child PID7091。
+HTTP就绪复核：offline、muted=true、voice_progress=idle、收发音频帧均0；人脸服务PID976仍运行、29.9842FPS。
+该快照companion RSS22.03MiB、全机已用约200MiB，不作为持续或有声负载性能结论。
+当前访问依赖SSH正反向隧道，关闭隧道后控制台/云端路径需重新建立；开机恢复与长期运行未验收。
+剩余工作及依赖见[产品检查清单](companion-readiness.md)。
