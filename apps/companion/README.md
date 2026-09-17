@@ -95,7 +95,7 @@ PYTHONPATH=.deps/companion-python python3 -m unittest discover -s tests -p 'test
 ```
 完整 transport 集成测试需要固定依赖；未安装时相关测试明确 skip。
 测试含真实本地 WebSocket Upgrade/分片限制和真实 libopus（主机具备时），其余声卡用替身。
-CTest 默认注册六组 companion 测试；Python应用不由 C++ 编译器构建。
+CTest 默认注册八组 companion 测试；Python应用不由 C++ 编译器构建。
 
 上板验收仍需：实际声卡录放、真实语音往返、与视觉并发的峰值内存/CPU、30分钟运行及网络中断恢复。
 不能把宿主测试或后端 hello 当成这些验收已完成。
@@ -164,3 +164,11 @@ tts.start只证明后端进入回复阶段，不代表收到声音或扬声器�
 配置适用于本次已核实的ALIENTEK RV1126B/ES8389控制名，不自动推广到其他声卡。
 设置仅作用于当前系统，不写入alsactl持久配置、不承诺重启保持；服务启动不会自动改写设置。
 API为同源 `GET /api/device` 和 `POST /api/device`，不接受任意命令、声卡名或文件路径。
+
+
+## 本地中文语音（2026-09-18）
+
+已增加板端 Zipformer INT8 识别、AISHELL3 VITS 合成和千帆文字回答。
+配置用 `config/companion/rv1126b-local.json`；模型、资源实测、许可和联网要求见
+[本地语音部署](../../deploy/companion/LOCAL-SPEECH.md)。音频留在本地，识别文字发送千帆。
+这是按住说话的单轮对话，非完全离线；默认模型8kHz，需试听确认音质。

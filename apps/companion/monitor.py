@@ -79,6 +79,18 @@ class Monitor:
                 metrics["memory_used_mb"] = round((memory["MemTotal"]-memory["MemAvailable"]) / 1024)
             except (OSError, ValueError, KeyError):
                 pass
+            worker = getattr(self.core, "speech_worker", None)
+            if worker is not None:
+                metrics["local_speech_running"] = worker.poll() is None
+                metrics["local_speech_rss_mb"] = None
+                if metrics["local_speech_running"]:
+                    try:
+                        with open("/proc/%d/status" % worker.pid) as stream:
+                            for line in stream:
+                                if line.startswith("VmRSS:"):
+                                    metrics["local_speech_rss_mb"] = round(int(line.split()[1]) / 1024, 2)
+                    except (OSError, ValueError):
+                        pass
             with self.core.lock:
                 self.core.data["metrics"].update(metrics)
             self.last_cpu, self.last_wall = cpu, now

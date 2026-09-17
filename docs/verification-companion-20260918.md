@@ -171,3 +171,35 @@ finally按原始值精确恢复（包括Speaker=on、spk switch=off和背光raw2
 - https://cloud.baidu.com/doc/qianfan-docs/s/7m95lyy43
 - https://cloud.baidu.com/doc/qianfan-docs/s/3m8pqgdbs
 - https://cloud.baidu.com/doc/qianfan-docs/s/sm8pqtkt3
+
+
+## 2026-09-18 本地识别/合成与千帆文字闭环
+
+用户授权实施本地语音。实际板卡1GB，保留既有人脸服务、图库和有线连接，未连接Wi-Fi。
+采用sherpa-onnx1.13.8、Zipformer CTC small中文INT8、AISHELL3 VITS low（默认sid0，原生8kHz）。
+模型及绑定142MiB、userdata剩余约422MB；模型不入Git。官方来源及SHA256见deploy/companion/local-speech-manifest.json。
+模型预热合计约34秒；单独热测5.61秒ASR约1.85–1.88秒，3.13–3.38秒合成约1.96–2.15秒，
+两模型交错运行峰值RSS350.4MiB。Kokoro板测RTF约13，不选；许可和其他候选取舍见LOCAL-SPEECH.md。
+
+真机公开test_wavs/0.wav经真实Opus编码、LocalVoiceTransport、常驻worker、千帆HTTPS、
+本地VITS和Opus解码：2.71秒返回STT，5.14秒返回LLM文字，10.54秒开始合成音频事件，
+19.90秒完成；157帧、9.42秒有效WAV。不是用户麦克风验收。
+千帆模型ernie-4.5-turbo-32k，只有识别文字送云，无人脸或音频上传。
+KEY仅在板端0600 service.env；不记录值，不进入Git或前端。
+板卡无外网路由，当前以宿主loopback CONNECT代理+SSH反向隧道访问千帆443，验证TLS证书，
+未关闭证书检查。校正板端当前UTC以验证证书；重启时间同步/独立外网仍需完成。
+
+新bundle SHA256 55715ee5b96e5ffb609f822a181315fd79a7cc40df1cba273bb22ef53fae0dc9，
+部署manifest67文件校验通过。随后仓库仅修正文档/docstring，不影响运行逻辑。
+原Android配置留存板端board-android-backup.json；当前board-test.json切换live/local。
+页面8092刷新显示本地识别与合成/千帆文字回答，点击准备语音后显示本地语音已就绪、麦克风静音。
+运行时本地模型RSS345.9MB，整机已用529/970MB，人脸30FPS（瞬时观测，非长期保证）。
+设备扬声器打开，音量设85%，固定sid0试听经aplay/rtctrl_es8389成功退出0；主观听感需用户确认。
+麦增益24dB、背光78%保持；模型冷启动时准备按钮明确提示等待。未采集新的用户语音。
+
+release和asan CTest各21/21通过。增加ASR/TTS协议、私有目录/Unix socket、忙状态、超时、
+密钥隔离、取消后旧结果抑制及8k→16k重采样测试。语音是手动PTT、单轮短回答；
+没有AEC、唤醒词、自动打断或长时稳定性承诺。取消会停止输出，但原生推理需计算结束后才能接下轮。
+音色为神经合成，但8k带宽不能称高保真；两个实际板端音色试听已交付，尚未主观验收。
+
+测试补充：CTest环境的8组companion共138项均OK、无语音测试跳过；SocketCAN loopback因未配置vcan仍按既有规则SKIP。系统python单独discover虽138项OK但缺依赖跳过19项，不作为完整语音验证依据。

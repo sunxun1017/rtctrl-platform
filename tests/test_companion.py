@@ -388,12 +388,49 @@ class CoreTests(unittest.TestCase):
         wait_for(lambda:self.core.snapshot()["transcript"] == "迟到的识别")
         self.assertEqual(self.core.snapshot()["voice_progress"], "receiving_audio")
 
+class LocalCoreTests(unittest.TestCase):
+    def test_local_manual_stop_does_not_add_cloud_vad_tail(self):
+        config = validate({"mode": "live", "voice_backend": "local",
+                           "local_asr_command": ["/bin/true"], "local_tts_command": ["/bin/true"]})
+        core = Companion(config, FakeAudio, FakeCodec, FakeTransport)
+        core.start()
+        try:
+            core.action("connect")
+            wait_for(lambda: core.snapshot()["connected"])
+            self.assertFalse(core.snapshot()["capabilities"]["audio_upload"])
+            self.assertTrue(core.snapshot()["muted"])
+            core.action("unmute"); core.action("listen")
+            core.audio.callback(b"pcm")
+            wait_for(lambda: core.turn_audio_frames_sent == 1)
+            core.action("stop")
+            self.assertEqual(core.silence_remaining, 0)
+            self.assertTrue(any(isinstance(x, dict) and x.get("type") == "listen" and
+                                x.get("state") == "stop" for x in core.transport.sent))
+            self.assertIn("本地语音识别", core._timeout_reason())
+        finally:
+            core.close()
+
 class ConfigTests(unittest.TestCase):
     def test_invalid_and_unsafe_configs(self):
         for config in ({"device_settings_enabled":1},{"port":True},{"face_poll_s":float("nan")},{"bind":"0.0.0.0"},
                        {"unknown":1},{"mode":"live","backend_url":"ws://example.test"},
                        {"face_url":"http://remote.test/status.json"}):
             with self.subTest(config=config),self.assertRaises(ValueError): validate(config)
+    def test_local_voice_configuration(self):
+        base = {"mode": "live", "voice_backend": "local", "listen_mode": "manual",
+                "local_asr_command": ["/usr/bin/python3", "asr.py", "{input}", "{output}"],
+                "local_tts_command": ["/usr/bin/python3", "tts.py", "{text}", "{output}"]}
+        self.assertEqual(validate(base)["backend_url"], "")
+        self.assertFalse(validate(base)["allow_insecure_ws"])
+        for change in ({"listen_mode": "realtime"}, {"local_asr_command": []},
+                       {"local_tts_command": "bad"}, {"local_asr_command": ["relative"]},
+                       {"local_asr_timeout_s": True}, {"qianfan_model": ""},
+                       {"qianfan_proxy_url": "http://example.test:80"},
+                       {"qianfan_proxy_url": "http://secret@127.0.0.1:18080"}):
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                validate(dict(base, **change))
+        self.assertEqual(validate(dict(base, qianfan_proxy_url="http://127.0.0.1:18080"))["voice_backend"], "local")
+
     def test_hello_validation(self):
         with self.assertRaises(ValueError): validate_hello({"type":"hello"})
         with self.assertRaises(ValueError): validate_hello({"session_id":"x","audio_params":{"sample_rate":44100}})

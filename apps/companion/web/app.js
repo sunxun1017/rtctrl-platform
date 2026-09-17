@@ -44,13 +44,19 @@
         const state = !reachable ? "offline" : (current.muted && current.state === "idle" ? "muted" : current.state);
         let [label, hint] = labels[state] || ["等待状态", "正在同步设备状态。"];
         const demo = current.capabilities && current.capabilities.mode === "demo";
-        $("mode-banner").hidden = !demo && reachable;
-        $("mode-banner").textContent = demo ? "演示模式 · 模拟对话流程，不采集麦克风、不播放真实声音、不连接语音后端。" : "正在获取设备运行模式…";
-        $("privacy-note").textContent = demo ? "当前操作仅演示交互。真实语音需要配置后端与设备声卡，并切换运行模式。" : "音频在按住说话期间发送到已配置的后端。松开结束录音；静音将停止采集。";
+        const local = !demo && current.capabilities && current.capabilities.voice_backend === "local";
+        $("mode-banner").hidden = !demo && !local && reachable;
+        $("mode-banner").textContent = demo ? "演示模式 · 模拟对话流程，不采集麦克风、不播放真实声音、不连接语音后端。" : local ? "本地识别与合成 · 千帆文字回答" : "正在获取设备运行模式…";
+        $("privacy-note").textContent = demo ? "当前操作仅演示交互。真实语音需要配置后端与设备声卡，并切换运行模式。" : local ? "音频只在设备本地处理，识别后的文字会发送到千帆生成回答。松开结束录音；静音将停止采集。" : "音频在按住说话期间发送到已配置的后端。松开结束录音；静音将停止采集。";
+        if (!current.capabilities) $("privacy-note").textContent = "正在确认语音处理方式。麦克风默认静音，开启后按住按钮才会录音。";
         $("input-hint").textContent = demo ? "模拟交互 · 空格 / 回车也可按住体验" : "使用设备麦克风 · 空格 / 回车也可按住说话";
         if (demo) {
             const demoHints = {offline:"点击开始演示，体验设备的对话流程。", muted:"点击启用演示交互，再按住按钮体验。", idle:"按住按钮，松开后查看示例回答。", listening:"正在演示聆听状态，未采集声音；松开查看示例回答。", thinking:"正在准备预设示例回答，未调用真实后端。", speaking:"正在展示预设回答，未播放真实声音。"};
             hint = demoHints[state] || hint;
+        }
+        if (local) {
+            const localLabels = {offline:["等待准备", "点击准备语音，加载本地识别与合成模型。"], connecting:["正在准备", "正在加载本地语音模型，请稍候。"], listening:["我在听", "正在采集设备麦克风，松开后在本地识别。"]};
+            [label, hint] = localLabels[state] || [label, hint];
         }
         if (!demo && ["thinking", "speaking"].includes(state)) {
             const progressLabels = {
@@ -61,6 +67,12 @@
                 complete:["本轮已完成", "这一轮对话已结束，稍候可再次按住说话。"],
                 failed:["本轮未完成", "请查看错误提示，处理后再重试。"]
             };
+            if (local) {
+                progressLabels.waiting_recognition = ["本地识别中", "录音已结束，正在设备上识别你说的话。音频不会上传。"];
+                progressLabels.waiting_reply = ["等待千帆回答", "已将识别文字发送到千帆，正在等待回答。音频保留在本地处理。"];
+                progressLabels.waiting_audio = ["本地合成中", "正在设备上将回答合成为声音，请稍候。完成后由设备扬声器播放。"];
+                progressLabels.receiving_audio = ["正在播放回答", "本地合成的语音已送往设备播放；如没有声音，请检查音量和扬声器。"];
+            }
             [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
         }
         $("avatar").dataset.voiceProgress = demo ? "receiving_audio" : current.voice_progress || (state === "speaking" ? "waiting_audio" : "idle");
@@ -69,9 +81,9 @@
         $("avatar").setAttribute("aria-label", label);
         $("state-label").textContent = label;
         $("state-hint").textContent = hint;
-        $("connection").textContent = !reachable ? "控制台连接中断" : current.connected ? (demo ? "演示已就绪" : "语音服务已连接") : (demo ? "控制台在线 · 演示未开始" : "控制台在线 · 语音未连接");
+        $("connection").textContent = !reachable ? "控制台连接中断" : current.connected ? (demo ? "演示已就绪" : local ? "本地语音已就绪" : "语音服务已连接") : (demo ? "控制台在线 · 演示未开始" : local ? "控制台在线 · 本地语音未准备" : "控制台在线 · 语音未连接");
         $("connection-dot").classList.toggle("online", reachable && !!current.connected);
-        $("connect").textContent = current.connected ? (demo ? "结束演示" : "断开语音服务") : (demo ? "开始演示" : "连接语音服务");
+        $("connect").textContent = current.connected ? (demo ? "结束演示" : local ? "关闭语音" : "断开语音服务") : (demo ? "开始演示" : local ? "准备语音" : "连接语音服务");
         $("connect").disabled = !reachable || pending > 0 || current.state === "connecting";
         $("mute").textContent = current.muted ? (demo ? "启用演示交互" : "开启麦克风") : (demo ? "暂停演示交互" : "立即静音");
         $("mute").setAttribute("aria-pressed", String(!!current.muted));
@@ -83,7 +95,7 @@
         $("interrupt").disabled = !reachable || !["speaking","thinking","listening"].includes(current.state);
         $("emotion").textContent = emotions[current.emotion] || "平静";
         $("transcript").textContent = current.transcript || "你的话会出现在这里";
-        $("reply").textContent = current.reply || "准备好后，连接服务并开启麦克风。";
+        $("reply").textContent = current.reply || (local ? "点击准备语音，待本地模型就绪后开启麦克风。" : "准备好后，连接服务并开启麦克风。");
         const face = current.face || {};
         $("face-state").textContent = face.available ? (face.running ? "运行中" : "已连接 · 未运行") : "未连接";
         const faces = Array.isArray(face.faces) ? face.faces.filter(item => item && typeof item === "object").slice(0, 16) : [];
@@ -105,6 +117,8 @@
         const metrics = [];
         if (finite(m.memory_used_mb) && finite(m.memory_total_mb)) metrics.push("内存 " + Math.round(m.memory_used_mb) + " / " + Math.round(m.memory_total_mb) + " MB");
         if (finite(m.rss_mb)) metrics.push("伴随服务 " + m.rss_mb.toFixed(1) + " MB");
+        if (finite(m.local_speech_rss_mb)) metrics.push("本地语音模型 " + m.local_speech_rss_mb.toFixed(1) + " MB");
+        if (local && m.local_speech_running === false) metrics.push("本地模型进程未运行");
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
         $("metrics").textContent = metrics.join(" · ") || "暂未提供资源数据";

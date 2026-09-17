@@ -43,7 +43,9 @@ class Companion:
                         "capture_peak_amplitude": 0},
             "capabilities": {"mode": config["mode"], "voice": "push-to-talk",
                 "wake_word": False, "aec": False, "automatic_barge_in": False,
-                "actuator_control": False, "face": "external-read-only"},
+                "actuator_control": False, "face": "external-read-only",
+                "voice_backend": config.get("voice_backend", "android"),
+                "audio_upload": config["mode"] == "live" and config.get("voice_backend", "android") != "local"},
         }
 
     def start(self):
@@ -128,6 +130,8 @@ class Companion:
                         result.put((True, self.snapshot()))
                 except ValueError as exc:
                     if result:
+                        if kind == "action" and payload == "connect":
+                            self._fail("语音准备失败：" + str(exc))
                         result.put((False, str(exc)))
                     else:
                         self._fail("后端协议或音频数据无效")
@@ -189,14 +193,19 @@ class Companion:
             if self.audio_factory is None:
                 from .audio import AudioIO, OpusCodec
                 from .transport import CloudTransport
-                self.audio_factory, self.codec_factory, self.transport_factory = AudioIO, OpusCodec, CloudTransport
+                if self.config.get("voice_backend") == "local":
+                    from .local_voice import LocalVoiceTransport
+                    transport_class = LocalVoiceTransport
+                else:
+                    transport_class = CloudTransport
+                self.audio_factory, self.codec_factory, self.transport_factory = AudioIO, OpusCodec, transport_class
             generation = self.generation
             self.codec = self.codec_factory()
             self.audio = self.audio_factory(self.config, on_error=lambda e: self.post(
                 "error", "音频设备失败，请检查声卡与 ALSA 配置", generation))
             self.transport = self.transport_factory(self.config,
                 lambda value: self.post("message", value, generation),
-                lambda e: self.post("error", "语音连接已断开，请重新连接", generation))
+                lambda e: self.post("error", str(e) if self.config.get("voice_backend") == "local" else "语音连接已断开，请重新连接", generation))
             self.transport.connect()
             self.transport.send({"type": "hello", "version": 1, "transport": "websocket",
                                  "device_id": self.config["device_id"], "audio_params": AUDIO_PARAMS})
@@ -392,6 +401,11 @@ class Companion:
         if self.data["state"] == "connecting":
             return "语音握手超时，请检查后端地址和设备认证后重新连接"
         stage = self.data["voice_progress"]
+        if self.config.get("voice_backend") == "local":
+            detail = {"waiting_recognition": "本地语音识别超时，请检查模型与设备负载",
+                      "waiting_reply": "千帆文字回答超时，请检查网络、密钥和模型权限",
+                      "waiting_audio": "本地语音合成超时，请检查模型与设备负载"}.get(stage, "本地语音处理超时")
+            return detail + "；已停止本轮，请重新连接"
         if stage == "waiting_recognition":
             detail = "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务"
         elif stage == "waiting_reply":

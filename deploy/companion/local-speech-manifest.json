@@ -1,0 +1,36 @@
+[
+  {
+    "filename": "sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16.tar.bz2",
+    "bytes": 50536402,
+    "sha256": "6a71c0cc442ba85ac1455ca23e4561e2a1ef18e55269a184a649d54e9cd0524c",
+    "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16.tar.bz2"
+  },
+  {
+    "filename": "vits-icefall-zh-aishell3.tar.bz2",
+    "bytes": 31559701,
+    "sha256": "ab468db3a3308cdd861495e0db2f25d79418a0c00639f74944c7cdf5dd8c6ec1",
+    "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-icefall-zh-aishell3.tar.bz2"
+  },
+  {
+    "filename": "sherpa_onnx_core-1.13.8-py3-none-manylinux2014_aarch64.whl",
+    "bytes": 13353426,
+    "sha256": "a51a03d55c376c32e15dd63ea852236042ba91a5cd73e253bbf7cf21f6582ba9",
+    "url": "https://files.pythonhosted.org/packages/9c/72/02227b14cd3fb3d504a8814ad144ed321a53331948c893821e02f4abb1d7/sherpa_onnx_core-1.13.8-py3-none-manylinux2014_aarch64.whl"
+  },
+  {
+    "filename": "sherpa_onnx-1.13.8-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+    "bytes": 4177610,
+    "sha256": "b56808d19a79368dcaa507d02a4c1ce537ca713fab9fedd91256b4ec599c6bf7",
+    "url": "https://files.pythonhosted.org/packages/c6/02/f2300e5cb07a611afcac5699a97c8d6f229f53a7c751882818ed40a7f72f/sherpa_onnx-1.13.8-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
+  },
+  {
+    "filename": "sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16/model.int8.onnx",
+    "bytes": 62666860,
+    "sha256": "32e5f17cc9a77d480f8d94bda97b7cc7a40965b6651b35385813f561a74129c8"
+  },
+  {
+    "filename": "vits-icefall-zh-aishell3/model.onnx",
+    "bytes": 30482262,
+    "sha256": "5511d651b7840c0a93a6bbfd4afd070a2c7f39ca1ec3ff2ecd73191519bbb852"
+  }
+]
