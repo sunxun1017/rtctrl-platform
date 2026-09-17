@@ -109,3 +109,20 @@ HTTP就绪复核：offline、muted=true、voice_progress=idle、收发音频帧�
 该快照companion RSS22.03MiB、全机已用约200MiB，不作为持续或有声负载性能结论。
 当前访问依赖SSH正反向隧道，关闭隧道后控制台/云端路径需重新建立；开机恢复与长期运行未验收。
 剩余工作及依赖见[产品检查清单](companion-readiness.md)。
+
+## Android鉴权对照复核
+
+对照参考仓库嵌套PatchX-Android-Main-C，而非顶层旧版：AndroidManifest.xml:76、84-85的launcher为MainActivity2。
+以下Java路径相对app/src/main/java/com/patchx_main/patchx/：
+- manage/WebSocketManager.java:68-75、147-150：固定测试Bearer令牌，Device-Id取UnifiedRobotState.getSn()，Client-Id固定，Protocol-Version=1。
+- MainActivity2.java:136：初始化硬编码设备身份。不是WebSocketManager内未使用的DEVICE_ID常量。
+- manage/WebSocketManager.java:239-258：hello还有client_ip和trace_id，Linux当前未发这两项。
+- manage/WebSocketManager.java:626-647：listen/start使用session_id和realtime，Linux基本字段一致。
+- manage/WebSocketManager.java:461-467、552-560及voice/WakeUpController.java:113：人脸ID大于0时发送updateUserId；不是通用登录换取token流程，Linux未上传该云端用户身份。
+
+本次只读核实板端配置和环境文件：令牌存在且与安卓测试令牌相同（未输出令牌），Client-Id相同，listen_mode=realtime；
+但Linux Device-Id为rtctrl-rv1126b，并非安卓启动时初始化的SN。没有切换身份、连接MQTT或重新录音。
+现有语音WS代码未发现从Wi-Fi配网领取令牌或另发模型API密钥的流程；MQTT设备管理使用独立连接。
+结论：不是简单漏传Bearer令牌；设备绑定/设备配置是否必要、hello额外字段及用户身份是否影响此后端，仍需服务端证据或受控对照。
+此前固定文字回显和tts.start、45秒无回答/音频，仅证明处理进入回复阶段，不能证明完整鉴权和模型调用成功。
+不能把未得到完整回复直接确定为服务端模型故障，也不能认定更换密钥或设备ID就能修复。

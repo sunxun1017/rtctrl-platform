@@ -83,3 +83,9 @@ HTTP offline/muted/idle，音频帧0，人脸服务976仍约30FPS。PID仅当时
 板端service.env权限0600；运行目录/run/rtctrl-companion；访问仍依赖临时SSH隧道。
 剩余后端闭环、实际Wi-Fi认证（本轮禁止连接）、LCD、离线唤醒/AEC与长时间验收见
 [产品检查清单](../docs/companion-readiness.md)。不把本轮宿主测试当作整机量产验收。
+
+
+Android鉴权复核：板端确实配置了与安卓一致的测试Bearer令牌；但Device-Id使用rtctrl-rv1126b，
+不同于MainActivity2初始化SN。Linux hello未发安卓的client_ip/trace_id，未上传云端人脸user_id。
+完整绑定/鉴权是否通过仍未知，不能仅凭hello/tts.start把无回答断定为服务端模型故障。
+本次未改身份、未连接MQTT、未采音；源码行号及边界见验证记录“Android鉴权对照复核”。
