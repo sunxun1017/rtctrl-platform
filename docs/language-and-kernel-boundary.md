@@ -8,6 +8,7 @@
 | 实时 runtime、控制、安全、HAL | C++17 | 固定容量容器、RAII、强类型接口和可替换叶子适配器；不依赖 GC |
 | 设备树 binding | YAML | 用 schema 描述真实 MMIO、IRQ、DMA 和 watchdog 参数，不在源码写死板卡资源 |
 | 构建与板端检查 | POSIX Shell + CMake | WSL、ARM64 与 RV64 共用入口；脚本不进入实时路径 |
+| 非实时交互终端 | Python3 + 原生 Opus/ALSA | 云端语音、HTTP 与表情编排，独立进程；不进入实时环，见 [ADR 0009](adr/0009-companion-nonrealtime-service.md) |
 | 离线训练/分析 | Python | 服务 PyTorch、仿真和数据处理，只输出模型或参数，不进入 1 kHz 环 |
 
 Linux 内核不提供标准 C++ 运行时，异常、RTTI 和标准库对象生命周期也不适合这个小型驱动边界。Rust-for-Linux 有内存安全优势，但各家 BSP 的内核、Rust 支持和工具链差异仍大；本版选 C 以覆盖传统 BSP，同时保持 UAPI 独立，未来可替换内核实现。

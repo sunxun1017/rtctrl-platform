@@ -84,3 +84,12 @@ if(NOT CMAKE_CROSSCOMPILING AND EXISTS
     add_subdirectory(${PROJECT_SOURCE_DIR}/adapters/inference/rknn/tests
         ${CMAKE_CURRENT_BINARY_DIR}/rknn)
 endif()
+
+# Non-realtime companion application: hardware-independent Python regressions.
+if(Python3_Interpreter_FOUND)
+    foreach(companion_suite test_companion test_companion_audio test_companion_transport)
+        add_test(NAME rtctrl_${companion_suite}
+            COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/${companion_suite}.py)
+        set_tests_properties(rtctrl_${companion_suite} PROPERTIES TIMEOUT 45 LABELS "companion")
+    endforeach()
+endif()

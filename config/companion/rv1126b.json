@@ -1,0 +1,12 @@
+{
+  "mode": "live",
+  "backend_url": "ws://118.196.28.154:8060/",
+  "allow_insecure_ws": true,
+  "device_id": "rtctrl-rv1126b",
+  "client_id": "cf6b2a-c23c-4819-b6b0-8cab81be359b",
+  "token_env": "RTCTRL_VOICE_TOKEN",
+  "capture_device": "default",
+  "playback_device": "default",
+  "playback_queue_frames": 16,
+  "face_url": "http://127.0.0.1:8080/status.json"
+}

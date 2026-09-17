@@ -79,3 +79,11 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 - function+sched_switch不足以分离睡眠与唤醒排队；补sched_wakeup→switch-in，当前单脸主线程P95约16us，无明显绑核依据。无job ID的schedule→IRQ配对只适用观察到无重叠的窗口。
 - 匹配SDK2.3.2普通rknn_init flags0初始化后可释放文件副本；两模型各20次合成输入完整输出字节一致，单脸PSS约47.4→41.1MiB。特殊MODEL_BUFFER_ZERO_COPY等模式必须重审生命周期，不能复制此结论。
 - 当前实际MEM_SIZE查询total/free SRAM均0，不根据头文件宏盲开SRAM。NEON固定点缩放逐像素一致，整机无脸CPU29.32→27.92%；没有NPU算术负载降低结论。
+
+
+## 2026-09-18：云端音频参数与会话隔离
+适用：companion协议v1适配。原Android后端hello返回Opus 24kHz，客户端上传仍16kHz；
+录音与播放参数必须独立协商，不能因Android源码编码常量为16kHz而固定解码采样率。
+协议缺少turn ID时，停止播放队列不等于隔离迟到回复；当前打断重建连接，
+录音使用独立capture_epoch。证据见[验证记录](../../../../docs/verification-companion-20260918.md)
+与tests/test_companion.py、tests/test_companion_audio.py。后端支持可靠轮次ID后可重新评估连接策略。

@@ -1,0 +1,85 @@
+"""Read-only face/status and local resource sampler. Never opens the camera."""
+import json
+import math
+import resource
+import threading
+import time
+import urllib.request
+
+class Monitor:
+    def __init__(self, core):
+        self.core = core
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self.run, name="companion-monitor", daemon=True)
+        self.last_frame = None
+        self.last_progress = 0.
+        self.last_cpu = time.process_time()
+        self.last_wall = time.monotonic()
+        self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def start(self):
+        self.thread.start()
+
+    def close(self):
+        self.stop_event.set()
+        self.thread.join(timeout=3)
+
+    def sample_face(self):
+        url = self.core.config["face_url"]
+        if not url:
+            return {"available": False, "reason": "未配置视觉服务"}
+        try:
+            with self.opener.open(url, timeout=1) as response:
+                raw = response.read(65537)
+            if len(raw) > 65536:
+                raise ValueError("oversized face response")
+            data = json.loads(raw)
+            if not isinstance(data, dict) or not isinstance(data.get("faces", []), list):
+                raise ValueError("invalid face response")
+            frame = data.get("frame")
+            if type(frame) is not int:
+                raise ValueError("missing frame sequence")
+            now = time.monotonic()
+            if frame != self.last_frame:
+                self.last_progress, self.last_frame = now, frame
+            fresh = now - self.last_progress <= self.core.config["face_stale_s"]
+            available = fresh and data.get("running") is True
+            faces = []
+            for face in data.get("faces", [])[:32]:
+                if not isinstance(face, dict) or not isinstance(face.get("name"), str):
+                    continue
+                score = face.get("similarity")
+                if type(score) not in (int, float) or not math.isfinite(score):
+                    continue
+                faces.append({"name": face["name"][:128], "similarity": score})
+            fps = data.get("fps", data.get("publish_fps"))
+            if type(fps) not in (int, float) or not math.isfinite(fps):
+                fps = None
+            return {"available": available, "running": available, "reason": "" if available else "视觉帧已停滞",
+                    "frame": frame, "fps": fps, "faces": faces if available else [],
+                    "age_s": round(now - self.last_progress, 2)}
+        except Exception:
+            self.last_frame = None
+            return {"available": False, "reason": "视觉服务不可用", "faces": []}
+
+    def run(self):
+        while not self.stop_event.is_set():
+            self.core.post("face", self.sample_face())
+            now, cpu = time.monotonic(), time.process_time()
+            metrics = {"cpu_percent": round(100 * (cpu-self.last_cpu) / max(.001, now-self.last_wall), 2),
+                       "peak_rss_mb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024, 2)}
+            try:
+                with open("/proc/self/status") as stream:
+                    for line in stream:
+                        if line.startswith("VmRSS:"):
+                            metrics["rss_mb"] = round(int(line.split()[1]) / 1024, 2)
+                with open("/proc/meminfo") as stream:
+                    memory = {line.split(":")[0]: int(line.split()[1]) for line in stream}
+                metrics["memory_total_mb"] = round(memory["MemTotal"] / 1024)
+                metrics["memory_used_mb"] = round((memory["MemTotal"]-memory["MemAvailable"]) / 1024)
+            except (OSError, ValueError, KeyError):
+                pass
+            with self.core.lock:
+                self.core.data["metrics"].update(metrics)
+            self.last_cpu, self.last_wall = cpu, now
+            self.stop_event.wait(self.core.config["face_poll_s"])

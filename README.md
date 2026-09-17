@@ -85,6 +85,8 @@ RTCTRL_REQUIRE_FIFO=1 RTCTRL_REQUIRE_MLOCK=1 \
 
 ## 应用入口
 
+- [RV1126B 语音与表情交互终端](apps/companion/README.md)：独立非实时 Python 服务，提供云端语音、浏览器二维表情和只读人脸状态集成；默认演示且静音。
+
 - [RV1126B 独立视频预览](apps/video_preview/README.md)：首次部署、浏览器访问、停止服务及软件/硬件对比。
 - [RV1126B 板级配置](docs/rv1126b.md)：BSP、用户态交叉构建与板端验收。
 - [产品部署边界](deploy/README.md)：控制与视觉运行域的部署约束。

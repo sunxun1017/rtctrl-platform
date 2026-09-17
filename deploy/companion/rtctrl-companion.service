@@ -1,0 +1,24 @@
+[Unit]
+Description=rtctrl non-realtime device companion
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=rtctrl
+SupplementaryGroups=audio
+WorkingDirectory=/opt/rtctrl-companion
+EnvironmentFile=/etc/rtctrl-companion.env
+ExecStart=/bin/sh /opt/rtctrl-companion/run-companion.sh /etc/rtctrl-companion.json
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=25
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+MemoryMax=192M
+TasksMax=24
+
+[Install]
+WantedBy=multi-user.target
