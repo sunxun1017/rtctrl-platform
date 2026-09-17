@@ -421,6 +421,30 @@ class HttpTests(unittest.TestCase):
             with self.subTest(code=code),self.assertRaises(urllib.error.HTTPError) as raised:
                 self.req("/api/action",body,headers)
             self.assertEqual(raised.exception.code,code)
+    def test_network_api_gates_and_async_dispatch(self):
+        with self.req("/api/network") as response:
+            self.assertFalse(json.load(response)["available"])
+        class Network:
+            def __init__(self): self.calls = []
+            def snapshot(self): return {"available": True, "busy": False, "networks": []}
+            def action(self, value):
+                self.calls.append(value)
+                return {"available": True, "busy": True, "networks": []}
+        network = Network()
+        self.server.network = network
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.req("/api/network", b'{"action":"scan"}',
+                     {"Origin":"http://evil.test", "Content-Type":"application/json"})
+        self.assertEqual(raised.exception.code, 403)
+        self.assertEqual(network.calls, [])
+        with self.req("/api/network", b'{"action":"scan"}',
+                      {"Content-Type":"application/json"}) as response:
+            self.assertEqual(response.status, 202)
+            self.assertTrue(json.load(response)["busy"])
+        self.assertEqual(network.calls, [{"action":"scan"}])
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.req("/api/network", b'{"password":"SECRET"', {"Content-Type":"application/json"})
+        self.assertNotIn(b"SECRET", raised.exception.read())
     def test_static_and_status(self):
         for path in ("/","/style.css","/app.js","/api/status"):
             with self.req(path) as response:

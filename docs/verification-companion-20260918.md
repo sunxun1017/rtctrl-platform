@@ -71,3 +71,20 @@ ALSA显示RUNNING但hw_ptr=0；硬件48kHz/stereo约1秒获得167936字节，hw_
 这说明当前端到端阻塞不止板卡录音；未取得后端日志，不能确定ASR/LLM/TTS/账号配置中哪项异常。
 新增空录音、realtime尾静音、提前TTS、清理隔离及电平统计回归后共66项测试通过；
 release/asan CTest各16项通过。无C++改动，全仓格式基线问题同上。
+
+## Wi-Fi 配网功能
+
+安卓侧证据：ProvisionClient显式绑定com.patchx_sys.provision.ProvisionService，
+IProvisionService仅定义getWifiProvision返回info/expireAt；DeviceManager的ACTION_UNBIND携带needReSetWifi。
+该系统应用实现不在参考仓库内，不能据主应用推定具体二维码、蓝牙或热点配网流程。
+
+板端可见wlan0/wlan1，ConnMan与wpa_supplicant系统进程运行，connmanctl可用，nmcli不可用。
+Wi-Fi初始Powered=False。enable wifi后第一次scan返回No carrier，随后scan成功并列出热点。
+Linux功能以ConnMan适配、异步任务和折叠控制台入口实现，默认wifi_enabled=false，板端明确启用。
+按用户最新要求，只验收扫描，不提交任何网络密码、不连接任何热点。真实认证/DHCP/重连留待之后验收。
+
+Wi-Fi验收结果：13项网络单测通过（包含真实本地PTY替身、输出超限与子进程回收），HTTP新增同源与异步派发测试通过。
+release/asan重新配置、构建通过，CTest各17/17通过。浏览器真机8092操作扫描完成，显示11个热点，
+API busy=false/status=idle/error为空，connected_wifi=0；eth0仍为192.168.50.2/24。
+页面布局检查通过，网络区展开且密码为空，未点击连接或断开。Wi-Fi包SHA256：
+e14f37a3bd6bd43238e5fa4cdd50fa29b318b24b5230df6dd9cd8d17b265339a，板端manifest逐文件验证通过。

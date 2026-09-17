@@ -118,3 +118,21 @@ export ALSA_CONFIG_PATH="$PWD/deploy/companion/asound-rv1126b.conf"
 原Android C后端配置使用listen_mode=realtime。松手立即停止真实采集，发送1.2秒合成静音让后端VAD结束一句话；
 manual模式仍发送listen.stop。两种模式均在没有上传完整采样帧时立即报错，避免空录音进入等待。
 metrics.capture_peak_amplitude显示当前轮16位采样峰值，仅用于排障，不保留录音，也不是语音识别置信度。
+
+## Wi-Fi 配网
+
+安卓参考仓库的ProvisionClient通过AIDL读取独立系统应用com.patchx_sys的配网信息，
+DeviceManager把重置Wi-Fi请求发给该应用；本仓库没有其ProvisionService实现。
+Linux版本使用板上已有ConnMan，不依赖安卓系统服务，不启动第二个wpa_supplicant。
+
+仅在有ConnMan与connmanctl的设备中将配置wifi_enabled设为true，默认关闭。
+控制台展开“网络设置”，网卡关闭时先主动点击“开启 Wi-Fi”，再扫描并选择已发现的开放网络或个人密码网络，输入密码连接。
+开启Wi-Fi后ConnMan可能自动重连系统已保存的网络；扫描本身不隐式开启网卡。
+扫描可能需要约30秒，连接最多45秒；后台任务不会阻塞语音状态机。
+只管理Wi-Fi服务，网线继续保留。隐藏网络和企业认证暂不支持。
+密码只经本机HTTP/SSH隧道送到ConnMan交互代理，不放入命令行参数、不写应用日志或浏览器存储；
+ConnMan会按系统机制保存成功连接的凭据用于重连。当前断开功能不等于删除系统已保存凭据。
+不要将控制台直接暴露到公网。API沿用loopback、同源写入、有限请求大小与并发限制。
+
+2026-09-18实物检查：ConnMan和wpa_supplicant已由系统启动，Wi-Fi初始关闭；启用后能扫描附近热点。
+按用户要求本轮不连接网络；密码认证、DHCP和重连仅完成模拟回归，尚未真机验收。

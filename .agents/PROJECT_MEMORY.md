@@ -60,3 +60,13 @@ PMU refill/access 是事件比例，不能直接认作应用精确命中率。�
 已补空录音快速报错、realtime尾静音及电平统计，66项测试通过。详见验证记录的板端追加章节。
 离线唤醒、AEC、自动打断、LCD和语音运动未实现。
 后端地址、网络与板卡状态需重新核实，不沿用短测作为当前可用性保证。
+
+## 2026-09-18 Wi-Fi 配网
+
+新增独立ConnMan适配和控制台“网络设置”，默认wifi_enabled=false；当前板端测试配置明确启用。
+开启Wi-Fi、扫描、连接、断开均需显式操作，scan不隐式enable。网络作业独立于语音线程，密码不进argv/日志/应用文件。
+ConnMan可按系统机制保存成功认证凭据，应用关闭不撤销daemon已接收的网络操作。
+用户本轮要求“先做好功能，暂不连接”：仅真机扫描验收，发现11热点、connected_wifi=0，有线连接保留。
+13项网络回归通过，release/asan各17项CTest通过；真实认证/DHCP/重连尚未验收。
+安卓侧实际系统配网服务com.patchx_sys不在参考仓库中，Linux实现不假定其内部二维码/蓝牙机制。
+证据见[验证记录](../docs/verification-companion-20260918.md)与[使用说明](../apps/companion/README.md)。

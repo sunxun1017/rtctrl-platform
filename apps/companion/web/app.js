@@ -185,6 +185,119 @@
             setTimeout(poll, 1000);
         }
     }
+    // Wi-Fi is managed independently from voice. Opening this panel only reads status.
+    let network = {available:false, busy:false, networks:[]};
+    let networkLoading = false;
+    let networkSubmitting = false;
+    let networkTimer = null;
+    let networkRevision = 0;
+    let networkMessage = "";
+    const networkPanel = $("network-panel");
+    function selectedNetwork() {
+        return network.networks.find(item => item.service === $("network-select").value);
+    }
+    function renderNetwork() {
+        const selected = $("network-select").value;
+        const list = document.createDocumentFragment();
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = network.networks.length ? "请选择网络" : "暂无网络，请点击扫描 Wi-Fi";
+        list.append(placeholder);
+        for (const item of network.networks) {
+            const option = document.createElement("option");
+            option.value = item.service;
+            option.textContent = item.ssid + (item.connected ? " · 已连接" : "") + (item.security === "none" || item.security === "open" ? " · 开放网络" : "");
+            list.append(option);
+        }
+        $("network-select").replaceChildren(list);
+        $("network-select").value = network.networks.some(item => item.service === selected) ? selected : "";
+        const item = selectedNetwork();
+        const supported = item && !item.hidden && ["psk", "open", "none"].includes(item.security);
+        const busy = network.busy || networkSubmitting;
+        const unavailable = !network.available;
+        $("network-enable").disabled = unavailable || busy;
+        $("network-scan").disabled = unavailable || busy;
+        $("network-select").disabled = unavailable || busy || !network.networks.length;
+        $("network-password").disabled = unavailable || busy || !item || !supported || item.connected || item.security === "none" || item.security === "open";
+        $("network-connect").disabled = unavailable || busy || !item || item.connected || !supported;
+        $("network-disconnect").disabled = unavailable || busy || !item || !item.connected;
+        $("network-count").textContent = network.available ? network.networks.length + " 个网络" : "";
+        const statuses = {idle:"网络管理已就绪。点击扫描发现附近的 Wi-Fi。", enabling:"正在开启 Wi-Fi，设备可能重连已保存的网络…", scanning:"正在扫描附近的 Wi-Fi…", connecting:"正在连接所选网络…", disconnecting:"正在断开所选网络…", error:"上次网络操作失败，请查看提示后重试。"};
+        const status = statuses[network.status] || "";
+        $("network-status").textContent = unavailable ? "当前设备未启用 Wi-Fi 管理，网线可继续使用。" : busy ? (status && network.status !== "idle" ? status : "正在处理网络操作，请稍候…") : item && !supported ? "此网络类型暂不支持连接，可选择普通密码网络或开放网络。" : status || "网络管理已就绪。点击扫描发现附近的 Wi-Fi。";
+        const error = networkMessage || (typeof network.error === "string" ? network.error : "");
+        $("network-error").textContent = error;
+        $("network-error").hidden = !error;
+    }
+    function acceptNetwork(value) {
+        if (!value || typeof value !== "object") throw new Error("invalid network status");
+        network = {...value, networks:Array.isArray(value.networks) ? value.networks.filter(item => item && typeof item.service === "string" && typeof item.ssid === "string").slice(0,128) : []};
+        renderNetwork();
+    }
+    function scheduleNetwork() {
+        if (networkTimer !== null) clearTimeout(networkTimer);
+        networkTimer = null;
+        if (networkPanel.open && !document.hidden) networkTimer = setTimeout(pollNetwork, 3000);
+    }
+    async function pollNetwork() {
+        if (!networkPanel.open || document.hidden || networkLoading || networkSubmitting) return;
+        networkLoading = true;
+        const revision = networkRevision;
+        try {
+            const next = await request("/api/network");
+            if (revision === networkRevision) { networkMessage = ""; acceptNetwork(next); }
+        } catch (_) {
+            if (revision === networkRevision) {
+                networkMessage = "无法读取网络状态，展开此区域时会自动重试。网线可继续使用。";
+                network.available = false;
+                renderNetwork();
+            }
+        } finally {
+            networkLoading = false;
+            scheduleNetwork();
+        }
+    }
+    async function networkAction(action) {
+        if (networkSubmitting || network.busy || !network.available) return;
+        const item = selectedNetwork();
+        if (!["scan", "enable"].includes(action) && !item) return;
+        if (action === "connect" && (item.hidden || !["psk", "open", "none"].includes(item.security))) return;
+        const body = {action};
+        if (item && !["scan", "enable"].includes(action)) body.service = item.service;
+        if (action === "connect") body.password = $("network-password").disabled ? "" : $("network-password").value;
+        // Clear immediately, including failed submissions; never persist credentials.
+        $("network-password").value = "";
+        networkSubmitting = true;
+        networkRevision++;
+        networkMessage = "";
+        renderNetwork();
+        try {
+            const next = await request("/api/network", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)}, 15000);
+            if (typeof next.available === "boolean") acceptNetwork(next);
+            else network.busy = true;
+        } catch (_) {
+            networkMessage = "网络操作未完成，请查看设备状态后重试。若正在切换 Wi-Fi，控制台可能暂时断开。";
+        } finally {
+            delete body.password;
+            networkSubmitting = false;
+            networkRevision++;
+            renderNetwork();
+            scheduleNetwork();
+        }
+    }
+    $("network-enable").addEventListener("click", () => networkAction("enable"));
+    $("network-scan").addEventListener("click", () => networkAction("scan"));
+    $("network-form").addEventListener("submit", event => { event.preventDefault(); networkAction("connect"); });
+    $("network-disconnect").addEventListener("click", () => networkAction("disconnect"));
+    $("network-select").addEventListener("change", () => { $("network-password").value = ""; renderNetwork(); });
+    networkPanel.addEventListener("toggle", () => {
+        if (networkPanel.open && !document.hidden) pollNetwork();
+        else { $("network-password").value = ""; scheduleNetwork(); }
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && networkPanel.open) pollNetwork();
+        else scheduleNetwork();
+    });
     render();
     poll();
 })();

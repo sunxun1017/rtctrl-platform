@@ -9,6 +9,7 @@ import threading
 from .config import load_config
 from .core import AUDIO_PARAMS, Companion, validate_hello
 from .monitor import Monitor
+from .network import NetworkManager
 from .server import Server
 
 def doctor(config):
@@ -62,7 +63,8 @@ def main():
         if args.probe:
             return probe(config)
         core = Companion(config)
-        server = Server((config["bind"], config["port"]), core)
+        network = NetworkManager(enabled=config["wifi_enabled"])
+        server = Server((config["bind"], config["port"]), core, network=network)
         monitor = Monitor(core)
         stopped = threading.Event()
         def stop(*_):
@@ -79,6 +81,7 @@ def main():
         finally:
             server.shutdown()
             server.server_close()
+            network.close()
             monitor.close()
             core.close()
             worker.join(timeout=2)

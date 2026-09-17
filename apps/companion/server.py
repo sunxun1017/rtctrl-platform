@@ -12,8 +12,9 @@ class Server(ThreadingHTTPServer):
     allow_reuse_address = True
     request_queue_size = 8
 
-    def __init__(self, address, companion):
+    def __init__(self, address, companion, network=None):
         self.companion = companion
+        self.network = network
         self.slots = threading.BoundedSemaphore(8)
         super().__init__(address, Handler)
 
@@ -65,6 +66,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self._host_ok():
             return self._reply(403, {"error": "invalid Host"})
         path = urlsplit(self.path).path
+        if path == "/api/network":
+            return self._reply(200, self.server.network.snapshot() if self.server.network else {"available": False, "busy": False, "status": "未启用Wi-Fi管理", "error": "", "networks": []})
         if path == "/api/status":
             return self._reply(200, self.server.companion.snapshot())
         assets = {"/": ("index.html", "text/html; charset=utf-8"),
@@ -80,7 +83,7 @@ class Handler(BaseHTTPRequestHandler):
         expected = "http://" + self.headers.get("Host", "")
         if not self._host_ok() or (origin is not None and origin != expected):
             return self._reply(403, {"error": "cross-origin request rejected"})
-        if self.path != "/api/action":
+        if self.path not in ("/api/action", "/api/network"):
             return self._reply(404, {"error": "not found"})
         if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
             return self._reply(415, {"error": "application/json required"})
@@ -89,11 +92,21 @@ class Handler(BaseHTTPRequestHandler):
             if not 0 < length <= 1024 or self.headers.get("Transfer-Encoding"):
                 raise ValueError("invalid body size")
             body = json.loads(self.rfile.read(length))
+            if self.path == "/api/network":
+                if not self.server.network:
+                    return self._reply(400, {"error": "未启用Wi-Fi管理"})
+                try:
+                    result = self.server.network.action(body)
+                except ValueError as exc:
+                    return self._reply(400, {"error": str(exc)})
+                return self._reply(202, result)
             if not isinstance(body, dict) or set(body) != {"action"} or not isinstance(body["action"], str):
                 raise ValueError("expected an action")
             result = self.server.companion.action(body["action"])
             self._reply(200, result)
-        except (ValueError, UnicodeError) as exc:
+        except (json.JSONDecodeError, UnicodeError):
+            self._reply(400, {"error": "请求格式无效"})
+        except ValueError as exc:
             self._reply(400, {"error": str(exc)})
         except TimeoutError:
             self._reply(408, {"error": "request timed out"})

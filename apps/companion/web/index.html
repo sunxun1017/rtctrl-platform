@@ -30,6 +30,22 @@
 </div>
 </main>
 <div id="error" class="error" role="alert" hidden></div>
+<details id="network-panel" class="panel network-panel">
+<summary>网络设置 <span>Wi-Fi · 网线可继续使用</span></summary>
+<div class="network-content">
+<p id="network-status" role="status">展开后读取网络状态。不会自动扫描或连接。</p>
+<p id="network-error" class="network-error" role="alert" hidden></p>
+<div class="network-actions"><button id="network-enable" type="button" disabled>开启 Wi-Fi</button><button id="network-scan" type="button" disabled>扫描 Wi-Fi</button><span id="network-count"></span></div>
+<form id="network-form" autocomplete="off">
+<label for="network-select">选择 Wi-Fi</label>
+<select id="network-select" disabled><option value="">请先扫描附近的 Wi-Fi</option></select>
+<label for="network-password">Wi-Fi 密码</label>
+<input id="network-password" type="password" autocomplete="new-password" autocapitalize="none" spellcheck="false" maxlength="128" disabled aria-describedby="network-note" placeholder="输入所选网络的密码">
+<div class="network-actions"><button id="network-connect" type="submit" disabled>连接所选网络</button><button id="network-disconnect" type="button" disabled>断开所选网络</button></div>
+</form>
+<p id="network-note" class="network-note">开启 Wi-Fi 后，设备系统可能自动重连已保存的网络。密码提交后会从页面清空，由设备系统保存用于重连。网线可继续使用；切换当前 Wi-Fi 可能使远程控制台暂时断开。</p>
+</div>
+</details>
 <footer id="privacy-note">音频在按住说话期间发送到已配置的后端。松开结束录音；静音将停止采集。</footer>
 </body>
 </html>
