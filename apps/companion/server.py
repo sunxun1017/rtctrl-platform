@@ -12,9 +12,10 @@ class Server(ThreadingHTTPServer):
     allow_reuse_address = True
     request_queue_size = 8
 
-    def __init__(self, address, companion, network=None):
+    def __init__(self, address, companion, network=None, device=None):
         self.companion = companion
         self.network = network
+        self.device = device
         self.slots = threading.BoundedSemaphore(8)
         super().__init__(address, Handler)
 
@@ -66,6 +67,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self._host_ok():
             return self._reply(403, {"error": "invalid Host"})
         path = urlsplit(self.path).path
+        if path == "/api/device":
+            return self._reply(200, self.server.device.snapshot() if self.server.device else {"available": False, "busy": False, "error": "", "supported": {}})
         if path == "/api/network":
             return self._reply(200, self.server.network.snapshot() if self.server.network else {"available": False, "busy": False, "status": "未启用Wi-Fi管理", "error": "", "networks": []})
         if path == "/api/status":
@@ -83,7 +86,7 @@ class Handler(BaseHTTPRequestHandler):
         expected = "http://" + self.headers.get("Host", "")
         if not self._host_ok() or (origin is not None and origin != expected):
             return self._reply(403, {"error": "cross-origin request rejected"})
-        if self.path not in ("/api/action", "/api/network"):
+        if self.path not in ("/api/action", "/api/network", "/api/device"):
             return self._reply(404, {"error": "not found"})
         if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
             return self._reply(415, {"error": "application/json required"})
@@ -92,6 +95,10 @@ class Handler(BaseHTTPRequestHandler):
             if not 0 < length <= 1024 or self.headers.get("Transfer-Encoding"):
                 raise ValueError("invalid body size")
             body = json.loads(self.rfile.read(length))
+            if self.path == "/api/device":
+                if not self.server.device:
+                    return self._reply(400, {"error": "未启用设备设置"})
+                return self._reply(200, self.server.device.action(body))
             if self.path == "/api/network":
                 if not self.server.network:
                     return self._reply(400, {"error": "未启用Wi-Fi管理"})

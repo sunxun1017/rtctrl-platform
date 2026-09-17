@@ -89,3 +89,13 @@ Android鉴权复核：板端确实配置了与安卓一致的测试Bearer令牌�
 不同于MainActivity2初始化SN。Linux hello未发安卓的client_ip/trace_id，未上传云端人脸user_id。
 完整绑定/鉴权是否通过仍未知，不能仅凭hello/tts.start把无回答断定为服务端模型故障。
 本次未改身份、未连接MQTT、未采音；源码行号及边界见验证记录“Android鉴权对照复核”。
+
+
+## 2026-09-18 声音与屏幕
+
+新增device.py及/api/device、控制台折叠设置。device_settings_enabled默认false，demo强制不触碰硬件；
+当前板端测试配置已明确开启。支持0dB封顶音量、扬声器两开关、0–24dB分档麦增益、10–100%背光。
+显式应用、写后读回、失败回滚，不采音/播放测试音，不自动保存重启配置。amixer使用sget/sset simple控件名。
+112项companion测试通过，release/asan CTest各19/19通过；真机四项调节/读回后恢复原始值。
+当时实际扬声器底层spk switch=off（Speaker=on），没有自动打开；UI如实显示关闭。
+最后音量raw191、增益raw8、背光raw200/255；服务静音离线，人脸约30FPS。详见验证记录的声音与屏幕章节。

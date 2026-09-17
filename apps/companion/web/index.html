@@ -48,6 +48,21 @@
 <p id="network-note" class="network-note">开启 Wi-Fi 后，设备系统可能自动重连已保存的网络。密码提交后会从页面清空，由设备系统保存用于重连。网线可继续使用；切换当前 Wi-Fi 可能使远程控制台暂时断开。</p>
 </div>
 </details>
+<details id="device-panel" class="panel network-panel device-panel">
+<summary>声音与屏幕 <span>音量 · 麦克风增益 · 亮度</span></summary>
+<div class="device-content">
+<p id="device-status" role="status">展开后读取设备设置。</p>
+<p id="device-error" class="network-error" role="alert" hidden></p>
+<div class="device-grid">
+<form id="device-volume-form" class="device-setting"><label for="device-volume">扬声器音量 <span id="device-volume-current">未读取</span></label><div class="device-entry"><input id="device-volume" type="range" min="0" max="100" step="1" disabled><output id="device-volume-value" for="device-volume">—</output><button id="device-volume-apply" type="submit" disabled>应用音量</button></div></form>
+<form id="device-speaker-form" class="device-setting"><label for="device-speaker">扬声器开关 <span id="device-speaker-current">未读取</span></label><div class="device-entry"><select id="device-speaker" disabled><option value="">选择开关状态</option><option value="true">打开扬声器</option><option value="false">关闭扬声器</option></select><button id="device-speaker-apply" type="submit" disabled>应用开关</button></div></form>
+<form id="device-mic_gain-form" class="device-setting"><label for="device-mic_gain">麦克风增益 <span id="device-mic_gain-current">未读取</span></label><div class="device-entry"><select id="device-mic_gain" disabled><option value="">选择增益</option><option value="0">0 dB</option><option value="6">6 dB</option><option value="12">12 dB</option><option value="18">18 dB</option><option value="24">24 dB</option></select><button id="device-mic_gain-apply" type="submit" disabled>应用增益</button></div><small>声音较小时可逐档提高；增益过高可能带来噪声或失真。</small></form>
+<form id="device-brightness-form" class="device-setting"><label for="device-brightness">屏幕亮度 <span id="device-brightness-current">未读取</span></label><div class="device-entry"><input id="device-brightness" type="range" min="10" max="100" step="1" disabled><output id="device-brightness-value" for="device-brightness">—</output><button id="device-brightness-apply" type="submit" disabled>应用亮度</button></div></form>
+</div>
+<p id="device-diagnostic" class="device-note"></p>
+<p class="device-note">扬声器开关只控制声音输出，不等于麦克风静音。调整这些设置不会开始录音或播放测试音。设置作用于当前运行系统，重启后可能恢复默认值。</p>
+</div>
+</details>
 <footer id="privacy-note">音频在按住说话期间发送到已配置的后端。松开结束录音；静音将停止采集。</footer>
 </body>
 </html>

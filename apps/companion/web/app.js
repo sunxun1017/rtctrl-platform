@@ -319,6 +319,115 @@
         if (!document.hidden && networkPanel.open) pollNetwork();
         else scheduleNetwork();
     });
+    // Device settings are read on expansion; edits require an explicit application.
+    const devicePanel = $("device-panel");
+    const deviceFields = {
+        volume:{key:"volume_percent", unit:"%", min:0, max:100},
+        speaker:{key:"speaker_enabled"},
+        mic_gain:{key:"mic_gain_db", unit:" dB", values:[0,6,12,18,24]},
+        brightness:{key:"brightness_percent", unit:"%", min:10, max:100}
+    };
+    let device = {available:false, supported:{}};
+    let deviceLoading = false, deviceSubmitting = false, deviceTimer = null;
+    let deviceRevision = 0, deviceMessage = "";
+    const deviceDirty = new Set();
+    function validDeviceValue(name, value) {
+        const field = deviceFields[name];
+        return name === "speaker" ? typeof value === "boolean" : Number.isInteger(value) &&
+            (field.values ? field.values.includes(value) : value >= field.min && value <= field.max);
+    }
+    function renderDevice() {
+        const usable = device.available && !device.error && !deviceMessage;
+        const busy = deviceSubmitting || device.busy;
+        $("device-status").textContent = deviceSubmitting ? "正在应用设置并读取设备实际值…" :
+            !usable ? "设备设置暂不可用，展开此区域时会自动重试。" : device.busy ? "设备正在处理设置，请稍候。" : "已读取设备设置；修改后点击对应的应用按钮。";
+        $("device-error").textContent = deviceMessage || device.error || "";
+        $("device-error").hidden = !$("device-error").textContent;
+        $("device-diagnostic").textContent = typeof device.diagnostic === "string" ? device.diagnostic : "";
+        for (const [name, field] of Object.entries(deviceFields)) {
+            const input = $("device-" + name);
+            const value = device[field.key];
+            const readable = name === "mic_gain" ? typeof value === "number" && Number.isFinite(value) :
+                name === "brightness" ? Number.isInteger(value) && value >= 0 && value <= 100 : validDeviceValue(name, value);
+            const known = usable && device.supported[name] === true && readable;
+            input.disabled = !known || busy;
+            $("device-" + name + "-apply").disabled = !known || busy || !deviceDirty.has(name);
+            $("device-" + name + "-current").textContent = known ? (device.busy ? "上次读取：" : "设备当前：") +
+                (name === "speaker" ? (value ? "已打开" : "已关闭") : value + field.unit) :
+                usable && device.supported[name] === false ? "此设备暂不支持" : "状态未知";
+            if (!known) {
+                deviceDirty.delete(name);
+                input.value = "";
+            } else if (!deviceDirty.has(name) && document.activeElement !== input) {
+                input.value = name === "mic_gain" && !field.values.includes(value) ? "" :
+                    name === "brightness" ? String(Math.max(field.min, value)) : String(value);
+            }
+            if (known && name === "brightness" && value < field.min) {
+                deviceDirty.add(name);
+                $("device-" + name + "-apply").disabled = !!busy;
+            }
+            if (name === "volume" || name === "brightness") {
+                $("device-" + name + "-value").textContent = known ? input.value + "%" : "—";
+                input.setAttribute("aria-valuetext", known ? input.value + "%" : "状态未知");
+            }
+        }
+    }
+    function acceptDevice(next) {
+        if (!next || typeof next.available !== "boolean" || !next.supported || typeof next.supported !== "object") throw new Error("设备设置响应无效");
+        device = next;
+        renderDevice();
+    }
+    function scheduleDevice() {
+        if (deviceTimer !== null) clearTimeout(deviceTimer);
+        deviceTimer = null;
+        if (devicePanel.open && !document.hidden) deviceTimer = setTimeout(pollDevice, 5000);
+    }
+    async function pollDevice() {
+        if (!devicePanel.open || document.hidden || deviceLoading || deviceSubmitting) return;
+        deviceLoading = true;
+        const revision = deviceRevision;
+        try {
+            const next = await request("/api/device");
+            if (revision === deviceRevision) { deviceMessage = ""; acceptDevice(next); }
+        } catch (_) {
+            if (revision === deviceRevision) {
+                device = {available:false, supported:{}};
+                deviceMessage = "无法读取设备设置，恢复连接后再试。";
+                renderDevice();
+            }
+        } finally { deviceLoading = false; scheduleDevice(); }
+    }
+    async function applyDevice(name) {
+        const input = $("device-" + name);
+        if (input.disabled || !deviceDirty.has(name) || deviceSubmitting) return;
+        const value = name === "speaker" ? input.value === "true" : Number(input.value);
+        if (!validDeviceValue(name, value)) return;
+        deviceSubmitting = true;
+        deviceRevision++;
+        deviceMessage = "";
+        renderDevice();
+        try {
+            const next = await request("/api/device", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:"set_" + name, value})}, 10000);
+            deviceDirty.delete(name);
+            acceptDevice(next);
+            // Read-back wins over the submitted value, even when the field retains focus.
+            if (validDeviceValue(name, device[deviceFields[name].key])) input.value = String(device[deviceFields[name].key]);
+        } catch (error) {
+            device = {available:false, supported:{}};
+            deviceMessage = error.name === "AbortError" ? "设置请求超时，无法确认结果，正在重新读取设备。" : error.message;
+        } finally {
+            deviceSubmitting = false;
+            deviceRevision++;
+            renderDevice();
+            scheduleDevice();
+        }
+    }
+    for (const name of Object.keys(deviceFields)) {
+        $("device-" + name).addEventListener("input", () => { deviceDirty.add(name); renderDevice(); });
+        $("device-" + name + "-form").addEventListener("submit", event => { event.preventDefault(); applyDevice(name); });
+    }
+    devicePanel.addEventListener("toggle", () => { if (devicePanel.open) pollDevice(); else scheduleDevice(); });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && devicePanel.open) pollDevice(); else scheduleDevice(); });
     render();
     poll();
 })();

@@ -10,6 +10,7 @@ from .config import load_config
 from .core import AUDIO_PARAMS, Companion, validate_hello
 from .monitor import Monitor
 from .network import NetworkManager
+from .device import DeviceManager
 from .server import Server
 
 def doctor(config):
@@ -64,7 +65,8 @@ def main():
             return probe(config)
         core = Companion(config)
         network = NetworkManager(enabled=config["wifi_enabled"])
-        server = Server((config["bind"], config["port"]), core, network=network)
+        device = DeviceManager(enabled=config["device_settings_enabled"] and config["mode"] == "live")
+        server = Server((config["bind"], config["port"]), core, network=network, device=device)
         monitor = Monitor(core)
         stopped = threading.Event()
         def stop(*_):
@@ -82,6 +84,7 @@ def main():
             server.shutdown()
             server.server_close()
             network.close()
+            device.close()
             monitor.close()
             core.close()
             worker.join(timeout=2)

@@ -390,7 +390,7 @@ class CoreTests(unittest.TestCase):
 
 class ConfigTests(unittest.TestCase):
     def test_invalid_and_unsafe_configs(self):
-        for config in ({"port":True},{"face_poll_s":float("nan")},{"bind":"0.0.0.0"},
+        for config in ({"device_settings_enabled":1},{"port":True},{"face_poll_s":float("nan")},{"bind":"0.0.0.0"},
                        {"unknown":1},{"mode":"live","backend_url":"ws://example.test"},
                        {"face_url":"http://remote.test/status.json"}):
             with self.subTest(config=config),self.assertRaises(ValueError): validate(config)
@@ -491,6 +491,34 @@ class HttpTests(unittest.TestCase):
         with self.assertRaises(urllib.error.HTTPError) as raised:
             self.req("/api/network", b'{"password":"SECRET"', {"Content-Type":"application/json"})
         self.assertNotIn(b"SECRET", raised.exception.read())
+    def test_device_api_gates_and_same_origin(self):
+        with self.req("/api/device") as response:
+            self.assertFalse(json.load(response)["available"])
+        headers = {"Content-Type": "application/json"}
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.req("/api/device", b'{"action":"set_volume","value":40}', headers)
+        self.assertEqual(raised.exception.code, 400)
+        class Device:
+            def __init__(self): self.calls = []
+            def snapshot(self): return {"available": True, "volume_percent": 40}
+            def action(self, body):
+                if not isinstance(body, dict): raise ValueError("invalid action")
+                self.calls.append(body)
+                return self.snapshot()
+        device = self.server.device = Device()
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.req("/api/device", b'{"action":"set_volume","value":40}',
+                     dict(headers, Origin="http://evil.test"))
+        self.assertEqual(raised.exception.code, 403)
+        self.assertEqual(device.calls, [])
+        with self.req("/api/device", b'{"action":"set_volume","value":40}', headers) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(json.load(response)["volume_percent"], 40)
+        self.assertEqual(device.calls, [{"action": "set_volume", "value": 40}])
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.req("/api/device", b'[]', headers)
+        self.assertEqual(raised.exception.code, 400)
+
     def test_static_and_status(self):
         for path in ("/","/style.css","/app.js","/api/status"):
             with self.req(path) as response:

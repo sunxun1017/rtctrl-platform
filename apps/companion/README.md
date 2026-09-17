@@ -95,7 +95,7 @@ PYTHONPATH=.deps/companion-python python3 -m unittest discover -s tests -p 'test
 ```
 完整 transport 集成测试需要固定依赖；未安装时相关测试明确 skip。
 测试含真实本地 WebSocket Upgrade/分片限制和真实 libopus（主机具备时），其余声卡用替身。
-CTest 默认注册五组 companion 测试；Python应用不由 C++ 编译器构建。
+CTest 默认注册六组 companion 测试；Python应用不由 C++ 编译器构建。
 
 上板验收仍需：实际声卡录放、真实语音往返、与视觉并发的峰值内存/CPU、30分钟运行及网络中断恢复。
 不能把宿主测试或后端 hello 当成这些验收已完成。
@@ -148,3 +148,19 @@ tts.start只证明后端进入回复阶段，不代表收到声音或扬声器�
 部署与剩余验收见[产品检查清单](../../docs/companion-readiness.md)。
 
 服务的显式启动、停止、重启与可选 Buildroot 启动模板见[服务管理](../../deploy/companion/SERVICE.md)。
+
+
+## 声音与屏幕
+
+真机配置显式设置 `device_settings_enabled: true` 后，可在控制台展开“声音与屏幕”。
+默认关闭，演示模式始终不控制宿主硬件。该功能独立于云端语音连接。
+
+- 播放音量：0–100%，映射 ES8389 DACL/DACR 的 0–191 范围，最高0dB，不启用额外数字增益。
+- 扬声器：同时控制 Speaker 与 spk switch；与页面麦克风静音相互独立。
+- 麦克风增益：0、6、12、18、24dB，同时调整左右PGA，不启动录音或改变输入路由。
+- 屏幕背光：10–100%，读取当前backlight的最大值换算，避免误设全黑。
+
+修改后需显式应用并读取设备返回值；失败会提示，设备不支持的项禁用。
+配置适用于本次已核实的ALIENTEK RV1126B/ES8389控制名，不自动推广到其他声卡。
+设置仅作用于当前系统，不写入alsactl持久配置、不承诺重启保持；服务启动不会自动改写设置。
+API为同源 `GET /api/device` 和 `POST /api/device`，不接受任意命令、声卡名或文件路径。

@@ -4,7 +4,7 @@ import math
 from urllib.parse import urlsplit
 
 DEFAULTS = {
-    "wifi_enabled": False, "mode": "demo", "bind": "127.0.0.1", "port": 8090,
+    "device_settings_enabled": False, "wifi_enabled": False, "mode": "demo", "bind": "127.0.0.1", "port": 8090,
     "backend_url": "", "token_env": "RTCTRL_VOICE_TOKEN",
     "device_id": "rtctrl-rv1126b", "client_id": "rtctrl-companion",
     "allow_insecure_ws": False, "network_timeout_s": 5,
@@ -37,8 +37,9 @@ def validate(values):
         raise ValueError("mode must be demo or live")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    if type(config["wifi_enabled"]) is not bool:
-        raise ValueError("wifi_enabled must be boolean")
+    for key in ("wifi_enabled", "device_settings_enabled"):
+        if type(config[key]) is not bool:
+            raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
         raise ValueError("allow_insecure_ws must be boolean")
     for key, low, high in (("port", 1, 65535), ("playback_queue_frames", 2, 32),

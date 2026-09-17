@@ -126,3 +126,26 @@ HTTP就绪复核：offline、muted=true、voice_progress=idle、收发音频帧�
 结论：不是简单漏传Bearer令牌；设备绑定/设备配置是否必要、hello额外字段及用户身份是否影响此后端，仍需服务端证据或受控对照。
 此前固定文字回显和tts.start、45秒无回答/音频，仅证明处理进入回复阶段，不能证明完整鉴权和模型调用成功。
 不能把未得到完整回复直接确定为服务端模型故障，也不能认定更换密钥或设备ID就能修复。
+
+## 声音与屏幕设置真机验收
+
+新增DeviceManager和同源/api/device，配置device_settings_enabled默认false；demo模式强制不启用硬件控制。
+控制台新增折叠面板，支持音量、扬声器、麦克风增益、背光，必须显式应用，不采音或播放测试音。
+板卡实测amixer sget/sset适用；cget name=DACL不适用，不能混淆simple mixer与原始control名称。
+音量DACL/DACR限制raw0–191（最高0dB），增益ADCL/ADCR PGA仅0/6/12/18/24dB，背光10–100%。
+默认构造和刷新不写硬件；操作串行、250ms单进程超时、8KiB输出上限、失败回滚并核对；不保存重启配置。
+页面允许原有0%背光恢复到受限范围，非枚举实际增益只作读值显示；过期操作错误能在成功刷新后恢复。
+
+112项companion测试通过（33.496秒）；release与ASan配置、构建成功，CTest各19/19通过（41.14/41.18秒）。
+新增12项设备适配器测试覆盖默认无写入、类型/边界拒绝、双通道失败恢复、静默写失败、超时与输出限制。
+新增HTTP设备接口同源与禁用测试；UI Node VM覆盖草稿保留、忙碌/错误、回读、0%背光和非枚举增益。
+
+部署包SHA256：df21fbbfa43d1a35d6eda20d1d0d6204a0cd6018d6325c77b3b10ed7e0c07211。
+传输哈希一致，板端manifest60文件全部匹配；独立bundle配置明确开启device_settings_enabled，服务重启正常。
+初始实际值：DACL/DACR=191，Speaker=on、spk switch=off，ADCL/ADCR PGA=8（24dB），backlight=200/255。
+因此API显示音量100%、扬声器关闭、增益24dB、亮度78%。API音量百分比以0dB上限归一化，不是amixer原生百分比。
+实际HTTP测试：音量50→100%、增益18→24dB、亮度70%、扬声器开→关，逐项读回正确。
+finally按原始值精确恢复（包括Speaker=on、spk switch=off和背光raw200，避免百分比四舍五入误差）。
+复核offline/muted=true/voice_progress=idle，音频收发帧0，人脸约29.86FPS。
+浏览器8092已展开声音与屏幕，四项读数正确、窄屏无横向遮挡；未连接Wi-Fi，未修改后端鉴权身份。
+控制读回不等于扬声器听感或实际屏幕观感验收，未实现LCD界面渲染/开机保存。
