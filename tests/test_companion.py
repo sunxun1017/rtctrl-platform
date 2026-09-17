@@ -3,6 +3,7 @@ import json
 import pathlib
 import sys
 import subprocess
+import struct
 import tarfile
 import tempfile
 import threading
@@ -69,6 +70,10 @@ class CoreTests(unittest.TestCase):
     def listen(self):
         self.core.action("unmute")
         self.core.action("listen")
+    def send_frame(self):
+        before = self.core.snapshot()["metrics"]["audio_frames_sent"]
+        self.core.audio.callback(b"pcm")
+        wait_for(lambda: self.core.snapshot()["metrics"]["audio_frames_sent"] == before + 1)
     def test_connect_never_records_and_negotiates_output(self):
         self.assertTrue(self.core.snapshot()["muted"])
         self.assertFalse(self.core.audio.recording)
@@ -95,6 +100,7 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(deadline,self.core.deadline)
     def test_mute_stops_and_rejects_late_tts(self):
         self.listen()
+        self.send_frame()
         self.core.action("stop")
         audio = self.core.audio
         old = self.core.transport
@@ -107,11 +113,13 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(self.core.snapshot()["state"],"muted")
     def test_interrupted_reply_cannot_enter_next_turn(self):
         self.listen()
+        self.send_frame()
         self.core.action("stop")
         old = self.core.transport
         self.core.action("interrupt")
         wait_for(lambda:self.core.snapshot()["connected"])
         self.core.action("listen")
+        self.send_frame()
         self.core.action("stop")
         old.message({"type":"tts","state":"start"})
         old.message(b"stale")
@@ -121,14 +129,165 @@ class CoreTests(unittest.TestCase):
     def test_old_capture_callback_cannot_enter_new_turn(self):
         self.listen()
         old_callback = self.core.audio.callback
+        self.send_frame()
         self.core.action("stop")
         self.core.transport.message({"type":"tts","state":"start"})
         self.core.transport.message({"type":"tts","state":"stop"})
         wait_for(lambda:self.core.snapshot()["state"]=="idle")
         self.core.action("listen")
+        before = self.core.snapshot()["metrics"]["audio_frames_sent"]
         old_callback(b"stale-pcm")
         time.sleep(.08)
-        self.assertNotIn(b"opus",self.core.transport.sent)
+        self.assertEqual(self.core.snapshot()["metrics"]["audio_frames_sent"], before)
+    def test_empty_recording_stops_without_waiting_for_backend(self):
+        self.listen()
+        audio, transport = self.core.audio, self.core.transport
+        state = self.core.action("stop")
+        self.assertEqual(state["state"], "error")
+        self.assertIn("未采集到音频", state["error"])
+        self.assertFalse(state["connected"])
+        self.assertEqual(self.core.deadline, 0)
+        self.assertTrue(audio.closed)
+        self.assertTrue(transport.closed)
+        self.assertIn({"type":"abort", "session_id":"test", "reason":"no_audio"}, transport.sent)
+        self.assertFalse(any(isinstance(item, dict) and item.get("type") == "listen"
+                             and item.get("state") == "stop" for item in transport.sent))
+        transport.message({"type":"tts", "state":"start"})
+        transport.message(b"late")
+        time.sleep(.08)
+        self.assertEqual(audio.played, [])
+        self.assertEqual(self.core.snapshot()["state"], "error")
+        self.core.action("connect")
+        wait_for(lambda:self.core.snapshot()["connected"])
+        self.assertTrue(self.core.thread.is_alive())
+
+    def test_failed_pcm_send_does_not_count_as_captured_turn(self):
+        self.listen()
+        self.core.transport.broken = True
+        self.core.audio.callback(b"pcm")
+        wait_for(lambda:self.core.snapshot()["state"] == "error")
+        self.assertEqual(self.core.turn_audio_frames_sent, 0)
+        self.assertEqual(self.core.snapshot()["metrics"]["audio_frames_sent"], 0)
+
+    def test_empty_auto_stop_reports_no_audio(self):
+        self.listen()
+        self.core.deadline = time.monotonic() - 1
+        wait_for(lambda:self.core.snapshot()["state"] == "error")
+        self.assertIn("未采集到音频", self.core.snapshot()["error"])
+        self.assertEqual(self.core.deadline, 0)
+
+    def test_empty_new_turn_does_not_reuse_previous_frame_count(self):
+        self.listen()
+        self.send_frame()
+        self.core.action("stop")
+        self.core.transport.message({"type":"tts", "state":"start"})
+        self.core.transport.message({"type":"tts", "state":"stop"})
+        wait_for(lambda:self.core.snapshot()["state"] == "idle")
+        self.core.action("listen")
+        state = self.core.action("stop")
+        self.assertEqual(state["metrics"]["audio_frames_sent"], 1)
+        self.assertEqual(state["state"], "error")
+        self.assertIn("未采集到音频", state["error"])
+
+    def test_empty_recording_cleanup_survives_abort_send_failure(self):
+        self.listen()
+        audio, transport = self.core.audio, self.core.transport
+        transport.broken = True
+        state = self.core.action("stop")
+        self.assertEqual(state["state"], "error")
+        self.assertIn("未采集到音频", state["error"])
+        self.assertTrue(audio.closed)
+        self.assertTrue(transport.closed)
+
+    def test_realtime_tail_is_paced_synthetic_audio_without_listen_stop(self):
+        self.core.config["listen_mode"] = "realtime"
+        encoded = []
+        def encode(pcm):
+            encoded.append((time.monotonic(), pcm))
+            return b"opus"
+        self.core.codec.encode = encode
+        self.listen()
+        self.send_frame()
+        audio, transport = self.core.audio, self.core.transport
+        self.core.action("stop")
+        self.assertFalse(audio.recording)
+        self.assertEqual(self.core.snapshot()["state"], "thinking")
+        self.assertGreater(self.core.silence_remaining, 0)
+        self.assertEqual(self.core.action("unmute")["state"], "thinking")
+        wait_for(lambda:self.core.silence_remaining == 0, timeout=3)
+        silence = [(stamp, pcm) for stamp, pcm in encoded if pcm == bytes(1920)]
+        self.assertEqual(len(silence), 20)
+        self.assertTrue(all(b[0] - a[0] >= .055 for a, b in zip(silence, silence[1:])))
+        self.assertFalse(audio.recording)
+        self.assertEqual(self.core.turn_audio_frames_sent, 1)
+        self.assertEqual(self.core.snapshot()["metrics"]["audio_frames_sent"], 21)
+        self.assertIn({"type":"listen", "session_id":"test", "state":"start", "mode":"realtime"}, transport.sent)
+        self.assertFalse(any(isinstance(item,dict) and item.get("type") == "listen"
+                             and item.get("state") == "stop" for item in transport.sent))
+
+    def test_realtime_early_tts_stops_capture_and_rejects_late_pcm(self):
+        self.core.config["listen_mode"] = "realtime"
+        self.listen()
+        self.send_frame()
+        audio, transport = self.core.audio, self.core.transport
+        old_callback = audio.callback
+        transport.message({"type":"tts", "state":"start"})
+        wait_for(lambda:self.core.snapshot()["state"] == "speaking")
+        self.assertFalse(audio.recording)
+        self.assertEqual(self.core.silence_remaining, 0)
+        old_callback(b"late")
+        transport.message(b"reply")
+        wait_for(lambda:audio.played == [b"reply"])
+        self.assertEqual(self.core.snapshot()["metrics"]["audio_frames_sent"], 1)
+        self.core.action("stop")
+        self.assertEqual(self.core.snapshot()["state"], "speaking")
+
+    def test_realtime_tts_cancels_pending_silence(self):
+        self.core.config["listen_mode"] = "realtime"
+        self.listen()
+        self.send_frame()
+        self.core.action("stop")
+        self.core.transport.message({"type":"tts", "state":"start"})
+        wait_for(lambda:self.core.snapshot()["state"] == "speaking")
+        count = self.core.snapshot()["metrics"]["audio_frames_sent"]
+        time.sleep(.15)
+        self.assertEqual(self.core.silence_remaining, 0)
+        self.assertEqual(self.core.snapshot()["metrics"]["audio_frames_sent"], count)
+
+    def test_realtime_interrupt_and_release_cancel_pending_silence(self):
+        self.core.config["listen_mode"] = "realtime"
+        for action in ("interrupt", "disconnect"):
+            self.listen()
+            self.send_frame()
+            self.core.action("stop")
+            old = self.core.transport
+            self.core.action(action)
+            count = len(old.sent)
+            time.sleep(.15)
+            self.assertEqual(self.core.silence_remaining, 0)
+            self.assertEqual(len(old.sent), count)
+            self.assertTrue(old.closed)
+            if action == "interrupt":
+                wait_for(lambda:self.core.snapshot()["connected"])
+
+    def test_capture_peak_is_current_turn_and_does_not_reject_silence(self):
+        self.listen()
+        self.core.audio.callback(struct.pack("<hhh", -32768, 7, 1234))
+        wait_for(lambda:self.core.snapshot()["metrics"]["audio_frames_sent"] == 1)
+        self.assertEqual(self.core.snapshot()["metrics"]["capture_peak_amplitude"], 32768)
+        self.core.audio.callback(struct.pack("<h", 20))
+        wait_for(lambda:self.core.snapshot()["metrics"]["audio_frames_sent"] == 2)
+        self.assertEqual(self.core.snapshot()["metrics"]["capture_peak_amplitude"], 32768)
+        self.core.action("interrupt")
+        wait_for(lambda:self.core.snapshot()["connected"])
+        self.core.action("listen")
+        self.assertEqual(self.core.snapshot()["metrics"]["capture_peak_amplitude"], 0)
+        self.core.audio.callback(bytes(1920))
+        wait_for(lambda:self.core.snapshot()["metrics"]["audio_frames_sent"] == 3)
+        state = self.core.action("stop")
+        self.assertEqual(state["state"], "thinking")
+        self.assertEqual(state["metrics"]["capture_peak_amplitude"], 0)
+
     def test_network_error_closes_microphone(self):
         self.listen()
         audio = self.core.audio
@@ -170,11 +329,13 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(self.core.snapshot()["transcript"],"")
     def test_max_recording_auto_stops(self):
         self.listen()
+        self.send_frame()
         self.core.deadline = time.monotonic()-1
         wait_for(lambda:self.core.snapshot()["state"] == "thinking")
         self.assertFalse(self.core.audio.recording)
     def test_response_timeout_releases_audio(self):
         self.listen()
+        self.send_frame()
         self.core.action("stop")
         audio = self.core.audio
         self.core.deadline = time.monotonic()-1

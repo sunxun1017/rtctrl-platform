@@ -38,10 +38,36 @@ Python事件队列48项、输出队列16包、文本64KiB/音频4KiB/人脸响�
 
 ## 尚未验证或实现
 
-尚未部署或运行于目标板；WSL缺arecord/aplay，板端须doctor后配置声卡。
+已部署到目标板，依赖doctor及后端握手通过；实际录放音结果见下方追加记录。
 真实语音识别/回复内容、实物扬声器、长时间稳定性、与人脸并发资源/温升尚未验收。
 离线唤醒词、AEC/全双工自动打断、本地LCD渲染、云端语音到运动意图映射没有实现。
 界面展示这些边界；现有控制产品继续独立工作，云端消息不会直接武装执行器。
 本次是可测试和打包的交互功能集成，不是整机量产验收完成。
 
 使用步骤见[应用说明](../apps/companion/README.md)，架构见[ADR0009](adr/0009-companion-nonrealtime-service.md)。
+
+## 板端部署与录音排障
+
+实物ALIENTEK RV1126B，Linux6.1.141/aarch64/Buildroot2024.02，MemTotal约970MiB，无swap；
+产品预算的2GB不是这块实物板的容量。程序部署至独立目录，未刷机、未修改模型或人脸库。
+Python3.11、libopus、ALSA、SSL与固定websocket依赖可用。仅网线直连时原后端直连失败，
+通过临时反向SSH隧道完成hello，输出24kHz；本地8092转发板端8092，非本机演示。
+现有视觉程序以native-fp16/RGA direct/MPP async启动，沿用现有图库，绑定loopback。
+并发静音15秒4次采样：companion RSS24.66MiB，进程CPU0.96–1.07%，人脸FPS29.90–30.14；
+全机MemTotal-MemAvailable约194–201MiB。无上传音频；该数据不是有声对话或长时压力测试。
+
+用户长按后无回复，初始上行0帧。独立arecord使用plughw:0,0/16kHz/mono/S16_LE，5秒无数据，
+ALSA显示RUNNING但hw_ptr=0；硬件48kHz/stereo约1秒获得167936字节，hw_ptr42016。
+专用plug固定48kHz/stereo，转换为应用16kHz/mono约1秒获得27520字节。
+24kHz播放经同一plug转换为48kHz/stereo，静音PCM测试aplay退出0，尚不等于确认扬声器实际发声。
+首次修复后用户PTT成功上传74帧，但仍无STT；另一轮44帧也无STT。
+原Android使用realtime连续上传，未使用manual结束；新增协议兼容路径及空录音防护。
+麦克风原模拟增益0dB，现场调至24dB；扬声器底层开关原off，调至on。
+仅采样统计不保存录音；实际语音往返与扬声器听感尚需继续验证。
+
+本轮兼容模式验证：用户一次PTT的捕获峰值223/32768，上行含尾静音共101帧，45秒内无STT或回复，
+正确进入超时错误。信号偏弱，尚不能证明有效人声已被后端接受。
+独立固定文字detect对照（不采麦克风）收到STT回显与tts.start，45.2秒内0音频帧、无回答文本或tts.stop。
+这说明当前端到端阻塞不止板卡录音；未取得后端日志，不能确定ASR/LLM/TTS/账号配置中哪项异常。
+新增空录音、realtime尾静音、提前TTS、清理隔离及电平统计回归后共66项测试通过；
+release/asan CTest各16项通过。无C++改动，全仓格式基线问题同上。

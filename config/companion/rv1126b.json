@@ -8,5 +8,6 @@
   "capture_device": "default",
   "playback_device": "default",
   "playback_queue_frames": 16,
-  "face_url": "http://127.0.0.1:8080/status.json"
+  "face_url": "http://127.0.0.1:8080/status.json",
+  "listen_mode": "realtime"
 }

@@ -1,10 +1,14 @@
 """Serialized companion state machine; all device work stays outside realtime control."""
 import json
 import queue
+import struct
 import threading
 import time
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
+SILENCE_FRAME = bytes(1920)
+SILENCE_FRAME_INTERVAL = 0.06
+SILENCE_TAIL_FRAMES = 20
 EMOTIONS = {"neutral", "happy", "sad", "angry", "surprised", "excited", "thinking", "sleepy"}
 
 class Companion:
@@ -21,6 +25,9 @@ class Companion:
         self.audio = self.codec = self.transport = None
         self.generation = 0
         self.capture_epoch = 0
+        self.turn_audio_frames_sent = 0
+        self.silence_remaining = 0
+        self.silence_due = 0.
         self.session = ""
         self.deadline = 0.
         self.demo_due = 0.
@@ -31,7 +38,8 @@ class Companion:
             "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
             "error": "", "connected": False, "muted": True,
             "face": {"available": False, "reason": "尚未连接视觉服务"},
-            "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0},
+            "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0,
+                        "capture_peak_amplitude": 0},
             "capabilities": {"mode": config["mode"], "voice": "push-to-talk",
                 "wake_word": False, "aec": False, "automatic_barge_in": False,
                 "actuator_control": False, "face": "external-read-only"},
@@ -85,7 +93,10 @@ class Companion:
                         self.data["metrics"]["queue_overflows"] += 1
                     self._fail("处理队列已满，会话已停止；请降低负载后重新连接")
                 try:
-                    kind, payload, generation, result = self.events.get(timeout=.05)
+                    wait = .05
+                    if self.silence_remaining:
+                        wait = min(wait, max(0., self.silence_due - time.monotonic()))
+                    kind, payload, generation, result = self.events.get(timeout=wait)
                 except queue.Empty:
                     self._safe_tick()
                     continue
@@ -98,7 +109,14 @@ class Companion:
                         self._message(payload)
                     elif kind == "pcm":
                         if self.data["state"] == "listening" and not self.data["muted"] and payload[0] == self.capture_epoch:
-                            self.transport.send(self.codec.encode(payload[1]))
+                            pcm = payload[1]
+                            peak = max((abs(value[0]) for value in struct.iter_unpack(
+                                "<h", pcm[:len(pcm) // 2 * 2])), default=0)
+                            with self.lock:
+                                self.data["metrics"]["capture_peak_amplitude"] = max(
+                                    self.data["metrics"]["capture_peak_amplitude"], peak)
+                            self.transport.send(self.codec.encode(pcm))
+                            self.turn_audio_frames_sent += 1
                             with self.lock:
                                 self.data["metrics"]["audio_frames_sent"] += 1
                     elif kind == "error":
@@ -131,6 +149,8 @@ class Companion:
         self.generation += 1
         self.accept_audio = False
         self.deadline = self.demo_due = 0
+        self.silence_remaining = 0
+        self.silence_due = 0.
         self.tts_ended = False
         for name in ("transport", "audio", "codec"):
             resource = getattr(self, name)
@@ -207,8 +227,11 @@ class Companion:
             self._interrupt()
             self.capture_epoch += 1
             epoch = self.capture_epoch
+            self.turn_audio_frames_sent = 0
+            with self.lock:
+                self.data["metrics"]["capture_peak_amplitude"] = 0
             self._set(state="listening", transcript="", reply="", error="", emotion="neutral")
-            self._send("listen", state="start", mode="manual")
+            self._send("listen", state="start", mode=self.config.get("listen_mode", "manual"))
             generation = self.generation
             if self.audio:
                 self.audio.start(lambda pcm: self.post("pcm", (epoch, pcm), generation))
@@ -219,7 +242,20 @@ class Companion:
             self.capture_epoch += 1
             if self.audio:
                 self.audio.stop_capture()
-            self._send("listen", state="stop")
+            if self.config["mode"] == "live" and self.turn_audio_frames_sent == 0:
+                # Sending listen/stop with no PCM can leave the backend waiting
+                # indefinitely. Fence late replies by closing this connection.
+                try:
+                    self._send("abort", reason="no_audio")
+                except Exception:
+                    pass  # Local cleanup is still required if the peer is gone.
+                self._fail("未采集到音频，请检查麦克风和 ALSA 设备配置后重新连接")
+                return
+            if self.config["mode"] == "live" and self.config.get("listen_mode", "manual") == "realtime":
+                self.silence_remaining = SILENCE_TAIL_FRAMES
+                self.silence_due = time.monotonic() + SILENCE_FRAME_INTERVAL
+            else:
+                self._send("listen", state="stop")
             self._set(state="thinking", emotion="thinking")
             self.deadline = time.monotonic() + self.config["response_timeout_s"]
             if self.config["mode"] == "demo":
@@ -239,6 +275,8 @@ class Companion:
         self.capture_epoch += 1
         self.accept_audio = False
         self.demo_due = self.deadline = 0
+        self.silence_remaining = 0
+        self.silence_due = 0.
         self.tts_ended = False
         if self.audio:
             self.audio.stop_capture()
@@ -287,7 +325,12 @@ class Companion:
                 self._set(reply=self._text(value["text"]))
         elif kind == "tts":
             state = value.get("state")
-            if state == "start" and self.data["state"] == "thinking" and not self.data["muted"]:
+            if state == "start" and self.data["state"] in ("listening", "thinking") and not self.data["muted"]:
+                self.capture_epoch += 1
+                if self.audio:
+                    self.audio.stop_capture()
+                self.silence_remaining = 0
+                self.silence_due = 0.
                 self.accept_audio = True
                 self.tts_ended = False
                 self._set(state="speaking")
@@ -309,6 +352,17 @@ class Companion:
 
     def _tick(self):
         now = time.monotonic()
+        if self.silence_remaining and now >= self.silence_due:
+            if self.data["state"] == "thinking" and self.data["connected"] and not self.data["muted"]:
+                self.transport.send(self.codec.encode(SILENCE_FRAME))
+                with self.lock:
+                    self.data["metrics"]["audio_frames_sent"] += 1
+                self.silence_remaining -= 1
+                # Never burst to catch up after a delayed event-loop iteration.
+                self.silence_due = time.monotonic() + SILENCE_FRAME_INTERVAL if self.silence_remaining else 0.
+            else:
+                self.silence_remaining = 0
+                self.silence_due = 0.
         if self.demo_due and now >= self.demo_due:
             if self.demo_phase == 1:
                 self._set(state="speaking", emotion="happy",

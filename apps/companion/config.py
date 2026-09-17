@@ -9,7 +9,7 @@ DEFAULTS = {
     "device_id": "rtctrl-rv1126b", "client_id": "rtctrl-companion",
     "allow_insecure_ws": False, "network_timeout_s": 5,
     "capture_device": "default", "playback_device": "default",
-    "playback_queue_frames": 16, "max_listen_s": 30,
+    "playback_queue_frames": 16, "max_listen_s": 30, "listen_mode": "manual",
     "response_timeout_s": 45, "face_url": "http://127.0.0.1:8080/status.json",
     "face_poll_s": 1, "face_stale_s": 5,
 }
@@ -35,6 +35,8 @@ def validate(values):
             raise ValueError("invalid " + key)
     if config["mode"] not in ("demo", "live"):
         raise ValueError("mode must be demo or live")
+    if config["listen_mode"] not in ("manual", "realtime"):
+        raise ValueError("listen_mode must be manual or realtime")
     if type(config["allow_insecure_ws"]) is not bool:
         raise ValueError("allow_insecure_ws must be boolean")
     for key, low, high in (("port", 1, 65535), ("playback_queue_frames", 2, 32),

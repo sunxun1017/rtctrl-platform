@@ -87,3 +87,12 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 协议缺少turn ID时，停止播放队列不等于隔离迟到回复；当前打断重建连接，
 录音使用独立capture_epoch。证据见[验证记录](../../../../docs/verification-companion-20260918.md)
 与tests/test_companion.py、tests/test_companion_audio.py。后端支持可靠轮次ID后可重新评估连接策略。
+
+## 2026-09-18：ES8389采样与后端验收分层
+
+适用当前ALIENTEK RV1126B Linux6.1.141现场。直接16kHz/mono录音出现RUNNING但hw_ptr=0、零字节；
+48kHz/stereo正常，专用ALSA plug可转为16kHz/mono。配置只通过进程ALSA_CONFIG_PATH启用，
+不能据此断言SoC不支持16kHz；更换BSP/声卡/时钟需复核。amixer默认可能走软件设备，硬件控制需明确-c0。
+原Android后端realtime与manual停止机制不同，尾静音是协议适配，不应延长真实采集。
+上传帧、STT、TTS音频、ALSA硬件运行、用户听见是不同验收层；hello成功不代表ASR/LLM/TTS正常。
+证据：[板端记录](../../../../docs/verification-companion-20260918.md)。

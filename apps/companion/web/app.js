@@ -6,7 +6,7 @@
         connecting: ["正在连接", "正在与语音服务建立连接，请稍候。"],
         idle: ["我在这里", "按住说话，松开后我会回答你。"],
         listening: ["我在听", "正在采集设备麦克风，松开按钮结束。"],
-        thinking: ["想一想", "已收到你的话，正在准备回答。"],
+        thinking: ["想一想", "录音已结束，正在等待语音服务回复。"],
         speaking: ["正在回答", "你可以停止回答，再开始下一次对话。"],
         error: ["需要处理", "请查看下方提示，检查设备和服务配置。"],
         muted: ["麦克风已静音", "开启麦克风后，按住按钮才会录音。"]
@@ -66,7 +66,8 @@
         $("mute").disabled = !reachable;
         $("talk").disabled = !reachable || !current.connected || current.muted || (!held && (pending > 0 || !["idle", "listening"].includes(current.state)));
         $("talk").textContent = held ? (demo ? "模拟聆听 · 松开继续" : "正在听 · 松开结束") : (demo ? "按住体验对话" : "按住说话");
-        $("talk").classList.toggle("held", held);
+        if (held && ["thinking", "speaking", "error", "offline"].includes(current.state)) $("talk").textContent = "已结束录音 · 请松开";
+        $("talk").classList.toggle("held", held && current.state === "listening");
         $("interrupt").disabled = !reachable || !["speaking","thinking","listening"].includes(current.state);
         $("emotion").textContent = emotions[current.emotion] || "平静";
         $("transcript").textContent = current.transcript || "你的话会出现在这里";
@@ -95,6 +96,7 @@
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
         $("metrics").textContent = metrics.join(" · ") || "暂未提供资源数据";
+        if (finite(m.capture_peak_amplitude)) $("metrics").textContent += " · 本轮录音峰值 " + m.capture_peak_amplitude + " / 32768";
         const c = current.capabilities || {};
         const capabilities = [];
         if (c.audio_input === false || c.recording === false) capabilities.push("录音未就绪");

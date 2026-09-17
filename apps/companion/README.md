@@ -99,3 +99,22 @@ CTest 默认注册三组 companion 测试；Python应用不由 C++ 编译器构�
 
 上板验收仍需：实际声卡录放、真实语音往返、与视觉并发的峰值内存/CPU、30分钟运行及网络中断恢复。
 不能把宿主测试或后端 hello 当成这些验收已完成。
+
+## ALIENTEK ES8389 板端配置
+
+2026-09-18 的实物板在直接16kHz单声道采集时无DMA进展；48kHz双声道采集正常。
+此为该固件现场现象，不代表所有RV1126B不支持16kHz。专用plug配置固定硬件48kHz双声道，
+应用仍上传16kHz单声道，下行按协商24kHz解码后由ALSA转换。使用前核实card0确为ES8389：
+
+```sh
+export ALSA_CONFIG_PATH="$PWD/deploy/companion/asound-rv1126b.conf"
+```
+
+将配置中的capture_device与playback_device均设为rtctrl_es8389。
+不覆盖系统asound.conf；此环境变量只影响本进程及其录放音子进程。
+板载麦克风使用Main Mic/AMIC；现场ADCL/ADCR PGA从0调整至8（24dB），spk switch从off调整至on，
+未使用alsactl store持久化；其他板卡需根据实际输入、电平和音量确认。
+
+原Android C后端配置使用listen_mode=realtime。松手立即停止真实采集，发送1.2秒合成静音让后端VAD结束一句话；
+manual模式仍发送listen.stop。两种模式均在没有上传完整采样帧时立即报错，避免空录音进入等待。
+metrics.capture_peak_amplitude显示当前轮16位采样峰值，仅用于排障，不保留录音，也不是语音识别置信度。
