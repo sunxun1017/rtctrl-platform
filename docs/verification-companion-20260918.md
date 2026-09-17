@@ -149,3 +149,25 @@ finally按原始值精确恢复（包括Speaker=on、spk switch=off和背光raw2
 复核offline/muted=true/voice_progress=idle，音频收发帧0，人脸约29.86FPS。
 浏览器8092已展开声音与屏幕，四项读数正确、窄屏无横向遮挡；未连接Wi-Fi，未修改后端鉴权身份。
 控制读回不等于扬声器听感或实际屏幕观感验收，未实现LCD界面渲染/开机保存。
+
+## 百度千帆替代后端能力验证
+
+2026-09-18，用户授权试用其提供的千帆API Key。密钥仅通过禁回显终端输入测试进程，未写入脚本、仓库或板卡。
+从WSL经HTTPS请求官方接口，未上传麦克风、人脸、已有对话或设备私有数据，未改板端后端配置。
+
+- chat/completions，ernie-4.0-turbo-8k：HTTP401 invalid_model（不存在或无访问权限），不能据此断定密钥失效。
+- GET /v2/models：HTTP429 OverRateLimit，未循环重试。
+- chat/completions，ernie-4.5-turbo-32k：成功返回“连接测试成功。”，prompt8/completion4/total12 tokens。
+- tsn.baidu.com/text2audio，固定测试短句、per5003：HTTP200 JSON而非音频，err_no502、err_subcode6，No permission to access data。
+- vop.baidu.com/server_api，dev_pid1537、程序生成1秒16kHz单声道静音PCM：err_no3302、No permission to access data；未采集用户语音。
+
+结论：文字模型调用已验证；该Key对本次测试的ASR/TTS能力无权限，不能替代完整语音后端。
+需要用户在百度控制台确认语音识别与语音合成服务开通、API Key能力授权及资源权限，再做真实语音闭环。
+千帆HTTPS接口与原Android WebSocket/Opus协议不同，不能只替换原服务器的token；需要独立适配。
+建议轮换聊天中已暴露的密钥；该测试不保证未来模型或权限可用性。
+
+官方资料（本次查阅）：
+- https://cloud.baidu.com/doc/qianfan-docs/s/qm8qxemze
+- https://cloud.baidu.com/doc/qianfan-docs/s/7m95lyy43
+- https://cloud.baidu.com/doc/qianfan-docs/s/3m8pqgdbs
+- https://cloud.baidu.com/doc/qianfan-docs/s/sm8pqtkt3
