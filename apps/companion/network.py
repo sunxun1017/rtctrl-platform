@@ -59,15 +59,72 @@ class NetworkManager:
         self._stop = threading.Event()
         self._thread = None
         self._process = None
+        self._pending_action = None
+        self._next_refresh = 0.
+        self._last_success = None
         self._data = {"available": self.enabled and bool(shutil.which("connmanctl")),
                       "busy": False, "status": "idle" if self.enabled else "disabled",
-                      "error": "", "networks": []}
+                      "error": "", "networks": [], "refreshing": False,
+                      "stale": True, "last_updated": None, "refresh_error": "",
+                      "service_available": None}
         if self.enabled and not self._data["available"]:
             self._data["error"] = "未找到 ConnMan 网络管理工具"
 
     def snapshot(self):
         with self._lock:
+            if self._last_success is not None and time.monotonic() - self._last_success > 15:
+                self._data["stale"] = True
+            if (self._data["available"] and not self._stop.is_set()
+                    and not self._data["busy"] and not self._data["refreshing"]
+                    and time.monotonic() >= self._next_refresh):
+                self._next_refresh = time.monotonic() + 5
+                self._data["refreshing"] = True
+                self._thread = threading.Thread(target=self._refresh_worker,
+                                                name="companion-network", daemon=True)
+                self._thread.start()
             return copy.deepcopy(self._data)
+
+    def _refresh_worker(self):
+        networks = None
+        daemon_available = False
+        try:
+            # Read the daemon's current list; never enable, scan or connect here.
+            deadline = time.monotonic() + 2
+            ok, text = self._run(["services"], deadline)
+            if not ok:
+                raise NetworkError("无法读取无线网络状态")
+            daemon_available = True
+            networks = parse_services(text)
+            # IPv4 is optional; cap detail queries even with multiple Wi-Fi radios.
+            for network in [item for item in networks if item["connected"]][:2]:
+                ok, details = self._run(["services", network["service"]], deadline)
+                if not ok:
+                    raise NetworkError("无法读取无线网络地址")
+                network.update(parse_service_details(details))
+                if not network["connected"]:
+                    network.pop("ipv4", None)
+        except Exception:
+            networks = None
+        with self._lock:
+            self._data["refreshing"] = False
+            if networks is None:
+                self._data.update(stale=True, service_available=daemon_available,
+                                  refresh_error="无线网络状态刷新失败，当前连接状态未知")
+                for network in self._data["networks"]:
+                    network["connected"] = False
+                    network.pop("ipv4", None)
+            else:
+                self._last_success = time.monotonic()
+                self._data.update(networks=networks, stale=False, last_updated=time.time(),
+                                  refresh_error="", service_available=True)
+            # One queued user action takes precedence over future refreshes.
+            pending = self._pending_action
+            self._pending_action = None
+            if self._stop.is_set():
+                pending = None
+                self._data["busy"] = False
+        if pending is not None:
+            self._work(*pending)
 
     def action(self, body):
         if not isinstance(body, dict) or body.get("action") not in ("enable", "scan", "connect", "disconnect"):
@@ -101,9 +158,12 @@ class NetworkManager:
                     if security == "open" and password:
                         raise ValueError("开放网络不需要密码")
             self._data.update(busy=True, error="", status={"enable":"enabling", "scan":"scanning", "connect":"connecting", "disconnect":"disconnecting"}[operation])
-            self._thread = threading.Thread(target=self._work, args=(operation, service, password, security),
-                                            name="companion-network", daemon=True)
-            self._thread.start()
+            if self._data["refreshing"]:
+                self._pending_action = (operation, service, password, security)
+            else:
+                self._thread = threading.Thread(target=self._work, args=(operation, service, password, security),
+                                                name="companion-network", daemon=True)
+                self._thread.start()
             return copy.deepcopy(self._data)
 
     def _spawn(self, argv, **kwargs):
@@ -274,9 +334,21 @@ class NetworkManager:
             password = None
             with self._lock:
                 self._data.update(busy=False, status="error" if error else "idle", error=error)
+                self._next_refresh = time.monotonic() + 5
+                if not error and operation != "enable":
+                    self._last_success = time.monotonic()
+                    self._data.update(stale=False, last_updated=time.time(),
+                                      refresh_error="", service_available=True)
+                else:
+                    self._data["stale"] = True
+                    for network in self._data["networks"]:
+                        network["connected"] = False
+                        network.pop("ipv4", None)
 
     def close(self):
         self._stop.set()
+        with self._lock:
+            self._pending_action = None
         with self._process_lock:
             process = self._process
             if process is not None and process.poll() is None:

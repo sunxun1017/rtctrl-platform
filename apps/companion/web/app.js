@@ -52,6 +52,18 @@
             const demoHints = {offline:"点击开始演示，体验设备的对话流程。", muted:"点击启用演示交互，再按住按钮体验。", idle:"按住按钮，松开后查看示例回答。", listening:"正在演示聆听状态，未采集声音；松开查看示例回答。", thinking:"正在准备预设示例回答，未调用真实后端。", speaking:"正在展示预设回答，未播放真实声音。"};
             hint = demoHints[state] || hint;
         }
+        if (!demo && ["thinking", "speaking"].includes(state)) {
+            const progressLabels = {
+                waiting_recognition:["等待识别", "录音已结束，正在等待服务识别你说的话。"],
+                waiting_reply:["等待回答", "已识别你的话，正在等待回答。"],
+                waiting_audio:["等待语音", "服务正在准备语音回复，设备尚未收到声音数据。"],
+                receiving_audio:["收到语音回复", "语音已送往设备播放；如没有声音，请检查音量和扬声器。"],
+                complete:["本轮已完成", "这一轮对话已结束，稍候可再次按住说话。"],
+                failed:["本轮未完成", "请查看错误提示，处理后再重试。"]
+            };
+            [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
+        }
+        $("avatar").dataset.voiceProgress = demo ? "receiving_audio" : current.voice_progress || (state === "speaking" ? "waiting_audio" : "idle");
         $("avatar").dataset.state = state;
         $("avatar").dataset.emotion = emotions[current.emotion] ? current.emotion : "neutral";
         $("avatar").setAttribute("aria-label", label);
@@ -206,7 +218,7 @@
         for (const item of network.networks) {
             const option = document.createElement("option");
             option.value = item.service;
-            option.textContent = item.ssid + (item.connected ? " · 已连接" : "") + (item.security === "none" || item.security === "open" ? " · 开放网络" : "");
+            option.textContent = item.ssid + (item.connected && !network.stale && network.service_available !== false && network.service_available !== null ? " · 已连接" : "") + (item.security === "none" || item.security === "open" ? " · 开放网络" : "");
             list.append(option);
         }
         $("network-select").replaceChildren(list);
@@ -214,17 +226,25 @@
         const item = selectedNetwork();
         const supported = item && !item.hidden && ["psk", "open", "none"].includes(item.security);
         const busy = network.busy || networkSubmitting;
-        const unavailable = !network.available;
+        const unavailable = !network.available || network.service_available === false;
+        const stateUncertain = !!network.stale || network.service_available === null;
         $("network-enable").disabled = unavailable || busy;
         $("network-scan").disabled = unavailable || busy;
         $("network-select").disabled = unavailable || busy || !network.networks.length;
-        $("network-password").disabled = unavailable || busy || !item || !supported || item.connected || item.security === "none" || item.security === "open";
-        $("network-connect").disabled = unavailable || busy || !item || item.connected || !supported;
-        $("network-disconnect").disabled = unavailable || busy || !item || !item.connected;
+        $("network-password").disabled = unavailable || busy || stateUncertain || !item || !supported || item.connected || item.security === "none" || item.security === "open";
+        $("network-connect").disabled = unavailable || busy || stateUncertain || !item || item.connected || !supported;
+        $("network-disconnect").disabled = unavailable || busy || stateUncertain || !item || !item.connected;
         $("network-count").textContent = network.available ? network.networks.length + " 个网络" : "";
         const statuses = {idle:"网络管理已就绪。点击扫描发现附近的 Wi-Fi。", enabling:"正在开启 Wi-Fi，设备可能重连已保存的网络…", scanning:"正在扫描附近的 Wi-Fi…", connecting:"正在连接所选网络…", disconnecting:"正在断开所选网络…", error:"上次网络操作失败，请查看提示后重试。"};
         const status = statuses[network.status] || "";
-        $("network-status").textContent = unavailable ? "当前设备未启用 Wi-Fi 管理，网线可继续使用。" : busy ? (status && network.status !== "idle" ? status : "正在处理网络操作，请稍候…") : item && !supported ? "此网络类型暂不支持连接，可选择普通密码网络或开放网络。" : status || "网络管理已就绪。点击扫描发现附近的 Wi-Fi。";
+        $("network-status").textContent = !network.available ? "当前设备未启用 Wi-Fi 管理，网线可继续使用。" : network.service_available === false ? "设备的 Wi-Fi 管理服务暂不可用，网线可继续使用。" : busy ? (status && network.status !== "idle" ? status : "正在处理网络操作，请稍候…") : item && !supported ? "此网络类型暂不支持连接，可选择普通密码网络或开放网络。" : status || "网络管理已就绪。点击扫描发现附近的 Wi-Fi。";
+        const refreshError = typeof network.refresh_error === "string" ? network.refresh_error : "";
+        const refresh = network.stale ? "网络状态已过期，不能确认是否已连接。刷新完成前，连接和断开暂不可用。" : network.refreshing ? "正在后台刷新网络状态，当前网络操作仍可使用。" : network.service_available === null ? "正在确认设备网络服务是否可用…" : "";
+        $("network-refresh").textContent = [refresh, refreshError].filter(Boolean).join(" ");
+        $("network-refresh").hidden = !refresh && !refreshError;
+        const address = item && item.connected && !network.stale && !unavailable && network.service_available !== null && typeof item.ipv4 === "string" ? item.ipv4 : "";
+        $("network-address").textContent = address ? "所选 Wi-Fi 已连接 · IPv4：" + address : "";
+        $("network-address").hidden = !address;
         const error = networkMessage || (typeof network.error === "string" ? network.error : "");
         $("network-error").textContent = error;
         $("network-error").hidden = !error;
@@ -249,7 +269,7 @@
         } catch (_) {
             if (revision === networkRevision) {
                 networkMessage = "无法读取网络状态，展开此区域时会自动重试。网线可继续使用。";
-                network.available = false;
+                network.stale = true;
                 renderNetwork();
             }
         } finally {
@@ -258,7 +278,8 @@
         }
     }
     async function networkAction(action) {
-        if (networkSubmitting || network.busy || !network.available) return;
+        if (networkSubmitting || network.busy || !network.available || network.service_available === false) return;
+        if (["connect", "disconnect"].includes(action) && (network.stale || network.service_available === null)) return;
         const item = selectedNetwork();
         if (!["scan", "enable"].includes(action) && !item) return;
         if (action === "connect" && (item.hidden || !["psk", "open", "none"].includes(item.security))) return;

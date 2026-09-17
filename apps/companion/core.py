@@ -26,6 +26,7 @@ class Companion:
         self.generation = 0
         self.capture_epoch = 0
         self.turn_audio_frames_sent = 0
+        self.turn_audio_frames_received = 0
         self.silence_remaining = 0
         self.silence_due = 0.
         self.session = ""
@@ -36,7 +37,7 @@ class Companion:
         self.accept_audio = False
         self.data = {
             "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
-            "error": "", "connected": False, "muted": True,
+            "error": "", "connected": False, "muted": True, "voice_progress": "idle",
             "face": {"available": False, "reason": "尚未连接视觉服务"},
             "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0,
                         "capture_peak_amplitude": 0},
@@ -164,22 +165,22 @@ class Companion:
 
     def _fail(self, reason):
         self._release()
-        self._set(state="error", connected=False, error=reason, emotion="neutral")
+        self._set(state="error", connected=False, error=reason, emotion="neutral", voice_progress="failed")
 
     def _send(self, kind, **fields):
         if self.transport:
             self.transport.send(dict(type=kind, session_id=self.session, **fields))
 
-    def _idle(self):
+    def _idle(self, progress="idle"):
         self.deadline = 0
-        self._set(state="muted" if self.data["muted"] else "idle", emotion="neutral")
+        self._set(state="muted" if self.data["muted"] else "idle", emotion="neutral", voice_progress=progress)
 
     def _action(self, action):
         if action == "connect":
             if self.data["connected"] or self.data["state"] == "connecting":
                 return
             self._release()
-            self._set(state="connecting", error="", transcript="", reply="")
+            self._set(state="connecting", error="", transcript="", reply="", voice_progress="idle")
             if self.config["mode"] == "demo":
                 self.session = "demo"
                 self._set(connected=True)
@@ -202,7 +203,7 @@ class Companion:
             self.deadline = time.monotonic() + self.config["network_timeout_s"] + 3
         elif action == "disconnect":
             self._release()
-            self._set(state="offline", connected=False, emotion="neutral")
+            self._set(state="offline", connected=False, emotion="neutral", voice_progress="idle")
         elif action == "mute":
             reconnect = self._interrupt()
             self._set(muted=True)
@@ -228,9 +229,10 @@ class Companion:
             self.capture_epoch += 1
             epoch = self.capture_epoch
             self.turn_audio_frames_sent = 0
+            self.turn_audio_frames_received = 0
             with self.lock:
                 self.data["metrics"]["capture_peak_amplitude"] = 0
-            self._set(state="listening", transcript="", reply="", error="", emotion="neutral")
+            self._set(state="listening", transcript="", reply="", error="", emotion="neutral", voice_progress="recording")
             self._send("listen", state="start", mode=self.config.get("listen_mode", "manual"))
             generation = self.generation
             if self.audio:
@@ -256,10 +258,10 @@ class Companion:
                 self.silence_due = time.monotonic() + SILENCE_FRAME_INTERVAL
             else:
                 self._send("listen", state="stop")
-            self._set(state="thinking", emotion="thinking")
+            self._set(state="thinking", emotion="thinking", voice_progress="waiting_reply" if self.data["transcript"] else "waiting_recognition")
             self.deadline = time.monotonic() + self.config["response_timeout_s"]
             if self.config["mode"] == "demo":
-                self._set(transcript="演示：你好，介绍一下你自己。")
+                self._set(transcript="演示：你好，介绍一下你自己。", voice_progress="waiting_reply")
                 self.demo_phase, self.demo_due = 1, time.monotonic() + .5
         elif action == "interrupt":
             reconnect = self._interrupt()
@@ -299,6 +301,8 @@ class Companion:
                 if len(value) > 4096:
                     raise ValueError("oversized audio")
                 self.audio.play(value)
+                self.turn_audio_frames_received += 1
+                self._set(voice_progress="receiving_audio")
                 with self.lock:
                     self.data["metrics"]["audio_frames_received"] += 1
             return
@@ -318,11 +322,15 @@ class Companion:
             return
         if kind == "stt" and self.data["state"] in ("listening", "thinking", "speaking"):
             self._set(transcript=self._text(value.get("text", "")))
+            if self.data["state"] == "thinking" and self.data["transcript"] and not self.data["reply"]:
+                self._set(voice_progress="waiting_reply")
         elif kind == "llm" and self.data["state"] in ("thinking", "speaking"):
             emotion = value.get("emotion", "neutral")
             self._set(emotion=emotion if emotion in EMOTIONS else "neutral")
             if "text" in value:
                 self._set(reply=self._text(value["text"]))
+                if self.data["reply"] and self.data["state"] == "thinking":
+                    self._set(voice_progress="waiting_audio")
         elif kind == "tts":
             state = value.get("state")
             if state == "start" and self.data["state"] in ("listening", "thinking") and not self.data["muted"]:
@@ -333,7 +341,7 @@ class Companion:
                 self.silence_due = 0.
                 self.accept_audio = True
                 self.tts_ended = False
-                self._set(state="speaking")
+                self._set(state="speaking", voice_progress="waiting_audio")
                 self.deadline = time.monotonic() + self.config["response_timeout_s"]
             elif state == "stop" and self.data["state"] == "speaking":
                 self.accept_audio = False
@@ -365,7 +373,7 @@ class Companion:
                 self.silence_due = 0.
         if self.demo_due and now >= self.demo_due:
             if self.demo_phase == 1:
-                self._set(state="speaking", emotion="happy",
+                self._set(state="speaking", emotion="happy", voice_progress="receiving_audio",
                     reply="你好！我是设备交互助手。语音、表情与视觉状态可以在这里协同工作。当前是演示模式，没有采集或播放真实音频。")
                 self.demo_phase, self.demo_due = 2, now + 2
             else:
@@ -373,12 +381,28 @@ class Companion:
                 self._idle()
         if self.tts_ended and self.audio and not self.audio.playback_busy():
             self.tts_ended = False
-            self._idle()
+            self._idle("complete")
         if self.deadline and now >= self.deadline:
             if self.data["state"] == "listening":
                 self._action("stop")
             else:
-                self._fail("语音会话超时，已停止录放音；请重新连接")
+                self._fail(self._timeout_reason())
+
+    def _timeout_reason(self):
+        if self.data["state"] == "connecting":
+            return "语音握手超时，请检查后端地址和设备认证后重新连接"
+        stage = self.data["voice_progress"]
+        if stage == "waiting_recognition":
+            detail = "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务"
+        elif stage == "waiting_reply":
+            detail = "已收到识别文字，但未收到回答；请检查后端对话服务"
+        elif stage == "waiting_audio":
+            detail = "后端已进入回复阶段，但未收到语音音频；请检查后端语音合成服务"
+        elif self.turn_audio_frames_received:
+            detail = "已收到部分语音，但回复未正常结束；请检查后端连接"
+        else:
+            detail = "语音服务未按时完成回复，请检查后端状态"
+        return detail + "。会话超时，已停止录放音；请重新连接"
 
 def validate_hello(value):
     params = value.get("audio_params", AUDIO_PARAMS)

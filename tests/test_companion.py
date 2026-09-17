@@ -342,6 +342,52 @@ class CoreTests(unittest.TestCase):
         wait_for(lambda:self.core.snapshot()["state"] == "error")
         self.assertTrue(audio.closed)
 
+    def test_voice_progress_distinguishes_no_recognition_reply_and_audio(self):
+        self.listen()
+        self.assertEqual(self.core.snapshot()["voice_progress"], "recording")
+        self.send_frame()
+        self.core.action("stop")
+        self.assertEqual(self.core.snapshot()["voice_progress"], "waiting_recognition")
+        self.assertIn("未收到识别结果", self.core._timeout_reason())
+        self.core.transport.message({"type":"stt", "text":"测试"})
+        wait_for(lambda:self.core.snapshot()["voice_progress"] == "waiting_reply")
+        self.assertIn("未收到回答", self.core._timeout_reason())
+        self.core.transport.message({"type":"tts", "state":"start"})
+        wait_for(lambda:self.core.snapshot()["voice_progress"] == "waiting_audio")
+        self.assertIn("未收到语音音频", self.core._timeout_reason())
+        self.core.transport.message(b"audio")
+        wait_for(lambda:self.core.snapshot()["voice_progress"] == "receiving_audio")
+        self.core.audio.busy = False
+        self.core.transport.message({"type":"tts", "state":"stop"})
+        wait_for(lambda:self.core.snapshot()["voice_progress"] == "complete")
+        self.core.action("listen")
+        self.assertEqual(self.core.snapshot()["voice_progress"], "recording")
+        self.assertEqual(self.core.turn_audio_frames_received, 0)
+
+    def test_voice_timeout_exposes_stage_and_releases_devices(self):
+        self.listen()
+        self.send_frame()
+        self.core.action("stop")
+        self.core.transport.message({"type":"stt", "text":"测试"})
+        wait_for(lambda:self.core.snapshot()["voice_progress"] == "waiting_reply")
+        audio = self.core.audio
+        self.core.deadline = time.monotonic()-1
+        wait_for(lambda:self.core.snapshot()["state"] == "error")
+        value = self.core.snapshot()
+        self.assertEqual(value["voice_progress"], "failed")
+        self.assertIn("未收到回答", value["error"])
+        self.assertTrue(audio.closed)
+
+    def test_late_stt_does_not_regress_audio_progress(self):
+        self.listen()
+        self.send_frame()
+        self.core.action("stop")
+        self.core.transport.message({"type":"tts", "state":"start"})
+        self.core.transport.message(b"audio")
+        self.core.transport.message({"type":"stt", "text":"迟到的识别"})
+        wait_for(lambda:self.core.snapshot()["transcript"] == "迟到的识别")
+        self.assertEqual(self.core.snapshot()["voice_progress"], "receiving_audio")
+
 class ConfigTests(unittest.TestCase):
     def test_invalid_and_unsafe_configs(self):
         for config in ({"port":True},{"face_poll_s":float("nan")},{"bind":"0.0.0.0"},

@@ -93,6 +93,7 @@ class NetworkTests(unittest.TestCase):
         self.which.start()
         self.manager = NetworkManager(enabled=True)
         self.manager._data["networks"] = parse_services(LISTING)
+        self.manager._next_refresh = time.monotonic() + 3600
 
     def tearDown(self):
         self.manager.close()
@@ -245,6 +246,120 @@ class NetworkTests(unittest.TestCase):
             self.assertLess(time.monotonic()-started, 3)
             self.assertFalse(self.manager._thread.is_alive())
         self.assertTrue(all(child.poll() is not None for child in children))
+
+    def test_snapshot_refresh_is_read_only_and_throttled(self):
+        responses = [(True, LISTING), (True, "State = online\nIPv4 = [ Address=192.168.1.50 ]")]
+        self.manager._next_refresh = 0
+        with mock.patch.object(self.manager, "_run", side_effect=responses) as run:
+            self.assertTrue(self.manager.snapshot()["refreshing"])
+            wait_for(lambda:not self.manager.snapshot()["refreshing"])
+            for _ in range(10):
+                self.manager.snapshot()
+        state = self.manager.snapshot()
+        self.assertFalse(state["stale"])
+        self.assertTrue(state["service_available"])
+        self.assertIsNotNone(state["last_updated"])
+        self.assertEqual(state["networks"][1]["ipv4"], "192.168.1.50")
+        self.assertEqual([call.args[0] for call in run.call_args_list], [["services"], ["services", OPEN]])
+        self.assertEqual(run.call_args_list[0].args[1], run.call_args_list[1].args[1])
+
+    def test_recent_fresh_status_remains_usable_during_background_refresh(self):
+        entered, finish = threading.Event(), threading.Event()
+        self.manager._data["stale"] = False
+        self.manager._last_success = time.monotonic() - 6
+        self.manager._next_refresh = 0
+        def read(args, deadline):
+            entered.set()
+            finish.wait(1)
+            return True, "    iPhone " + PSK
+        with mock.patch.object(self.manager, "_run", side_effect=read):
+            try:
+                state = self.manager.snapshot()
+                self.assertTrue(state["refreshing"])
+                self.assertFalse(state["stale"])
+                self.assertTrue(entered.wait(1))
+                self.assertFalse(self.manager.snapshot()["stale"])
+            finally:
+                finish.set()
+            wait_for(lambda:not self.manager.snapshot()["refreshing"])
+        self.assertFalse(self.manager.snapshot()["stale"])
+
+    def test_status_older_than_fifteen_seconds_is_stale_using_monotonic_time(self):
+        self.manager._data.update(stale=False, last_updated=9999999999)
+        self.manager._last_success = time.monotonic() - 16
+        state = self.manager.snapshot()
+        self.assertTrue(state["stale"])
+        self.assertFalse(state["refreshing"])
+        self.assertEqual(state["last_updated"], 9999999999)
+
+    def test_refresh_observes_external_connection_change(self):
+        changed = "*AR iPhone " + PSK + "\n    Guest network " + OPEN
+        self.manager._next_refresh = 0
+        with mock.patch.object(self.manager, "_run", side_effect=[(True, changed), (True, "State = ready\nIPv4 = [ Address=10.0.0.9 ]")]):
+            self.manager.snapshot()
+            wait_for(lambda:not self.manager.snapshot()["refreshing"])
+        state = self.manager.snapshot()
+        self.assertTrue(state["networks"][0]["connected"])
+        self.assertEqual(state["networks"][0]["ipv4"], "10.0.0.9")
+        self.assertFalse(state["networks"][1]["connected"])
+        self.assertNotIn("ipv4", state["networks"][1])
+
+    def test_refresh_failure_marks_unknown_without_stale_connected_claim(self):
+        self.manager._data.update(last_updated=123, error="previous user action error")
+        self.manager._data["networks"][1]["ipv4"] = "10.0.0.2"
+        self.manager._next_refresh = 0
+        with mock.patch.object(self.manager, "_run", side_effect=RuntimeError("secret raw stderr")):
+            self.manager.snapshot()
+            wait_for(lambda:not self.manager.snapshot()["refreshing"])
+        state = self.manager.snapshot()
+        self.assertTrue(state["available"])
+        self.assertFalse(state["service_available"])
+        self.assertTrue(state["stale"])
+        self.assertEqual(state["last_updated"], 123)
+        self.assertEqual(state["error"], "previous user action error")
+        self.assertIn("状态未知", state["refresh_error"])
+        self.assertNotIn("secret", str(state))
+        self.assertFalse(any(item["connected"] for item in state["networks"]))
+        self.assertTrue(all("ipv4" not in item for item in state["networks"]))
+
+    def test_user_action_queues_ahead_of_refresh_and_second_action_rejects(self):
+        entered, finish = threading.Event(), threading.Event()
+        workers = []
+        def read(args, deadline):
+            self.assertEqual(args, ["services"])
+            workers.append(threading.get_ident())
+            entered.set()
+            finish.wait(1)
+            return True, "    iPhone " + PSK
+        def scan(deadline):
+            workers.append(threading.get_ident())
+        self.manager._next_refresh = 0
+        with mock.patch.object(self.manager, "_run", side_effect=read), mock.patch.object(self.manager, "_scan", side_effect=scan) as scan_call:
+            self.manager.snapshot()
+            self.assertTrue(entered.wait(1))
+            try:
+                state = self.manager.action({"action":"scan"})
+                self.assertTrue(state["busy"])
+                self.assertEqual(state["status"], "scanning")
+                with self.assertRaisesRegex(ValueError, "正在处理"):
+                    self.manager.action({"action":"scan"})
+            finally:
+                finish.set()
+            wait_for(lambda:not self.manager.snapshot()["busy"])
+        self.assertEqual(scan_call.call_count, 1)
+        self.assertEqual(len(workers), 2)
+        self.assertEqual(workers[0], workers[1])
+        self.assertFalse(self.manager.snapshot()["refreshing"])
+
+    def test_refresh_has_one_deadline_and_caps_connected_detail_queries(self):
+        third = "wifi_extra_managed_none"
+        listing = "*AR One " + PSK + "\n*AR Two " + OPEN + "\n*AR Three " + third
+        self.manager._next_refresh = 0
+        with mock.patch.object(self.manager, "_run", side_effect=[(True,listing), (True,"State = ready"), (True,"State = ready")]) as run:
+            self.manager.snapshot()
+            wait_for(lambda:not self.manager.snapshot()["refreshing"])
+        self.assertEqual(run.call_count, 3)
+        self.assertEqual(len({call.args[1] for call in run.call_args_list}), 1)
 
     def test_close_interrupts_pending_pty_and_joins(self):
         processes = []
