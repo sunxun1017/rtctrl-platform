@@ -8,7 +8,7 @@ import threading
 import unittest
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from apps.companion.access import Access
+from apps.companion.access import Access, preferred_address
 from apps.companion.config import validate
 from apps.companion.diagnostics import Diagnostics
 from apps.companion.server import Server
@@ -69,6 +69,13 @@ class PortalTests(unittest.TestCase):
         status,h,data=self.request("/api/logs/export?source=app&level=error")
         self.assertEqual(status,200);self.assertIn("attachment",h["Content-Disposition"])
         self.assertEqual(json.loads(data)["entries"],[])
+    def test_phone_qr_prefers_wifi_even_from_wired_page(self):
+        interfaces = [{"address":"192.168.50.2","kind":"wired"},
+                      {"address":"192.168.102.211","kind":"wifi"}]
+        self.assertEqual(preferred_address(interfaces,"192.168.50.2"),"192.168.102.211")
+        self.assertEqual(preferred_address(interfaces[:1],"127.0.0.1"),"192.168.50.2")
+        self.assertEqual(preferred_address([],"127.0.0.1"),"127.0.0.1")
+
     def test_config_explicit_lan_optin(self):
         with self.assertRaises(ValueError):validate({"bind":"0.0.0.0"})
         self.assertTrue(validate({"bind":"0.0.0.0","lan_access":True,"standalone_voice":True})["standalone_voice"])

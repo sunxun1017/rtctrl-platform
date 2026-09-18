@@ -6,7 +6,7 @@ import pathlib
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit, parse_qs
-from .access import Access, local_addresses
+from .access import Access, local_addresses, interface_addresses, preferred_address
 
 WEB = pathlib.Path(__file__).with_name("web")
 
@@ -82,8 +82,8 @@ class Handler(BaseHTTPRequestHandler):
         authorized = access.authorized(self.client_address[0], self.headers.get("Cookie"))
         if path in ("/api/access", "/api/access/qr.svg"):
             host = urlsplit("http://" + self.headers.get("Host", "")).hostname
-            candidates = sorted(local_addresses() - {"127.0.0.1"})
-            address = host if host not in ("localhost", "127.0.0.1") else (candidates[0] if candidates else "127.0.0.1")
+            interfaces = interface_addresses()
+            address = preferred_address(interfaces, host)
             url = "http://%s:%s/" % (address, self.server.server_port)
             if path.endswith("qr.svg"):
                 try:
@@ -95,7 +95,8 @@ class Handler(BaseHTTPRequestHandler):
                 except ImportError:
                     return self._reply(503, {"error": "二维码组件未安装，请使用设备地址"})
             result = {"paired": authorized, "pairing_required": not authorized, "device_url": url,
-                      "lan_enabled": access.enabled}
+                      "lan_enabled": access.enabled,
+                      "device_addresses": [{"kind": item["kind"], "url": "http://%s:%s/" % (item["address"], self.server.server_port)} for item in interfaces]}
             if access.local(self.client_address[0]) and access.enabled:
                 result["pairing_code"] = access.code
             return self._reply(200, result)

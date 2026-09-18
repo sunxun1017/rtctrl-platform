@@ -11,16 +11,32 @@ import time
 from http.cookies import SimpleCookie
 
 
-def local_addresses():
-    addresses = {"127.0.0.1"}
+def interface_addresses():
+    addresses = []
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as peer:
         for _, name in socket.if_nameindex():
             try:
                 raw = fcntl.ioctl(peer.fileno(), 0x8915, struct.pack("256s", name[:15].encode()))
-                addresses.add(socket.inet_ntoa(raw[20:24]))
+                address = socket.inet_ntoa(raw[20:24])
+                if ipaddress.ip_address(address).is_loopback:
+                    continue
+                wireless = (Path("/sys/class/net", name, "wireless").exists() or
+                            Path("/sys/class/net", name, "phy80211").exists())
+                addresses.append({"address": address, "kind": "wifi" if wireless else "wired"})
             except OSError:
                 pass
     return addresses
+
+
+def local_addresses():
+    return {"127.0.0.1"} | {item["address"] for item in interface_addresses()}
+
+
+def preferred_address(interfaces, host):
+    wifi = [item["address"] for item in interfaces if item["kind"] == "wifi"]
+    all_addresses = [item["address"] for item in interfaces]
+    return (wifi[0] if wifi else host if host in all_addresses else
+            all_addresses[0] if all_addresses else "127.0.0.1")
 
 
 class Access:

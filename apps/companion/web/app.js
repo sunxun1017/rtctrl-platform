@@ -599,6 +599,8 @@
             $("pairing-code-value").textContent = pairingCode;
             $("pairing-code-panel").hidden = !pairingCode;
             delete access.pairing_code;
+            $("device-addresses").textContent = (access.device_addresses || []).map(item =>
+                (item.kind === "wifi" ? "无线" : "有线/其他") + "：" + item.url).join(" · ") + "（二维码优先使用无线地址）";
             const link = $("device-url");
             try {
                 const target = new URL(access.device_url);
