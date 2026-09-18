@@ -129,6 +129,39 @@ class DuplexTests(unittest.TestCase):
         self.assertEqual(self.core.snapshot()["pending_utterances"],1)
         self.assertEqual(self.core.snapshot()["echo_suspect"],"")
 
+    def test_echo_partial_survives_final_revision_and_drain(self):
+        self.echo_reference()
+        partial = "明天上午可以到公园散步"
+        revised = partial + "你说对不对"
+        self.assertFalse(self.core.echo_guard.suspected(revised, time.monotonic()))
+        self.message("duplex_partial", text=partial)
+        wait_for(lambda:self.core.duplex_echo_suspected)
+        self.core.audio.busy = False
+        self.core.last_playback_at = time.monotonic() - 5
+        self.message("duplex_partial", text=revised)
+        self.message("duplex_final", text=revised)
+        wait_for(lambda:self.core.snapshot()["echo_suspect"] == revised)
+        self.assertEqual(self.core.snapshot()["next_transcript"], "")
+        self.assertEqual(self.core.snapshot()["pending_utterances"], 0)
+        self.assertEqual(len(self.replies()), 1)
+        self.core.action("confirm_echo:" + str(self.core.snapshot()["echo_suspect_id"]))
+        self.assertEqual(self.core.snapshot()["pending_utterances"], 1)
+
+    def test_echo_partial_latch_clears_for_next_utterance_and_release(self):
+        self.echo_reference()
+        self.message("duplex_partial", text="明天上午可以到公园散步")
+        wait_for(lambda:self.core.duplex_echo_suspected)
+        self.message("duplex_waiting")
+        wait_for(lambda:not self.core.duplex_echo_suspected)
+        self.message("duplex_started")
+        self.message("duplex_final", text="我想听一首歌曲")
+        wait_for(lambda:self.core.snapshot()["pending_utterances"] == 1)
+        self.assertEqual(self.core.snapshot()["echo_suspect"], "")
+        self.message("duplex_partial", text="明天上午可以到公园散步")
+        wait_for(lambda:self.core.duplex_echo_suspected)
+        self.core.action("mute")
+        self.assertFalse(self.core.duplex_echo_suspected)
+
     def test_overlap_still_checked_after_playback_has_drained(self):
         self.echo_reference()
         self.core.audio.busy=False

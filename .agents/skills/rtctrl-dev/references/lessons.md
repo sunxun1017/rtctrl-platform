@@ -121,3 +121,11 @@ CPU ONNX INT8不等于RKNN INT8：当前CTC DynamicQuantizeLinear在Toolkit2 2.3
 官方RV1126B Zipformer FP模型可转换并板测。模型替换必须重验文本，CLI计时必须区分加载与应用IPC，
 主进程RSS不含独立runner/NPU DMA。VITS decoder可拆但局部相关性不能代替整句音质验收。
 证据：docs/verification-speech-npu-20260918.md。模型、SDK或运行库变化后重新验证。
+
+### 2026-09-18 流式回声保护的同轮状态
+
+流式 ASR 的 final 可能改写已命中的 partial；仅隐藏 partial 不足以阻止最终自动提交。
+当前全双工将已命中的疑似回声保留至本轮结束，使用显式确认，下一轮和释放必须清理。
+证据：docs/verification-echo-guard-20260918.md、test_companion_duplex_core.py。
+这不证明声学 AEC 有效；从未匹配的回声仍可漏判，真实重复设备话可能需确认。
+识别事件边界或确认策略改变时重验。

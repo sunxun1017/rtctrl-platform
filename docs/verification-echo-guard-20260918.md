@@ -36,3 +36,28 @@ probe只打印计数，不保存PCM或识别全文。声学对齐根因尚未确
 应用备份rtctrl-companion-before-echo-guard.tar.gz；保持原full_duplex=true/aec_enable_aes=true配置。
 板端部署应用，无新增常驻模型；候选文字和近期播放参考只在内存。交付保持麦克风关闭。
 后续日常验收关注是否仍有未匹配回声、确认误拦频率和不同音量摆位的影响。
+
+## 首次回复回声反馈后的保护修复
+
+用户再次反馈开启语音后设备第一句回复会被识别为新输入。本轮源码核对未发现首句
+sentence_start 晚于 PCM 的问题；AEC 冷启动/声学对齐仍未实测，不认作已确定根因。
+确认一处保护状态缺口：partial 命中回声只隐藏显示，后续 final 增加文字超出匹配预算时仍会自动提交。
+现将疑似标记保留到本轮识别结束，后续 partial 保持隐藏，final 走原有确认/忽略流程；
+duplex_waiting、duplex_started 和会话释放清理标记，不改变全双工或文字匹配阈值。
+真人先重复设备话再追加问题也可能需要确认，内容仍可提交；从未命中过的回声仍可能漏判。
+
+新增两项无硬件回归，覆盖 partial 命中但 final 扩展、播放排空后隔离、确认、下一轮恢复和静音清理。
+`python3 -m unittest discover -s tests -p test_companion_duplex_core.py`：15/15 通过。
+`ctest --preset release -R companion --output-on-failure` 与 asan 同命令各24/24组通过；
+这些是宿主 Python 回归，不代表板端声学验收或 Python 的 ASan 插桩。
+本轮未部署板端、未采集麦克风或调用云端，首次真实声学问题仍待复测。
+
+### 后续授权部署
+
+用户授权后已部署至实物 Alientek RV1126B。部署前板端 core.py 与本地 HEAD 原版逐字节一致，
+仅原子替换 core.py，备份为应用目录 `apps/companion/core.py.before-echo-latch-20260918-160956`。
+新版 SHA256：`d5a91a896647b79182ded0b6f5265fbff365b76d58fcb0487b5fb034c8d50717`。
+沿用现场 bundle/config/env-file 重启 supervisor，语法编译、板端导入及哈希核验通过。
+8080状态正常，显式准备语音后 connected=true、muted=true、continuous=false、error为空；
+重启后采集/播放计数均0。8081人脸状态短时读数30.1516 FPS，未重启人脸服务。
+保持原full_duplex/AEC/AES配置，未开启麦克风，实际首次声学复测由用户继续。

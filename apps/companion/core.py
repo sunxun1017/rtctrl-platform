@@ -41,6 +41,7 @@ class Companion:
         self.last_playback_at = -1000.
         self.echo_refresh_at = 0.
         self.duplex_overlap = False
+        self.duplex_echo_suspected = False
         self.pending_utterances = deque()
         self.response_busy = False
         self.response_produced = False
@@ -187,6 +188,7 @@ class Companion:
     def _release(self):
         self.echo_guard.clear()
         self.duplex_overlap = False
+        self.duplex_echo_suspected = False
         self.last_playback_at = -1000.
         self.echo_refresh_at = 0.
         self.pending_utterances.clear()
@@ -499,10 +501,12 @@ class Companion:
                 return
             if kind == "duplex_waiting":
                 self.duplex_overlap = False
+                self.duplex_echo_suspected = False
                 self._set(input_state="waiting_speech")
                 if self.data["state"] == "listening":
                     self._set(voice_progress="waiting_speech")
             elif kind == "duplex_started":
+                self.duplex_echo_suspected = False
                 self.duplex_overlap = bool(self.audio and self.audio.playback_busy() and getattr(self.audio, "first_write_monotonic", 0.) > 0) or time.monotonic() - self.last_playback_at < 3.
                 self._set(input_state="recognizing", next_transcript="")
                 if self.data["state"] == "listening":
@@ -510,11 +514,14 @@ class Companion:
             elif kind == "duplex_partial":
                 text = self._text(value.get("text", ""))
                 suspect = self._echo_context() and self.echo_guard.suspected(text, time.monotonic())
-                self._set(next_transcript="" if suspect else text)
+                # A later ASR revision must not erase evidence from this utterance.
+                # Keep it reviewable through the existing confirm/dismiss path.
+                self.duplex_echo_suspected |= bool(suspect)
+                self._set(next_transcript="" if self.duplex_echo_suspected else text)
             elif kind == "duplex_final":
                 text = self._text(value.get("text", "")).strip()
                 if text:
-                    if self._echo_context() and self.echo_guard.suspected(text, time.monotonic()):
+                    if self.duplex_echo_suspected or (self._echo_context() and self.echo_guard.suspected(text, time.monotonic())):
                         with self.lock:
                             self.data["metrics"]["echo_suspicions"] += 1
                         self.diagnostics.emit("echo_quarantined")
