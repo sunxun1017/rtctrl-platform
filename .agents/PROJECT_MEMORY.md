@@ -230,3 +230,7 @@ Melo新增原完整batch回调、worker PCM流、单aplay连续写，默认2s预
 并非整体对话提速66%；TTS总生成6.384s仍在，音色/参数/采样率不变。真实固定句扬声器drain完成、无欠载日志。
 新增每轮latency_ms及页面分段显示，首次写管道不等于声学首音。release/asan各16组通过。
 用户麦克风本轮未开启；证据/回退见[延迟验收](../docs/verification-voice-latency-20260918.md)。
+
+### 2026-09-18 AEC
+
+已接普通Rockchip VQE CPU软件参考AEC，固定16ms缓存延迟，默认关闭、板端纯AEC实验开启。一次明确授权安静声学测试测得21.07dB能量降低，AES25.16dB；未保存/上传录音。真人双讲和自动插话未验收，automatic_barge_in仍false。配置、边界、回退及测量条件见 [AEC记录](../docs/verification-aec-20260918.md)。

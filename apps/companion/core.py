@@ -51,7 +51,7 @@ class Companion:
                 "streaming_tts": config.get("local_tts_streaming", False),
                 "streaming_asr": config.get("local_asr_streaming", False),
                 "automatic_endpoint": config.get("local_asr_streaming", False),
-                "wake_word": False, "aec": False, "automatic_barge_in": False,
+                "wake_word": False, "aec": config.get("aec_enabled", False), "automatic_barge_in": False,
                 "actuator_control": False, "face": "external-read-only",
                 "voice_backend": config.get("voice_backend", "android"),
                 "local_asr_backend": config.get("local_asr_backend", "cpu"),
@@ -197,6 +197,8 @@ class Companion:
         self._set(state="muted" if self.data["muted"] else "idle", emotion="neutral", voice_progress=progress)
         if self.data["continuous"] and not self.data["muted"]:
             self.auto_due = time.monotonic() + .4
+        elif self.config.get("aec_enabled") and self.audio:
+            self.audio.stop_capture()
 
     def _action(self, action):
         if action == "continuous":
@@ -266,7 +268,7 @@ class Companion:
                 return
             if self.data["state"] not in ("idle", "muted"):
                 raise ValueError("请先停止当前回答，再开始新一轮对话")
-            self._interrupt()
+            self._interrupt(keep_capture=self.config.get("aec_enabled", False))
             self.capture_epoch += 1
             epoch = self.capture_epoch
             self.turn_audio_frames_sent = 0
@@ -290,7 +292,7 @@ class Companion:
             self.capture_stopped_at = time.monotonic()
             self.capture_epoch += 1
             if self.audio:
-                self.audio.stop_capture()
+                self.audio.pause_capture() if self.config.get("aec_enabled") else self.audio.stop_capture()
             if self.config["mode"] == "live" and self.turn_audio_frames_sent == 0:
                 # Sending listen/stop with no PCM can leave the backend waiting
                 # indefinitely. Fence late replies by closing this connection.
@@ -321,7 +323,7 @@ class Companion:
         else:
             raise ValueError("不支持的操作")
 
-    def _interrupt(self):
+    def _interrupt(self, keep_capture=False):
         active = self.data["connected"] and self.data["state"] in ("listening", "thinking", "speaking")
         self.capture_epoch += 1
         self.accept_audio = False
@@ -330,7 +332,10 @@ class Companion:
         self.silence_due = 0.
         self.tts_ended = False
         if self.audio:
-            self.audio.stop_capture()
+            if keep_capture and not active:
+                self.audio.pause_capture()
+            else:
+                self.audio.stop_capture()
             self.audio.interrupt()
         if active:
             try:
@@ -418,7 +423,7 @@ class Companion:
             if state == "start" and self.data["state"] in ("listening", "thinking") and not self.data["muted"]:
                 self.capture_epoch += 1
                 if self.audio:
-                    self.audio.stop_capture()
+                    self.audio.pause_capture() if self.config.get("aec_enabled") else self.audio.stop_capture()
                 self.silence_remaining = 0
                 self.silence_due = 0.
                 self.accept_audio = True

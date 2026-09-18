@@ -5,6 +5,8 @@ import os
 from urllib.parse import urlsplit
 
 DEFAULTS = {
+    "aec_enabled": False,
+    "aec_enable_aes": False, "aec_library": "", "aec_reference_delay_ms": 0,
     "device_settings_enabled": False, "wifi_enabled": False, "mode": "demo", "bind": "127.0.0.1", "port": 8090,
     "backend_url": "", "token_env": "RTCTRL_VOICE_TOKEN",
     "device_id": "rtctrl-rv1126b", "client_id": "rtctrl-companion",
@@ -37,7 +39,7 @@ def validate(values):
     config = dict(DEFAULTS, **values)
     for key in ("bind", "backend_url", "token_env", "device_id", "client_id",
                 "capture_device", "playback_device", "face_url", "qianfan_model",
-                "qianfan_token_env", "qianfan_proxy_url", "local_speech_root", "local_speech_socket"):
+                "qianfan_token_env", "qianfan_proxy_url", "local_speech_root", "local_speech_socket", "aec_library"):
         if not isinstance(config[key], str) or len(config[key]) > 2048 or any(
                 c in config[key] for c in "\r\n\x00"):
             raise ValueError("invalid " + key)
@@ -71,7 +73,7 @@ def validate(values):
             raise ValueError("qianfan_proxy_url must be a credential-free loopback HTTP CONNECT proxy")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming"):
+    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming", "aec_enabled", "aec_enable_aes"):
         if type(config[key]) is not bool:
             raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
@@ -79,7 +81,7 @@ def validate(values):
     for key, low, high in (("port", 1, 65535), ("playback_queue_frames", 2, 32),
                            ("network_timeout_s", 1, 15), ("max_listen_s", 1, 120),
                            ("response_timeout_s", 5, 240), ("local_asr_timeout_s", 1, 120),
-                           ("local_tts_timeout_s", 1, 120), ("local_tts_prebuffer_s", .5, 5), ("face_poll_s", .2, 10),
+                           ("aec_reference_delay_ms", 0, 300), ("local_tts_timeout_s", 1, 120), ("local_tts_prebuffer_s", .5, 5), ("face_poll_s", .2, 10),
                            ("face_stale_s", 1, 60)):
         value = config[key]
         if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
@@ -89,6 +91,9 @@ def validate(values):
             raise ValueError(key + " must be an integer")
     if config["bind"] not in ("127.0.0.1", "localhost"):
         raise ValueError("bind must be loopback; use an SSH tunnel for remote control")
+    if config["aec_enabled"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
+            not os.path.isabs(config["aec_library"]) or not config["local_asr_streaming"]):
+        raise ValueError("AEC requires live local streaming ASR and an absolute native library path")
     if config["local_tts_streaming"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
             config["local_tts_kind"] != "melo_npu" or not config["local_speech_socket"]):
         raise ValueError("streaming TTS requires live local Melo NPU and worker socket")

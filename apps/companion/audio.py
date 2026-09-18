@@ -2,7 +2,7 @@
 
 Requires Linux alsa-utils and libopus. No microphone is opened until start().
 Callbacks run on worker threads and must return promptly. This adapter does not
-implement acoustic echo cancellation: use push-to-talk or half-duplex upstream.
+enable automatic barge-in. Optional AEC keeps capture adapted during playback.
 """
 import ctypes
 import ctypes.util
@@ -169,6 +169,11 @@ class AudioIO:
         self._capture = None
         self._playback = None
         self._capture_thread = None
+        self._capture_callback = None
+        self._aec = None
+        if self.config.get("aec_enabled"):
+            from .aec import EchoCanceller
+            self._aec = EchoCanceller(self.config)
         self._output_thread = None
         self._codec = None
         self._inflight = False
@@ -230,6 +235,9 @@ class AudioIO:
                    if name != "arecord" and not path]
         if missing:
             raise AudioError("Missing audio dependencies: " + ", ".join(missing))
+        if self.config.get("aec_enabled") and self._aec is None:
+            from .aec import EchoCanceller
+            self._aec = EchoCanceller(self.config)
         self._codec = OpusCodec(decoder_sample_rate=self.output_sample_rate)
         self.last_error = None
         self._stop.clear()
@@ -242,6 +250,9 @@ class AudioIO:
         if not callable(on_frame):
             raise ValueError("on_frame must be callable")
         with self._lock:
+            if self._aec and self._capture_thread is not None and not self._capture_stop.is_set():
+                self._capture_callback = on_frame
+                return
             if self._capture_thread is not None:
                 raise AudioError("Capture is already started; call stop_capture first")
             if not shutil.which("arecord"):
@@ -255,6 +266,7 @@ class AudioIO:
                 self._terminate(self._capture)
                 self._capture = None
                 raise
+            self._capture_callback = on_frame
             self._capture_stop.clear()
             self._capture_thread = threading.Thread(target=self._record, args=(on_frame,),
                                                     name="companion-capture", daemon=True)
@@ -297,7 +309,14 @@ class AudioIO:
                 pending.extend(chunk)
                 if len(pending) == FRAME_BYTES:
                     if not self._capture_stop.is_set():
-                        callback(bytes(pending))
+                        with self._lock:
+                            target = self._capture_callback
+                        clean = self._aec.process(bytes(pending), time.monotonic()) if self._aec else bytes(pending)
+                        with self._lock:
+                            if target is not self._capture_callback:
+                                target = None
+                        if target and not self._capture_stop.is_set():
+                            target(clean)
                     pending.clear()
         except Exception as error:
             if not self._capture_stop.is_set():
@@ -420,6 +439,8 @@ class AudioIO:
                         if select.select([], [fd], [], 0)[1]:
                             try:
                                 count = os.write(fd, pcm[offset:])
+                                if count and self._aec:
+                                    self._aec.render(pcm[offset:offset + count], rate, time.monotonic())
                                 offset += count
                                 if count and not self.first_write_monotonic:
                                     self.first_write_monotonic = time.monotonic()
@@ -461,6 +482,8 @@ class AudioIO:
 
     def interrupt(self):
         with self._lock:
+            if self._aec:
+                self._aec.reset_reference()
             self._generation += 1
             self._stream_open = self._stream_ending = self._stream_started = False
             self._stream_rate = self._stream_bytes = 0
@@ -485,7 +508,22 @@ class AudioIO:
             if thread.is_alive():
                 raise AudioError("Audio callback did not return; worker could not stop")
 
+    def pause_capture(self):
+        """Keep AEC adapted during playback; stop forwarding PCM to the turn."""
+        if not self._aec:
+            self.stop_capture()
+            return
+        with self._lock:
+            self._capture_callback = None
+
+    def aec_status(self):
+        if not self._aec:
+            return {"enabled": False}
+        return {"enabled": True, "capture_active": not self._capture_stop.is_set(),
+                "barge_in": False}
+
     def stop_capture(self):
+        self._capture_callback = None
         self._capture_stop.set()
         with self._lock:
             self._terminate(self._capture)
@@ -501,6 +539,9 @@ class AudioIO:
         self._join(self._output_thread)
         self._output_thread = None
         with self._lock:
+            if self._aec:
+                self._aec.close()
+                self._aec = None
             if self._codec:
                 self._codec.close()
                 self._codec = None

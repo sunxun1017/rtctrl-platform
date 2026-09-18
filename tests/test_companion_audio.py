@@ -3,12 +3,14 @@ import importlib.util
 import os
 from pathlib import Path
 import select
+import sys
 import threading
 import time
 import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 spec = importlib.util.spec_from_file_location("companion_audio_under_test", ROOT / "apps/companion/audio.py")
 audio = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(audio)
@@ -28,6 +30,21 @@ class FakeCodec:
 
     def close(self):
         self.closed = True
+
+
+class FakeEchoCanceller:
+    def __init__(self, config):
+        self.captured = []
+        self.rendered = []
+        self.closed = False
+        self.resets = 0
+    def process(self, pcm, captured_at=None):
+        self.captured.append((pcm, captured_at))
+        return pcm
+    def render(self, pcm, rate, submitted_at=None):
+        self.rendered.append((pcm, rate, submitted_at))
+    def reset_reference(self): self.resets += 1
+    def close(self): self.closed = True
 
 
 class FakeProcess:
@@ -91,6 +108,103 @@ class AudioTests(unittest.TestCase):
             process.cleanup()
         for patcher in reversed(self.patchers):
             patcher.stop()
+
+    def enable_fake_aec(self):
+        self.io.stop()
+        package = mock.patch.object(audio, "__package__", "apps.companion")
+        bridge = mock.patch("apps.companion.aec.EchoCanceller", FakeEchoCanceller)
+        specification = mock.patch.object(audio, "__spec__", None)
+        specification.start()
+        self.addCleanup(specification.stop)
+        package.start();bridge.start()
+        self.addCleanup(package.stop);self.addCleanup(bridge.stop)
+        self.io = audio.AudioIO({"aec_enabled": True}, on_error=self.errors.append)
+        return self.io._aec
+
+    def test_aec_pause_keeps_capture_and_start_reuses_with_new_callback(self):
+        echo = self.enable_fake_aec()
+        first, second = [], []
+        self.io.start(first.append)
+        capture = self.io._capture
+        worker = self.io._capture_thread
+        frame = b"\x01\0" * audio.FRAME_SAMPLES
+        capture.peer.write(frame)
+        eventually(lambda: len(first) == 1)
+        self.io.pause_capture()
+        capture.peer.write(frame)
+        eventually(lambda: len(echo.captured) == 2)
+        self.assertEqual(len(first), 1)
+        self.assertFalse(capture.terminated)
+        self.assertTrue(worker.is_alive())
+        self.io.start(second.append)
+        self.assertIs(self.io._capture, capture)
+        self.assertIs(self.io._capture_thread, worker)
+        capture.peer.write(frame)
+        eventually(lambda: len(second) == 1)
+        self.assertEqual(first, [frame]);self.assertEqual(second, [frame])
+        self.assertEqual(len(self.processes), 1)
+
+    def test_aec_inflight_old_frame_not_delivered_to_new_callback(self):
+        echo = self.enable_fake_aec()
+        entered, proceed = threading.Event(), threading.Event()
+        original_process = echo.process
+        def blocked_process(pcm, captured_at=None):
+            entered.set()
+            if not proceed.wait(1):
+                raise RuntimeError("test barrier timed out")
+            return original_process(pcm, captured_at)
+        first, second = [], []
+        old_frame = b"\x01\0" * audio.FRAME_SAMPLES
+        new_frame = b"\x02\0" * audio.FRAME_SAMPLES
+        with mock.patch.object(echo, "process", side_effect=blocked_process):
+            self.io.start(first.append)
+            capture = self.io._capture
+            capture.peer.write(old_frame)
+            try:
+                self.assertTrue(entered.wait(1))
+                self.io.pause_capture()
+                self.io.start(second.append)
+            finally:
+                proceed.set()
+            eventually(lambda: len(echo.captured) == 1)
+            capture.peer.write(new_frame)
+            eventually(lambda: len(second) == 1)
+        self.assertEqual(first, [])
+        self.assertEqual(second, [new_frame])
+        self.assertIs(self.io._capture, capture)
+        self.assertEqual(self.errors, [])
+
+    def test_aec_stop_closes_and_restart_rebuilds_context(self):
+        original = self.enable_fake_aec()
+        self.io.start(lambda pcm: None)
+        old_capture = self.io._capture
+        self.io.stop()
+        self.assertTrue(original.closed)
+        self.assertIsNone(self.io._aec)
+        self.io.start(lambda pcm: None)
+        self.assertIsNot(self.io._aec, original)
+        self.assertFalse(self.io._aec.closed)
+        self.assertIsNot(self.io._capture, old_capture)
+        self.assertEqual(self.errors, [])
+
+    def test_aec_reference_matches_actual_playback_bytes(self):
+        echo = self.enable_fake_aec()
+        first, second = b"\x01\x02" * 111, b"\xfe\xff" * 71
+        self.io.play_pcm_stream(audio.PcmStreamChunk(first, 44100))
+        eventually(lambda: len(self.processes) == 1)
+        process = self.processes[0][1]
+        self.assertEqual(process.peer.read(len(first)), first)
+        eventually(lambda: sum(len(x[0]) for x in echo.rendered) == len(first))
+        eventually(lambda: not self.io._inflight)
+        self.io.play_pcm_stream(audio.PcmStreamChunk(second, 44100))
+        self.assertEqual(process.peer.read(len(second)), second)
+        eventually(lambda: sum(len(x[0]) for x in echo.rendered) == len(first)+len(second))
+        self.assertEqual(b"".join(x[0] for x in echo.rendered), first+second)
+        self.assertTrue(all(x[1] == 44100 and x[2] > 0 for x in echo.rendered))
+        before = echo.resets
+        self.io.interrupt()
+        self.assertEqual(echo.resets, before+1)
+        self.assertEqual(self.errors, [])
 
     def test_stream_chunks_reuse_process_exact_bytes_and_end_drain(self):
         first, second = b"\x01\x02" * 111, b"\xfe\xff" * 71

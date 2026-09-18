@@ -29,6 +29,7 @@ class FakeAudio:
     def configure_output(self, rate): self.rate = rate
     def start(self, callback): self.recording = True; self.callback = callback
     def stop_capture(self): self.recording = False
+    def pause_capture(self): self.callback = None
     def play(self, packet): self.played.append(packet); self.busy = True
     def play_pcm(self, audio): self.played.append(audio); self.busy = True
     def playback_busy(self): return self.busy
@@ -93,6 +94,20 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(self.core.snapshot()["state"],"speaking")
         self.core.audio.busy = False
         wait_for(lambda: self.core.snapshot()["state"] == "idle")
+    def test_aec_holds_capture_only_until_mute_or_manual_idle(self):
+        self.core.config["aec_enabled"] = True
+        self.listen()
+        self.send_frame()
+        self.core.action("stop")
+        self.assertTrue(self.core.audio.recording)
+        self.assertIsNone(self.core.audio.callback)
+        self.core.transport.message({"type":"tts", "state":"start"})
+        wait_for(lambda: self.core.snapshot()["state"] == "speaking")
+        self.assertTrue(self.core.audio.recording)
+        self.core.action("mute")
+        self.assertFalse(self.core.audio.recording)
+        self.assertTrue(self.core.snapshot()["muted"])
+
     def test_repeated_unmute_does_not_lose_recording_deadline(self):
         self.listen()
         deadline = self.core.deadline

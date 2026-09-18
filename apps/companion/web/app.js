@@ -78,7 +78,7 @@
             [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
         }
         if (streaming) {
-            $("privacy-note").textContent = "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复采音；静音、离开页面或控制台失联后会停止。";
+            $("privacy-note").textContent = "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复识别；静音、离开页面或控制台失联后会停止。";
             $("input-hint").textContent = current.continuous ? "连续对话中 · 停顿后自动提交 · 回答时暂停采音" : "可按住说话，或点击连续对话自动断句";
             if (state === "muted") hint = "开启麦克风后，选择按住说话或连续对话。";
             if (state === "idle") hint = "按住说话，或点击开始连续对话，停顿后自动提交。";
@@ -164,6 +164,7 @@
         if (c.audio_input === false || c.recording === false) capabilities.push("录音未就绪");
         if (c.playback === false || c.audio_output === false) capabilities.push("播放未就绪");
         if (c.wake_word === false) capabilities.push("唤醒词未启用");
+        if (c.aec) capabilities.push("实验性回声消除已开启；对话期间回答时也保持本地麦克风采集，关闭麦克风即停止");
         if (c.aec === false || c.automatic_barge_in === false) capabilities.push((streaming ? "流式识别、停顿断句；" : "按住说话；") + "回答时请先点击停止，不支持直接说话打断");
         $("capabilities").textContent = capabilities.join(" · ");
         showError(actionError || (typeof current.error === "string" ? current.error : ""));
