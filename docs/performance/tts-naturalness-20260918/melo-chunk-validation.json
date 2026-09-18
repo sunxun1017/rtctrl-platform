@@ -1,0 +1,131 @@
+{
+  "dependency_interval_for_frame_1000": [
+    987,
+    1013
+  ],
+  "required_halo": 13,
+  "recommended_halo": 16,
+  "bucket": 256,
+  "records": [
+    {
+      "length": 257,
+      "halo": 13,
+      "core_frames": 230,
+      "max_error": 3.762543201446533e-07,
+      "mean_error": 1.63203370817655e-08,
+      "output_samples": 131584
+    },
+    {
+      "length": 257,
+      "halo": 16,
+      "core_frames": 224,
+      "max_error": 3.762543201446533e-07,
+      "mean_error": 1.63203370817655e-08,
+      "output_samples": 131584
+    },
+    {
+      "length": 600,
+      "halo": 13,
+      "core_frames": 230,
+      "max_error": 3.241002559661865e-07,
+      "mean_error": 1.6292325710765e-08,
+      "output_samples": 307200
+    },
+    {
+      "length": 600,
+      "halo": 16,
+      "core_frames": 224,
+      "max_error": 3.241002559661865e-07,
+      "mean_error": 1.6292325710765e-08,
+      "output_samples": 307200
+    },
+    {
+      "length": 1000,
+      "halo": 13,
+      "core_frames": 230,
+      "max_error": 7.040798664093018e-07,
+      "mean_error": 1.612314726173736e-08,
+      "output_samples": 512000
+    },
+    {
+      "length": 1000,
+      "halo": 16,
+      "core_frames": 224,
+      "max_error": 7.040798664093018e-07,
+      "mean_error": 1.612314726173736e-08,
+      "output_samples": 512000
+    },
+    {
+      "name": "dialogue-0.npy",
+      "length": 124,
+      "halo": 16,
+      "max_error": 8.987262845039368e-08,
+      "mean_error": 6.452935963352502e-09,
+      "output_samples": 63488
+    },
+    {
+      "name": "dialogue-1.npy",
+      "length": 92,
+      "halo": 16,
+      "max_error": 1.4156103134155273e-07,
+      "mean_error": 8.468036050146566e-09,
+      "output_samples": 47104
+    },
+    {
+      "name": "dialogue-2.npy",
+      "length": 142,
+      "halo": 16,
+      "max_error": 9.452924132347107e-08,
+      "mean_error": 8.272575513501579e-09,
+      "output_samples": 72704
+    },
+    {
+      "name": "dialogue-3.npy",
+      "length": 93,
+      "halo": 16,
+      "max_error": 1.096632331609726e-07,
+      "mean_error": 5.97931526513662e-09,
+      "output_samples": 47616
+    },
+    {
+      "name": "dialogue-4.npy",
+      "length": 113,
+      "halo": 16,
+      "max_error": 7.450580596923828e-08,
+      "mean_error": 5.868816099763308e-09,
+      "output_samples": 57856
+    },
+    {
+      "name": "dialogue-5.npy",
+      "length": 116,
+      "halo": 16,
+      "max_error": 8.195638656616211e-08,
+      "mean_error": 5.872315522736926e-09,
+      "output_samples": 59392
+    },
+    {
+      "name": "short-0.npy",
+      "length": 125,
+      "halo": 16,
+      "max_error": 7.543712854385376e-08,
+      "mean_error": 5.756538357104546e-09,
+      "output_samples": 64000
+    },
+    {
+      "name": "short-1.npy",
+      "length": 141,
+      "halo": 16,
+      "max_error": 2.966262400150299e-07,
+      "mean_error": 8.291777930935496e-09,
+      "output_samples": 72192
+    },
+    {
+      "name": "concatenated-real-latents",
+      "length": 946,
+      "halo": 16,
+      "max_error": 2.966262400150299e-07,
+      "mean_error": 6.935599206059351e-09,
+      "output_samples": 484352
+    }
+  ]
+}

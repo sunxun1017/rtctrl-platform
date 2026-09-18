@@ -118,7 +118,11 @@
         if (finite(m.memory_used_mb) && finite(m.memory_total_mb)) metrics.push("内存 " + Math.round(m.memory_used_mb) + " / " + Math.round(m.memory_total_mb) + " MB");
         if (finite(m.system_cpu_percent)) metrics.push("整机 CPU " + m.system_cpu_percent.toFixed(1) + "%" + (finite(m.cpu_logical_cores) ? "（" + m.cpu_logical_cores + "核）" : ""));
         metrics.push(finite(m.npu_load_percent) ? "NPU " + m.npu_load_percent.toFixed(0) + "%" : "NPU 暂无读数");
-        if (local) metrics.push(current.capabilities.local_asr_backend === "rknn" ? "ASR：NPU + CPU前后处理 · TTS：CPU" : "ASR / TTS：CPU");
+        if (local) {
+            const asr = current.capabilities.local_asr_backend === "rknn" ? "NPU + CPU前后处理" : "CPU";
+            const tts = current.capabilities.local_tts_backend === "rknn" ? "Melo：NPU波形生成 + CPU前端" : "CPU";
+            metrics.push("ASR：" + asr + " · TTS：" + tts);
+        }
         if (finite(m.rss_mb)) metrics.push("伴随服务 " + m.rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_rss_mb)) metrics.push("语音主进程 " + m.local_speech_rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_cpu_percent)) metrics.push("语音主进程 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");

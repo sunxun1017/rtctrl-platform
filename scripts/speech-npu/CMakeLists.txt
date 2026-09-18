@@ -34,3 +34,8 @@ if(MODEL_ZOO_ROOT)
     set_target_properties(rknn_zipformer_demo PROPERTIES SKIP_BUILD_RPATH TRUE)
 endif()
 # Deliberately no runtime-library installation: probes use the board's existing librknnrt.
+
+add_library(melo_decoder SHARED melo_decoder.cc)
+target_include_directories(melo_decoder PRIVATE "${RKNN_SDK_ROOT}/include")
+target_link_libraries(melo_decoder PRIVATE "${RKNN_SDK_ROOT}/aarch64/librknnrt.so")
+set_target_properties(melo_decoder PROPERTIES SKIP_BUILD_RPATH TRUE)

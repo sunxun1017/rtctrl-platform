@@ -47,6 +47,8 @@ class Companion:
                 "actuator_control": False, "face": "external-read-only",
                 "voice_backend": config.get("voice_backend", "android"),
                 "local_asr_backend": config.get("local_asr_backend", "cpu"),
+                "local_tts_backend": "rknn" if config.get("local_tts_kind") == "melo_npu" else "cpu",
+                "local_tts_kind": config.get("local_tts_kind", "vits"),
                 "audio_upload": config["mode"] == "live" and config.get("voice_backend", "android") != "local"},
         }
 

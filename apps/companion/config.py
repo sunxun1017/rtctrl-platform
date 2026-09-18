@@ -56,9 +56,9 @@ def validate(values):
             raise ValueError(key + " needs an absolute executable path")
     if type(config["local_speech_threads"]) is not int or config["local_speech_threads"] not in (1, 2):
         raise ValueError("local_speech_threads must be 1 or 2")
-    if config["local_tts_kind"] not in ("vits", "vits_aishell3"):
+    if config["local_tts_kind"] not in ("vits", "vits_aishell3", "melo", "melo_npu"):
         raise ValueError("unsupported local_tts_kind")
-    if type(config["local_tts_speaker"]) is not int or not 0 <= config["local_tts_speaker"] < 174:
+    if type(config["local_tts_speaker"]) is not int or not 0 <= config["local_tts_speaker"] < (1 if config["local_tts_kind"] in ("melo", "melo_npu") else 174):
         raise ValueError("invalid local_tts_speaker")
     if bool(config["local_speech_root"]) != bool(config["local_speech_socket"]):
         raise ValueError("local_speech_root and local_speech_socket must be configured together")

@@ -97,3 +97,56 @@ The compare script checks sample count/finiteness and records unnormalized
 waveform error, correlation, clipping and PCM16 listening files at native 8 kHz.
 This is a whole-sentence, fixed-shape probe; it does not validate arbitrary-length
 production synthesis or perceptual quality. See ../../docs/verification-tts-sentences-20260918.md.
+
+
+## Naturalness auditions
+
+`tts-audition.py KIND MODEL_DIR OUTPUT_WAV TEXT` supports `aishell3`, `melo`,
+and `kokoro` with the existing sherpa-onnx 1.13.8 host environment. Choose the
+speaker explicitly (for example Kokoro v1.1-zh sid3); optional `--speed` and
+`--duration-noise` only change model inputs, never remove phonemes or splice audio.
+Each WAV gets a JSON sidecar with model hash, parameters, machine and timings.
+Host timings do not establish RV1126B performance. It refuses to overwrite WAVs
+and does not change any running service. Naturalness requires listening, not
+waveform correlation or a shorter duration. See the user-rejected candidates in
+../../docs/verification-tts-naturalness-20260918.md.
+
+## Persistent Melo decoder shared library
+
+The same configured cross-build provides `cmake --build work/speech-npu-build --target melo_decoder`.
+The resulting `libmelo_decoder.so` uses the existing system RKNN runtime. Its C ABI is in
+`melo_decoder.h`: create(path), run(handle, latent, valid_length, output), destroy(handle),
+and thread-local error text. Check NULL / nonzero returns after every operation.
+
+This adapter accepts only the masked bucket-256 model contract: latent `/Mul_10_output_0`
+`[1,192,256]`, masks `mask_1,mask_8,mask_64,mask_128,mask_256,mask_512`, and output `y`
+`[1,1,131072]`. It checks queried names, dimensions, types, and element counts at creation.
+Singleton axes inserted by RKNN are accepted explicitly. All six masks are generated
+inside C++, and latent padding beyond valid_length is zeroed. Input/output storage is
+allocated once; model context persists across calls. Each run requests float32 NCHW input
+and float32 output, validates finite values, and releases RKNN output ownership.
+
+The caller must supply full 192*256 and 131072 float buffers, serialize calls per handle,
+and trim returned audio to valid_length*512 samples. Destroy a handle exactly once.
+Length 0 or >256 is rejected; this library does not implement chunk overlap or text frontend.
+It does not replace the application's current TTS by itself. Cross-compilation alone does
+not establish numerical equivalence, latency, stability, or listening quality.
+
+
+## Accepted Melo hybrid on RV1126B
+
+`convert-melo.py --source /path/model.onnx --output-dir /path/output --build`
+extracts the exact CPU prefix and speaker-row-1 masked decoder, runs FP32 mask checks,
+then builds RV1126B FP16 RKNN. Conversion writes a hash/version manifest; model files
+are not committed. `validate-melo-chunks.py --model-dir /path/output --output-dir /path/reports`
+checks the halo proof and stitched waveform against the exact decoder.
+
+Install prefix.onnx, decoder-masked-256.rknn and libmelo_decoder.so under
+`<local_speech_root>/melo-npu/`; keep official tokens.txt, lexicon.txt, dict/, date.fst,
+number.fst, phone.fst and LICENSE under `<local_speech_root>/vits-melo-tts-zh_en/`.
+Use `local_tts_kind=melo_npu`, speaker0. The full CPU model is needed only for `melo`.
+Do not replace system librknnrt. Preserve the previous voice configuration/model for rollback.
+
+Python adapter keeps complete sherpa batches, uses 256-frame decoder windows with
+16-frame context, then applies upstream silence compression once per batch.
+See ../../docs/verification-tts-naturalness-20260918.md for board results and limitations.

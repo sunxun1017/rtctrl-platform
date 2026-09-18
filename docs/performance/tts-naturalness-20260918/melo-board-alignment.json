@@ -1,0 +1,66 @@
+[
+  {
+    "name": "dialogue-0",
+    "samples": 63488,
+    "max_error": 0.000619739294052124,
+    "snr_db": 51.09215259552002,
+    "cpu_scaled_samples": 63488,
+    "npu_scaled_samples": 63488
+  },
+  {
+    "name": "dialogue-1",
+    "samples": 47104,
+    "max_error": 0.0005088746547698975,
+    "snr_db": 51.27288341522217,
+    "cpu_scaled_samples": 47104,
+    "npu_scaled_samples": 47104
+  },
+  {
+    "name": "dialogue-2",
+    "samples": 72704,
+    "max_error": 0.000668451189994812,
+    "snr_db": 50.72346210479736,
+    "cpu_scaled_samples": 72704,
+    "npu_scaled_samples": 72704
+  },
+  {
+    "name": "dialogue-3",
+    "samples": 47616,
+    "max_error": 0.0006752237677574158,
+    "snr_db": 49.47532653808594,
+    "cpu_scaled_samples": 47616,
+    "npu_scaled_samples": 47616
+  },
+  {
+    "name": "dialogue-4",
+    "samples": 57856,
+    "max_error": 0.00037807971239089966,
+    "snr_db": 50.0636625289917,
+    "cpu_scaled_samples": 57856,
+    "npu_scaled_samples": 57856
+  },
+  {
+    "name": "dialogue-5",
+    "samples": 59392,
+    "max_error": 0.0003832093789242208,
+    "snr_db": 50.22695064544678,
+    "cpu_scaled_samples": 59392,
+    "npu_scaled_samples": 59392
+  },
+  {
+    "name": "short-0",
+    "samples": 64000,
+    "max_error": 0.0003784745931625366,
+    "snr_db": 50.402464866638184,
+    "cpu_scaled_samples": 55732,
+    "npu_scaled_samples": 55732
+  },
+  {
+    "name": "short-1",
+    "samples": 72192,
+    "max_error": 0.0006550885736942291,
+    "snr_db": 47.75580406188965,
+    "cpu_scaled_samples": 72192,
+    "npu_scaled_samples": 72192
+  }
+]

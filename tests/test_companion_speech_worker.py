@@ -81,6 +81,42 @@ class RknnAdapterTests(unittest.TestCase):
         sherpa.OfflineRecognizer.from_zipformer_ctc.assert_not_called()
         sherpa.OfflineTts.assert_called_once()
 
+    def test_melo_model_configuration_and_native_pcm(self):
+        from apps.companion.speech_worker import SherpaEngine
+        from types import SimpleNamespace
+        sherpa = MagicMock()
+        with patch.dict(sys.modules, {"sherpa_onnx": sherpa}):
+            previous_path = list(sys.path)
+            try:
+                engine = SherpaEngine(self.root, tts_kind="melo", asr_backend="rknn")
+            finally:
+                sys.path[:] = previous_path
+        vits = sherpa.OfflineTtsVitsModelConfig.call_args.kwargs
+        self.assertEqual(vits["dict_dir"], str(self.root / "vits-melo-tts-zh_en/dict"))
+        self.assertEqual(vits["model"], str(self.root / "vits-melo-tts-zh_en/model.onnx"))
+        self.assertEqual(sherpa.OfflineTtsModelConfig.call_args.kwargs["num_threads"], 2)
+        rules = sherpa.OfflineTtsConfig.call_args.kwargs["rule_fsts"].split(",")
+        self.assertEqual([Path(item).name for item in rules], ["date.fst", "number.fst", "phone.fst"])
+        self.assertEqual(engine.tts_kind, "melo")
+        sherpa.OfflineRecognizer.from_zipformer_ctc.assert_not_called()
+        engine.tts.generate.return_value = SimpleNamespace(samples=[0., .5, -.5], sample_rate=44100)
+        pcm, rate = engine.synthesize("测试")
+        self.assertEqual(rate, 44100)
+        self.assertEqual(len(pcm), 6)
+        engine.tts.generate.assert_called_once_with("测试", sid=0, speed=1.0)
+
+    def test_melo_speaker_validation_and_default_voice(self):
+        from apps.companion.config import validate
+        from apps.companion.speech_worker import SherpaEngine
+        self.assertEqual(validate({})["local_tts_kind"], "vits")
+        self.assertEqual(validate({"local_tts_kind": "melo"})["local_tts_speaker"], 0)
+        self.assertEqual(validate({"local_tts_kind": "vits_aishell3", "local_tts_speaker": 173})["local_tts_speaker"], 173)
+        for sid in (True, 0.0, -1, 1, 173):
+            with self.assertRaises(ValueError):
+                validate({"local_tts_kind": "melo", "local_tts_speaker": sid})
+            with self.assertRaises(ValueError):
+                SherpaEngine(self.root, tts_kind="melo", sid=sid)
+
     def test_config_defaults_and_validation(self):
         from apps.companion.config import validate
         self.assertEqual(validate({})['local_asr_backend'], 'cpu')

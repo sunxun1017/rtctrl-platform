@@ -176,3 +176,24 @@ release/asan各9组companion通过。来源/哈希/回退/边界见[验证记录
 整句一次推理无拼接；板端decoder含IO中位31.746/52.991ms，非端到端延迟。
 两版回识别一致，长句正确、短句都有同样偏差；不等于主观音质满分。试听WAV已提供。
 当前CPU TTS保持，任意长度集成和主观试听仍待验收；见[整句记录](../docs/verification-tts-sentences-20260918.md)。
+
+
+## 2026-09-18 用户否定现有TTS自然度
+
+用户指出AISHELL3 CPU/NPU整句都逐字吐音、不连贯；先前数值对齐不代表产品音质通过。
+进一步试听原sid0 speed1.15/noise0.35与Kokoro INT8 sid3，用户明确“两份仍然不自然”，不得记为已认可候选。
+审计确认整句一次生成、#0是上游标准且承载有声内容，不能删除。逗号边界和上下文变调存在前端不足，非已确定唯一根因。
+先选用户认可的整句自然度，再评估板端资源与NPU；当前生产TTS未切换。
+证据见docs/verification-tts-naturalness-20260918.md。
+
+
+## 2026-09-18 用户接受Melo，板端已启用混合NPU TTS
+
+此项覆盖上文“当前CPU TTS保持”。用户认可Melo完整对话连贯性，已部署local_tts_kind=melo_npu、sid0。
+ASR仍NPU；Melo中文前端/flow在CPU，decoder FP16在NPU，44.1kHz PCM，256bucket/16halo/224core。
+短句2.9s声音：CPU26.49s降至混合3.41s；完整对话7.895s声音生成9.28s；进程峰值272.8MiB，不含全部DMA。
+8段真实板端latent数值SNR47.76–51.27dB，后处理长度全部对齐；板端扬声器主观听感待用户确认。
+先前AISHELL3整句原始decoder及调参试听遗漏ScaleSilence，不代表完整应用输出；已纠正并说明。
+本次每个完整sherpa批次才ScaleSilence(.2)，168组上游C++对照逐样本相同。
+正式worker健康检查/固定文字输出成功；release/asan各10组companion通过。原模型/配置备份可回退，未改自启动。
+依据：[Melo验证记录](../docs/verification-tts-naturalness-20260918.md)。

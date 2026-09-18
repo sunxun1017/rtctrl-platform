@@ -162,7 +162,8 @@ class SpeechWorker:
                     if request.get("operation") == "health":
                         self._send(peer, {"ok": True, "ready": True, "busy": self.busy.locked(),
                                           "asr_backend": getattr(self.engine, "asr_backend", "cpu"),
-                                          "tts_backend": "cpu"})
+                                          "tts_backend": getattr(self.engine, "tts_backend", "cpu"),
+                                          "tts_kind": getattr(self.engine, "tts_kind", "vits")})
                         peer.close()
                     elif request.get("operation") not in ("asr", "tts"):
                         raise ValueError("Unsupported operation")
@@ -190,7 +191,7 @@ def main():
     parser.add_argument("--root", required=True)
     parser.add_argument("--socket", required=True)
     parser.add_argument("--asr-backend", choices=("cpu", "rknn"), default="cpu")
-    parser.add_argument("--tts-kind", choices=("vits", "vits_aishell3"), default="vits")
+    parser.add_argument("--tts-kind", choices=("vits", "vits_aishell3", "melo", "melo_npu"), default="vits")
     parser.add_argument("--sid", type=int, default=0)
     parser.add_argument("--threads", type=int, choices=(1, 2), default=2)
     args = parser.parse_args()
@@ -284,22 +285,33 @@ class SherpaEngine:
         self.rknn = RknnRecognizer(root) if asr_backend == "rknn" else None
         if type(threads) is not int or threads not in (1, 2):
             raise ValueError("Speech threads must be 1 or 2")
-        if tts_kind not in ("vits", "vits_aishell3") or not 0 <= sid < 174:
+        if (tts_kind not in ("vits", "vits_aishell3", "melo", "melo_npu") or type(sid) is not int or
+                not 0 <= sid < (1 if tts_kind in ("melo", "melo_npu") else 174)):
             raise ValueError("Unsupported local voice model or speaker")
+        self.tts_kind = tts_kind
         sys.path.insert(0, str(root / "python"))
         import sherpa_onnx
         asr_root = root / "sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16"
-        tts_root = root / "vits-icefall-zh-aishell3"
+        tts_root = root / ("vits-melo-tts-zh_en" if tts_kind in ("melo", "melo_npu") else "vits-icefall-zh-aishell3")
+        vits_options = {"dict_dir": str(tts_root / "dict")} if tts_kind in ("melo", "melo_npu") else {}
+        rules = ("date.fst", "number.fst", "phone.fst")
+        if tts_kind not in ("melo", "melo_npu"):
+            rules += ("new_heteronym.fst",)
         self.asr = None
         if asr_backend == "cpu":
             self.asr = sherpa_onnx.OfflineRecognizer.from_zipformer_ctc(
                 model=str(asr_root / "model.int8.onnx"), tokens=str(asr_root / "tokens.txt"), num_threads=threads)
-        self.tts = sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(
-            model=sherpa_onnx.OfflineTtsModelConfig(vits=sherpa_onnx.OfflineTtsVitsModelConfig(
-                model=str(tts_root / "model.onnx"), lexicon=str(tts_root / "lexicon.txt"),
-                tokens=str(tts_root / "tokens.txt")), num_threads=threads),
-            rule_fsts=",".join(str(tts_root / name) for name in
-                              ("date.fst", "number.fst", "phone.fst", "new_heteronym.fst"))))
+        self.tts_backend = "rknn" if tts_kind == "melo_npu" else "cpu"
+        if tts_kind == "melo_npu":
+            from .melo_npu import MeloNpu
+            self.tts = MeloNpu(root, sherpa_onnx, threads)
+        else:
+            self.tts = sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(
+                model=sherpa_onnx.OfflineTtsModelConfig(vits=sherpa_onnx.OfflineTtsVitsModelConfig(
+                    model=str(tts_root / "model.onnx"), lexicon=str(tts_root / "lexicon.txt"),
+                    tokens=str(tts_root / "tokens.txt"), **vits_options), num_threads=threads),
+                rule_fsts=",".join(str(tts_root / name) for name in
+                                  rules)))
         self.sid = sid
 
     def recognize(self, path):
@@ -323,6 +335,9 @@ class SherpaEngine:
         return text
 
     def synthesize(self, text):
+        if self.tts_kind == "melo_npu":
+            samples, rate = self.tts.synthesize(text)
+            return float_to_pcm16(samples), rate
         generated = self.tts.generate(text, sid=self.sid, speed=1.0)
         samples = generated.samples
         if len(samples) > generated.sample_rate * 45:
