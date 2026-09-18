@@ -70,3 +70,18 @@ Output-unit verification for this SDK ordinary lib64 binary: disassembly of
 0x23948. Thus 512 means 256 int16 mono samples, not 512 samples. The bridge additionally
 checks its guarded tail beyond those samples on every invocation. The previously
 assumed sample-count return was incorrect and rejected valid output at frame zero.
+
+## User-coordinated double-talk check
+
+`double_talk_probe.py --run-local-double-talk-test --wav FIXED_MONO_WAV --library /absolute/librtctrl_aec.so --speech-root /absolute/speech-root`
+requires prior user coordination and the board ALSA_CONFIG_PATH. It opens the microphone
+for 17 seconds and plays the first up-to-eight seconds of the fixture twice. Use a fixture
+at least eight seconds long (the current 7.895-second fixture also covers the scoring window).
+It scores only capture frames 2–14 seconds after the first playback write, excluding startup/tail.
+Before recording, local ASR rejects a fixture too similar to the fixed test sentence.
+Captured raw/AEC/AEC+AES stay bounded in RAM, then use local RKNN ASR; no cloud request,
+audio file or recognized transcript is emitted. Output is aggregate RMS/peak and matching counts.
+The target is 今天天气不错，我想出去散步; ask the user to repeat it during playback.
+Best substring edit distance is not whole-recording CER, exact matches are not recall without
+a known repetition count, and mixed-speech energy reduction is not near-end preservation/ERLE.
+This check supports a narrow intelligibility observation, not universal double-talk certification.
