@@ -3,7 +3,6 @@
 Commands exchange private temporary files, never shell fragments. Lightweight
 clients call the resident speech worker; model inference is serialized.
 """
-import audioop
 import http.client
 import json
 import os
@@ -18,7 +17,7 @@ import uuid
 import wave
 from urllib.parse import urlsplit
 
-from .audio import OpusCodec, FRAME_BYTES
+from .audio import OpusCodec, FRAME_BYTES, PcmAudio
 
 
 class LocalVoiceTransport:
@@ -253,26 +252,9 @@ class LocalVoiceTransport:
                     rate not in (8000, 16000, 22050, 24000, 44100, 48000) or
                     source.getnframes() > rate * 45):
                 raise ValueError("Unsupported or oversized synthesized WAV")
-            state, pending = None, b""
-            deadline = time.monotonic()
-            while self._active(generation):
-                block = source.readframes(2048)
-                if not block:
-                    break
-                if rate != 16000:
-                    block, state = audioop.ratecv(block, 2, 1, rate, 16000, state)
-                pending += block
-                while len(pending) >= FRAME_BYTES:
-                    if not self._active(generation):
-                        return
-                    with self._lock:
-                        if not self._active(generation):
-                            return
-                        packet = self._codec.encode(pending[:FRAME_BYTES])
-                    self._emit(generation, packet)
-                    pending = pending[FRAME_BYTES:]
-                    deadline += .06
-                    time.sleep(max(0, deadline - time.monotonic()))
-            with self._lock:
-                if pending and self._active(generation):
-                    self._emit(generation, self._codec.encode(pending.ljust(FRAME_BYTES, b"\0")))
+            # Own the bytes before the turn directory is removed. Playback uses
+            # ALSA backpressure at the original rate, with no lossy codec stage.
+            pcm = source.readframes(source.getnframes())
+            audio = PcmAudio(pcm, rate)
+            audio.validate()
+            self._emit(generation, audio)

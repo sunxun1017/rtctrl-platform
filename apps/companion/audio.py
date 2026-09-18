@@ -13,12 +13,25 @@ import shutil
 import subprocess
 import threading
 import time
+from typing import NamedTuple
 
 SAMPLE_RATE = 16000
 FRAME_SAMPLES = 960
 FRAME_BYTES = FRAME_SAMPLES * 2
 MAX_PACKET_BYTES = 4096
 OUTPUT_SAMPLE_RATES = (16000, 24000, 48000)
+
+
+class PcmAudio(NamedTuple):
+    """Owned, bounded local PCM; never a remote wire message or temporary path."""
+    data: bytes
+    sample_rate: int
+
+    def validate(self):
+        if (type(self.sample_rate) is not int or self.sample_rate not in (8000, 16000, 22050, 24000, 44100, 48000) or
+                not isinstance(self.data, bytes) or not self.data or len(self.data) % 2 or
+                len(self.data) > self.sample_rate * 2 * 45):
+            raise ValueError("Invalid local PCM audio")
 
 
 class AudioError(RuntimeError):
@@ -147,11 +160,11 @@ class AudioIO:
         self._inflight = False
         self._play_until = 0.0
 
-    def _command(self, capture):
+    def _command(self, capture, sample_rate=None):
         return ["arecord" if capture else "aplay", "-q", "-D",
                 self.config.get("capture_device" if capture else "playback_device", "default"),
                 "-t", "raw", "-f", "S16_LE", "-r",
-                str(SAMPLE_RATE if capture else self.output_sample_rate), "-c", "1",
+                str(SAMPLE_RATE if capture else (sample_rate or self.output_sample_rate)), "-c", "1",
                 "--buffer-time=120000", "--period-time=20000"]
 
     def configure_output(self, sample_rate):
@@ -272,6 +285,19 @@ class AudioIO:
             except queue.Full as error:
                 raise AudioError("Playback queue is full; interrupt/reset the response") from error
 
+    def play_pcm(self, audio):
+        if not isinstance(audio, PcmAudio):
+            raise ValueError("Expected local PCM audio")
+        audio.validate()
+        with self._lock:
+            self._ensure_started()
+            if self.playback_busy():
+                raise AudioError("Previous playback must finish before local PCM")
+            try:
+                self._queue.put_nowait((self._generation, audio))
+            except queue.Full as error:
+                raise AudioError("Playback queue is full") from error
+
     def playback_busy(self):
         """Includes 100 ms ALSA tail margin; not a hardware sample-clock query."""
         with self._lock:
@@ -292,9 +318,16 @@ class AudioIO:
                         if generation != self._generation or self._stop.is_set():
                             continue
                         self._inflight = True
-                        pcm = self._codec.decode(packet)
+                        local_pcm = isinstance(packet, PcmAudio)
+                        if local_pcm:
+                            packet.validate()
+                            pcm, rate = packet.data, packet.sample_rate
+                            self._terminate(self._playback)
+                            self._playback = None
+                        else:
+                            pcm, rate = self._codec.decode(packet), self.output_sample_rate
                         if self._playback is None:
-                            self._playback = subprocess.Popen(self._command(False),
+                            self._playback = subprocess.Popen(self._command(False, rate),
                                                               stdin=subprocess.PIPE,
                                                               stdout=subprocess.DEVNULL, bufsize=0)
                             os.set_blocking(self._playback.stdin.fileno(), False)
@@ -314,11 +347,32 @@ class AudioIO:
                             try:
                                 count = os.write(fd, pcm[offset:])
                                 offset += count
-                                self._play_until = max(time.monotonic(), self._play_until) + count / (self.output_sample_rate * 2)
+                                self._play_until = max(time.monotonic(), self._play_until) + count / (rate * 2)
                             except BlockingIOError:
                                 pass
                     if offset < len(pcm):
                         self._stop.wait(0.01)
+                if local_pcm:
+                    # EOF lets aplay drain the actual ALSA tail. Do not report
+                    # completion merely because all bytes fitted in the pipe.
+                    with self._lock:
+                        current = generation == self._generation and not self._stop.is_set()
+                        if current:
+                            process.stdin.close()
+                    # A large pipe can still hold several seconds at 8kHz.
+                    drain_deadline = max(time.monotonic(), self._play_until) + 3
+                    while current and process.poll() is None:
+                        if time.monotonic() > drain_deadline:
+                            raise AudioError("Local PCM playback drain timed out")
+                        self._stop.wait(.01)
+                        with self._lock:
+                            current = generation == self._generation and not self._stop.is_set()
+                    with self._lock:
+                        if current:
+                            if process.returncode != 0:
+                                raise AudioError("Local PCM playback failed")
+                            self._playback = None
+                            self._play_until = 0.0
                 with self._lock:
                     self._inflight = False
         except Exception as error:

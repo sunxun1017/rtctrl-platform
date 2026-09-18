@@ -132,3 +132,14 @@ local_speech_threads严格1/2，最终2；单线程ASR2.84s/TTS5.68s明显慢于
 release/asan22项CTest通过，最后修复重跑两套9组companion通过；当前150用例有执行证据。
 format-check依旧被原有未修改C++格式问题阻塞。原有不连接Wi-Fi、不动人脸图库/执行器的边界未变。
 证据见docs/verification-companion-performance-20260918.md及docs/performance/companion-20260918。
+
+
+## 2026-09-18 本地对话音质对齐
+
+用户对照聊天“音色一”；板端同为sid0。修复本地TTS8k→16k→Opus→PCM的非必要有损路径。
+现在PcmAudio持有原始bytes/rate，经Core local-only门控→AudioIO→aplay原生rate→ALSA48k；Android不变。
+有界45秒、单个PCM任务、generation中断、EOF等待真实drain（期限考虑缓冲时长），不传临时文件路径。
+真机原试听WAV78326PCM字节进入aplay逐字节一致，rate8000，5.174秒完成并回idle，无错误。
+155项companion用例有通过证据。用户主观听感仍待重听；电脑和开发板扬声器不能视为相同声学条件。
+本地audio_frames_received现在是PCM任务计数而非60ms帧；不套用旧Opus帧数验收。
+证据见docs/verification-companion-20260918.md“对话与音色一播放对齐”。

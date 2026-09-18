@@ -30,6 +30,7 @@ class FakeAudio:
     def start(self, callback): self.recording = True; self.callback = callback
     def stop_capture(self): self.recording = False
     def play(self, packet): self.played.append(packet); self.busy = True
+    def play_pcm(self, audio): self.played.append(audio); self.busy = True
     def playback_busy(self): return self.busy
     def interrupt(self): self.busy = False
     def stop(self): self.closed = True; self.recording = False; self.busy = False
@@ -389,6 +390,25 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(self.core.snapshot()["voice_progress"], "receiving_audio")
 
 class LocalCoreTests(unittest.TestCase):
+    def test_local_pcm_is_gated_by_backend_mute_and_turn(self):
+        from apps.companion.audio import PcmAudio
+        packet = PcmAudio(b"\0" * 160, 8000)
+        core = Companion(validate({"voice_backend": "local"}))
+        core.audio = FakeAudio({})
+        core.accept_audio = True
+        core._message(packet)
+        self.assertEqual(core.audio.played, [])  # muted
+        core.data["muted"] = False
+        core._message(packet)
+        self.assertEqual(core.audio.played, [packet])
+        core.accept_audio = False
+        core._message(packet)
+        self.assertEqual(len(core.audio.played), 1)
+        core.config["voice_backend"] = "android"
+        with self.assertRaises(ValueError):
+            core._message(packet)
+
+
     def test_local_manual_stop_does_not_add_cloud_vad_tail(self):
         config = validate({"mode": "live", "voice_backend": "local",
                            "local_asr_command": ["/bin/true"], "local_tts_command": ["/bin/true"]})

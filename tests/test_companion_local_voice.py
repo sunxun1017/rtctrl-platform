@@ -10,6 +10,7 @@ import wave
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from apps.companion.local_voice import LocalVoiceTransport
+from apps.companion.audio import PcmAudio
 
 
 class Codec:
@@ -94,7 +95,7 @@ class LocalVoiceTests(unittest.TestCase):
             self.transport._run(self.transport._generation, b"\0" * 1920)
         self.assertFalse(self.errors)
         self.assertEqual([x["type"] for x in self.messages if isinstance(x, dict)], ["stt", "llm", "tts", "tts", "tts"])
-        self.assertIn(b"packet", self.messages)
+        self.assertTrue(any(isinstance(x, PcmAudio) for x in self.messages))
         self.assertTrue(all(not Path(path).exists() for path in paths))
 
     def test_error_never_contains_command_or_secret(self):
@@ -140,18 +141,19 @@ class LocalVoiceTests(unittest.TestCase):
             self.assertTrue(kwargs["start_new_session"])
             self.assertNotIn("shell", kwargs)
 
-    def test_native_8khz_wave_resamples_to_16khz_frames(self):
-        with tempfile.TemporaryDirectory() as directory:
-            filename = str(Path(directory) / "native.wav")
-            with wave.open(filename, "wb") as output:
-                output.setparams((1, 2, 8000, 0, "NONE", "not compressed"))
-                output.writeframes(b"\x00\x10" * 960)  # 120 ms at the model's native rate.
-            with patch.object(self.transport._codec, "encode", return_value=b"packet") as encode, patch("apps.companion.local_voice.time.sleep"):
-                self.transport._play(self.transport._generation, filename)
-                self.assertEqual(encode.call_count, 2)
-                self.assertTrue(all(len(call.args[0]) == 1920 for call in encode.call_args_list))
-                self.assertEqual(encode.call_args_list[0].args[0][:8], b"\x00\x10" * 4)
-            self.assertEqual(self.messages, [b"packet", b"packet"])
+    def test_native_wave_is_owned_bit_exact_pcm_without_codec_or_resampling(self):
+        for rate in (8000, 22050, 48000):
+            self.messages.clear()
+            with tempfile.TemporaryDirectory() as directory:
+                filename = str(Path(directory) / "native.wav")
+                original = b"\x00\x10\xff\x7f\x00\x80" * 173
+                with wave.open(filename, "wb") as output:
+                    output.setparams((1, 2, rate, 0, "NONE", "not compressed"))
+                    output.writeframes(original)
+                with patch.object(self.transport._codec, "encode", side_effect=AssertionError("lossy encode")):
+                    self.transport._play(self.transport._generation, filename)
+            # The temporary WAV is gone; the queued PCM remains complete.
+            self.assertEqual(self.messages, [PcmAudio(original, rate)])
 
     def test_wav_duration_limit(self):
         with tempfile.TemporaryDirectory() as directory:

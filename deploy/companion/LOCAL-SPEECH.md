@@ -97,3 +97,13 @@ perf stat -p "$WORKER_PID" -e task-clock,context-switches,page-faults,cycles,ins
 VITS输出时长有随机波动，因此比较合成速度时要看RTF，不能只比同一句话的一次墙钟时间。
 首次请求单列为warm-up；热结果用中位数，短测不能替代数小时稳定性和温升验收。
 perf record可按49Hz低频采样，先读perf报告再决定是否继续优化模型；不要默认改CPU频率或全局调度。
+
+
+## 本地播放保真
+
+本地合成输出直接以有界原生PCM任务交给aplay/ALSA，保持原采样率；
+不再走8k→16k软件重采样和Opus编解码。ALSA设备plug仍统一输出48k双声道给ES8389。
+任务持有bytes，临时WAV可安全删除；EOF后等待真实drain，静音/停止会终止播放器并丢弃旧generation。
+原生PCM最长45秒，仅允许一个本地任务在途；Android云Opus播放保持原协议。
+源WAV与对话送入aplay的PCM已在板端做逐字节相等验证。此保证针对同一WAV，
+不同文本/VITS随机韵律和电脑/开发板扬声器差异不在数字一致性保证内。

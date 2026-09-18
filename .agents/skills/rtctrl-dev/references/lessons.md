@@ -104,3 +104,12 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 连续10轮公开样本及确定性测试验证修复。CPU监控需包括模型子进程；按(PID,starttime)重置/proc差分，单核100%口径允许超过100。
 模型RSS随预热/长度增长，初次加载快照不是长期上限；线程数和arena策略应由板端perf及多轮RTF/RSS验证，不套用主机结论。
 证据：docs/verification-companion-performance-20260918.md。模型、runtime、allocator或进程架构变化时需重新验证。
+
+
+## 2026-09-18 本地TTS播放一致性
+
+本地生成WAV无须套用网络语音的Opus链路。以同一WAV比对进入aplay的实际PCM字节及rate，
+区分软件损失与扬声器听感；不要用不同次VITS生成波形当作严格相等基线。
+异步播放须持有有界bytes而非即将删除的临时路径，完成以EOF后的播放器drain为准；
+超时覆盖管道剩余音频时长，不能假设所有Linux管道都是8KiB而固定3秒。
+适用当前ALSA非实时AudioIO；改格式/播放器/缓冲策略后重验。证据见verification-companion-20260918.md最新章节。

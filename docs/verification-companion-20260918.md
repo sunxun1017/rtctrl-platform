@@ -206,3 +206,29 @@ release和asan CTest各21/21通过。增加ASR/TTS协议、私有目录/Unix soc
 
 
 后续perf与资源优化实测见[性能记录](verification-companion-performance-20260918.md)，其中多轮RSS约388MiB覆盖上述较早短时快照。
+
+
+## 2026-09-18 对话与音色一播放对齐
+
+用户确认参照聊天中的“音色一”WAV，板配置local_tts_speaker=0、VITS、speed1.0与试听相同。
+现场扬声器开启、音量85%、增益24dB、背光78%，本次保持不变。
+发现确定的链路差异：原试听WAV8k→ALSA48k；旧对话8k→audioop16k→Opus VOIP→解码16k→ALSA48k。
+原实现还将已生成WAV按60ms人工供料并保持aplay stdin打开。未观察到欠载日志，不能把欠载断言为既成根因。
+这能证明软件输出不对齐，不能证明用户听感差异全部来自Opus；电脑和板扬声器、音量、文本韵律亦有影响。
+
+修复：本地TTS持有有界PcmAudio(bytes,原生rate)，经Core local-only门控到AudioIO，不做中间重采样或Opus。
+单个任务最长45秒（8k最多720KB），不排队重叠本地话音。ALSA背压驱动写入，无人工发包节奏。
+临时WAV删除不影响持有的PCM；generation隔离中断。EOF后等待aplay真实退出，保持speaking直到尾音播放完成。
+drain超时覆盖预计管道剩余时长+3秒，避免64KiB管道在8k下超过3秒而截尾。Android仍走原Opus协议。
+本地audio_frames_received现在记录PCM任务接收次数，不能再解释为60ms Opus帧数。
+
+真机固定sid0 WAV经LocalVoiceTransport._play→Companion._message→AudioIO→真实aplay：
+原生rate8000、aplay参数8000，源78326字节，实际写入78326字节，逐字节相等。
+PCM SHA256：6e55d3fb4f1f78b5f6c40ad224c7aeb6606641ab00df1cf988bc6b36d12dec29c。
+原音频4.895375秒，测试到idle共5.174秒，errors为空；这是数字输入及播放完成验证，非声学录音或主观听感结论。
+对照旧路径生成82个Opus帧/4.92秒的WAV，已保存供同一电脑输出设备A/B试听。未采集新用户录音，未调用云API。
+
+最终应用包b24ee5da2247dc8bbf38e0bc1454a66ae7c29e9167730b46d85113d876bc0d7d，manifest35文件验证通过。
+release/asan的9组companion均通过；最后drain边界补丁后两套音频19项再次通过。当前155项companion有执行证据。
+覆盖：PCM精确字节/采样率、临时文件销毁后仍可用、等待真实drain、大管道超过3秒、打断堵塞旧输出后新输出、
+输入上限/禁止重叠、静音与turn门控、远端backend拒绝本地PCM。模型/音色未改变。

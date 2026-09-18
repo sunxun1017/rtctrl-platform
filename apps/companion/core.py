@@ -4,6 +4,7 @@ import queue
 import struct
 import threading
 import time
+from .audio import PcmAudio
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
 SILENCE_FRAME = bytes(1920)
@@ -305,6 +306,17 @@ class Companion:
         return False
 
     def _message(self, value):
+        if isinstance(value, PcmAudio):
+            if self.config.get("voice_backend") != "local":
+                raise ValueError("Local PCM is not accepted from an Android backend")
+            value.validate()
+            if self.accept_audio and not self.data["muted"] and self.audio:
+                self.audio.play_pcm(value)
+                self.turn_audio_frames_received += 1
+                self._set(voice_progress="receiving_audio")
+                with self.lock:
+                    self.data["metrics"]["audio_frames_received"] += 1
+            return
         if isinstance(value, bytes):
             if self.accept_audio and not self.data["muted"] and self.audio:
                 if len(value) > 4096:

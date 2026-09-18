@@ -92,6 +92,60 @@ class AudioTests(unittest.TestCase):
         for patcher in reversed(self.patchers):
             patcher.stop()
 
+    def test_pcm_native_rate_exact_bytes_and_wait_for_drain(self):
+        pcm = b"\x00\x10\xff\x7f\x00\x80" * 71
+        with mock.patch.object(FakeCodec, "decode", side_effect=AssertionError("lossy decode")):
+            self.io.play_pcm(audio.PcmAudio(pcm, 8000))
+            eventually(lambda: len(self.processes) == 1)
+            command, process = self.processes[0]
+            self.assertEqual(command[command.index("-r") + 1], "8000")
+            self.assertEqual(process.peer.read(len(pcm)), pcm)
+            eventually(lambda: process.stdin.closed)
+            self.assertTrue(self.io.playback_busy())
+            process.returncode = 0
+            eventually(lambda: not self.io.playback_busy())
+        self.assertEqual(self.errors, [])
+
+    def test_pcm_drain_allows_audio_buffered_in_large_pipe(self):
+        clock = [100.0]
+        with mock.patch.object(audio, "time", mock.Mock(monotonic=lambda: clock[0])), \
+                mock.patch.object(audio.os, "write", side_effect=lambda fd, data: len(data)):
+            self.io.play_pcm(audio.PcmAudio(b"x\0" * (8000 * 8), 8000))
+            eventually(lambda: len(self.processes) == 1 and self.processes[0][1].stdin.closed)
+            process = self.processes[0][1]
+            clock[0] = 104.0
+            time.sleep(.05)
+            self.assertEqual(self.errors, [])
+            self.assertTrue(self.io.playback_busy())
+            clock[0] = 108.5
+            process.returncode = 0
+            eventually(lambda: not self.io.playback_busy())
+
+    def test_pcm_interrupt_discards_blocked_old_audio(self):
+        self.io.play_pcm(audio.PcmAudio(b"x\0" * 80000, 8000))
+        eventually(lambda: len(self.processes) == 1)
+        old = self.processes[0][1]
+        self.io.interrupt()
+        self.assertTrue(old.terminated)
+        self.io.play_pcm(audio.PcmAudio(b"y\0" * 80, 8000))
+        eventually(lambda: len(self.processes) == 2)
+        new = self.processes[1][1]
+        self.assertEqual(new.peer.read(160), b"y\0" * 80)
+        eventually(lambda: new.stdin.closed)
+        new.returncode = 0
+        eventually(lambda: not self.io.playback_busy())
+        self.assertEqual(self.errors, [])
+
+    def test_pcm_bounds_and_no_overlapping_utterances(self):
+        for packet in (audio.PcmAudio(b"x", 8000), audio.PcmAudio(b"xx", True),
+                       audio.PcmAudio(b"xx", 12345), audio.PcmAudio(b"xx" * (8000 * 45 + 1), 8000)):
+            with self.assertRaises(ValueError):
+                self.io.play_pcm(packet)
+        with mock.patch.object(self.io, "_ensure_started"):
+            self.io.play_pcm(audio.PcmAudio(b"xx", 8000))
+            with self.assertRaises(audio.AudioError):
+                self.io.play_pcm(audio.PcmAudio(b"yy", 8000))
+
     def test_construct_does_not_open_microphone(self):
         self.assertEqual(self.processes, [])
         self.assertFalse(self.io.playback_busy())
