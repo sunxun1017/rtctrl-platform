@@ -1,5 +1,8 @@
 """RV1126B Melo hybrid synthesis; graph-specific 44.1 kHz decoder contract."""
 import ctypes
+import json
+import queue
+import threading
 from pathlib import Path
 
 RATE = 44100
@@ -35,16 +38,20 @@ def decode_chunks(latent, decoder):
     z = np.asarray(latent, dtype=np.float32)
     if z.ndim != 3 or z.shape[:2] != (1, 192) or not 0 < z.shape[2] <= 4000 or not np.isfinite(z).all():
         raise ValueError("Invalid Melo latent")
+    bucket = getattr(decoder, "frames", BUCKET)
+    if bucket not in (192, 256):
+        raise ValueError("Unsupported Melo decoder bucket")
+    core = bucket if z.shape[2] <= bucket else bucket - 2 * HALO
     length = z.shape[2]
     parts = []
-    for start in range(0, length, CORE):
-        end = min(length, start + CORE)
+    for start in range(0, length, core):
+        end = min(length, start + core)
         left, right = max(0, start - HALO), min(length, end + HALO)
         count = right - left
-        padded = np.zeros((1, 192, BUCKET), np.float32)
+        padded = np.zeros((1, 192, bucket), np.float32)
         padded[:, :, :count] = z[:, :, left:right]
         wave = np.asarray(decoder(padded, count), dtype=np.float32).reshape(-1)
-        if len(wave) != BUCKET * HOP or not np.isfinite(wave).all():
+        if len(wave) != bucket * HOP or not np.isfinite(wave).all():
             raise ValueError("Invalid Melo decoder output")
         parts.append(wave[(start - left) * HOP:(end - left) * HOP].copy())
     return np.concatenate(parts)
@@ -59,33 +66,73 @@ class MeloNpu:
         self.prefix = sherpa.OfflineTts(sherpa.OfflineTtsConfig(
             model=sherpa.OfflineTtsModelConfig(vits=sherpa.OfflineTtsVitsModelConfig(
                 model=str(hybrid / "prefix.onnx"), tokens=str(model / "tokens.txt"),
-                lexicon=str(model / "lexicon.txt"), dict_dir=str(model / "dict")), num_threads=threads),
+                lexicon=str(model / "lexicon.txt"), dict_dir=str(model / "dict")), num_threads=threads,
+                provider="cpu:" + str(Path(__file__).with_name("melo-cpu.conf"))),
             rule_fsts=",".join(str(model / name) for name in ("date.fst", "number.fst", "phone.fst")),
             max_num_sentences=1, silence_scale=1.0))
 
     def synthesize(self, text):
         import numpy as np
-        parts, failures = [], []
-        total = 0
-        def callback(samples, progress):
-            nonlocal total
+        # One queued latent plus one in flight; one decoder owns native context.
+        jobs = queue.Queue(maxsize=1)
+        stop = threading.Event()
+        producer_done = threading.Event()
+        parts, errors = [], []
+
+        def consumer():
+            total = 0
             try:
-                z = np.asarray(samples, dtype=np.float32)
-                if z.size % 192:
+                while not stop.is_set():
+                    try:
+                        z = jobs.get(timeout=.02)
+                    except queue.Empty:
+                        if producer_done.is_set():
+                            return
+                        continue
+                    wave = scale_silence(decode_chunks(z, self.decoder))
+                    total += len(wave)
+                    if total > RATE * 45:
+                        raise ValueError("Synthesized reply too long")
+                    parts.append(wave)
+            except BaseException as error:
+                errors.append(error)
+                stop.set()
+
+        def callback(samples, progress):
+            try:
+                values = np.asarray(samples, dtype=np.float32)
+                if (values.size == 0 or values.size % 192 or values.size > 192 * 4000 or
+                        not np.isfinite(values).all()):
                     raise ValueError("Invalid Melo prefix output")
-                wave = decode_chunks(z.reshape(1, 192, -1), self.decoder)
-                wave = scale_silence(wave)
-                total += len(wave)
-                if total > RATE * 45:
-                    raise ValueError("Synthesized reply too long")
-                parts.append(wave)
-                return 1
-            except Exception as error:
-                failures.append(error)
+                # Sherpa callback storage belongs to producer; always copy it.
+                latent = values.reshape(1, 192, -1).copy()
+                latent.flags.writeable = False
+                while not stop.is_set():
+                    try:
+                        jobs.put(latent, timeout=.02)
+                        return 1
+                    except queue.Full:
+                        pass
                 return 0
-        self.prefix.generate(text, sid=0, speed=1.0, callback=callback)
-        if failures:
-            raise RuntimeError("Melo synthesis failed") from failures[0]
+            except BaseException as error:
+                errors.append(error)
+                stop.set()
+                return 0
+
+        worker = threading.Thread(target=consumer, name="melo-decoder-pipeline")
+        worker.start()
+        try:
+            self.prefix.generate(text, sid=0, speed=1.0, callback=callback)
+        except BaseException as error:
+            errors.append(error)
+            stop.set()
+        finally:
+            producer_done.set()
+            # Native decoder call must finish before its context can be reused.
+            # No daemon leak or returning while a native call is still in flight.
+            worker.join()
+        if errors:
+            raise RuntimeError("Melo pipelined synthesis failed") from errors[0]
         if not parts:
             raise ValueError("Empty Melo synthesis")
         return np.concatenate(parts), RATE
@@ -106,16 +153,31 @@ class NativeDecoder:
         lib.melo_decoder_destroy.restype = ctypes.c_int
         lib.melo_decoder_error.argtypes = []
         lib.melo_decoder_error.restype = ctypes.c_char_p
-        self.context = lib.melo_decoder_create(str(Path(root) / "decoder-masked-256.rknn").encode())
+        lib.melo_decoder_frames.argtypes = [ctypes.c_void_p]
+        lib.melo_decoder_frames.restype = ctypes.c_uint
+        selection = Path(root) / "decoder.json"
+        filename = "decoder-masked-256.rknn"
+        if selection.exists():
+            if selection.stat().st_size > 4096:
+                raise ValueError("Invalid Melo decoder selection")
+            settings = json.loads(selection.read_text())
+            filename = settings.get("model") if isinstance(settings, dict) else None
+            if filename not in ("decoder-masked-192.rknn", "decoder-masked-256.rknn"):
+                raise ValueError("Unsupported Melo decoder model")
+        self.context = lib.melo_decoder_create(str(Path(root) / filename).encode())
         if not self.context:
             raise RuntimeError("Melo decoder initialization failed")
+        self.frames = int(lib.melo_decoder_frames(self.context))
+        if self.frames not in (192, 256):
+            self.close()
+            raise ValueError("Unsupported Melo decoder bucket")
 
     def __call__(self, latent, valid_length):
         import numpy as np
         data = np.ascontiguousarray(latent, dtype=np.float32)
-        if data.shape != (1, 192, BUCKET) or not 0 < valid_length <= BUCKET or not self.context:
+        if data.shape != (1, 192, self.frames) or not 0 < valid_length <= self.frames or not self.context:
             raise ValueError("Invalid decoder input")
-        output = np.empty(BUCKET * HOP, np.float32)
+        output = np.empty(self.frames * HOP, np.float32)
         pointer = ctypes.POINTER(ctypes.c_float)
         code = self.library.melo_decoder_run(self.context, data.ctypes.data_as(pointer),
                                             valid_length, output.ctypes.data_as(pointer))

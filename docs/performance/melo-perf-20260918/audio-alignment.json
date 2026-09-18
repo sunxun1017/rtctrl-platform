@@ -1,0 +1,101 @@
+[
+  {
+    "name": "dialogue-0",
+    "frames": 124,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 63488,
+    "samples256": 63488,
+    "post192": 63488,
+    "post256": 63488,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "dialogue-1",
+    "frames": 92,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 47104,
+    "samples256": 47104,
+    "post192": 47104,
+    "post256": 47104,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "dialogue-2",
+    "frames": 142,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 72704,
+    "samples256": 72704,
+    "post192": 72704,
+    "post256": 72704,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "dialogue-3",
+    "frames": 93,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 47616,
+    "samples256": 47616,
+    "post192": 47616,
+    "post256": 47616,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "dialogue-4",
+    "frames": 113,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 57856,
+    "samples256": 57856,
+    "post192": 57856,
+    "post256": 57856,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "dialogue-5",
+    "frames": 116,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 59392,
+    "samples256": 59392,
+    "post192": 59392,
+    "post256": 59392,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "short-0",
+    "frames": 125,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 64000,
+    "samples256": 64000,
+    "post192": 55732,
+    "post256": 55732,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "short-1",
+    "frames": 141,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 72192,
+    "samples256": 72192,
+    "post192": 72192,
+    "post256": 72192,
+    "note": "identical samples; zero error, SNR not finite"
+  },
+  {
+    "name": "long-946",
+    "frames": 946,
+    "snr_db": null,
+    "max_error": 0.0,
+    "samples192": 484352,
+    "samples256": 484352,
+    "post192": 418484,
+    "post256": 418484,
+    "note": "identical samples; zero error, SNR not finite"
+  }
+]

@@ -1,0 +1,14 @@
+# started on Fri Sep 18 11:53:07 2026
+
+
+ Performance counter stats for process id '1014':
+
+         17,320.50 msec task-clock                       #    0.787 CPUs utilized
+             5,085      context-switches                 #  293.583 /sec
+                68      cpu-migrations                   #    3.926 /sec
+             2,209      page-faults                      #  127.537 /sec
+    23,850,857,891      cycles                           #    1.377 GHz
+     9,563,503,468      instructions                     #    0.40  insn per cycle
+       113,743,658      cache-misses
+
+      22.020933677 seconds time elapsed

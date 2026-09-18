@@ -1,0 +1,18 @@
+{
+  "bucket": 192,
+  "halo": 16,
+  "core": 160,
+  "toolkit": "2.3.2",
+  "platform": "rv1126b",
+  "quantization": false,
+  "files": {
+    "decoder-masked-192.onnx": {
+      "sha256": "47157650b6b12caf44502b18cf6513b6db25e593cdd7c78b255a5c0dd012778e",
+      "bytes": 58177457
+    },
+    "decoder-masked-192.rknn": {
+      "sha256": "1b9a69ce036393c0153846f0efbefd2e072a915a27975fb02ce3b9b28db2f9ac",
+      "bytes": 30689115
+    }
+  }
+}

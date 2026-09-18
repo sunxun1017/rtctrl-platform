@@ -64,7 +64,7 @@ def validate(reference,padded,bucket,output_dir):
     exact=ort.InferenceSession(reference.SerializeToString(),options,providers=['CPUExecutionProvider'])
     masked=ort.InferenceSession(padded.SerializeToString(),options,providers=['CPUExecutionProvider'])
     rng=np.random.default_rng(20260918); report=[]
-    for length in (100,200):
+    for length in (100, min(200, bucket - 42)):
         z=rng.standard_normal((1,192,length)).astype(np.float32)
         baseline=exact.run(None,{LATENT:z})[0]
         inputs={LATENT:np.pad(z,((0,0),(0,0),(0,bucket-length)))}
@@ -107,7 +107,7 @@ def main():
     parser.add_argument('--build',action='store_true',help='Build nonquantized RV1126B RKNN using Toolkit2')
     parser.add_argument('--bucket',type=int,default=256)
     args=parser.parse_args()
-    if args.bucket<200:parser.error('bucket must be at least 200 for the validation cases')
+    if args.bucket not in (192,256):parser.error('supported buckets are 192 and 256')
     output_dir=args.output_dir.resolve();output_dir.mkdir(parents=True,exist_ok=True)
     source_path=args.source.resolve();source=onnx.load(source_path)
     metadata={x.key:x.value for x in source.metadata_props}

@@ -11,7 +11,7 @@
 #include <vector>
 
 namespace {
-constexpr size_t kFrames = 256, kChannels = 192, kSamples = 131072;
+constexpr size_t kChannels = 192;
 constexpr std::array<unsigned, 6> kScales{{1, 8, 64, 128, 256, 512}};
 thread_local char error_text[512] = {};
 void error(const char* message, int code = 0) {
@@ -19,6 +19,7 @@ void error(const char* message, int code = 0) {
 }
 struct Decoder {
     rknn_context context = 0;
+    unsigned frames = 0;
     std::array<std::vector<float>, 7> data;
     std::array<rknn_input, 7> inputs{};
     std::vector<float> result;
@@ -106,16 +107,33 @@ void* melo_decoder_create(const char* path) {
             error("expected seven inputs and one output");
             return nullptr;
         }
-        if (!tensor(d->context, 0, false, "/Mul_10_output_0", kChannels, kFrames) ||
-            !tensor(d->context, 0, true, "y", 1, kSamples))
+        rknn_tensor_attr latent_attr{};
+        latent_attr.index = 0;
+        rc = rknn_query(
+            d->context, RKNN_QUERY_INPUT_ATTR, &latent_attr, sizeof(latent_attr));
+        if (rc != RKNN_SUCC) {
+            error("latent query failed", rc);
             return nullptr;
-        d->data[0].resize(kChannels * kFrames);
+        }
+        if (shape(latent_attr, kChannels, 192))
+            d->frames = 192;
+        else if (shape(latent_attr, kChannels, 256))
+            d->frames = 256;
+        else {
+            error("expected latent [1,192,192] or [1,192,256]");
+            return nullptr;
+        }
+        if (!tensor(
+                d->context, 0, false, "/Mul_10_output_0", kChannels, d->frames) ||
+            !tensor(d->context, 0, true, "y", 1, d->frames * 512))
+            return nullptr;
+        d->data[0].resize(kChannels * d->frames);
         for (unsigned i = 0; i < 6; i++) {
             char name[32];
             std::snprintf(name, sizeof(name), "mask_%u", kScales[i]);
-            if (!tensor(d->context, i + 1, false, name, 1, kFrames * kScales[i]))
+            if (!tensor(d->context, i + 1, false, name, 1, d->frames * kScales[i]))
                 return nullptr;
-            d->data[i + 1].resize(kFrames * kScales[i]);
+            d->data[i + 1].resize(d->frames * kScales[i]);
         }
         for (unsigned i = 0; i < 7; i++) {
             auto& in = d->inputs[i];
@@ -126,7 +144,7 @@ void* melo_decoder_create(const char* path) {
             in.buf = d->data[i].data();
             in.size = d->data[i].size() * sizeof(float);
         }
-        d->result.resize(kSamples);
+        d->result.resize(d->frames * 512);
         return d.release();
     } catch (const std::exception& e) {
         error(e.what());
@@ -141,17 +159,21 @@ int melo_decoder_run(void* opaque,
                      unsigned valid_length,
                      float* output) {
     error_text[0] = 0;
-    if (!opaque || !latent || !output || valid_length < 1 ||
-        valid_length > kFrames) {
-        error("invalid pointer or valid_length outside 1..256");
+    if (!opaque || !latent || !output) {
+        error("invalid pointer");
         return -1;
     }
     auto& d = *static_cast<Decoder*>(opaque);
-    // Caller supplies [192,256]. Ignore padding, preventing stale/NaN tail
+    if (valid_length < 1 || valid_length > d.frames) {
+        error("valid_length outside model frame count");
+        return -1;
+    }
+    const size_t samples = d.frames * 512;
+    // Caller supplies [192,frames]. Ignore padding, preventing stale/NaN tail
     // contamination.
     for (unsigned c = 0; c < kChannels; c++) {
-        const float* src = latent + c * kFrames;
-        float* dst = d.data[0].data() + c * kFrames;
+        const float* src = latent + c * d.frames;
+        float* dst = d.data[0].data() + c * d.frames;
         for (unsigned t = 0; t < valid_length; t++) {
             if (!std::isfinite(src[t])) {
                 error("non-finite latent value");
@@ -159,7 +181,7 @@ int melo_decoder_run(void* opaque,
             }
             dst[t] = src[t];
         }
-        std::fill(dst + valid_length, dst + kFrames, 0.0f);
+        std::fill(dst + valid_length, dst + d.frames, 0.0f);
     }
     for (unsigned i = 0; i < 6; i++) {
         auto& mask = d.data[i + 1];
@@ -182,13 +204,13 @@ int melo_decoder_run(void* opaque,
     out.want_float = 1;
     out.is_prealloc = 1;
     out.buf = d.result.data();
-    out.size = kSamples * sizeof(float);
+    out.size = samples * sizeof(float);
     rc = rknn_outputs_get(d.context, 1, &out, nullptr);
     if (rc != RKNN_SUCC) {
         error("outputs_get failed", rc);
         return -1;
     }
-    bool valid = out.buf == d.result.data() && out.size == kSamples * sizeof(float);
+    bool valid = out.buf == d.result.data() && out.size == samples * sizeof(float);
     if (valid)
         for (float value : d.result)
             if (!std::isfinite(value)) {
@@ -204,8 +226,16 @@ int melo_decoder_run(void* opaque,
         error("invalid output size/buffer/non-finite values");
         return -1;
     }
-    std::memcpy(output, d.result.data(), kSamples * sizeof(float));
+    std::memcpy(output, d.result.data(), samples * sizeof(float));
     return 0;
+}
+unsigned melo_decoder_frames(void* opaque) {
+    error_text[0] = 0;
+    if (!opaque) {
+        error("invalid context");
+        return 0;
+    }
+    return static_cast<Decoder*>(opaque)->frames;
 }
 int melo_decoder_destroy(void* opaque) {
     error_text[0] = 0;

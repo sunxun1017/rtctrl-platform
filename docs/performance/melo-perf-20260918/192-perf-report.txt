@@ -1,0 +1,20 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 2K of event 'cycles'
+# Event count (approx.): 60957126281
+#
+# Overhead  Command   Shared Object                                       Symbol
+# ........  ........  ..................................................  .......................................................................................................................................................................................................................................................................................................
+#
+    59.93%  python3   libonnxruntime.so                                   [.] MlasSgemmKernelAdd
+    15.48%  python3   libonnxruntime.so                                   [.] MlasSgemmKernelZero
+     6.34%  python3   libonnxruntime.so                                   [.] _Z18MlasSgemmCopyPackBPfPKfmmm
+     1.48%  python3   libonnxruntime.so                                   [.] _ZN11onnxruntime12_GLOBAL__N_110ComputeJobIffvEEvPKT_S4_S4_lllPKfS6_fbPS2_PT0_S9_St10shared_ptrINS_10IAllocatorEE.constprop.0
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

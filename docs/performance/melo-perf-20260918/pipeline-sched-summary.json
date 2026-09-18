@@ -1,0 +1,31 @@
+{
+  "available": true,
+  "reason": null,
+  "elapsed_s": 28.189009347000137,
+  "observed_events": 40499,
+  "first_timestamp": 4288.617948,
+  "last_timestamp": 4316.803522,
+  "intervals": "between observed transitions; leading/trailing partial intervals omitted",
+  "tids": {
+    "31646": {
+      "running_s": 24.951370000003408,
+      "runnable_s": 0.15510099999664817,
+      "sleeping_s": 3.079103000000032,
+      "switches_in": 711,
+      "wakeups": 20,
+      "offcpu_s": 3.23420399999668
+    },
+    "31653": {
+      "running_s": 21.156353000040326,
+      "runnable_s": 0.6905980000346972,
+      "sleeping_s": 5.815910999925109,
+      "switches_in": 13712,
+      "wakeups": 11642,
+      "offcpu_s": 6.506508999959806
+    }
+  },
+  "lost_events": false,
+  "reliable_intervals": true,
+  "buffer_kb_per_cpu": 2048,
+  "cleanup_errors": []
+}

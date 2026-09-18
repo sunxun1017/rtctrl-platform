@@ -1,0 +1,14 @@
+# started on Fri Sep 18 11:42:26 2026
+
+
+ Performance counter stats for process id '28939':
+
+         45,257.00 msec task-clock                       #    0.869 CPUs utilized
+            13,342      context-switches                 #  294.805 /sec
+               154      cpu-migrations                   #    3.403 /sec
+             4,976      page-faults                      #  109.950 /sec
+    62,498,029,050      cycles                           #    1.381 GHz
+    27,078,433,996      instructions                     #    0.43  insn per cycle
+       306,948,332      cache-misses
+
+      52.052424692 seconds time elapsed

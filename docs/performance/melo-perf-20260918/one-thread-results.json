@@ -1,0 +1,54 @@
+[
+  {
+    "round": 0,
+    "text": "short",
+    "threads": 1,
+    "wall": 4.586802211000759,
+    "cpu": 3.6333832420000007,
+    "audio_seconds": 2.9009750566893424,
+    "decoder": 0.9644384160001209,
+    "silence": 0.017655168000601407,
+    "blocks": 2,
+    "prefix_and_python": 3.6047086270000364,
+    "rss_kib": 272620
+  },
+  {
+    "round": 0,
+    "text": "dialogue",
+    "threads": 1,
+    "wall": 12.08962329699989,
+    "cpu": 9.282045167000003,
+    "audio_seconds": 7.894784580498866,
+    "decoder": 2.886709585999597,
+    "silence": 0.042350583000370534,
+    "blocks": 6,
+    "prefix_and_python": 9.160563127999922,
+    "rss_kib": 275260
+  },
+  {
+    "round": 1,
+    "text": "short",
+    "threads": 1,
+    "wall": 4.565886501999557,
+    "cpu": 3.6292348610000005,
+    "audio_seconds": 2.9020634920634922,
+    "decoder": 0.9625516249989232,
+    "silence": 0.018696124999223684,
+    "blocks": 2,
+    "prefix_and_python": 3.5846387520014105,
+    "rss_kib": 275260
+  },
+  {
+    "round": 1,
+    "text": "dialogue",
+    "threads": 1,
+    "wall": 12.179003088999707,
+    "cpu": 9.305222770999997,
+    "audio_seconds": 7.894784580498866,
+    "decoder": 2.890918920000331,
+    "silence": 0.041528956999172806,
+    "blocks": 6,
+    "prefix_and_python": 9.246555212000203,
+    "rss_kib": 275260
+  }
+]

@@ -1,0 +1,14 @@
+# started on Fri Sep 18 11:40:24 2026
+
+
+ Performance counter stats for process id '28063':
+
+         49,036.48 msec task-clock                       #    0.980 CPUs utilized
+             1,715      context-switches                 #   34.974 /sec
+                32      cpu-migrations                   #    0.653 /sec
+             1,308      page-faults                      #   26.674 /sec
+    67,828,186,962      cycles                           #    1.383 GHz
+    32,828,026,784      instructions                     #    0.48  insn per cycle
+       311,123,946      cache-misses
+
+      50.052821316 seconds time elapsed

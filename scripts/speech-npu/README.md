@@ -147,6 +147,37 @@ number.fst, phone.fst and LICENSE under `<local_speech_root>/vits-melo-tts-zh_en
 Use `local_tts_kind=melo_npu`, speaker0. The full CPU model is needed only for `melo`.
 Do not replace system librknnrt. Preserve the previous voice configuration/model for rollback.
 
-Python adapter keeps complete sherpa batches, uses 256-frame decoder windows with
+Python adapter keeps complete sherpa batches, uses 192- or 256-frame decoder windows with
 16-frame context, then applies upstream silence compression once per batch.
 See ../../docs/verification-tts-naturalness-20260918.md for board results and limitations.
+
+
+### Measured resource/latency tuning
+
+The optimized board selects `decoder-masked-192.rknn` with
+`<local_speech_root>/melo-npu/decoder.json` containing
+`{"model":"decoder-masked-192.rknn"}`. Without this file the adapter chooses256;
+only those two filenames and validated tensor shapes are allowed. Rebuild/install
+libmelo_decoder.so together with the Python adapter: the ABI now exposes
+melo_decoder_frames(context), and buffers must use the returned size.
+The converter supports `--bucket 192`; keep256 model for rollback.
+
+CPU prefix uses the packaged melo-cpu.conf to disable idle thread spinning.
+One bounded queue overlaps the next CPU prefix batch with current NPU decode;
+wave order and complete-batch silence scaling remain unchanged. These changes
+trade a small bounded staging buffer for lower wall time; CPU percentage during
+synthesis can increase even when total CPU seconds do not.
+
+For repeatable fixed-text profiling, stop the interactive service first and run:
+
+```sh
+python3 deploy/companion/profile-melo.py --root /userdata/rtctrl-speech \
+  --output /tmp/melo-profile-new --rounds 3 --perf --ftrace
+perf report --stdio -i /tmp/melo-profile-new/perf.data
+```
+
+It refuses an already-running speech worker, excludes load/warmup from rounds,
+uses an isolated ftrace instance, reports lost events, and removes only its own
+instance. Main/ORT startup TIDs are traced; transient decoder threads are not in
+that scheduler summary. Raw perf and trace outputs require checking loss/cleanup
+status before drawing conclusions. No microphone, cloud requests or playback.

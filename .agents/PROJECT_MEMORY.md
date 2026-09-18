@@ -197,3 +197,15 @@ ASR仍NPU；Melo中文前端/flow在CPU，decoder FP16在NPU，44.1kHz PCM，256
 本次每个完整sherpa批次才ScaleSilence(.2)，168组上游C++对照逐样本相同。
 正式worker健康检查/固定文字输出成功；release/asan各10组companion通过。原模型/配置备份可回退，未改自启动。
 依据：[Melo验证记录](../docs/verification-tts-naturalness-20260918.md)。
+
+
+## 2026-09-18 Melo perf/ftrace优化已验证
+
+在57b0176的Melo基础上，192帧NPU块+禁ORT空转+容量1队列并行CPU前缀/NPU解码。
+热3轮中位短句3.352→2.805s、长句9.129→6.573s（-16%/-28%，不含ASR/云/播放）；总CPU秒基本持平。
+峰值RSS约271MiB，人脸仍30FPS；模型初始化约21s未变。单线程更慢，保持双线程。
+板端decoder.json选192，256模型及旧库/代码备份保留；新ABI含melo_decoder_frames，Python/库必须配套。
+8段真实latent及946帧长样本192/256逐样本相同；流水线476084样本与串行完全一致。
+ftrace使用独立instance且清理，全局trace不变；nospin早期512KB trace丢事件不作为调度证据，最终2048KB无丢失。
+perf在此BSP需等目标退出收尾；复用工具profile-melo.py采用父控制器+独立benchmark子进程，避免附加自身后等待死结。
+结论与测量边界见[性能验证](../docs/verification-melo-performance-20260918.md)。

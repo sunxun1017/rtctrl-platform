@@ -51,7 +51,20 @@ class MeloTests(unittest.TestCase):
                 return np.repeat(padded[0,0],m.HOP)
             got=m.decode_chunks(z,decoder)
             np.testing.assert_array_equal(got,np.repeat(z[0,0],m.HOP))
-            self.assertEqual(len(calls),(length+m.CORE-1)//m.CORE)
+            self.assertEqual(len(calls), 1 if length <= m.BUCKET else (length+m.CORE-1)//m.CORE)
+
+    def test_192_bucket_preserves_context_boundaries(self):
+        for length in (1, 159, 160, 161, 176, 192, 320, 321, 946, 4000):
+            z = np.broadcast_to(np.arange(length, dtype=np.float32), (1, 192, length))
+            def decoder(padded, count):
+                self.assertEqual(padded.shape, (1, 192, 192))
+                self.assertTrue(np.all(padded[:, :, count:] == 0))
+                return np.repeat(padded[0, 0], m.HOP)
+            decoder.frames = 192
+            np.testing.assert_array_equal(m.decode_chunks(z, decoder), np.repeat(z[0, 0], m.HOP))
+        decoder.frames = 128
+        with self.assertRaises(ValueError):
+            m.decode_chunks(z, decoder)
 
     def test_bad_latents_and_decoder_output(self):
         for z in (np.zeros((1,192,0)),np.zeros((1,192,4001)),np.zeros((192,3)),np.zeros((1,191,3)),np.full((1,192,3),np.nan)):

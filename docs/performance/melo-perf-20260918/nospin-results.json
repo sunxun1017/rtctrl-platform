@@ -1,0 +1,80 @@
+[
+  {
+    "round": 0,
+    "text": "short",
+    "threads": 2,
+    "wall": 3.387325667999903,
+    "cpu": 3.954789990000002,
+    "audio_seconds": 2.9028798185941045,
+    "decoder": 1.2764803339996433,
+    "silence": 0.01785233300006439,
+    "blocks": 2,
+    "prefix_and_python": 2.0929930010001954,
+    "rss_kib": 272940
+  },
+  {
+    "round": 0,
+    "text": "dialogue",
+    "threads": 2,
+    "wall": 9.249012795999988,
+    "cpu": 10.133649422000001,
+    "audio_seconds": 7.894784580498866,
+    "decoder": 3.8312933779998275,
+    "silence": 0.04280995799945231,
+    "blocks": 6,
+    "prefix_and_python": 5.374909460000708,
+    "rss_kib": 275052
+  },
+  {
+    "round": 1,
+    "text": "short",
+    "threads": 2,
+    "wall": 3.3885034179998,
+    "cpu": 3.954524278000001,
+    "audio_seconds": 2.9036734693877553,
+    "decoder": 1.2768991670004652,
+    "silence": 0.01842983299957268,
+    "blocks": 2,
+    "prefix_and_python": 2.0931744179997622,
+    "rss_kib": 275052
+  },
+  {
+    "round": 1,
+    "text": "dialogue",
+    "threads": 2,
+    "wall": 9.242696170999807,
+    "cpu": 10.117040711000001,
+    "audio_seconds": 7.894784580498866,
+    "decoder": 3.828020294999533,
+    "silence": 0.04146566800000073,
+    "blocks": 6,
+    "prefix_and_python": 5.373210208000273,
+    "rss_kib": 275052
+  },
+  {
+    "round": 2,
+    "text": "short",
+    "threads": 2,
+    "wall": 3.387339084999894,
+    "cpu": 3.9564101929999964,
+    "audio_seconds": 2.9027891156462586,
+    "decoder": 1.2742064999997638,
+    "silence": 0.016636665999612887,
+    "blocks": 2,
+    "prefix_and_python": 2.0964959190005175,
+    "rss_kib": 275052
+  },
+  {
+    "round": 2,
+    "text": "dialogue",
+    "threads": 2,
+    "wall": 9.279018878999977,
+    "cpu": 10.139457649,
+    "audio_seconds": 7.894784580498866,
+    "decoder": 3.8399310849990798,
+    "silence": 0.04183870699989711,
+    "blocks": 6,
+    "prefix_and_python": 5.397249087001001,
+    "rss_kib": 275316
+  }
+]

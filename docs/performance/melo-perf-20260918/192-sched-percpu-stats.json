@@ -1,0 +1,6 @@
+{
+  "cpu0": "entries: 8810\noverrun: 6046\ncommit overrun: 0\nbytes: 522860\noldest event ts:  4030.719346\nnow ts:  4066.171954\ndropped events: 0\nread events: 0\n",
+  "cpu1": "entries: 3668\noverrun: 0\ncommit overrun: 0\nbytes: 227016\noldest event ts:  4021.671183\nnow ts:  4066.173340\ndropped events: 0\nread events: 0\n",
+  "cpu2": "entries: 8869\noverrun: 1987\ncommit overrun: 0\nbytes: 524764\noldest event ts:  4032.110434\nnow ts:  4066.173750\ndropped events: 0\nread events: 0\n",
+  "cpu3": "entries: 8720\noverrun: 475\ncommit overrun: 0\nbytes: 522836\noldest event ts:  4022.556614\nnow ts:  4066.174128\ndropped events: 0\nread events: 0\n"
+}
