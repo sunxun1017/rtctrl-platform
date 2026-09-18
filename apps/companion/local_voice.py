@@ -6,6 +6,7 @@ clients call the resident speech worker; model inference is serialized.
 import http.client
 import json
 import os
+import queue
 from pathlib import Path
 import signal
 import socket
@@ -32,6 +33,8 @@ class LocalVoiceTransport:
         self._process = None
         self._worker = None
         self._codec = None
+        self._asr_stream = None
+        self._frames = None
         self._http = None
         self._session = uuid.uuid4().hex
 
@@ -68,6 +71,9 @@ class LocalVoiceTransport:
         with self._lock:
             if not self._closed:
                 raise RuntimeError("Local voice already connected")
+            if self.config.get("local_asr_streaming"):
+                from .streaming_asr import StreamingAsr
+                self._asr_stream = StreamingAsr(self.config["local_speech_root"])
             self._codec = OpusCodec()
             self._closed = False
 
@@ -88,6 +94,9 @@ class LocalVoiceTransport:
             if isinstance(value, bytes):
                 if self._recording:
                     pcm = self._codec.decode(value)
+                    if self._asr_stream:
+                        self.send_pcm(pcm)
+                        return
                     limit = int(min(60, self.config.get("max_listen_s", 15)) * 32000)
                     if len(self._pcm) + len(pcm) > limit + 3840:
                         raise ValueError("Local recording exceeds configured duration")
@@ -105,14 +114,71 @@ class LocalVoiceTransport:
                 self._cancel()
                 self._codec.reset_decoder()
                 self._recording = True
+                if self._asr_stream:
+                    self._frames = queue.Queue(maxsize=32)
+                    self._worker = threading.Thread(target=self._stream_turn,
+                        args=(self._generation, self._frames, value.get("mode") == "auto"),
+                        name="companion-stream-asr", daemon=True)
+                    self._worker.start()
             elif kind == "listen" and state == "stop" and self._recording:
                 self._recording = False
+                if self._asr_stream:
+                    self._frames.put_nowait(None)
+                    return
                 pcm = bytes(self._pcm)
                 self._pcm.clear()
                 generation = self._generation
                 self._worker = threading.Thread(target=self._run, args=(generation, pcm),
                                                 name="companion-local-voice", daemon=True)
                 self._worker.start()
+
+    def send_pcm(self, pcm):
+        """Local-only PCM path: avoid Opus encode/decode before recognition."""
+        with self._lock:
+            if self._closed:
+                raise RuntimeError("Local voice is closed")
+            if self._recording and self._asr_stream:
+                if not isinstance(pcm, bytes) or not pcm or len(pcm) > FRAME_BYTES or len(pcm) % 2:
+                    raise ValueError("Invalid local PCM frame")
+                self._frames.put_nowait(pcm)
+
+    def _stream_turn(self, generation, frames, automatic):
+        try:
+            self._asr_stream.exchange(3)
+            previous = ""
+            started = time.monotonic()
+            while self._active(generation):
+                try:
+                    pcm = frames.get(timeout=.2)
+                except queue.Empty:
+                    if time.monotonic() - started > min(30, self.config.get("max_listen_s", 30)) + 5:
+                        raise TimeoutError("No capture progress")
+                    continue
+                if pcm is None:
+                    break
+                result = self._asr_stream.exchange(1, pcm)
+                text = result.get("text", "")
+                if text != previous:
+                    previous = text
+                    self._emit(generation, {"type": "stt", "text": text, "partial": True})
+                if automatic and result.get("endpoint"):
+                    with self._lock:
+                        if not self._active(generation):
+                            return
+                        self._recording = False
+                    self._emit(generation, {"type": "asr_endpoint"})
+                    break
+            if not self._active(generation):
+                return
+            text = self._asr_stream.exchange(2).get("text", "").strip()
+            if not text:
+                self._emit(generation, {"type": "asr_empty"})
+                return
+            self._run(generation, None, recognized_text=text)
+        except Exception:
+            with self._lock:
+                if self._active(generation):
+                    self.on_error("流式识别失败或超时，已停止采音，请重新准备语音")
 
     @staticmethod
     def _terminate(process):
@@ -127,6 +193,11 @@ class LocalVoiceTransport:
         self._generation += 1
         self._recording = False
         self._pcm.clear()
+        if self._frames:
+            try:
+                self._frames.put_nowait(None)
+            except queue.Full:
+                pass
         self._terminate(self._process)
         if self._http:
             self._http.close()
@@ -135,6 +206,8 @@ class LocalVoiceTransport:
         with self._lock:
             self._closed = True
             self._cancel()
+            if self._asr_stream:
+                self._asr_stream.close()
             if self._codec:
                 self._codec.close()
                 self._codec = None
@@ -208,25 +281,27 @@ class LocalVoiceTransport:
                 if self._http is connection:
                     self._http = None
 
-    def _run(self, generation, pcm):
+    def _run(self, generation, pcm, recognized_text=None):
         stage = "录音"
         try:
-            if not pcm:
+            if recognized_text is None and not pcm:
                 raise RuntimeError("No local microphone audio received")
             with tempfile.TemporaryDirectory(prefix="rtctrl-voice-") as directory:
                 source, result, speech = [str(Path(directory) / name) for name in ("input.wav", "asr.json", "reply.wav")]
-                with wave.open(source, "wb") as output:
-                    output.setparams((1, 2, 16000, 0, "NONE", "not compressed"))
-                    output.writeframes(pcm)
-                del pcm
-                stage = "本地语音识别"
-                self._execute(generation, self.config["local_asr_command"], "local_asr_timeout_s", input=source, output=result, text="")
-                if Path(result).stat().st_size > 16384:
-                    raise ValueError("Local ASR result too large")
-                text = json.loads(Path(result).read_text(encoding="utf-8"))["text"]
+                text = recognized_text
+                if text is None:
+                    with wave.open(source, "wb") as output:
+                        output.setparams((1, 2, 16000, 0, "NONE", "not compressed"))
+                        output.writeframes(pcm)
+                    del pcm
+                    stage = "本地语音识别"
+                    self._execute(generation, self.config["local_asr_command"], "local_asr_timeout_s", input=source, output=result, text="")
+                    if Path(result).stat().st_size > 16384:
+                        raise ValueError("Local ASR result too large")
+                    text = json.loads(Path(result).read_text(encoding="utf-8"))["text"]
                 if not isinstance(text, str) or not text.strip() or len(text) > 4096:
                     raise RuntimeError("Local ASR did not recognize speech")
-                self._emit(generation, {"type": "stt", "text": text.strip()})
+                self._emit(generation, {"type": "stt", "text": text.strip(), "partial": False})
                 if not self._active(generation):
                     return
                 stage = "千帆文字回答"

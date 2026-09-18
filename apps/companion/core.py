@@ -26,6 +26,8 @@ class Companion:
         self.audio = self.codec = self.transport = None
         self.generation = 0
         self.capture_epoch = 0
+        self.auto_until = 0.
+        self.auto_due = 0.
         self.turn_audio_frames_sent = 0
         self.turn_audio_frames_received = 0
         self.silence_remaining = 0
@@ -38,11 +40,13 @@ class Companion:
         self.accept_audio = False
         self.data = {
             "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
-            "error": "", "connected": False, "muted": True, "voice_progress": "idle",
+            "error": "", "connected": False, "muted": True, "continuous": False, "transcript_partial": False, "voice_progress": "idle",
             "face": {"available": False, "reason": "尚未连接视觉服务"},
             "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0,
                         "capture_peak_amplitude": 0},
             "capabilities": {"mode": config["mode"], "voice": "push-to-talk",
+                "streaming_asr": config.get("local_asr_streaming", False),
+                "automatic_endpoint": config.get("local_asr_streaming", False),
                 "wake_word": False, "aec": False, "automatic_barge_in": False,
                 "actuator_control": False, "face": "external-read-only",
                 "voice_backend": config.get("voice_backend", "android"),
@@ -122,7 +126,10 @@ class Companion:
                             with self.lock:
                                 self.data["metrics"]["capture_peak_amplitude"] = max(
                                     self.data["metrics"]["capture_peak_amplitude"], peak)
-                            self.transport.send(self.codec.encode(pcm))
+                            if self.config.get("local_asr_streaming"):
+                                self.transport.send_pcm(pcm)
+                            else:
+                                self.transport.send(self.codec.encode(pcm))
                             self.turn_audio_frames_sent += 1
                             with self.lock:
                                 self.data["metrics"]["audio_frames_sent"] += 1
@@ -155,6 +162,8 @@ class Companion:
             self._fail("会话维护失败，已停止录放音；请重新连接")
 
     def _release(self):
+        self.auto_until = self.auto_due = 0.
+        self._set(continuous=False)
         self.generation += 1
         self.accept_audio = False
         self.deadline = self.demo_due = 0
@@ -182,9 +191,22 @@ class Companion:
     def _idle(self, progress="idle"):
         self.deadline = 0
         self._set(state="muted" if self.data["muted"] else "idle", emotion="neutral", voice_progress=progress)
+        if self.data["continuous"] and not self.data["muted"]:
+            self.auto_due = time.monotonic() + .4
 
     def _action(self, action):
-        if action == "connect":
+        if action == "continuous":
+            if not self.config.get("local_asr_streaming"):
+                raise ValueError("当前配置不支持流式对话")
+            if not self.data["connected"] or self.data["muted"] or self.data["state"] != "idle":
+                raise ValueError("请先准备语音并开启麦克风，等待当前对话结束")
+            self.auto_until = time.monotonic() + 15
+            self._set(continuous=True)
+            self._action("listen")
+        elif action == "keep_listening":
+            if self.data["continuous"]:
+                self.auto_until = time.monotonic() + 15
+        elif action == "connect":
             if self.data["connected"] or self.data["state"] == "connecting":
                 return
             self._release()
@@ -218,6 +240,8 @@ class Companion:
             self._release()
             self._set(state="offline", connected=False, emotion="neutral", voice_progress="idle")
         elif action == "mute":
+            self.auto_due = self.auto_until = 0.
+            self._set(continuous=False)
             reconnect = self._interrupt()
             self._set(muted=True)
             if reconnect:
@@ -245,12 +269,13 @@ class Companion:
             self.turn_audio_frames_received = 0
             with self.lock:
                 self.data["metrics"]["capture_peak_amplitude"] = 0
-            self._set(state="listening", transcript="", reply="", error="", emotion="neutral", voice_progress="recording")
-            self._send("listen", state="start", mode=self.config.get("listen_mode", "manual"))
+            self.auto_due = 0.
+            self._set(state="listening", transcript="", transcript_partial=False, reply="", error="", emotion="neutral", voice_progress="recording")
+            self._send("listen", state="start", mode="auto" if self.data["continuous"] else self.config.get("listen_mode", "manual"))
             generation = self.generation
             if self.audio:
                 self.audio.start(lambda pcm: self.post("pcm", (epoch, pcm), generation))
-            self.deadline = time.monotonic() + self.config["max_listen_s"]
+            self.deadline = time.monotonic() + min(self.config["max_listen_s"], 29 if self.config.get("local_asr_streaming") else 120)
         elif action == "stop":
             if self.data["state"] != "listening":
                 return
@@ -277,6 +302,8 @@ class Companion:
                 self._set(transcript="演示：你好，介绍一下你自己。", voice_progress="waiting_reply")
                 self.demo_phase, self.demo_due = 1, time.monotonic() + .5
         elif action == "interrupt":
+            self.auto_due = self.auto_until = 0.
+            self._set(continuous=False)
             reconnect = self._interrupt()
             if reconnect:
                 self._action("connect")
@@ -344,9 +371,18 @@ class Companion:
             return
         if not self.data["connected"] or (value.get("session_id") not in (None, self.session)):
             return
+        if kind == "asr_endpoint" and self.config.get("local_asr_streaming"):
+            if self.data["state"] == "listening":
+                self._action("stop")
+            return
+        if kind == "asr_empty" and self.config.get("local_asr_streaming"):
+            if self.data["state"] == "thinking":
+                self._set(transcript="", transcript_partial=False)
+                self._idle("no_speech")
+            return
         if kind == "stt" and self.data["state"] in ("listening", "thinking", "speaking"):
-            self._set(transcript=self._text(value.get("text", "")))
-            if self.data["state"] == "thinking" and self.data["transcript"] and not self.data["reply"]:
+            self._set(transcript=self._text(value.get("text", "")), transcript_partial=value.get("partial") is True)
+            if self.data["state"] == "thinking" and self.data["transcript"] and not self.data["reply"] and not self.data["transcript_partial"]:
                 self._set(voice_progress="waiting_reply")
         elif kind == "llm" and self.data["state"] in ("thinking", "speaking"):
             emotion = value.get("emotion", "neutral")
@@ -384,6 +420,13 @@ class Companion:
 
     def _tick(self):
         now = time.monotonic()
+        if self.data["continuous"] and now >= self.auto_until:
+            self._action("mute")
+            return
+        if self.auto_due and now >= self.auto_due:
+            self.auto_due = 0.
+            if self.data["continuous"] and self.data["connected"] and not self.data["muted"] and self.data["state"] == "idle":
+                self._action("listen")
         if self.silence_remaining and now >= self.silence_due:
             if self.data["state"] == "thinking" and self.data["connected"] and not self.data["muted"]:
                 self.transport.send(self.codec.encode(SILENCE_FRAME))

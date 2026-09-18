@@ -209,3 +209,14 @@ ASR仍NPU；Melo中文前端/flow在CPU，decoder FP16在NPU，44.1kHz PCM，256
 ftrace使用独立instance且清理，全局trace不变；nospin早期512KB trace丢事件不作为调度证据，最终2048KB无丢失。
 perf在此BSP需等目标退出收尾；复用工具profile-melo.py采用父控制器+独立benchmark子进程，避免附加自身后等待死结。
 结论与测量边界见[性能验证](../docs/verification-melo-performance-20260918.md)。
+
+
+## 2026-09-18 RKNN ASR流式与连续对话
+
+现有Zipformer改常驻native，跨PCM块保留缓存；local_asr_streaming默认false、板端true。
+公开5.61s样本首partial1.178s、约0.96s更新、6.84s输入触发端点；空音不发云、reset重放一致。
+真实应用接ASR+Melo夹具测试成功，用户麦克风/云端本轮未调用。新增17用例，release/asan各15组通过。
+连续模式显式开启，播放drain后恢复；静音/失败/断连撤销，控制台15s租约到期静音。
+ASR native RSS约17MiB不含NPU，整机准备后约681/970MiB（未加载ASR约550），人脸约30FPS。
+属于停顿断句而非语义标点；仍无AEC/唤醒词/直接说话打断。Melo音色不变。
+旧CLI与配置可回退；证据与限制见[流式验收](../docs/verification-streaming-asr-20260918.md)。

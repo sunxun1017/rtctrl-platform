@@ -15,7 +15,7 @@ DEFAULTS = {
     "face_poll_s": 1, "face_stale_s": 5,
     "voice_backend": "android", "qianfan_model": "ernie-4.5-turbo-32k",
     "qianfan_token_env": "BAIDU_QIANFAN_API_KEY", "qianfan_proxy_url": "",
-    "local_asr_backend": "cpu", "local_asr_command": [], "local_tts_command": [],
+    "local_asr_streaming": False, "local_asr_backend": "cpu", "local_asr_command": [], "local_tts_command": [],
     "local_asr_timeout_s": 60, "local_tts_timeout_s": 90,
     "local_speech_root": "", "local_speech_socket": "", "local_tts_kind": "vits", "local_tts_speaker": 0, "local_speech_threads": 2,
 
@@ -71,7 +71,7 @@ def validate(values):
             raise ValueError("qianfan_proxy_url must be a credential-free loopback HTTP CONNECT proxy")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    for key in ("wifi_enabled", "device_settings_enabled"):
+    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming"):
         if type(config[key]) is not bool:
             raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
@@ -89,6 +89,9 @@ def validate(values):
             raise ValueError(key + " must be an integer")
     if config["bind"] not in ("127.0.0.1", "localhost"):
         raise ValueError("bind must be loopback; use an SSH tunnel for remote control")
+    if config["local_asr_streaming"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
+            config["local_asr_backend"] != "rknn" or not config["local_speech_root"]):
+        raise ValueError("streaming ASR requires live local RKNN and model root")
     if config["mode"] == "live" and config["voice_backend"] == "local":
         if config["listen_mode"] != "manual":
             raise ValueError("local voice requires manual push-to-talk")

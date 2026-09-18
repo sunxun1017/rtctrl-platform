@@ -32,6 +32,18 @@ if(MODEL_ZOO_ROOT)
         "${Z}/3rdparty/kaldi_native_fbank/Linux/aarch64/libkaldi-native-fbank-core.a"
         pthread m)
     set_target_properties(rknn_zipformer_demo PROPERTIES SKIP_BUILD_RPATH TRUE)
+    add_executable(rknn_zipformer_stream zipformer_stream.cc
+        "${Z}/examples/zipformer/cpp/process.cc")
+    target_include_directories(rknn_zipformer_stream PRIVATE
+        "${Z}/examples/zipformer/cpp" "${Z}/utils" "${RKNN_SDK_ROOT}/include"
+        "${Z}/3rdparty/timer" "${Z}/3rdparty/libsndfile/include"
+        "${Z}/3rdparty/kaldi_native_fbank/include")
+    target_link_libraries(rknn_zipformer_stream PRIVATE
+        "${RKNN_SDK_ROOT}/aarch64/librknnrt.so"
+        "${Z}/3rdparty/kaldi_native_fbank/Linux/aarch64/libkaldi-native-fbank-core.a"
+        pthread m)
+    set_target_properties(rknn_zipformer_stream PROPERTIES SKIP_BUILD_RPATH TRUE)
+
 endif()
 # Deliberately no runtime-library installation: probes use the board's existing librknnrt.
 

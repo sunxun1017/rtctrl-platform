@@ -19,6 +19,7 @@
     let actionQueue = Promise.resolve();
     let actionError = "";
     let statusRevision = 0;
+    let lastLease = 0;
     let displayedError = "";
     function showError(message) {
         const value = String(message || "");
@@ -44,6 +45,7 @@
         const state = !reachable ? "offline" : (current.muted && current.state === "idle" ? "muted" : current.state);
         let [label, hint] = labels[state] || ["等待状态", "正在同步设备状态。"];
         const demo = current.capabilities && current.capabilities.mode === "demo";
+        const streaming = !!(current.capabilities && current.capabilities.streaming_asr);
         const local = !demo && current.capabilities && current.capabilities.voice_backend === "local";
         $("mode-banner").hidden = !demo && !local && reachable;
         $("mode-banner").textContent = demo ? "演示模式 · 模拟对话流程，不采集麦克风、不播放真实声音、不连接语音后端。" : local ? "本地识别与合成 · 千帆文字回答" : "正在获取设备运行模式…";
@@ -75,6 +77,19 @@
             }
             [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
         }
+        if (streaming) {
+            $("privacy-note").textContent = "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复采音；静音、离开页面或控制台失联后会停止。";
+            $("input-hint").textContent = current.continuous ? "连续对话中 · 停顿后自动提交 · 回答时暂停采音" : "可按住说话，或点击连续对话自动断句";
+            if (state === "muted") hint = "开启麦克风后，选择按住说话或连续对话。";
+            if (state === "idle") hint = "按住说话，或点击开始连续对话，停顿后自动提交。";
+            if (state === "listening") hint = current.continuous ? "边说边出字，停顿约 1～2 秒后自动提交。" : "正在实时识别，松开按钮提交这一句。";
+            if (current.voice_progress === "no_speech" && state === "idle") hint = "没有识别到话音，未发送云端。";
+        }
+        $("continuous").hidden = !streaming;
+        $("continuous").disabled = !reachable || pending > 0 || !current.connected || current.muted || (!current.continuous && current.state !== "idle");
+        $("continuous").textContent = current.continuous ? "结束连续对话" : "开始连续对话";
+        $("continuous").setAttribute("aria-pressed", String(!!current.continuous));
+        $("transcript-label").textContent = current.transcript_partial ? "你说 · 识别中" : "你说";
         $("avatar").dataset.voiceProgress = demo ? "receiving_audio" : current.voice_progress || (state === "speaking" ? "waiting_audio" : "idle");
         $("avatar").dataset.state = state;
         $("avatar").dataset.emotion = emotions[current.emotion] ? current.emotion : "neutral";
@@ -88,7 +103,7 @@
         $("mute").textContent = current.muted ? (demo ? "启用演示交互" : "开启麦克风") : (demo ? "暂停演示交互" : "立即静音");
         $("mute").setAttribute("aria-pressed", String(!!current.muted));
         $("mute").disabled = !reachable;
-        $("talk").disabled = !reachable || !current.connected || current.muted || (!held && (pending > 0 || !["idle", "listening"].includes(current.state)));
+        $("talk").disabled = !!current.continuous || !reachable || !current.connected || current.muted || (!held && (pending > 0 || !["idle", "listening"].includes(current.state)));
         $("talk").textContent = held ? (demo ? "模拟聆听 · 松开继续" : "正在听 · 松开结束") : (demo ? "按住体验对话" : "按住说话");
         if (held && ["thinking", "speaking", "error", "offline"].includes(current.state)) $("talk").textContent = "已结束录音 · 请松开";
         $("talk").classList.toggle("held", held && current.state === "listening");
@@ -128,7 +143,7 @@
         if (finite(m.local_speech_cpu_percent)) metrics.push("语音主进程 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");
         if (finite(m.local_speech_peak_rss_mb)) metrics.push("语音主进程峰值 " + m.local_speech_peak_rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_threads)) metrics.push("语音线程 " + m.local_speech_threads);
-        if (local && current.capabilities.local_asr_backend === "rknn") metrics.push("主进程统计不含临时NPU识别进程");
+        if (local && current.capabilities.local_asr_backend === "rknn") metrics.push("主进程统计不含独立NPU识别进程");
         if (local && m.local_speech_running === false) metrics.push("本地模型进程未运行");
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
@@ -143,7 +158,7 @@
         if (c.audio_input === false || c.recording === false) capabilities.push("录音未就绪");
         if (c.playback === false || c.audio_output === false) capabilities.push("播放未就绪");
         if (c.wake_word === false) capabilities.push("唤醒词未启用");
-        if (c.aec === false || c.automatic_barge_in === false) capabilities.push("按住说话；回答时请先点击停止，不支持直接说话打断");
+        if (c.aec === false || c.automatic_barge_in === false) capabilities.push((streaming ? "流式识别、停顿断句；" : "按住说话；") + "回答时请先点击停止，不支持直接说话打断");
         $("capabilities").textContent = capabilities.join(" · ");
         showError(actionError || (typeof current.error === "string" ? current.error : ""));
     }
@@ -179,6 +194,7 @@
         held = false;
         action("stop");
     }
+    $("continuous").addEventListener("click", () => { stopTalk(); action(current.continuous ? "mute" : "continuous"); });
     $("connect").addEventListener("click", () => { stopTalk(); action(current.connected ? "disconnect" : "connect"); });
     $("mute").addEventListener("click", () => { stopTalk(); action(current.muted ? "unmute" : "mute"); });
     $("interrupt").addEventListener("click", () => { stopTalk(); action("interrupt"); });
@@ -197,19 +213,25 @@
         if ([" ", "Enter"].includes(event.key)) { event.preventDefault(); stopTalk(); }
     });
     $("talk").addEventListener("blur", stopTalk);
-    window.addEventListener("blur", stopTalk);
-    document.addEventListener("visibilitychange", () => { if (document.hidden) stopTalk(); });
+    function leaveConversation() { stopTalk(); if (current.continuous) action("mute"); }
+    window.addEventListener("blur", leaveConversation);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) leaveConversation(); });
     window.addEventListener("pagehide", () => {
-        if (held) {
+        if (held || current.continuous) {
+            const stopAction = current.continuous ? "mute" : "stop";
             held = false;
             // Server-side recording timeout remains the fallback if this request is lost.
-            fetch("/api/action", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:"stop"}), keepalive:true}).catch(() => {});
+            fetch("/api/action", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:stopAction}), keepalive:true}).catch(() => {});
         }
     });
     async function poll() {
         const revision = statusRevision;
         try {
             const next = await request("/api/status");
+            if (next.continuous && !document.hidden && Date.now() - lastLease > 4000) {
+                await request("/api/action", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:"keep_listening"})});
+                lastLease = Date.now();
+            }
             if (revision === statusRevision && pending === 0) {
                 current = next;
                 reachable = true;
@@ -223,7 +245,7 @@
             render();
             showError("无法连接设备控制台，正在自动重试。");
         } finally {
-            setTimeout(poll, 1000);
+            setTimeout(poll, current.state === "listening" ? 250 : 1000);
         }
     }
     // Wi-Fi is managed independently from voice. Opening this panel only reads status.

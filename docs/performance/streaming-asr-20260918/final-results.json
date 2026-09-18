@@ -1,0 +1,155 @@
+{
+  "init_s": 0.3150192499997502,
+  "rows": [
+    {
+      "name": "public-1",
+      "wall_s": 7.060441211999205,
+      "changes": [
+        {
+          "at_s": 1.178,
+          "audio_s": 1.08,
+          "text": "对我做了"
+        },
+        {
+          "at_s": 2.1271,
+          "audio_s": 2.04,
+          "text": "对我做了介绍"
+        },
+        {
+          "at_s": 3.0846,
+          "audio_s": 3.0,
+          "text": "对我做了介绍那么我想说的是"
+        },
+        {
+          "at_s": 4.0392,
+          "audio_s": 3.96,
+          "text": "对我做了介绍那么我想说的是大家如果"
+        },
+        {
+          "at_s": 5.004,
+          "audio_s": 4.92,
+          "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣"
+        },
+        {
+          "at_s": 5.9603,
+          "audio_s": 5.88,
+          "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢"
+        }
+      ],
+      "endpoint": {
+        "type": "partial",
+        "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢",
+        "samples": 109440,
+        "audio_s": 6.84,
+        "trailing_blank_s": 1.52,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "final": {
+        "type": "final",
+        "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢",
+        "samples": 109440,
+        "audio_s": 6.84,
+        "trailing_blank_s": 2.48,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "max_request_s": 0.15781849999984843,
+      "process": {
+        "VmHWM": "17312 kB",
+        "VmRSS": "17312 kB",
+        "Threads": "1"
+      }
+    },
+    {
+      "name": "silence",
+      "wall_s": 0.8708746669999528,
+      "changes": [],
+      "endpoint": {
+        "type": "partial",
+        "text": "",
+        "samples": 80000,
+        "audio_s": 5.0,
+        "trailing_blank_s": 4.8,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "final": {
+        "type": "final",
+        "text": "",
+        "samples": 80000,
+        "audio_s": 5.0,
+        "trailing_blank_s": 5.76,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "max_request_s": 0.14125533399965207,
+      "process": {
+        "VmHWM": "17384 kB",
+        "VmRSS": "17384 kB",
+        "Threads": "1"
+      }
+    },
+    {
+      "name": "public-reset",
+      "wall_s": 1.187367417999667,
+      "changes": [
+        {
+          "at_s": 0.1549,
+          "audio_s": 1.08,
+          "text": "对我做了"
+        },
+        {
+          "at_s": 0.3002,
+          "audio_s": 2.04,
+          "text": "对我做了介绍"
+        },
+        {
+          "at_s": 0.4574,
+          "audio_s": 3.0,
+          "text": "对我做了介绍那么我想说的是"
+        },
+        {
+          "at_s": 0.602,
+          "audio_s": 3.96,
+          "text": "对我做了介绍那么我想说的是大家如果"
+        },
+        {
+          "at_s": 0.7571,
+          "audio_s": 4.92,
+          "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣"
+        },
+        {
+          "at_s": 0.9023,
+          "audio_s": 5.88,
+          "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢"
+        }
+      ],
+      "endpoint": {
+        "type": "partial",
+        "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢",
+        "samples": 109440,
+        "audio_s": 6.84,
+        "trailing_blank_s": 1.52,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "final": {
+        "type": "final",
+        "text": "对我做了介绍那么我想说的是大家如果对我的研究感兴趣呢",
+        "samples": 109440,
+        "audio_s": 6.84,
+        "trailing_blank_s": 2.48,
+        "endpoint": true,
+        "reason": "silence"
+      },
+      "max_request_s": 0.15036612499989133,
+      "process": {
+        "VmHWM": "17384 kB",
+        "VmRSS": "17384 kB",
+        "Threads": "1"
+      }
+    }
+  ],
+  "child_cpu_s": 2.000407
+}
