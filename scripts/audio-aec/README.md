@@ -85,3 +85,17 @@ The target is 今天天气不错，我想出去散步; ask the user to repeat it
 Best substring edit distance is not whole-recording CER, exact matches are not recall without
 a known repetition count, and mixed-speech energy reduction is not near-end preservation/ERLE.
 This check supports a narrow intelligibility observation, not universal double-talk certification.
+
+## Full-duplex integration checks
+
+`duplex_probe.py --run-local-test --aes --duration 15 --config BOARD_CONFIG --wav FIXED_WAV`
+requires user coordination: opens the microphone with real AEC/ASR and plays one fixed reply.
+It uses the actual core and duplex listener but replaces cloud/TTS reply generation with a
+local fixed PCM response; later replies are counted, never sent to cloud. Only counters,
+electric peak and fixed-phrase matching diagnostics are printed; audio/text are not persisted.
+Use one quiet run before a separately announced speaking run; match the announced duration.
+
+`duplex_load_probe.py --bundle BUNDLE --root SPEECH_ROOT --socket SPEECH_SOCKET --wav FIXED_WAV`
+needs no microphone: it concurrently runs fixture ASR and local Unix-socket TTS, counting
+PCM without saving/playing it. It measures inference contention, not acoustic/full-cloud quality.
+See docs/verification-full-duplex-20260918.md for measured results and limits.

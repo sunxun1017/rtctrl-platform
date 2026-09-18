@@ -46,6 +46,8 @@
         let [label, hint] = labels[state] || ["等待状态", "正在同步设备状态。"];
         const demo = current.capabilities && current.capabilities.mode === "demo";
         const streaming = !!(current.capabilities && current.capabilities.streaming_asr);
+        const fullDuplex = !demo && streaming && !!(current.capabilities && current.capabilities.full_duplex);
+        const inputActive = fullDuplex && reachable && current.connected && current.continuous && !current.muted && ["waiting_speech", "recognizing"].includes(current.input_state);
         const local = !demo && current.capabilities && current.capabilities.voice_backend === "local";
         $("mode-banner").hidden = !demo && !local && reachable;
         $("mode-banner").textContent = demo ? "演示模式 · 模拟对话流程，不采集麦克风、不播放真实声音、不连接语音后端。" : local ? "本地识别与合成 · 千帆文字回答" : "正在获取设备运行模式…";
@@ -78,8 +80,8 @@
             [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
         }
         if (streaming) {
-            $("privacy-note").textContent = "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复识别；静音、离开页面或控制台失联后会停止。";
-            $("input-hint").textContent = current.continuous ? "连续对话中 · 停顿后自动提交 · 回答时暂停识别" : "可按住说话，或点击连续对话自动断句";
+            $("privacy-note").textContent = fullDuplex ? "音频只在设备本地识别。连续对话期间，等待回答和播放时也会保持采集与识别；新的一句排队，当前回答播放结束后再发送到千帆并回应。不会自动打断。静音、离开页面或控制台失联后停止采集。" : "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复识别；静音、离开页面或控制台失联后会停止。";
+            $("input-hint").textContent = current.continuous ? (fullDuplex ? "连续对话中 · 边说边听 · 新的一句排队回应" : "连续对话中 · 停顿后自动提交 · 回答时暂停识别") : "可按住说话，或点击连续对话自动断句";
             if (state === "muted") hint = "开启麦克风后，选择按住说话或连续对话。";
             if (state === "idle") hint = "按住说话，或点击开始连续对话，停顿后自动提交。";
             if (state === "listening") {
@@ -91,6 +93,17 @@
                 }
             }
             if (current.voice_progress === "no_speech" && state === "idle") hint = "没有识别到话音，未发送云端。";
+        }
+        const queued = Number.isInteger(current.pending_utterances) ? Math.max(0, Math.min(3, current.pending_utterances)) : 0;
+        $("duplex-input").hidden = !fullDuplex || !current.continuous;
+        $("duplex-input").dataset.active = String(!!inputActive);
+        $("duplex-state").textContent = !reachable ? "连接中断 · 正在等待状态" : inputActive ? (current.input_state === "recognizing" ? "正在听你说 · 识别中" : "正在听 · 等待新的一句") : "采集已停止";
+        $("pending-count").textContent = queued ? "待回应 " + queued + " / 3" : "没有排队的话";
+        $("next-transcript").textContent = typeof current.next_transcript === "string" && current.next_transcript ? current.next_transcript : (inputActive ? "你可以继续说，听到的新一句会显示在这里。" : "开始连续对话后，等待回答和播放时也能听你说。");
+        $("duplex-note").textContent = queued >= 3 ? "已有 3 句等待回应，请等队列减少后再说。当前回答不会自动中断。" : "下一句会等当前回答播放结束后再回应；立即静音可停止所有采集。";
+        if (inputActive && ["thinking", "speaking"].includes(state)) {
+            if (state === "speaking") label = "边说边听";
+            hint += " 你可以继续说，新的一句会排队回应，不会自动打断。";
         }
         $("continuous").hidden = !streaming;
         $("continuous").disabled = !reachable || pending > 0 || !current.connected || current.muted || (!current.continuous && current.state !== "idle");
@@ -172,7 +185,8 @@
         if (c.playback === false || c.audio_output === false) capabilities.push("播放未就绪");
         if (c.wake_word === false) capabilities.push("唤醒词未启用");
         if (c.aec) capabilities.push("实验性回声消除已开启；对话期间回答时也保持本地麦克风采集，关闭麦克风即停止");
-        if (c.aec === false || c.automatic_barge_in === false) capabilities.push((streaming ? "流式识别、停顿断句；" : "按住说话；") + "回答时请先点击停止，不支持直接说话打断");
+        if (fullDuplex) capabilities.push("连续对话支持边说边听，新一句排队回应；不支持自动打断");
+        else if (c.aec === false || c.automatic_barge_in === false) capabilities.push((streaming ? "流式识别、停顿断句；" : "按住说话；") + "回答时请先点击停止，不支持直接说话打断");
         $("capabilities").textContent = capabilities.join(" · ");
         showError(actionError || (typeof current.error === "string" ? current.error : ""));
     }

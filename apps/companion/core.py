@@ -5,6 +5,7 @@ import queue
 import struct
 import threading
 import time
+from collections import deque
 from .audio import PcmAudio, PcmStreamChunk
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
@@ -31,6 +32,9 @@ class Companion:
         self.audio_queued_at = 0.
         self.auto_until = 0.
         self.auto_due = 0.
+        self.pending_utterances = deque()
+        self.response_busy = False
+        self.response_produced = False
         self.turn_audio_frames_sent = 0
         self.turn_audio_frames_received = 0
         self.silence_remaining = 0
@@ -42,6 +46,7 @@ class Companion:
         self.tts_ended = False
         self.accept_audio = False
         self.data = {
+            "input_state": "off", "next_transcript": "", "pending_utterances": 0,
             "last_latency_ms": {}, "latency_ms": {}, "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
             "error": "", "connected": False, "muted": True, "continuous": False, "transcript_partial": False, "voice_progress": "idle",
             "face": {"available": False, "reason": "尚未连接视觉服务"},
@@ -51,7 +56,7 @@ class Companion:
                 "streaming_tts": config.get("local_tts_streaming", False),
                 "streaming_asr": config.get("local_asr_streaming", False),
                 "automatic_endpoint": config.get("local_asr_streaming", False),
-                "wake_word": False, "aec": config.get("aec_enabled", False), "automatic_barge_in": False,
+                "wake_word": False, "aec": config.get("aec_enabled", False), "automatic_barge_in": False, "full_duplex": config.get("full_duplex", False),
                 "actuator_control": False, "face": "external-read-only",
                 "voice_backend": config.get("voice_backend", "android"),
                 "local_asr_backend": config.get("local_asr_backend", "cpu"),
@@ -123,7 +128,7 @@ class Companion:
                     elif kind == "message":
                         self._message(payload)
                     elif kind == "pcm":
-                        if self.data["state"] == "listening" and not self.data["muted"] and payload[0] == self.capture_epoch:
+                        if (self.data["state"] == "listening" or (self._duplex() and self.data["state"] in ("thinking", "speaking"))) and not self.data["muted"] and payload[0] == self.capture_epoch:
                             pcm = payload[1]
                             peak = max((abs(value[0]) for value in struct.iter_unpack(
                                 "<h", pcm[:len(pcm) // 2 * 2])), default=0)
@@ -166,6 +171,9 @@ class Companion:
             self._fail("会话维护失败，已停止录放音；请重新连接")
 
     def _release(self):
+        self.pending_utterances.clear()
+        self.response_busy = self.response_produced = False
+        self._set(input_state="off", next_transcript="", pending_utterances=0)
         self.auto_until = self.auto_due = 0.
         self._set(continuous=False)
         self.generation += 1
@@ -192,7 +200,42 @@ class Companion:
         if self.transport:
             self.transport.send(dict(type=kind, session_id=self.session, **fields))
 
+    def _duplex(self):
+        return self.config.get("full_duplex", False) and self.data["continuous"]
+
+    def _start_duplex_reply(self, text):
+        self.response_busy = True
+        self.response_produced = False
+        self.accept_audio = self.tts_ended = False
+        self.capture_stopped_at = time.monotonic()
+        self.audio_queued_at = 0.
+        self.turn_audio_frames_received = 0
+        if self.data["latency_ms"]:
+            self._set(last_latency_ms=dict(self.data["latency_ms"]))
+        self._set(state="thinking", transcript=text, transcript_partial=False, reply="",
+                  latency_ms={}, voice_progress="waiting_reply", emotion="thinking")
+        self.deadline = time.monotonic() + self.config["response_timeout_s"]
+        self._send("reply", text=text)
+
+    def _finish_duplex_reply(self):
+        if not self.response_busy or not self.response_produced or (self.audio and self.audio.playback_busy()):
+            return
+        self.response_busy = self.response_produced = False
+        self.tts_ended = self.accept_audio = False
+        self.deadline = 0.
+        if self.pending_utterances:
+            text = self.pending_utterances.popleft()
+            self._set(pending_utterances=len(self.pending_utterances))
+            self._start_duplex_reply(text)
+        else:
+            self._set(state="listening", emotion="neutral",
+                      voice_progress="recording" if self.data["input_state"] == "recognizing" else "waiting_speech")
+
     def _idle(self, progress="idle"):
+        if self._duplex() and not self.data["muted"]:
+            self.deadline = 0.
+            self._set(state="listening", voice_progress="waiting_speech", emotion="neutral")
+            return
         self.deadline = 0
         self._set(state="muted" if self.data["muted"] else "idle", emotion="neutral", voice_progress=progress)
         if self.data["continuous"] and not self.data["muted"]:
@@ -280,6 +323,7 @@ class Companion:
             if self.data["latency_ms"]:
                 self._set(last_latency_ms=dict(self.data["latency_ms"]))
             self._set(latency_ms={})
+            self._set(input_state="waiting_speech" if self._duplex() else "off", next_transcript="")
             self._set(state="listening", transcript="", transcript_partial=False, reply="", error="", emotion="neutral", voice_progress="waiting_speech" if self.data["continuous"] else "recording")
             self._send("listen", state="start", mode="auto" if self.data["continuous"] else self.config.get("listen_mode", "manual"))
             generation = self.generation
@@ -287,6 +331,9 @@ class Companion:
                 self.audio.start(lambda pcm: self.post("pcm", (epoch, pcm), generation))
             self.deadline = 0. if self.data["continuous"] else time.monotonic() + min(self.config["max_listen_s"], 29 if self.config.get("local_asr_streaming") else 120)
         elif action == "stop":
+            if self._duplex():
+                self._action("mute")
+                return
             if self.data["state"] != "listening":
                 return
             self.capture_stopped_at = time.monotonic()
@@ -398,6 +445,36 @@ class Companion:
                 raise ValueError("Invalid stage timing")
             self._set(latency_ms=dict(self.data["latency_ms"], **values))
             return
+        if kind.startswith("duplex_") and self._duplex():
+            if self.data["muted"] or not self.data["connected"]:
+                return
+            if kind == "duplex_waiting":
+                self._set(input_state="waiting_speech")
+                if self.data["state"] == "listening":
+                    self._set(voice_progress="waiting_speech")
+            elif kind == "duplex_started":
+                self._set(input_state="recognizing", next_transcript="")
+                if self.data["state"] == "listening":
+                    self._set(voice_progress="recording")
+            elif kind == "duplex_partial":
+                self._set(next_transcript=self._text(value.get("text", "")))
+            elif kind == "duplex_final":
+                text = self._text(value.get("text", "")).strip()
+                if text:
+                    self._set(next_transcript=text)
+                    if self.response_busy:
+                        if len(self.pending_utterances) >= 3:
+                            self._fail("待回复的话超过三句，已停止会话；请重新开启后逐句交流")
+                            return
+                        self.pending_utterances.append(text)
+                        self._set(pending_utterances=len(self.pending_utterances))
+                    else:
+                        self._start_duplex_reply(text)
+            return
+        if kind == "response_complete" and self._duplex():
+            self.response_produced = True
+            self._finish_duplex_reply()
+            return
         if kind in ("asr_waiting", "asr_started") and self.config.get("local_asr_streaming"):
             if self.data["continuous"] and self.data["state"] == "listening" and not self.data["muted"]:
                 if kind == "asr_waiting":
@@ -430,9 +507,10 @@ class Companion:
         elif kind == "tts":
             state = value.get("state")
             if state == "start" and self.data["state"] in ("listening", "thinking") and not self.data["muted"]:
-                self.capture_epoch += 1
-                if self.audio:
-                    self.audio.pause_capture() if self.config.get("aec_enabled") else self.audio.stop_capture()
+                if not self._duplex():
+                    self.capture_epoch += 1
+                    if self.audio:
+                        self.audio.pause_capture() if self.config.get("aec_enabled") else self.audio.stop_capture()
                 self.silence_remaining = 0
                 self.silence_due = 0.
                 self.accept_audio = True
@@ -489,7 +567,9 @@ class Companion:
             else:
                 self.demo_due = 0
                 self._idle()
-        if self.tts_ended and self.audio and not self.audio.playback_busy():
+        if self._duplex():
+            self._finish_duplex_reply()
+        if not self._duplex() and self.tts_ended and self.audio and not self.audio.playback_busy():
             self.tts_ended = False
             self._idle("complete")
         if self.deadline and now >= self.deadline:

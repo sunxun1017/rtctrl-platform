@@ -240,3 +240,7 @@ Melo新增原完整batch回调、worker PCM流、单aplay连续写，默认2s预
 ### 2026-09-18 连续模式静音资源
 
 已增加前置PCM能量起音门控及480ms缓存，安静等待不送RKNN ASR、不周期finalize，UI显示等待说话；模型仍常驻。不是语义VAD，较强持续噪声可能误触发。lease/静音保护仍有效。验证范围见 [静音门控记录](../docs/verification-speech-gate-20260918.md)。
+
+### 2026-09-18 全双工持续识别
+
+连续模式新增独立ASR listener与回复worker，回答期间实时识别新一句，最多3句排队，等当前播放排空再回应；不自动截断播放。板端启用full_duplex及AEC+AES：纯AEC安静全链路误触发1句，AES安静测试0句；真人15秒测试播放中6次partial、最终完整固定句1次。模型ASR/TTS并行固定输入无错；边界、回退和数据见 [全双工验证](../docs/verification-full-duplex-20260918.md)。上述测试仅本地桩回应，未将测试音频/文字发送云端；真实云端全双工用户体验仍需日常验收。

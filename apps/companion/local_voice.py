@@ -33,6 +33,9 @@ class LocalVoiceTransport:
         self._recording = False
         self._process = None
         self._worker = None
+        self._listener = None
+        self._duplex = False
+        self._asr_retired = False
         self._codec = None
         self._asr_stream = None
         self._frames = None
@@ -73,9 +76,13 @@ class LocalVoiceTransport:
         with self._lock:
             if not self._closed:
                 raise RuntimeError("Local voice already connected")
+            if ((self._listener and self._listener.is_alive()) or
+                    (self._worker and self._worker.is_alive())):
+                raise RuntimeError("Previous local voice task is still stopping")
             if self.config.get("local_asr_streaming"):
                 from .streaming_asr import StreamingAsr
                 self._asr_stream = StreamingAsr(self.config["local_speech_root"])
+                self._asr_retired = False
             self._codec = OpusCodec()
             self._closed = False
 
@@ -110,14 +117,40 @@ class LocalVoiceTransport:
                     "format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}})
             elif kind == "abort":
                 self._cancel()
+            elif kind == "reply":
+                text = value.get("text")
+                if not self._duplex or not self._recording:
+                    raise RuntimeError("Duplex listener is not active")
+                if not isinstance(text, str) or not text.strip() or len(text) > 4096:
+                    raise ValueError("Invalid duplex reply text")
+                if self._worker is not None:
+                    raise RuntimeError("Previous reply is still running")
+                self._worker = threading.Thread(target=self._duplex_reply,
+                    args=(self._generation, text), name="companion-duplex-reply", daemon=True)
+                self._worker.start()
             elif kind == "listen" and state == "start":
+                if self._listener and self._listener.is_alive():
+                    raise RuntimeError("Previous duplex listener is still stopping")
                 if self._worker and self._worker.is_alive():
                     raise RuntimeError("Previous local voice task is still stopping")
                 self._cancel()
+                self._duplex = bool(self.config.get("full_duplex") and value.get("mode") == "auto")
+                if self._asr_retired:
+                    from .streaming_asr import StreamingAsr
+                    self._asr_stream = StreamingAsr(self.config["local_speech_root"])
+                    self._asr_retired = False
+                if self._duplex and not self._asr_stream:
+                    raise RuntimeError("Duplex requires streaming ASR")
                 self._codec.reset_decoder()
                 self._recording = True
                 if self._asr_stream:
                     self._frames = queue.Queue(maxsize=32)
+                    if self._duplex:
+                        self._listener = threading.Thread(target=self._duplex_listen,
+                            args=(self._generation, self._frames, self._asr_stream),
+                            name="companion-duplex-asr", daemon=True)
+                        self._listener.start()
+                        return
                     self._worker = threading.Thread(target=self._stream_turn,
                         args=(self._generation, self._frames, value.get("mode") == "auto"),
                         name="companion-stream-asr", daemon=True)
@@ -223,6 +256,87 @@ class LocalVoiceTransport:
                 if self._active(generation):
                     self.on_error("流式识别失败或超时，已停止采音，请重新准备语音")
 
+    def _duplex_reply(self, generation, text):
+        try:
+            self._run(generation, None, recognized_text=text)
+        finally:
+            with self._lock:
+                if self._worker is threading.current_thread():
+                    self._worker = None
+                self._emit(generation, {"type": "response_complete"})
+
+    def _duplex_listen(self, generation, frames, stream):
+        from .speech_gate import SpeechGate
+        gate = SpeechGate()
+        recognizing = False
+        previous = ""
+        total = 0
+        started = last_frame = time.monotonic()
+        limit = 29 * 32000
+        try:
+            self._emit(generation, {"type": "duplex_waiting"})
+            while self._active(generation):
+                try:
+                    pcm = frames.get(timeout=.2)
+                except queue.Empty:
+                    if time.monotonic() - last_frame > 5:
+                        raise TimeoutError("No capture progress")
+                    continue
+                stopping = pcm is None
+                packets = [] if stopping else [pcm]
+                if not stopping:
+                    last_frame = time.monotonic()
+                    if not recognizing:
+                        packets = gate.feed(pcm)
+                        if packets is None:
+                            continue
+                        stream.exchange(3)
+                        recognizing = True
+                        total = 0
+                        previous = ""
+                        started = time.monotonic()
+                        self._emit(generation, {"type": "duplex_started"})
+                endpoint = stopping and recognizing
+                empty_endpoint = False
+                for packet in packets:
+                    if not self._active(generation):
+                        return
+                    packet = packet[:limit - total]
+                    if packet:
+                        result = stream.exchange(1, packet)
+                        total += len(packet)
+                        text = result.get("text", "")
+                        if text != previous:
+                            previous = text
+                            self._emit(generation, {"type": "duplex_partial", "text": text})
+                        endpoint = bool(result.get("endpoint"))
+                        empty_endpoint = endpoint and not text.strip()
+                    endpoint = endpoint or total >= limit or time.monotonic() - started >= 29
+                    if endpoint:
+                        break
+                if endpoint:
+                    if not self._active(generation):
+                        return
+                    if not empty_endpoint:
+                        text = stream.exchange(2).get("text", "").strip()
+                        if text:
+                            self._emit(generation, {"type": "duplex_final", "text": text})
+                    recognizing = False
+                    gate = SpeechGate()
+                    if not stopping:
+                        self._emit(generation, {"type": "duplex_waiting"})
+                if stopping:
+                    return
+        except Exception:
+            with self._lock:
+                if self._active(generation):
+                    self._cancel()
+                    self.on_error("流式识别失败或超时，已停止采音，请重新准备语音")
+        finally:
+            with self._lock:
+                if self._listener is threading.current_thread():
+                    self._listener = None
+
     @staticmethod
     def _terminate(process):
         if process and process.poll() is None:
@@ -234,6 +348,9 @@ class LocalVoiceTransport:
 
     def _cancel(self):
         self._generation += 1
+        if self._duplex and self._asr_stream and not self._asr_retired:
+            self._asr_stream.close()
+            self._asr_retired = True
         self._recording = False
         self._pcm.clear()
         if self._frames:

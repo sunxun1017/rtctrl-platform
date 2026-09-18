@@ -5,7 +5,7 @@ import os
 from urllib.parse import urlsplit
 
 DEFAULTS = {
-    "aec_enabled": False,
+    "aec_enabled": False, "full_duplex": False,
     "aec_enable_aes": False, "aec_library": "", "aec_reference_delay_ms": 0,
     "device_settings_enabled": False, "wifi_enabled": False, "mode": "demo", "bind": "127.0.0.1", "port": 8090,
     "backend_url": "", "token_env": "RTCTRL_VOICE_TOKEN",
@@ -73,7 +73,7 @@ def validate(values):
             raise ValueError("qianfan_proxy_url must be a credential-free loopback HTTP CONNECT proxy")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming", "aec_enabled", "aec_enable_aes"):
+    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming", "aec_enabled", "aec_enable_aes", "full_duplex"):
         if type(config[key]) is not bool:
             raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
@@ -91,6 +91,8 @@ def validate(values):
             raise ValueError(key + " must be an integer")
     if config["bind"] not in ("127.0.0.1", "localhost"):
         raise ValueError("bind must be loopback; use an SSH tunnel for remote control")
+    if config["full_duplex"] and not config["aec_enabled"]:
+        raise ValueError("Full duplex requires AEC and local streaming ASR")
     if config["aec_enabled"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
             not os.path.isabs(config["aec_library"]) or not config["local_asr_streaming"]):
         raise ValueError("AEC requires live local streaming ASR and an absolute native library path")
