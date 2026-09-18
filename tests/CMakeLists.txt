@@ -87,7 +87,7 @@ endif()
 
 # Non-realtime companion application: hardware-independent Python regressions.
 if(Python3_Interpreter_FOUND)
-    foreach(companion_suite test_companion_aec test_companion test_companion_audio test_companion_transport test_companion_network test_companion_service test_companion_device test_companion_local_voice test_companion_speech_worker test_companion_melo_npu test_companion_melo_pipeline test_companion_ftrace test_companion_profile_melo test_companion_resource_monitor test_companion_streaming test_companion_stream_protocol test_companion_tts_stream)
+    foreach(companion_suite test_companion_speech_gate test_companion_aec test_companion test_companion_audio test_companion_transport test_companion_network test_companion_service test_companion_device test_companion_local_voice test_companion_speech_worker test_companion_melo_npu test_companion_melo_pipeline test_companion_ftrace test_companion_profile_melo test_companion_resource_monitor test_companion_streaming test_companion_stream_protocol test_companion_tts_stream)
         add_test(NAME rtctrl_${companion_suite}
             COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/${companion_suite}.py)
         set_tests_properties(rtctrl_${companion_suite} PROPERTIES TIMEOUT 45 LABELS "companion")

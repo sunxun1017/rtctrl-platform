@@ -280,12 +280,12 @@ class Companion:
             if self.data["latency_ms"]:
                 self._set(last_latency_ms=dict(self.data["latency_ms"]))
             self._set(latency_ms={})
-            self._set(state="listening", transcript="", transcript_partial=False, reply="", error="", emotion="neutral", voice_progress="recording")
+            self._set(state="listening", transcript="", transcript_partial=False, reply="", error="", emotion="neutral", voice_progress="waiting_speech" if self.data["continuous"] else "recording")
             self._send("listen", state="start", mode="auto" if self.data["continuous"] else self.config.get("listen_mode", "manual"))
             generation = self.generation
             if self.audio:
                 self.audio.start(lambda pcm: self.post("pcm", (epoch, pcm), generation))
-            self.deadline = time.monotonic() + min(self.config["max_listen_s"], 29 if self.config.get("local_asr_streaming") else 120)
+            self.deadline = 0. if self.data["continuous"] else time.monotonic() + min(self.config["max_listen_s"], 29 if self.config.get("local_asr_streaming") else 120)
         elif action == "stop":
             if self.data["state"] != "listening":
                 return
@@ -397,6 +397,15 @@ class Companion:
                     type(v) not in (int, float) or not math.isfinite(v) or not 0 <= v <= 240000 for v in values.values())):
                 raise ValueError("Invalid stage timing")
             self._set(latency_ms=dict(self.data["latency_ms"], **values))
+            return
+        if kind in ("asr_waiting", "asr_started") and self.config.get("local_asr_streaming"):
+            if self.data["continuous"] and self.data["state"] == "listening" and not self.data["muted"]:
+                if kind == "asr_waiting":
+                    self.deadline = 0.
+                    self._set(voice_progress="waiting_speech", transcript="", transcript_partial=False)
+                elif self.data["voice_progress"] == "waiting_speech":
+                    self.deadline = time.monotonic() + min(self.config["max_listen_s"], 29)
+                    self._set(voice_progress="recording")
             return
         if kind == "asr_endpoint" and self.config.get("local_asr_streaming"):
             if self.data["state"] == "listening":

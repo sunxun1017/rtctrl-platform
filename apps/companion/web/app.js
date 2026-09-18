@@ -79,10 +79,17 @@
         }
         if (streaming) {
             $("privacy-note").textContent = "音频只在设备本地识别，完成的一句话才会发送到千帆。连续对话会在回答播放结束后恢复识别；静音、离开页面或控制台失联后会停止。";
-            $("input-hint").textContent = current.continuous ? "连续对话中 · 停顿后自动提交 · 回答时暂停采音" : "可按住说话，或点击连续对话自动断句";
+            $("input-hint").textContent = current.continuous ? "连续对话中 · 停顿后自动提交 · 回答时暂停识别" : "可按住说话，或点击连续对话自动断句";
             if (state === "muted") hint = "开启麦克风后，选择按住说话或连续对话。";
             if (state === "idle") hint = "按住说话，或点击开始连续对话，停顿后自动提交。";
-            if (state === "listening") hint = current.continuous ? "边说边出字，停顿约 1～2 秒后自动提交。" : "正在实时识别，松开按钮提交这一句。";
+            if (state === "listening") {
+                if (current.continuous && current.voice_progress === "waiting_speech") {
+                    label = "等待说话";
+                    hint = "正在进行轻量声音检测，尚未运行语音识别。说话后开始识别。";
+                } else {
+                    hint = current.continuous ? "边说边出字，停顿约 1～2 秒后自动提交。" : "正在实时识别，松开按钮提交这一句。";
+                }
+            }
             if (current.voice_progress === "no_speech" && state === "idle") hint = "没有识别到话音，未发送云端。";
         }
         $("continuous").hidden = !streaming;

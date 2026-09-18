@@ -145,29 +145,61 @@ class LocalVoiceTransport:
                 self._frames.put_nowait(pcm)
 
     def _stream_turn(self, generation, frames, automatic):
+        from .speech_gate import SpeechGate
+        gate = SpeechGate() if automatic else None
+        recognizing = not automatic
         try:
-            self._asr_stream.exchange(3)
+            if recognizing:
+                self._asr_stream.exchange(3)
+            else:
+                self._emit(generation, {"type": "asr_waiting"})
             previous = ""
             first_partial = False
-            started = time.monotonic()
+            started = last_frame = time.monotonic()
             while self._active(generation):
                 try:
                     pcm = frames.get(timeout=.2)
                 except queue.Empty:
-                    if time.monotonic() - started > min(30, self.config.get("max_listen_s", 30)) + 5:
+                    if time.monotonic() - last_frame > 5:
                         raise TimeoutError("No capture progress")
                     continue
                 if pcm is None:
                     break
-                result = self._asr_stream.exchange(1, pcm)
-                text = result.get("text", "")
-                if text != previous:
-                    if text and not first_partial:
-                        first_partial = True
-                        self._timing(generation, "asr_first_partial_ms", started)
-                    previous = text
-                    self._emit(generation, {"type": "stt", "text": text, "partial": True})
-                if automatic and result.get("endpoint"):
+                last_frame = time.monotonic()
+                packets = [pcm]
+                if not recognizing:
+                    packets = gate.feed(pcm)
+                    if packets is None:
+                        continue
+                    self._asr_stream.exchange(3)
+                    recognizing = True
+                    started = time.monotonic()
+                    self._emit(generation, {"type": "asr_started"})
+                endpoint = False
+                for packet in packets:
+                    if not self._active(generation):
+                        return
+                    result = self._asr_stream.exchange(1, packet)
+                    text = result.get("text", "")
+                    if text != previous:
+                        if text and not first_partial:
+                            first_partial = True
+                            self._timing(generation, "asr_first_partial_ms", started)
+                        previous = text
+                        self._emit(generation, {"type": "stt", "text": text, "partial": True})
+                    if automatic and result.get("endpoint"):
+                        if not text.strip():
+                            # False onset/noise: return to lightweight waiting without
+                            # closing capture, finalizing, or starting a cloud turn.
+                            recognizing = False
+                            gate = SpeechGate()
+                            first_partial = False
+                            previous = ""
+                            self._emit(generation, {"type": "asr_waiting"})
+                        else:
+                            endpoint = True
+                        break
+                if endpoint:
                     with self._lock:
                         if not self._active(generation):
                             return
@@ -175,6 +207,9 @@ class LocalVoiceTransport:
                     self._emit(generation, {"type": "asr_endpoint"})
                     break
             if not self._active(generation):
+                return
+            if not recognizing:
+                self._emit(generation, {"type": "asr_empty"})
                 return
             finalize_started = time.monotonic()
             text = self._asr_stream.exchange(2).get("text", "").strip()

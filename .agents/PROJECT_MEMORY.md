@@ -236,3 +236,7 @@ Melo新增原完整batch回调、worker PCM流、单aplay连续写，默认2s预
 已接普通Rockchip VQE CPU软件参考AEC，固定16ms缓存延迟，默认关闭、板端纯AEC实验开启。一次明确授权安静声学测试测得21.07dB能量降低，AES25.16dB；未保存/上传录音。真人双讲和自动插话未验收，automatic_barge_in仍false。配置、边界、回退及测量条件见 [AEC记录](../docs/verification-aec-20260918.md)。
 
 真人双讲后续：两轮本地内存测试完成，严格播放重叠12秒中原始固定句完整匹配0、纯AEC1、AES2；证明该次人声可识别地保留，不等于逐字/全部重复无损。AES跨轮波动，配置仍纯AEC；automatic_barge_in仍false。详情见同一AEC验证记录。
+
+### 2026-09-18 连续模式静音资源
+
+已增加前置PCM能量起音门控及480ms缓存，安静等待不送RKNN ASR、不周期finalize，UI显示等待说话；模型仍常驻。不是语义VAD，较强持续噪声可能误触发。lease/静音保护仍有效。验证范围见 [静音门控记录](../docs/verification-speech-gate-20260918.md)。

@@ -62,7 +62,9 @@ class TurnTests(unittest.TestCase):
     def tearDown(self):self.transport.close()
     def turn(self,final,automatic=False):
         self.transport._asr_stream.exchange.side_effect=[{'type':'reset'},{'type':'partial','text':'未完成','endpoint':automatic},{'type':'final','text':final}]
-        frames=queue.Queue();frames.put(b'\0\0');frames.put(None)
+        frames=queue.Queue()
+        for _ in range(3 if automatic else 1): frames.put((b'\x64\x00\x9c\xff' * 480) if automatic else b'\0\0')
+        frames.put(None)
         self.transport._recording=True
         self.transport._stream_turn(self.transport._generation,frames,automatic)
     def test_partial_only_does_not_start_reply(self):
@@ -80,7 +82,7 @@ class TurnTests(unittest.TestCase):
     def test_auto_endpoint_manual_stop_once(self):
         self.turn('完整句',True)
         self.transport.send({'type':'listen','state':'stop'})
-        self.assertEqual([m['type'] for m in self.messages if m['type'] != 'latency'],['stt','asr_endpoint'])
+        self.assertEqual([m['type'] for m in self.messages if m['type'] not in ('latency','asr_waiting','asr_started')],['stt','asr_endpoint'])
         self.transport._run.assert_called_once()
         self.assertEqual([c.args[0] for c in self.transport._asr_stream.exchange.call_args_list],[3,1,2])
     def test_empty_does_not_start_cloud(self):
@@ -95,6 +97,28 @@ class TurnTests(unittest.TestCase):
         frames=queue.Queue();frames.put(b'\0\0')
         self.transport._stream_turn(self.transport._generation,frames,False)
         self.assertEqual(self.messages,[]);self.transport._run.assert_not_called()
+    def test_long_quiet_skips_all_recognizer_exchanges(self):
+        frames=queue.Queue()
+        for _ in range(1000): frames.put(bytes(1920))
+        frames.put(None)
+        self.transport._stream_turn(self.transport._generation,frames,True)
+        self.transport._asr_stream.exchange.assert_not_called()
+        self.transport._run.assert_not_called()
+        self.assertEqual([m['type'] for m in self.messages],['asr_waiting','asr_empty'])
+
+    def test_false_onset_returns_to_waiting_without_finalize(self):
+        frames=queue.Queue()
+        for _ in range(3): frames.put(b"\x64\x00\x9c\xff"*480)
+        for _ in range(100): frames.put(bytes(1920))
+        frames.put(None)
+        def exchange(op,*args):
+            return {'type':'reset'} if op==3 else {'type':'partial','text':'','endpoint':True}
+        self.transport._asr_stream.exchange.side_effect=exchange
+        self.transport._stream_turn(self.transport._generation,frames,True)
+        self.assertEqual([x.args[0] for x in self.transport._asr_stream.exchange.call_args_list],[3,1])
+        self.assertNotIn('asr_endpoint',[m['type'] for m in self.messages])
+        self.transport._run.assert_not_called()
+
     def test_queue_full_is_not_silently_dropped(self):
         self.transport._recording=True;self.transport._frames=queue.Queue(maxsize=1)
         self.transport.send_pcm(b'\0\0')
@@ -115,6 +139,35 @@ class ContinuousCoreTests(unittest.TestCase):
     def frame(self):
         self.core.audio.callback(b'\0\0')
         wait_for(lambda:self.core.turn_audio_frames_sent>0)
+    def test_waiting_speech_has_no_recognition_deadline(self):
+        self.core.action('continuous')
+        self.assertEqual(self.core.snapshot()['voice_progress'],'waiting_speech')
+        self.assertEqual(self.core.deadline,0)
+        # Simulate a long silence while the UI still renews the separate lease.
+        self.core.auto_until=time.monotonic()+1000
+        with patch('apps.companion.core.time.monotonic',return_value=time.monotonic()+120):
+            self.core._tick()
+        self.assertEqual(self.core.snapshot()['state'],'listening')
+        self.assertFalse(any(isinstance(x,dict) and x.get('state')=='stop' for x in self.core.transport.sent))
+
+    def test_asr_started_arms_once_and_waiting_clears_partial(self):
+        self.core.action('continuous')
+        self.core.transport.message({'type':'asr_started'})
+        wait_for(lambda:self.core.snapshot()['voice_progress']=='recording')
+        deadline=self.core.deadline
+        self.assertGreater(deadline,time.monotonic())
+        self.assertLessEqual(deadline,time.monotonic()+29)
+        self.core.transport.message({'type':'asr_started'})
+        self.core.transport.message({'type':'stt','text':'半句','partial':True})
+        wait_for(lambda:self.core.snapshot()['transcript']=='半句')
+        self.assertEqual(self.core.deadline,deadline)
+        self.core.transport.message({'type':'asr_waiting'})
+        wait_for(lambda:self.core.snapshot()['voice_progress']=='waiting_speech')
+        self.assertEqual(self.core.deadline,0)
+        self.assertEqual(self.core.snapshot()['transcript'],'')
+        self.assertFalse(self.core.snapshot()['transcript_partial'])
+        self.assertEqual(self.core.snapshot()['state'],'listening')
+
     def test_endpoint_and_stop_idempotent_then_resume(self):
         self.core.action('continuous');self.frame()
         transport=self.core.transport
