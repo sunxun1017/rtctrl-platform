@@ -1,0 +1,12 @@
+init_ms=18.488
+runtime=2.3.2 (429f97ae6b@2025-04-09T09:09:27) driver=0.9.8
+input index=0 name=/Mul_8_output_0 fmt=3 type=1 elems=9600 bytes=19200 dims=1,96,100
+input index=1 name=/Unsqueeze_output_0 fmt=3 type=1 elems=256 bytes=512 dims=1,256,1
+output index=0 name=/decoder/output_conv/output_conv.2/Tanh_output_0 fmt=3 type=1 elems=25600 bytes=51200 dims=1,1,25600
+round=-1 warmup=1 run_ms=29.400 io_run_ms=30.898
+round=0 warmup=0 run_ms=31.259 io_run_ms=31.982
+round=1 warmup=0 run_ms=31.848 io_run_ms=32.573
+round=2 warmup=0 run_ms=31.019 io_run_ms=31.746
+round=3 warmup=0 run_ms=30.757 io_run_ms=31.498
+round=4 warmup=0 run_ms=30.409 io_run_ms=31.148
+saved=sentences/sentence-3/npu.0.f32 bytes=102400
