@@ -15,7 +15,7 @@ DEFAULTS = {
     "face_poll_s": 1, "face_stale_s": 5,
     "voice_backend": "android", "qianfan_model": "ernie-4.5-turbo-32k",
     "qianfan_token_env": "BAIDU_QIANFAN_API_KEY", "qianfan_proxy_url": "",
-    "local_asr_command": [], "local_tts_command": [],
+    "local_asr_backend": "cpu", "local_asr_command": [], "local_tts_command": [],
     "local_asr_timeout_s": 60, "local_tts_timeout_s": 90,
     "local_speech_root": "", "local_speech_socket": "", "local_tts_kind": "vits", "local_tts_speaker": 0, "local_speech_threads": 2,
 
@@ -45,6 +45,8 @@ def validate(values):
         raise ValueError("mode must be demo or live")
     if config["voice_backend"] not in ("android", "local"):
         raise ValueError("voice_backend must be android or local")
+    if config["local_asr_backend"] not in ("cpu", "rknn"):
+        raise ValueError("local_asr_backend must be cpu or rknn")
     for key in ("local_asr_command", "local_tts_command"):
         command = config[key]
         if not isinstance(command, list) or len(command) > 64 or any(

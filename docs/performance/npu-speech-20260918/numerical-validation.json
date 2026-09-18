@@ -1,0 +1,12 @@
+{
+  "ort_version": "1.23.2",
+  "latent_length": 39,
+  "full_shape": [
+    1,
+    9984
+  ],
+  "max_abs_error": 0.0,
+  "mean_abs_error": 0.0,
+  "same_noise_realization": true,
+  "synthetic_token_ids_not_listening_test": true
+}

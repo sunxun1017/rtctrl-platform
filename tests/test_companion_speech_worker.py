@@ -9,6 +9,7 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import MagicMock, patch
 import wave
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -28,6 +29,65 @@ class Engine:
 
     def synthesize(self, text):
         return b"\0" * 100, 22050
+
+
+class RknnAdapterTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.runner = self.root / "npu-asr" / "rknn_zipformer_demo"
+        self.runner.parent.mkdir()
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def run_script(self, body, timeout=2):
+        from apps.companion.speech_worker import RknnRecognizer
+        self.runner.write_text("#!" + sys.executable + "\n" + body)
+        self.runner.chmod(0o700)
+        return RknnRecognizer(self.root, timeout).recognize(self.root / "sample.wav")
+
+    def test_text_and_fixed_arguments(self):
+        text = self.run_script("import sys, os\nassert sys.argv[1:4] == ['model/encoder.rknn', 'model/decoder.rknn', 'model/joiner.rknn']\nassert os.path.basename(os.getcwd()) == 'npu-asr'\nprint('load model')\nprint('Zipformer output: 测试文字')\n")
+        self.assertEqual(text, "测试文字")
+
+    def test_nonzero_rejected_even_with_text(self):
+        with self.assertRaises(ValueError):
+            self.run_script("print('Zipformer output: 假结果')\nraise SystemExit(1)\n")
+
+    def test_timeout(self):
+        with self.assertRaises(TimeoutError):
+            self.run_script("import time\ntime.sleep(5)\n", timeout=.05)
+
+    def test_missing_and_empty_result(self):
+        for output in ('ready', 'Zipformer output: '):
+            with self.assertRaises(ValueError):
+                self.run_script('print(' + repr(output) + ')\n')
+
+    def test_bounded_output(self):
+        with self.assertRaises(ValueError):
+            self.run_script("print('x' * (2 * 1024 * 1024))\n")
+
+    def test_rknn_keeps_tts_but_does_not_load_cpu_asr(self):
+        from apps.companion.speech_worker import SherpaEngine
+        sherpa = MagicMock()
+        with patch.dict(sys.modules, {"sherpa_onnx": sherpa}):
+            previous_path = list(sys.path)
+            try:
+                engine = SherpaEngine(self.root, asr_backend="rknn")
+            finally:
+                sys.path[:] = previous_path
+        self.assertIsNone(engine.asr)
+        sherpa.OfflineRecognizer.from_zipformer_ctc.assert_not_called()
+        sherpa.OfflineTts.assert_called_once()
+
+    def test_config_defaults_and_validation(self):
+        from apps.companion.config import validate
+        self.assertEqual(validate({})['local_asr_backend'], 'cpu')
+        self.assertEqual(validate({'local_asr_backend': 'rknn'})['local_asr_backend'], 'rknn')
+        for invalid in ('cuda', True, None):
+            with self.assertRaises(ValueError):
+                validate({'local_asr_backend': invalid})
 
 
 class SampleConversionTests(unittest.TestCase):

@@ -156,3 +156,14 @@ PGA厂商驱动实际支持0–42dB，UI解除旧24dB限制，6dB步长；现场
 第一轮右峰值588、平均296.5；第二轮右映射36dB峰194；连续采集证实增益有效，需核实实际麦克风/偏置/硬件。
 UI峰值增加dBFS与幅度百分比；0dBFS不是目标，满幅有削波风险。161项companion用例有通过证据。
 详细统计及SDK源码/ALSA路由证据见docs/verification-companion-20260918.md最新章节。
+
+
+## 2026-09-18 实验NPU ASR已接入
+
+用户要求迁移ASR/TTS：原CPU CTC INT8转换被DynamicQuantizeLinear实际阻塞；改用Model Zoo RV1126B Zipformer。
+现场local_asr_backend=rknn，代码默认cpu可回退。三个非量化RKNN已上板，TTS仍AISHELL3 sid0 CPU。
+5.6115s公开样本CLI含加载中位1.3084s；应用socket单轮1.589s文本正确，随后CPU TTS生成成功。
+worker短测RSS172.38MiB、整机358–365MiB，人脸约30FPS（本轮无脸）；非长期/准确率验收。
+VITS decoder分拆已转NPU并板测，0.512s波形约5–8ms，相关系数0.999842；整句接缝/试听未验收，未切TTS。
+用户重启后手动恢复服务、时钟、临时隧道和音量85%/麦增益36dB/扬声器；未安装自启动或持久混音器保存。
+release/asan各9组companion通过。来源/哈希/回退/边界见[验证记录](../docs/verification-speech-npu-20260918.md)。

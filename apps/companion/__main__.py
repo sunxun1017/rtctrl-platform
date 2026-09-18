@@ -77,6 +77,7 @@ def main():
             worker_env["MALLOC_ARENA_MAX"] = "2"
             speech_worker = subprocess.Popen([sys.executable, "-B", "-m", "apps.companion.speech_worker",
                 "--root", config["local_speech_root"], "--socket", config["local_speech_socket"],
+                "--asr-backend", config["local_asr_backend"],
                 "--tts-kind", config["local_tts_kind"], "--sid", str(config["local_tts_speaker"]),
                 "--threads", str(config["local_speech_threads"])], env=worker_env, stdin=subprocess.DEVNULL)
         core = Companion(config)

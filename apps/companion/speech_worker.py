@@ -7,6 +7,8 @@ import select
 import signal
 import socket
 import stat
+import subprocess
+import time
 import sys
 import threading
 import wave
@@ -158,7 +160,9 @@ class SpeechWorker:
                 try:
                     request = self._request(peer)
                     if request.get("operation") == "health":
-                        self._send(peer, {"ok": True, "ready": True, "busy": self.busy.locked()})
+                        self._send(peer, {"ok": True, "ready": True, "busy": self.busy.locked(),
+                                          "asr_backend": getattr(self.engine, "asr_backend", "cpu"),
+                                          "tts_backend": "cpu"})
                         peer.close()
                     elif request.get("operation") not in ("asr", "tts"):
                         raise ValueError("Unsupported operation")
@@ -185,12 +189,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", required=True)
     parser.add_argument("--socket", required=True)
+    parser.add_argument("--asr-backend", choices=("cpu", "rknn"), default="cpu")
     parser.add_argument("--tts-kind", choices=("vits", "vits_aishell3"), default="vits")
     parser.add_argument("--sid", type=int, default=0)
     parser.add_argument("--threads", type=int, choices=(1, 2), default=2)
     args = parser.parse_args()
     try:
-        engine = SherpaEngine(Path(args.root), args.tts_kind, args.sid, args.threads)
+        engine = SherpaEngine(Path(args.root), args.tts_kind, args.sid, args.threads, args.asr_backend)
         worker = SpeechWorker(engine, args.socket)
         signal.signal(signal.SIGTERM, lambda *_: worker.stop.set())
         signal.signal(signal.SIGINT, lambda *_: worker.stop.set())
@@ -224,8 +229,59 @@ def float_to_pcm16(samples):
     return values.astype("<i2").tobytes()
 
 
+class RknnRecognizer:
+    """Experimental fixed RV1126B runner; errors never silently fall back to CPU."""
+    OUTPUT_LIMIT = 1024 * 1024
+
+    def __init__(self, root, timeout=55):
+        self.directory = Path(root).resolve() / "npu-asr"
+        self.timeout = timeout
+
+    def recognize(self, path):
+        argv = [str(self.directory / "rknn_zipformer_demo"),
+                "model/encoder.rknn", "model/decoder.rknn", "model/joiner.rknn",
+                str(Path(path).resolve())]
+        process = subprocess.Popen(argv, cwd=self.directory, stdin=subprocess.DEVNULL,
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                   start_new_session=True)
+        output = bytearray()
+        deadline = time.monotonic() + self.timeout
+        try:
+            while True:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError("NPU recognition timed out")
+                readable, _, _ = select.select([process.stdout], [], [], min(remaining, .2))
+                if not readable:
+                    continue
+                block = os.read(process.stdout.fileno(), 16384)
+                if not block:
+                    break
+                output.extend(block)
+                if len(output) > self.OUTPUT_LIMIT:
+                    raise ValueError("NPU recognition output too large")
+            process.wait(timeout=max(.001, deadline - time.monotonic()))
+            if process.returncode:
+                raise ValueError("NPU recognition failed")
+        finally:
+            if process.poll() is None:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.wait()
+            process.stdout.close()
+        lines = output.decode("utf-8", errors="strict").splitlines()
+        results = [line.partition("Zipformer output:")[2].strip()
+                   for line in lines if line.startswith("Zipformer output:")]
+        if len(results) != 1 or not results[0] or len(results[0]) > 4096:
+            raise ValueError("Missing or invalid NPU recognition result")
+        return results[0]
+
+
 class SherpaEngine:
-    def __init__(self, root, tts_kind="vits", sid=0, threads=2):
+    def __init__(self, root, tts_kind="vits", sid=0, threads=2, asr_backend="cpu"):
+        if asr_backend not in ("cpu", "rknn"):
+            raise ValueError("Unsupported ASR backend")
+        self.asr_backend = asr_backend
+        self.rknn = RknnRecognizer(root) if asr_backend == "rknn" else None
         if type(threads) is not int or threads not in (1, 2):
             raise ValueError("Speech threads must be 1 or 2")
         if tts_kind not in ("vits", "vits_aishell3") or not 0 <= sid < 174:
@@ -234,8 +290,10 @@ class SherpaEngine:
         import sherpa_onnx
         asr_root = root / "sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16"
         tts_root = root / "vits-icefall-zh-aishell3"
-        self.asr = sherpa_onnx.OfflineRecognizer.from_zipformer_ctc(
-            model=str(asr_root / "model.int8.onnx"), tokens=str(asr_root / "tokens.txt"), num_threads=threads)
+        self.asr = None
+        if asr_backend == "cpu":
+            self.asr = sherpa_onnx.OfflineRecognizer.from_zipformer_ctc(
+                model=str(asr_root / "model.int8.onnx"), tokens=str(asr_root / "tokens.txt"), num_threads=threads)
         self.tts = sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(
             model=sherpa_onnx.OfflineTtsModelConfig(vits=sherpa_onnx.OfflineTtsVitsModelConfig(
                 model=str(tts_root / "model.onnx"), lexicon=str(tts_root / "lexicon.txt"),
@@ -251,7 +309,12 @@ class SherpaEngine:
                 if (wav.getnchannels() != 1 or wav.getsampwidth() != 2 or
                         wav.getframerate() != 16000 or wav.getnframes() > 16000 * 60):
                     raise ValueError("Unsupported recognition WAV")
-                samples = pcm16_to_float(wav.readframes(wav.getnframes()))
+                pcm = wav.readframes(wav.getnframes())
+                if len(pcm) != wav.getnframes() * 2 or not pcm:
+                    raise ValueError("Incomplete recognition WAV")
+        if self.rknn is not None:
+            return self.rknn.recognize(path)
+        samples = pcm16_to_float(pcm)
         stream = self.asr.create_stream()
         stream.accept_waveform(16000, samples)
         self.asr.decode_stream(stream)

@@ -113,3 +113,11 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 异步播放须持有有界bytes而非即将删除的临时路径，完成以EOF后的播放器drain为准；
 超时覆盖管道剩余音频时长，不能假设所有Linux管道都是8KiB而固定3秒。
 适用当前ALSA非实时AudioIO；改格式/播放器/缓冲策略后重验。证据见verification-companion-20260918.md最新章节。
+
+
+### 2026-09-18 RV1126B语音NPU迁移边界
+
+CPU ONNX INT8不等于RKNN INT8：当前CTC DynamicQuantizeLinear在Toolkit2 2.3.2 build失败；
+官方RV1126B Zipformer FP模型可转换并板测。模型替换必须重验文本，CLI计时必须区分加载与应用IPC，
+主进程RSS不含独立runner/NPU DMA。VITS decoder可拆但局部相关性不能代替整句音质验收。
+证据：docs/verification-speech-npu-20260918.md。模型、SDK或运行库变化后重新验证。

@@ -118,3 +118,18 @@ perf record可按49Hz低频采样，先读perf报告再决定是否继续优化�
 不以数字放大到满幅为验收目标；0dBFS表示满幅，达到上限会削波。
 后续需稳定声源/原厂录音对照，并核对实际麦克风接口与偏置，不能只凭DTS推断模拟硬件正常。
 控制台新增整机CPU、核数、NPU负载和录音dBFS；无法读取NPU时明确未知。
+
+## 实验性 RV1126B NPU ASR（2026-09-18）
+
+可选 `local_asr_backend: "rknn"`，默认仍为 `cpu`。现场板卡已切换实验选项。
+将交叉编译的 `rknn_zipformer_demo` 放在 `<local_speech_root>/npu-asr/`，
+对应 RV1126B FP16 encoder/decoder/joiner.rknn 和 vocab.txt 放在其 model/ 下。
+构建见 ../../scripts/speech-npu/README.md，源文件/产物哈希见
+../../docs/performance/npu-speech-20260918/asr-models.json。
+不得使用 RK3588 的 RKNN 文件，不替换系统 librknnrt。
+
+此路径使用瑞芯微 Model Zoo 中英双语 Zipformer，并非原 CPU 中文 CTC 模型的等价加速。
+每轮启动独立有界进程，包含加载开销；55秒超时、1MiB输出上限，失败明确报错，无隐式CPU回退。
+worker不再加载CPU ASR，TTS仍为原AISHELL3 sid0 CPU；界面说明语音主进程统计不含临时识别子进程及NPU DMA。
+恢复时改 `local_asr_backend` 为 `cpu` 并重启服务，原CPU模型仍保留。
+板测与未完成的TTS整句迁移见 ../../docs/verification-speech-npu-20260918.md。

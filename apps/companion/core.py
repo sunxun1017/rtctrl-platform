@@ -46,6 +46,7 @@ class Companion:
                 "wake_word": False, "aec": False, "automatic_barge_in": False,
                 "actuator_control": False, "face": "external-read-only",
                 "voice_backend": config.get("voice_backend", "android"),
+                "local_asr_backend": config.get("local_asr_backend", "cpu"),
                 "audio_upload": config["mode"] == "live" and config.get("voice_backend", "android") != "local"},
         }
 

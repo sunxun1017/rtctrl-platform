@@ -1,0 +1,26 @@
+{
+  "latent_length": 16,
+  "input_shapes": [
+    [
+      1,
+      96,
+      16
+    ],
+    [
+      1,
+      256,
+      1
+    ]
+  ],
+  "output_shape": [
+    1,
+    1,
+    4096
+  ],
+  "source_sha256": "5511d651b7840c0a93a6bbfd4afd070a2c7f39ca1ec3ff2ecd73191519bbb852",
+  "onnx_sha256": "e594520c22a3a0fdb362ccd379893c15a8c623fbbdeb407770ba6d41cfd78223",
+  "nodes": 114,
+  "target": "rv1126b",
+  "quantized": false,
+  "rknn_sha256": "e599953f244a0f729118685d846abae2860c13486e21458c054312d5bf970dce"
+}

@@ -118,12 +118,13 @@
         if (finite(m.memory_used_mb) && finite(m.memory_total_mb)) metrics.push("内存 " + Math.round(m.memory_used_mb) + " / " + Math.round(m.memory_total_mb) + " MB");
         if (finite(m.system_cpu_percent)) metrics.push("整机 CPU " + m.system_cpu_percent.toFixed(1) + "%" + (finite(m.cpu_logical_cores) ? "（" + m.cpu_logical_cores + "核）" : ""));
         metrics.push(finite(m.npu_load_percent) ? "NPU " + m.npu_load_percent.toFixed(0) + "%" : "NPU 暂无读数");
-        if (local) metrics.push("ASR / TTS：CPU");
+        if (local) metrics.push(current.capabilities.local_asr_backend === "rknn" ? "ASR：NPU + CPU前后处理 · TTS：CPU" : "ASR / TTS：CPU");
         if (finite(m.rss_mb)) metrics.push("伴随服务 " + m.rss_mb.toFixed(1) + " MB");
-        if (finite(m.local_speech_rss_mb)) metrics.push("本地语音模型 " + m.local_speech_rss_mb.toFixed(1) + " MB");
-        if (finite(m.local_speech_cpu_percent)) metrics.push("语音 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");
-        if (finite(m.local_speech_peak_rss_mb)) metrics.push("语音峰值 " + m.local_speech_peak_rss_mb.toFixed(1) + " MB");
+        if (finite(m.local_speech_rss_mb)) metrics.push("语音主进程 " + m.local_speech_rss_mb.toFixed(1) + " MB");
+        if (finite(m.local_speech_cpu_percent)) metrics.push("语音主进程 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");
+        if (finite(m.local_speech_peak_rss_mb)) metrics.push("语音主进程峰值 " + m.local_speech_peak_rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_threads)) metrics.push("语音线程 " + m.local_speech_threads);
+        if (local && current.capabilities.local_asr_backend === "rknn") metrics.push("主进程统计不含临时NPU识别进程");
         if (local && m.local_speech_running === false) metrics.push("本地模型进程未运行");
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
