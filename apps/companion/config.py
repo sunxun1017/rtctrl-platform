@@ -6,6 +6,8 @@ from urllib.parse import urlsplit
 
 DEFAULTS = {
     "aec_enabled": False, "full_duplex": False,
+    "standalone_voice": False, "lan_access": False, "pairing_file": "/run/rtctrl-companion/pairing-code",
+    "vision_url": "http://127.0.0.1:8081",
     "aec_enable_aes": False, "aec_library": "", "aec_reference_delay_ms": 0,
     "device_settings_enabled": False, "wifi_enabled": False, "mode": "demo", "bind": "127.0.0.1", "port": 8090,
     "backend_url": "", "token_env": "RTCTRL_VOICE_TOKEN",
@@ -37,7 +39,7 @@ def validate(values):
     if unknown:
         raise ValueError("unknown configuration keys: " + ", ".join(sorted(unknown)))
     config = dict(DEFAULTS, **values)
-    for key in ("bind", "backend_url", "token_env", "device_id", "client_id",
+    for key in ("bind", "backend_url", "token_env", "device_id", "client_id", "pairing_file", "vision_url",
                 "capture_device", "playback_device", "face_url", "qianfan_model",
                 "qianfan_token_env", "qianfan_proxy_url", "local_speech_root", "local_speech_socket", "aec_library"):
         if not isinstance(config[key], str) or len(config[key]) > 2048 or any(
@@ -73,7 +75,7 @@ def validate(values):
             raise ValueError("qianfan_proxy_url must be a credential-free loopback HTTP CONNECT proxy")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    for key in ("qianfan_streaming", "wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming", "aec_enabled", "aec_enable_aes", "full_duplex"):
+    for key in ("standalone_voice", "lan_access", "qianfan_streaming", "wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming", "aec_enabled", "aec_enable_aes", "full_duplex"):
         if type(config[key]) is not bool:
             raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
@@ -89,8 +91,14 @@ def validate(values):
     for key in ("port", "playback_queue_frames"):
         if type(config[key]) is not int:
             raise ValueError(key + " must be an integer")
-    if config["bind"] not in ("127.0.0.1", "localhost"):
+    if config["bind"] not in (("127.0.0.1", "localhost", "0.0.0.0") if config["lan_access"] else ("127.0.0.1", "localhost")):
         raise ValueError("bind must be loopback; use an SSH tunnel for remote control")
+    if not os.path.isabs(config["pairing_file"]):
+        raise ValueError("pairing_file must be absolute")
+    vision = urlsplit(config["vision_url"])
+    if (vision.scheme != "http" or vision.hostname != "127.0.0.1" or not vision.port or
+            vision.username or vision.password or vision.path not in ("", "/") or vision.query or vision.fragment):
+        raise ValueError("vision_url must be a loopback origin")
     if config["full_duplex"] and not config["aec_enabled"]:
         raise ValueError("Full duplex requires AEC and local streaming ASR")
     if config["aec_enabled"] and (config["mode"] != "live" or config["voice_backend"] != "local" or

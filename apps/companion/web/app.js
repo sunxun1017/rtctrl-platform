@@ -12,6 +12,13 @@
         muted: ["麦克风已静音", "开启麦克风后，按住按钮才会录音。"]
     };
     const emotions = {neutral:"平静",happy:"开心",sad:"低落",angry:"认真",surprised:"惊喜",thinking:"思考",calm:"平静"};
+    let authorized = false;
+    let page = "home";
+    let cameraSelected = false;
+    let access = {};
+    let logLoading = false;
+    let logRevision = 0;
+    const deviceOwned = value => (value.control_mode || (value.capabilities || {}).control_mode) === "device";
     let current = {connected:false, muted:true, state:"offline"};
     let reachable = false;
     let held = false;
@@ -35,6 +42,10 @@
         try {
             const response = await fetch(url, {...options, signal:controller.signal, cache:"no-store"});
             const body = await response.json();
+            if (response.status === 401 && !["/api/access", "/api/pair"].includes(url)) {
+                authorized = false;
+                showAccessGate("访问授权已过期，请重新配对。", true);
+            }
             if (!response.ok || body.ok === false) {
                 throw new Error(typeof body.error === "string" ? body.error : "设备请求失败（" + response.status + "）");
             }
@@ -42,6 +53,9 @@
         } finally { clearTimeout(timer); }
     }
     function render() {
+        const micOn = reachable && !current.muted && (current.continuous || current.state === "listening");
+        $("mic-status").dataset.active = reachable ? String(micOn) : "unknown";
+        $("mic-status").textContent = !reachable ? "麦克风状态未知" : micOn ? "● 麦克风 ON · 正在采集" : current.muted ? "麦克风 OFF · 已关闭" : "麦克风待命 · 未采集";
         const state = !reachable ? "offline" : (current.muted && current.state === "idle" ? "muted" : current.state);
         let [label, hint] = labels[state] || ["等待状态", "正在同步设备状态。"];
         const demo = current.capabilities && current.capabilities.mode === "demo";
@@ -94,6 +108,9 @@
             }
             if (current.voice_progress === "no_speech" && state === "idle") hint = "没有识别到话音，未发送云端。";
         }
+        if (deviceOwned(current) && streaming) {
+            $("privacy-note").textContent = "音频在设备本地处理，识别后的文字发送到千帆。连续对话由设备管理，切换页面或关闭浏览器不会停止；请使用“立即静音”关闭麦克风。刷新页面不会自动开启麦克风。";
+        }
         const queued = Number.isInteger(current.pending_utterances) ? Math.max(0, Math.min(3, current.pending_utterances)) : 0;
         $("duplex-input").hidden = !fullDuplex || !current.continuous;
         $("duplex-input").dataset.active = String(!!inputActive);
@@ -131,6 +148,7 @@
         $("mute").textContent = current.muted ? (demo ? "启用演示交互" : "开启麦克风") : (demo ? "暂停演示交互" : "立即静音");
         $("mute").setAttribute("aria-pressed", String(!!current.muted));
         $("mute").disabled = !reachable;
+        $("global-mute").disabled = !reachable || current.muted || pending > 0;
         $("talk").disabled = !!current.continuous || !reachable || !current.connected || current.muted || (!held && (pending > 0 || !["idle", "listening"].includes(current.state)));
         $("talk").textContent = held ? (demo ? "模拟聆听 · 松开继续" : "正在听 · 松开结束") : (demo ? "按住体验对话" : "按住说话");
         if (held && ["thinking", "speaking", "error", "offline"].includes(current.state)) $("talk").textContent = "已结束录音 · 请松开";
@@ -173,6 +191,7 @@
         if (finite(m.local_speech_threads)) metrics.push("语音线程 " + m.local_speech_threads);
         if (local && current.capabilities.local_asr_backend === "rknn") metrics.push("主进程统计不含独立NPU识别进程");
         if (local && m.local_speech_running === false) metrics.push("本地模型进程未运行");
+        if (finite(m.temperature_c)) metrics.push("温度 " + m.temperature_c.toFixed(1) + "℃");
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
         $("metrics").textContent = metrics.join(" · ") || "暂未提供资源数据";
@@ -234,6 +253,7 @@
     $("dismiss-echo").addEventListener("click", () => { if (!$("dismiss-echo").disabled) action("dismiss_echo:" + current.echo_suspect_id); });
     $("continuous").addEventListener("click", () => { stopTalk(); action(current.continuous ? "mute" : "continuous"); });
     $("connect").addEventListener("click", () => { stopTalk(); action(current.connected ? "disconnect" : "connect"); });
+    $("global-mute").addEventListener("click", () => { stopTalk(); action("mute"); });
     $("mute").addEventListener("click", () => { stopTalk(); action(current.muted ? "unmute" : "mute"); });
     $("interrupt").addEventListener("click", () => { stopTalk(); action("interrupt"); });
     $("talk").addEventListener("pointerdown", startTalk);
@@ -251,11 +271,13 @@
         if ([" ", "Enter"].includes(event.key)) { event.preventDefault(); stopTalk(); }
     });
     $("talk").addEventListener("blur", stopTalk);
-    function leaveConversation() { stopTalk(); if (current.continuous) action("mute"); }
+    function leaveConversation() { if (deviceOwned(current)) return; stopTalk(); if (current.continuous) action("mute"); }
     // Losing focus to the chat pane is not leaving the visible conversation.
-    window.addEventListener("blur", stopTalk);
-    document.addEventListener("visibilitychange", () => { if (document.hidden) leaveConversation(); });
+    window.addEventListener("blur", () => { if (!deviceOwned(current)) stopTalk(); });
+    document.addEventListener("visibilitychange", () => { updateCamera(); if (document.hidden) leaveConversation(); });
     window.addEventListener("pagehide", () => {
+        $("camera-image").removeAttribute("src");
+        if (deviceOwned(current)) return;
         if (held || current.continuous) {
             const stopAction = current.continuous ? "mute" : "stop";
             held = false;
@@ -264,10 +286,11 @@
         }
     });
     async function poll() {
+        if (!authorized) { setTimeout(poll, 1000); return; }
         const revision = statusRevision;
         try {
             const next = await request("/api/status");
-            if (next.continuous && !document.hidden && Date.now() - lastLease > 4000) {
+            if (!deviceOwned(next) && next.continuous && !document.hidden && Date.now() - lastLease > 4000) {
                 await request("/api/action", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:"keep_listening"})});
                 lastLease = Date.now();
             }
@@ -282,7 +305,7 @@
             stopTalk();
             $("updated").textContent = "同步中断";
             render();
-            showError("无法连接设备控制台，正在自动重试。");
+            showError("无法连接设备中心，正在自动重试。");
         } finally {
             setTimeout(poll, current.state === "listening" ? 250 : 1000);
         }
@@ -347,10 +370,10 @@
     function scheduleNetwork() {
         if (networkTimer !== null) clearTimeout(networkTimer);
         networkTimer = null;
-        if (networkPanel.open && !document.hidden) networkTimer = setTimeout(pollNetwork, 3000);
+        if (authorized && page === "settings" && networkPanel.open && !document.hidden) networkTimer = setTimeout(pollNetwork, 3000);
     }
     async function pollNetwork() {
-        if (!networkPanel.open || document.hidden || networkLoading || networkSubmitting) return;
+        if (!authorized || page !== "settings" || !networkPanel.open || document.hidden || networkLoading || networkSubmitting) return;
         networkLoading = true;
         const revision = networkRevision;
         try {
@@ -402,7 +425,7 @@
     $("network-disconnect").addEventListener("click", () => networkAction("disconnect"));
     $("network-select").addEventListener("change", () => { $("network-password").value = ""; renderNetwork(); });
     networkPanel.addEventListener("toggle", () => {
-        if (networkPanel.open && !document.hidden) pollNetwork();
+        if (authorized && page === "settings" && networkPanel.open && !document.hidden) pollNetwork();
         else { $("network-password").value = ""; scheduleNetwork(); }
     });
     document.addEventListener("visibilitychange", () => {
@@ -470,10 +493,10 @@
     function scheduleDevice() {
         if (deviceTimer !== null) clearTimeout(deviceTimer);
         deviceTimer = null;
-        if (devicePanel.open && !document.hidden) deviceTimer = setTimeout(pollDevice, 5000);
+        if (authorized && page === "settings" && devicePanel.open && !document.hidden) deviceTimer = setTimeout(pollDevice, 5000);
     }
     async function pollDevice() {
-        if (!devicePanel.open || document.hidden || deviceLoading || deviceSubmitting) return;
+        if (!authorized || page !== "settings" || !devicePanel.open || document.hidden || deviceLoading || deviceSubmitting) return;
         deviceLoading = true;
         const revision = deviceRevision;
         try {
@@ -518,6 +541,135 @@
     }
     devicePanel.addEventListener("toggle", () => { if (devicePanel.open) pollDevice(); else scheduleDevice(); });
     document.addEventListener("visibilitychange", () => { if (!document.hidden && devicePanel.open) pollDevice(); else scheduleDevice(); });
+    function updateCamera() {
+        const show = authorized && page === "home" && cameraSelected && !document.hidden;
+        $("camera-frame").hidden = !cameraSelected;
+        $("avatar").hidden = cameraSelected;
+        const image = $("camera-image");
+        if (show && !image.hasAttribute("src")) {
+            $("camera-message").hidden = false;
+            $("camera-message").textContent = "正在连接摄像头…";
+            image.src = "/vision/stream";
+        } else if (!show) image.removeAttribute("src");
+        $("view-camera").setAttribute("aria-pressed", String(cameraSelected));
+        $("view-expression").setAttribute("aria-pressed", String(!cameraSelected));
+    }
+    function navigate(name) {
+        page = ["home", "settings", "status", "logs"].includes(name) ? name : "home";
+        document.querySelectorAll(".portal-page").forEach(node => { node.hidden = node.id !== "page-" + page; });
+        document.querySelectorAll("[data-page]").forEach(node => {
+            if (node.dataset.page === page) node.setAttribute("aria-current", "page");
+            else node.removeAttribute("aria-current");
+        });
+        updateCamera();
+        scheduleNetwork();
+        scheduleDevice();
+        if (authorized && page === "settings") {
+            if (networkPanel.open) pollNetwork();
+            if (devicePanel.open) pollDevice();
+            $("access-qr").src = "/api/access/qr.svg";
+        } else $("access-qr").removeAttribute("src");
+        if (authorized && page === "logs") loadLogs();
+    }
+    function showAccessGate(message, pairing) {
+        authorized = false;
+        $("app-shell").hidden = true;
+        $("pair-gate").hidden = false;
+        $("access-message").textContent = message;
+        $("pair-form").hidden = !pairing;
+        $("access-retry").hidden = pairing;
+        $("pair-code").value = "";
+        $("pairing-code-value").textContent = "";
+        $("pairing-code-panel").hidden = true;
+        updateCamera();
+        $("access-qr").removeAttribute("src");
+    }
+    async function checkAccess() {
+        $("access-retry").disabled = true;
+        try {
+            access = await request("/api/access");
+            if (access.pairing_required && !access.paired) {
+                showAccessGate("请输入设备上显示的配对码，授权此浏览器访问。", true);
+                return;
+            }
+            authorized = true;
+            $("pair-gate").hidden = true;
+            $("app-shell").hidden = false;
+            const pairingCode = typeof access.pairing_code === "string" && /^\d{8}$/.test(access.pairing_code) ? access.pairing_code : "";
+            $("pairing-code-value").textContent = pairingCode;
+            $("pairing-code-panel").hidden = !pairingCode;
+            delete access.pairing_code;
+            const link = $("device-url");
+            try {
+                const target = new URL(access.device_url);
+                if (!["http:", "https:"].includes(target.protocol) || target.username || target.password) throw new Error();
+                link.href = target.href;
+                link.textContent = target.href;
+            } catch (_) { link.removeAttribute("href"); link.textContent = "设备地址暂不可用"; }
+            navigate(location.hash.slice(1));
+        } catch (_) { showAccessGate("暂时无法连接设备，请检查网络后重试。", false); }
+        finally { $("access-retry").disabled = false; }
+    }
+    function logQuery() { return new URLSearchParams({source:$("log-source").value, level:$("log-level").value}).toString(); }
+    async function loadLogs() {
+        if (!authorized || page !== "logs" || logLoading) return;
+        const revision = ++logRevision;
+        const query = logQuery();
+        logLoading = true;
+        $("log-refresh").disabled = true;
+        $("log-status").textContent = "正在读取日志…";
+        $("log-export").href = "/api/logs/export?" + query;
+        try {
+            const result = await request("/api/logs?" + query);
+            if (!authorized || revision !== logRevision || query !== logQuery()) return;
+            const entries = Array.isArray(result.entries) ? result.entries.slice(-200) : [];
+            const list = document.createDocumentFragment();
+            for (const entry of entries) {
+                if (!entry || typeof entry !== "object") continue;
+                const row = document.createElement("li");
+                const meta = document.createElement("div");
+                meta.className = "log-meta";
+                meta.textContent = [entry.timestamp, entry.level, entry.source, entry.code].filter(value => typeof value === "string" || typeof value === "number").join(" · ");
+                const body = document.createElement("p");
+                body.textContent = typeof entry.message === "string" ? entry.message : "";
+                row.dataset.level = ["error", "warning"].includes(entry.level) ? entry.level : "info";
+                row.append(meta, body); list.append(row);
+            }
+            $("log-entries").replaceChildren(list);
+            $("log-status").textContent = result.available === false || result.supported === false ? (typeof result.reason === "string" && result.reason ? result.reason : "此设备暂不提供该来源的日志。") : entries.length ? "已读取 " + entries.length + " 条事件 · 日志不会自动刷新" : "此筛选条件下没有日志。";
+        } catch (_) { $("log-status").textContent = "日志读取失败，请稍后重试。"; }
+        finally {
+            logLoading = false;
+            $("log-refresh").disabled = false;
+            if (authorized && page === "logs" && query !== logQuery()) loadLogs();
+        }
+    }
+    document.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
+        location.hash = button.dataset.page;
+        navigate(button.dataset.page);
+    }));
+    window.addEventListener("hashchange", () => navigate(location.hash.slice(1)));
+    $("view-camera").addEventListener("click", () => { cameraSelected = true; updateCamera(); });
+    $("view-expression").addEventListener("click", () => { cameraSelected = false; updateCamera(); });
+    $("camera-image").addEventListener("load", () => { $("camera-message").hidden = true; });
+    $("camera-image").addEventListener("error", () => { if (cameraSelected && authorized) { $("camera-message").hidden = false; $("camera-message").textContent = "摄像头画面暂不可用，可切换表情后重试。"; } });
+    $("pair-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const code = $("pair-code").value.trim();
+        $("pair-code").value = "";
+        $("pair-submit").disabled = true;
+        try {
+            await request("/api/pair", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({code})});
+            await checkAccess();
+        } catch (error) { $("access-message").textContent = error.name === "AbortError" ? "配对超时，请重试。" : error.message; }
+        finally { $("pair-submit").disabled = false; }
+    });
+    $("access-qr").addEventListener("error", () => { $("access-qr-error").hidden = false; });
+    $("access-qr").addEventListener("load", () => { $("access-qr-error").hidden = true; });
+    $("access-retry").addEventListener("click", checkAccess);
+    $("log-refresh").addEventListener("click", loadLogs);
+    for (const id of ["log-source", "log-level"]) $(id).addEventListener("change", () => { logRevision++; loadLogs(); });
     render();
+    checkAccess();
     poll();
 })();

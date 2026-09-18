@@ -31,7 +31,10 @@ def main():
         shutil.copy2(root/"apps/companion/README.md",stage/"README.md")
         shutil.copy2(root/"LICENSE",stage/"LICENSE")
         if args.python_deps:
-            for path in ("websocket", "websocket_client-1.8.0.dist-info"):
+            packages = ["websocket", "websocket_client-1.8.0.dist-info"]
+            if (deps / "qrcode").is_dir() and (deps / "qrcode-8.2.dist-info").is_dir():
+                packages += ["qrcode", "qrcode-8.2.dist-info"]
+            for path in packages:
                 shutil.copytree(deps/path,stage/"vendor"/path,
                                 ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
         manifest = {}

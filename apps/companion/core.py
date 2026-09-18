@@ -8,6 +8,7 @@ import time
 from collections import deque
 from .audio import PcmAudio, PcmStreamChunk
 from .echo_guard import EchoGuard
+from .diagnostics import Diagnostics
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
 SILENCE_FRAME = bytes(1920)
@@ -18,6 +19,8 @@ EMOTIONS = {"neutral", "happy", "sad", "angry", "surprised", "excited", "thinkin
 class Companion:
     def __init__(self, config, audio_factory=None, codec_factory=None, transport_factory=None):
         self.config = config
+        self.diagnostics = Diagnostics()
+        self.diagnostics.emit("service_started")
         self.audio_factory = audio_factory
         self.codec_factory = codec_factory
         self.transport_factory = transport_factory
@@ -52,6 +55,7 @@ class Companion:
         self.tts_ended = False
         self.accept_audio = False
         self.data = {
+            "control_mode": "device" if config.get("standalone_voice", False) else "browser",
             "input_state": "off", "next_transcript": "", "pending_utterances": 0, "echo_suspect": "", "echo_suspect_id": 0,
             "last_latency_ms": {}, "latency_ms": {}, "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
             "error": "", "connected": False, "muted": True, "continuous": False, "transcript_partial": False, "voice_progress": "idle",
@@ -81,7 +85,11 @@ class Companion:
 
     def _set(self, **values):
         with self.lock:
+            previous = self.data.get("state")
             self.data.update(values)
+        state = values.get("state")
+        if state and state != previous:
+            self.diagnostics.emit("state_" + state)
 
     def post(self, kind, payload=None, generation=None):
         try:
@@ -203,8 +211,9 @@ class Companion:
         self.session = ""
 
     def _fail(self, reason):
+        self.diagnostics.emit("session_failed")
         self._release()
-        self._set(state="error", connected=False, error=reason, emotion="neutral", voice_progress="failed")
+        self._set(state="error", connected=False, muted=True, error=reason, emotion="neutral", voice_progress="failed")
 
     def _send(self, kind, **fields):
         if self.transport:
@@ -286,11 +295,12 @@ class Companion:
                 raise ValueError("当前配置不支持流式对话")
             if not self.data["connected"] or self.data["muted"] or self.data["state"] != "idle":
                 raise ValueError("请先准备语音并开启麦克风，等待当前对话结束")
-            self.auto_until = time.monotonic() + 15
+            self.auto_until = 0. if self.config.get("standalone_voice", False) else time.monotonic() + 15
+            self.diagnostics.emit("continuous_started")
             self._set(continuous=True)
             self._action("listen")
         elif action == "keep_listening":
-            if self.data["continuous"]:
+            if self.data["continuous"] and not self.config.get("standalone_voice", False):
                 self.auto_until = time.monotonic() + 15
         elif action == "connect":
             if self.data["connected"] or self.data["state"] == "connecting":
@@ -324,8 +334,9 @@ class Companion:
             self.deadline = time.monotonic() + self.config["network_timeout_s"] + 3
         elif action == "disconnect":
             self._release()
-            self._set(state="offline", connected=False, emotion="neutral", voice_progress="idle")
+            self._set(state="offline", connected=False, muted=True, emotion="neutral", voice_progress="idle")
         elif action == "mute":
+            self.diagnostics.emit("microphone_muted")
             self.auto_due = self.auto_until = 0.
             self._set(continuous=False)
             reconnect = self._interrupt()
@@ -335,6 +346,7 @@ class Companion:
             elif self.data["connected"]:
                 self._idle()
         elif action == "unmute":
+            self.diagnostics.emit("microphone_enabled")
             if self.data["muted"]:
                 self._set(muted=False)
                 if self.data["connected"]:
@@ -505,6 +517,7 @@ class Companion:
                     if self._echo_context() and self.echo_guard.suspected(text, time.monotonic()):
                         with self.lock:
                             self.data["metrics"]["echo_suspicions"] += 1
+                        self.diagnostics.emit("echo_quarantined")
                         self.echo_sequence += 1
                         self._set(echo_suspect=text, echo_suspect_id=self.echo_sequence, next_transcript="")
                     else:
@@ -594,7 +607,8 @@ class Companion:
             if self.capture_stopped_at:
                 timing["stop_to_audio_ms"] = round((first_write - self.capture_stopped_at) * 1000, 1)
             self._set(latency_ms=timing)
-        if self.data["continuous"] and now >= self.auto_until:
+        if self.data["continuous"] and not self.config.get("standalone_voice", False) and now >= self.auto_until:
+            self.diagnostics.emit("browser_lease_expired")
             self._action("mute")
             return
         if self.auto_due and now >= self.auto_due:

@@ -150,6 +150,19 @@ class Monitor:
             pass
         return {"npu_load_percent": None}
 
+    @staticmethod
+    def sample_temperature():
+        values = []
+        for index in range(8):
+            try:
+                with open("/sys/class/thermal/thermal_zone%d/temp" % index) as source:
+                    value = float(source.read(32)) / 1000
+                if math.isfinite(value) and -40 <= value <= 150:
+                    values.append(value)
+            except (OSError, ValueError):
+                pass
+        return {"temperature_c": round(max(values), 1) if values else None}
+
     def run(self):
         while not self.stop_event.is_set():
             self.core.post("face", self.sample_face())
@@ -169,6 +182,7 @@ class Monitor:
                 pass
             metrics.update(self.sample_system_cpu())
             metrics.update(self.sample_npu())
+            metrics.update(self.sample_temperature())
             metrics.update(self.sample_worker(now))
             with self.core.lock:
                 self.core.data["metrics"].update(metrics)
