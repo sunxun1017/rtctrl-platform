@@ -252,7 +252,8 @@
     });
     $("talk").addEventListener("blur", stopTalk);
     function leaveConversation() { stopTalk(); if (current.continuous) action("mute"); }
-    window.addEventListener("blur", leaveConversation);
+    // Losing focus to the chat pane is not leaving the visible conversation.
+    window.addEventListener("blur", stopTalk);
     document.addEventListener("visibilitychange", () => { if (document.hidden) leaveConversation(); });
     window.addEventListener("pagehide", () => {
         if (held || current.continuous) {
