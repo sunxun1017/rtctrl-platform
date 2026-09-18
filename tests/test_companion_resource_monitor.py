@@ -63,5 +63,64 @@ class WorkerResourceTests(unittest.TestCase):
             self.assertEqual(Monitor.read_process(42), (999, 150, 6, {"VmRSS": 1.5, "VmHWM": 2.0}))
 
 
+class BoardResourceTests(unittest.TestCase):
+    def setUp(self):
+        self.monitor = Monitor(SimpleNamespace())
+
+    def sample_cpu(self, values, cores=4):
+        raw = "cpu " + values + "\n" + "".join(
+            "cpu%d 0 0 0 0 0 0 0 0\n" % index for index in range(cores))
+        with patch("builtins.open", return_value=io.StringIO(raw)):
+            return self.monitor.sample_system_cpu()
+
+    def test_aggregate_cpu_excludes_guest_and_normalizes_all_cores(self):
+        first = self.sample_cpu("100 0 50 500 10 0 0 0 90 0")
+        self.assertIsNone(first["system_cpu_percent"])
+        self.assertEqual(first["cpu_logical_cores"], 4)
+        # Busy +100, idle +280, iowait +20 -> 25%, irrespective of guest +90.
+        result = self.sample_cpu("180 0 70 780 30 0 0 0 180 0")
+        self.assertEqual(result["system_cpu_percent"], 25)
+        self.assertEqual(result["cpu_logical_cores"], 4)
+
+    def test_cpu_idle_busy_and_no_progress(self):
+        self.sample_cpu("0 0 0 0 0 0 0 0")
+        self.assertEqual(self.sample_cpu("0 0 0 40 0 0 0 0")["system_cpu_percent"], 0)
+        self.assertEqual(self.sample_cpu("40 0 0 40 0 0 0 0")["system_cpu_percent"], 100)
+        self.assertIsNone(self.sample_cpu("40 0 0 40 0 0 0 0")["system_cpu_percent"])
+
+    def test_cpu_reset_and_hotplug_rebaseline(self):
+        self.sample_cpu("100 0 50 500 10 0 0 0")
+        self.assertIsNone(self.sample_cpu("0 0 0 0 0 0 0 0")["system_cpu_percent"])
+        self.assertEqual(self.sample_cpu("20 0 0 20 0 0 0 0")["system_cpu_percent"], 50)
+        self.assertIsNone(self.sample_cpu("40 0 0 40 0 0 0 0", cores=2)["system_cpu_percent"])
+
+    def test_cpu_unreadable_or_malformed_is_unknown_and_clears_baseline(self):
+        for raw in ("", "intr 123\n", "cpu 1 2 3\n", "cpu x 0 0 0 0 0 0 0\ncpu0 0\n",
+                    "cpu -1 0 0 0 0 0 0 0\ncpu0 0\n", "cpu 0 0 0 0 0 0 0 0\n"):
+            with self.subTest(raw=raw):
+                self.sample_cpu("10 0 0 10 0 0 0 0")
+                with patch("builtins.open", return_value=io.StringIO(raw)):
+                    self.assertEqual(self.monitor.sample_system_cpu(),
+                                     {"system_cpu_percent": None, "cpu_logical_cores": None})
+                self.assertIsNone(self.monitor.system_cpu_sample)
+        with patch("builtins.open", side_effect=PermissionError()):
+            self.assertIsNone(self.monitor.sample_system_cpu()["system_cpu_percent"])
+
+    def test_npu_valid_load_including_zero(self):
+        for value in (0, 10, 100):
+            with patch("builtins.open", return_value=io.StringIO("NPU load: %d%%\n" % value)) as opened:
+                self.assertEqual(Monitor.sample_npu(), {"npu_load_percent": value})
+                opened.assert_called_once_with("/sys/kernel/debug/rknpu/load")
+
+    def test_npu_missing_or_invalid_never_claims_zero(self):
+        for raw in ("", "NPU load: 101%", "NPU load: -1%", "NPU load: 1.5%",
+                    "NPU load: 10% unexpected", "Core0: 10%", "NPU load: 10%\nNPU load: 20%"):
+            with self.subTest(raw=raw), patch("builtins.open", return_value=io.StringIO(raw)):
+                self.assertIsNone(Monitor.sample_npu()["npu_load_percent"])
+        for error in (PermissionError(), FileNotFoundError()):
+            with patch("builtins.open", side_effect=error):
+                self.assertIsNone(Monitor.sample_npu()["npu_load_percent"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -232,3 +232,41 @@ PCM SHA256：6e55d3fb4f1f78b5f6c40ad224c7aeb6606641ab00df1cf988bc6b36d12dec29c�
 release/asan的9组companion均通过；最后drain边界补丁后两套音频19项再次通过。当前155项companion有执行证据。
 覆盖：PCM精确字节/采样率、临时文件销毁后仍可用、等待真实drain、大管道超过3秒、打断堵塞旧输出后新输出、
 输入上限/禁止重叠、静音与turn门控、远端backend拒绝本地PCM。模型/音色未改变。
+
+
+## 2026-09-18 CPU/NPU部署核查与低录音电平
+
+读数：四核，空闲（人脸仍运行）5秒整机CPU7.89%，内存397/970MiB、MemAvailable约563MiB；
+NPU五次均10%、freq800000000Hz、驱动v0.9.8。公开样本ASR/TTS一轮期间，整机CPU50.13/59.90/61.77/59.19/59.90%，
+收尾34.67%；内存470.9–495.0MiB，NPU10–11%。这是本次短测，不是长期峰值上限。
+语音进程单核口径约200%相当于四核总算力约50%；之前页面的伴随服务CPU不是整机CPU。
+
+进程核查：人脸976映射/usr/lib/librknnrt.so并打开/dev/rknpu；语音worker映射sherpa_onnx/lib/libonnxruntime.so，
+没有NPU设备fd。板端from_zipformer_ctc签名provider默认cpu，OfflineTtsModelConfig().provider=cpu，应用未覆盖。
+结论：ASR与TTS均为CPU双线程，已有NPU人脸独立运行；没有部署语音RKNN模型，不把NPU余量当自动可用语音加速。
+
+用户配合电平测试，仅内存统计，未保存原始录音或发送云端。
+第一次48k/S16/双声道5秒、24dB：左peak14/rms2.83；右peak588(-34.92dBFS)/rms46.70；
+左右平均peak296.5(-40.87dBFS)/rms23.29，相关系数-0.0724，零削波。
+本机SDK证据：kernel-6.1/arch/arm64/boot/dts/rockchip/rv1126b-alientek.dtsi Main Mic→INPUT2，
+kernel-6.1/sound/soc/codecs/es8389.c PGAR→ADCR；PGA raw0..14按3dB/档=0..42dB，ADC191=0dB。
+原页面24dB上限是应用限制。驱动S16_LE有明确寄存器设置，未找到数据移位错误证据。
+
+增加独立右通道capture PCM、保留播放PCM。依据ALSA官方plug/ttable说明：
+https://www.alsa-project.org/alsa-doc/alsa-lib/pcm_plugins.html
+板端纯合成双声道常数(L100,R1000)通过虚拟file输入验证，无物理麦克风：
+默认mono均值549.164，右映射998.479，左映射99.848，排除映射方向错误。
+默认平均闲置左ADC会损失约6dB，但不能单独解释全部低电平。
+
+第二次右路16k/mono5秒、36dB：peak194(-44.55dBFS)、rms24.55(-62.51dBFS)，零削波；
+用户确认同样距离/音量，不能宣称这次调整提高了语音峰值。
+第三次一次连续8秒raw stereo，前4秒24dB后4秒36dB：
+右通道每秒peak[210,67,25,22,89,105,91,136]，rms[19.48,8.06,5.46,5.30,21.38,22.50,22.32,24.83]；
+左peak[12,12,14,15,46,47,49,47]；零削波。低电平区rms约5.3→22证实增益生效，不证明语音信噪比已改善。
+用户说话距离10–20厘米。剩余近场电平弱仍待核实麦克风本体/实际接口/偏置等模拟路径；无原理图/电压证据时不定根因。
+当前保留36dB作现场调试、无数字补偿/AGC，未保存硬件增益的重启配置。用户可在页面改回24dB。
+
+监控新增system_cpu_percent(全核0..100)、cpu_logical_cores、npu_load_percent；严格读sysfs/proc，缺失显示未知。
+页面保留语音单核CPU口径并明确ASR/TTS CPU；录音peak加dBFS/幅度百分比，避免把它当资源利用率。
+两套companion CTest各9/9通过，总161用例（新增6项CPU/NPU采样边界）；设备测试覆盖36/42dB与越界拒绝。
+原有不连接Wi-Fi、保留人脸服务/图库/控制执行器的边界继续有效。

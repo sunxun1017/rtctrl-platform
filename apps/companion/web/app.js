@@ -116,6 +116,9 @@
         const finite = value => typeof value === "number" && Number.isFinite(value);
         const metrics = [];
         if (finite(m.memory_used_mb) && finite(m.memory_total_mb)) metrics.push("内存 " + Math.round(m.memory_used_mb) + " / " + Math.round(m.memory_total_mb) + " MB");
+        if (finite(m.system_cpu_percent)) metrics.push("整机 CPU " + m.system_cpu_percent.toFixed(1) + "%" + (finite(m.cpu_logical_cores) ? "（" + m.cpu_logical_cores + "核）" : ""));
+        metrics.push(finite(m.npu_load_percent) ? "NPU " + m.npu_load_percent.toFixed(0) + "%" : "NPU 暂无读数");
+        if (local) metrics.push("ASR / TTS：CPU");
         if (finite(m.rss_mb)) metrics.push("伴随服务 " + m.rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_rss_mb)) metrics.push("本地语音模型 " + m.local_speech_rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_cpu_percent)) metrics.push("语音 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");
@@ -125,7 +128,11 @@
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");
         $("metrics").textContent = metrics.join(" · ") || "暂未提供资源数据";
-        if (finite(m.capture_peak_amplitude)) $("metrics").textContent += " · 本轮录音峰值 " + m.capture_peak_amplitude + " / 32768";
+        if (finite(m.capture_peak_amplitude)) {
+            const peak = m.capture_peak_amplitude;
+            $("metrics").textContent += " · 本轮录音峰值 " + peak + " / 32768" +
+                (peak > 0 ? "（" + (20 * Math.log10(peak / 32768)).toFixed(1) + " dBFS，" + (peak / 32768 * 100).toFixed(1) + "%）" : "（本轮尚无有效电平）");
+        }
         const c = current.capabilities || {};
         const capabilities = [];
         if (c.audio_input === false || c.recording === false) capabilities.push("录音未就绪");
@@ -341,7 +348,7 @@
     const deviceFields = {
         volume:{key:"volume_percent", unit:"%", min:0, max:100},
         speaker:{key:"speaker_enabled"},
-        mic_gain:{key:"mic_gain_db", unit:" dB", values:[0,6,12,18,24]},
+        mic_gain:{key:"mic_gain_db", unit:" dB", values:[0,6,12,18,24,30,36,42]},
         brightness:{key:"brightness_percent", unit:"%", min:10, max:100}
     };
     let device = {available:false, supported:{}};

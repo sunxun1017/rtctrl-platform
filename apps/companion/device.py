@@ -60,7 +60,7 @@ class DeviceManager:
                       "volume_percent": None, "speaker_enabled": None,
                       "mic_gain_db": None, "brightness_percent": None,
                       "supported": dict.fromkeys(("volume", "speaker", "mic_gain", "brightness"), False),
-                      "diagnostic": "音量上限为0dB；麦克风增益仅支持0/6/12/18/24dB；亮度最低10%；修改即时生效，未保存重启配置。"}
+                      "diagnostic": "音量上限为0dB；麦克风增益仅支持0–42dB（每档6dB）；亮度最低10%；修改即时生效，未保存重启配置。"}
 
     def _read_control(self, name):
         text = self._runner(["amixer", "-c", "0", "sget", name])
@@ -166,7 +166,7 @@ class DeviceManager:
             raise DeviceError("设置失败，已恢复原值" if restored else "设置失败，无法完全恢复，请检查设备") from exc
 
     def action(self, body):
-        ranges = {"set_volume": range(101), "set_mic_gain": (0, 6, 12, 18, 24),
+        ranges = {"set_volume": range(101), "set_mic_gain": (0, 6, 12, 18, 24, 30, 36, 42),
                   "set_brightness": range(10, 101)}
         if not isinstance(body, dict) or set(body) != {"action", "value"}:
             raise ValueError("设备设置请求格式无效")

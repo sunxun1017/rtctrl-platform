@@ -62,6 +62,8 @@ class DeviceTests(unittest.TestCase):
     def test_explicit_safe_controls_and_readback(self):
         for operation, value, key in (("set_volume", 50, "volume_percent"),
                                       ("set_mic_gain", 6, "mic_gain_db"),
+                                      ("set_mic_gain", 36, "mic_gain_db"),
+                                      ("set_mic_gain", 42, "mic_gain_db"),
                                       ("set_speaker", True, "speaker_enabled"),
                                       ("set_brightness", 10, "brightness_percent")):
             state = self.device.action({"action": operation, "value": value})
@@ -76,7 +78,7 @@ class DeviceTests(unittest.TestCase):
         for body in ({"action": "set_volume", "value": True},
                      {"action": "set_volume", "value": "50; reboot"},
                      {"action": "set_volume", "value": 101},
-                     {"action": "set_mic_gain", "value": 30},
+                     {"action": "set_mic_gain", "value": 48},
                      {"action": "set_brightness", "value": 0},
                      {"action": "set_speaker", "value": 1},
                      {"action": "set_speaker", "value": True, "name": "anything"},

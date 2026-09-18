@@ -143,3 +143,16 @@ format-check依旧被原有未修改C++格式问题阻塞。原有不连接Wi-Fi
 155项companion用例有通过证据。用户主观听感仍待重听；电脑和开发板扬声器不能视为相同声学条件。
 本地audio_frames_received现在是PCM任务计数而非60ms帧；不套用旧Opus帧数验收。
 证据见docs/verification-companion-20260918.md“对话与音色一播放对齐”。
+
+
+## 2026-09-18 整机资源/NPU与录音路由
+
+已核实ASR/TTS均CPU provider，NPU为独立人脸进程/dev/rknpu，负载10–11%、800MHz。
+四核整机CPU空闲约8%，语音推理约50–62%；UI新增整机CPU/NPU，语音200%仍为单核口径。
+板载Main Mic为INPUT2/ADCR右ADC；原plug平均左侧闲置通道损失约6dB。
+已新增rtctrl_es8389_capture右路录音别名并切现场capture_device，播放别名不改。
+PGA厂商驱动实际支持0–42dB，UI解除旧24dB限制，6dB步长；现场暂36dB、数字0dB、ALCoff。
+三次短测仅内存统计不留原音频/不上传。增益能放大底噪约4倍，但近距10–20cm语音仍弱，不能声称完全修复。
+第一轮右峰值588、平均296.5；第二轮右映射36dB峰194；连续采集证实增益有效，需核实实际麦克风/偏置/硬件。
+UI峰值增加dBFS与幅度百分比；0dBFS不是目标，满幅有削波风险。161项companion用例有通过证据。
+详细统计及SDK源码/ALSA路由证据见docs/verification-companion-20260918.md最新章节。

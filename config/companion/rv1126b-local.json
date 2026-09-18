@@ -5,7 +5,7 @@
   "device_settings_enabled": true,
   "wifi_enabled": false,
   "listen_mode": "manual",
-  "capture_device": "rtctrl_es8389",
+  "capture_device": "rtctrl_es8389_capture",
   "playback_device": "rtctrl_es8389",
   "max_listen_s": 15,
   "response_timeout_s": 180,

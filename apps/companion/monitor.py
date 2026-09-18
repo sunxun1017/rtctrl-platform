@@ -3,6 +3,7 @@ import json
 import math
 import os
 import resource
+import re
 import threading
 import time
 import urllib.request
@@ -17,6 +18,7 @@ class Monitor:
         self.last_cpu = time.process_time()
         self.last_wall = time.monotonic()
         self.worker_sample = None
+        self.system_cpu_sample = None
         self.clock_ticks = os.sysconf("SC_CLK_TCK")
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
@@ -107,6 +109,47 @@ class Monitor:
             self.worker_sample = None
         return metrics
 
+    def sample_system_cpu(self):
+        metrics = {"system_cpu_percent": None, "cpu_logical_cores": None}
+        try:
+            with open("/proc/stat") as stream:
+                lines = stream.read(65536).splitlines()
+            fields = lines[0].split()
+            if fields[0] != "cpu" or len(fields) < 9:
+                raise ValueError("invalid aggregate CPU counters")
+            # guest/guest_nice are already included in user/nice. Count only fields 1..8.
+            counters = tuple(int(value) for value in fields[1:9])
+            cores = sum(bool(re.fullmatch(r"cpu[0-9]+", line.split()[0]))
+                        for line in lines if line.split())
+            if any(value < 0 for value in counters) or not cores:
+                raise ValueError("invalid CPU counters or core count")
+            metrics["cpu_logical_cores"] = cores
+            previous = self.system_cpu_sample
+            self.system_cpu_sample = (cores, counters)
+            if previous is not None and previous[0] == cores:
+                delta = tuple(value - old for value, old in zip(counters, previous[1]))
+                total = sum(delta)
+                if total > 0 and all(value >= 0 for value in delta):
+                    # idle and iowait are not execution; the aggregate already sums all cores.
+                    metrics["system_cpu_percent"] = round(
+                        100 * (total - delta[3] - delta[4]) / total, 2)
+        except (OSError, ValueError, IndexError):
+            self.system_cpu_sample = None
+        return metrics
+
+    @staticmethod
+    def sample_npu():
+        # Board driver debugfs is read-only here; never mount it or alter permissions.
+        try:
+            with open("/sys/kernel/debug/rknpu/load") as stream:
+                value = stream.read(256)
+            match = re.fullmatch(r"\s*NPU load:\s*([0-9]{1,3})%\s*", value)
+            if match and 0 <= int(match[1]) <= 100:
+                return {"npu_load_percent": int(match[1])}
+        except OSError:
+            pass
+        return {"npu_load_percent": None}
+
     def run(self):
         while not self.stop_event.is_set():
             self.core.post("face", self.sample_face())
@@ -124,6 +167,8 @@ class Monitor:
                 metrics["memory_used_mb"] = round((memory["MemTotal"]-memory["MemAvailable"]) / 1024)
             except (OSError, ValueError, KeyError):
                 pass
+            metrics.update(self.sample_system_cpu())
+            metrics.update(self.sample_npu())
             metrics.update(self.sample_worker(now))
             with self.core.lock:
                 self.core.data["metrics"].update(metrics)
