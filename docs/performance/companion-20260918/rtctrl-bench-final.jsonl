@@ -1,0 +1,18 @@
+{"input_sha256": "668bf8df51a10027b84d5d8816a1ce11ae93545538dc05cfe2aa6811d399c250", "pid": 1865}
+{"round": 0, "operation": "asr", "wall_s": 2.4295, "audio_s": null, "rtf": null, "cpu_s": 4.18, "rss_kib": 289496, "peak_rss_kib": 289496, "threads": 3}
+{"round": 0, "operation": "tts", "wall_s": 3.5093, "audio_s": 5.36825, "rtf": 0.6537, "cpu_s": 7.05, "rss_kib": 328392, "peak_rss_kib": 328392, "threads": 3}
+{"round": 1, "operation": "asr", "wall_s": 1.866, "audio_s": null, "rtf": null, "cpu_s": 3.7, "rss_kib": 376584, "peak_rss_kib": 376584, "threads": 3}
+{"round": 1, "operation": "tts", "wall_s": 3.2707, "audio_s": 4.991625, "rtf": 0.6552, "cpu_s": 6.61, "rss_kib": 379204, "peak_rss_kib": 379204, "threads": 3}
+{"round": 2, "operation": "asr", "wall_s": 1.8437, "audio_s": null, "rtf": null, "cpu_s": 3.65, "rss_kib": 379604, "peak_rss_kib": 379604, "threads": 3}
+{"round": 2, "operation": "tts", "wall_s": 3.4289, "audio_s": 5.246625, "rtf": 0.6535, "cpu_s": 6.91, "rss_kib": 381164, "peak_rss_kib": 381164, "threads": 3}
+{"round": 3, "operation": "asr", "wall_s": 1.8391, "audio_s": null, "rtf": null, "cpu_s": 3.66, "rss_kib": 381164, "peak_rss_kib": 381164, "threads": 3}
+{"round": 3, "operation": "tts", "wall_s": 3.3367, "audio_s": 5.35025, "rtf": 0.6237, "cpu_s": 6.77, "rss_kib": 381168, "peak_rss_kib": 381168, "threads": 3}
+{"round": 4, "operation": "asr", "wall_s": 1.8632, "audio_s": null, "rtf": null, "cpu_s": 3.66, "rss_kib": 381168, "peak_rss_kib": 381168, "threads": 3}
+{"round": 4, "operation": "tts", "wall_s": 3.1631, "audio_s": 4.803875, "rtf": 0.6585, "cpu_s": 6.39, "rss_kib": 389448, "peak_rss_kib": 389448, "threads": 3}
+{"round": 5, "operation": "asr", "wall_s": 1.8615, "audio_s": null, "rtf": null, "cpu_s": 3.68, "rss_kib": 389448, "peak_rss_kib": 389448, "threads": 3}
+{"round": 5, "operation": "tts", "wall_s": 3.3251, "audio_s": 5.05825, "rtf": 0.6574, "cpu_s": 6.71, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 3}
+{"round": 6, "operation": "asr", "wall_s": 1.8194, "audio_s": null, "rtf": null, "cpu_s": 3.62, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 3}
+{"round": 6, "operation": "tts", "wall_s": 3.0244, "audio_s": 4.707375, "rtf": 0.6425, "cpu_s": 6.12, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 3}
+{"round": 7, "operation": "asr", "wall_s": 1.844, "audio_s": null, "rtf": null, "cpu_s": 3.66, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 3}
+{"round": 7, "operation": "tts", "wall_s": 3.1881, "audio_s": 5.015375, "rtf": 0.6357, "cpu_s": 6.44, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 4}
+{"round": 8, "operation": "asr", "wall_s": 1.8514, "audio_s": null, "rtf": null, "cpu_s": 3.68, "rss_kib": 389840, "peak_rss_kib": 389840, "threads": 4}

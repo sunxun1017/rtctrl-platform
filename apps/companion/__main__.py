@@ -73,9 +73,12 @@ def main():
         speech_worker = None
         if config["mode"] == "live" and config["voice_backend"] == "local" and config["local_speech_root"]:
             worker_env = {key: os.environ[key] for key in ("PATH", "LANG", "LD_LIBRARY_PATH", "PYTHONPATH") if key in os.environ}
+            # Bound glibc arenas in this worker only; audio/vision scheduling is unchanged.
+            worker_env["MALLOC_ARENA_MAX"] = "2"
             speech_worker = subprocess.Popen([sys.executable, "-B", "-m", "apps.companion.speech_worker",
                 "--root", config["local_speech_root"], "--socket", config["local_speech_socket"],
-                "--tts-kind", config["local_tts_kind"], "--sid", str(config["local_tts_speaker"])], env=worker_env, stdin=subprocess.DEVNULL)
+                "--tts-kind", config["local_tts_kind"], "--sid", str(config["local_tts_speaker"]),
+                "--threads", str(config["local_speech_threads"])], env=worker_env, stdin=subprocess.DEVNULL)
         core = Companion(config)
         core.speech_worker = speech_worker
         network = NetworkManager(enabled=config["wifi_enabled"])

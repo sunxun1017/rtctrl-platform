@@ -1,0 +1,24 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 2K of event 'cycles'
+# Event count (approx.): 58286397696
+#
+# Overhead  Command  Shared Object                             Symbol                                                                                                                                                                                                                                                                                                                                                                                          
+# ........  .......  ........................................  ................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    24.89%  python3  libonnxruntime.so                         [.] MlasSgemmKernelAdd
+    22.37%  python3  libonnxruntime.so                         [.] MlasSgemmKernelZero
+    10.22%  python3  libonnxruntime.so                         [.] _ZN11onnxruntime11concurrency15ThreadPoolTemplINS_3EnvENS0_20WorkNoCallbackPolicyEE10WorkerLoopEi
+     6.63%  python3  libonnxruntime.so                         [.] MlasGemmS8S8KernelNeon
+     5.90%  python3  libonnxruntime.so                         [.] _Z18MlasSgemmCopyPackBPfPKfmmm
+     4.93%  python3  libonnxruntime.so                         [.] _Z14MlasConvIm2ColPK20MLAS_CONV_PARAMETERSPKfPfmmmm
+     2.22%  python3  libonnxruntime.so                         [.] _ZN11onnxruntime11concurrency8RunQueueINS0_20WorkNoCallbackPolicyENS0_15ThreadPoolTemplINS_3EnvES2_E3TagELj1024EE8PopFrontEv
+     2.01%  python3  libonnxruntime.so                         [.] _ZZNK11onnxruntime3AddIfE7ComputeEPNS_15OpKernelContextEENUlRNS_15BroadcastHelperEE1_4_FUNES5_
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

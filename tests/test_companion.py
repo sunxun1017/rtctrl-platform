@@ -411,6 +411,13 @@ class LocalCoreTests(unittest.TestCase):
             core.close()
 
 class ConfigTests(unittest.TestCase):
+    def test_local_speech_thread_budget(self):
+        for value in (1, 2):
+            self.assertEqual(validate({"local_speech_threads": value})["local_speech_threads"], value)
+        for value in (True, 0, 3, 1.0):
+            with self.assertRaises(ValueError):
+                validate({"local_speech_threads": value})
+
     def test_invalid_and_unsafe_configs(self):
         for config in ({"device_settings_enabled":1},{"port":True},{"face_poll_s":float("nan")},{"bind":"0.0.0.0"},
                        {"unknown":1},{"mode":"live","backend_url":"ws://example.test"},

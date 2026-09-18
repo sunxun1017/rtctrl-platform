@@ -1,6 +1,5 @@
 """Warm, serialized local speech models behind a private Unix socket."""
 import argparse
-import array
 import json
 import os
 from pathlib import Path
@@ -83,6 +82,7 @@ class SpeechWorker:
         return value
 
     def _process(self, peer, request):
+        response = None
         try:
             operation = request.get("operation")
             output = self._path(request.get("output"))
@@ -113,12 +113,16 @@ class SpeechWorker:
                     with wave.open(target, "wb") as wav:
                         wav.setparams((1, 2, rate, 0, "NONE", "not compressed"))
                         wav.writeframes(pcm)
-            self._send(peer, {"ok": True})
+            response = {"ok": True}
         except Exception:
-            self._send(peer, {"ok": False, "error": "local speech operation failed"})
+            response = {"ok": False, "error": "local speech operation failed"}
         finally:
-            peer.close()
+            # Completion must mean the next serialized operation can start.
+            # Sending first races an immediate ASR -> TTS request against release.
             self.busy.release()
+            if response is not None:
+                self._send(peer, response)
+            peer.close()
 
     def serve(self):
         self.socket_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -183,9 +187,10 @@ def main():
     parser.add_argument("--socket", required=True)
     parser.add_argument("--tts-kind", choices=("vits", "vits_aishell3"), default="vits")
     parser.add_argument("--sid", type=int, default=0)
+    parser.add_argument("--threads", type=int, choices=(1, 2), default=2)
     args = parser.parse_args()
     try:
-        engine = SherpaEngine(Path(args.root), args.tts_kind, args.sid)
+        engine = SherpaEngine(Path(args.root), args.tts_kind, args.sid, args.threads)
         worker = SpeechWorker(engine, args.socket)
         signal.signal(signal.SIGTERM, lambda *_: worker.stop.set())
         signal.signal(signal.SIGINT, lambda *_: worker.stop.set())
@@ -200,8 +205,29 @@ def main():
 
 # SherpaEngine is initialized only from main; tests use a small fake engine.
 
+def pcm16_to_float(pcm):
+    """Convert little-endian PCM without one Python object per sample."""
+    import numpy as np
+    values = np.frombuffer(pcm, dtype="<i2").astype(np.float32)
+    values *= 1.0 / 32768
+    return values
+
+
+def float_to_pcm16(samples):
+    """Preserve truncation and saturation of the original scalar conversion."""
+    import numpy as np
+    # Float64 matches the former float32-scalar * Python-int calculation.
+    values = np.asarray(samples, dtype=np.float64) * 32767
+    if not np.isfinite(values).all():
+        raise ValueError("Invalid synthesized samples")
+    np.clip(values, -32768, 32767, out=values)
+    return values.astype("<i2").tobytes()
+
+
 class SherpaEngine:
-    def __init__(self, root, tts_kind="vits", sid=0):
+    def __init__(self, root, tts_kind="vits", sid=0, threads=2):
+        if type(threads) is not int or threads not in (1, 2):
+            raise ValueError("Speech threads must be 1 or 2")
         if tts_kind not in ("vits", "vits_aishell3") or not 0 <= sid < 174:
             raise ValueError("Unsupported local voice model or speaker")
         sys.path.insert(0, str(root / "python"))
@@ -209,11 +235,11 @@ class SherpaEngine:
         asr_root = root / "sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16"
         tts_root = root / "vits-icefall-zh-aishell3"
         self.asr = sherpa_onnx.OfflineRecognizer.from_zipformer_ctc(
-            model=str(asr_root / "model.int8.onnx"), tokens=str(asr_root / "tokens.txt"), num_threads=2)
+            model=str(asr_root / "model.int8.onnx"), tokens=str(asr_root / "tokens.txt"), num_threads=threads)
         self.tts = sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(
             model=sherpa_onnx.OfflineTtsModelConfig(vits=sherpa_onnx.OfflineTtsVitsModelConfig(
                 model=str(tts_root / "model.onnx"), lexicon=str(tts_root / "lexicon.txt"),
-                tokens=str(tts_root / "tokens.txt")), num_threads=2),
+                tokens=str(tts_root / "tokens.txt")), num_threads=threads),
             rule_fsts=",".join(str(tts_root / name) for name in
                               ("date.fst", "number.fst", "phone.fst", "new_heteronym.fst"))))
         self.sid = sid
@@ -225,11 +251,9 @@ class SherpaEngine:
                 if (wav.getnchannels() != 1 or wav.getsampwidth() != 2 or
                         wav.getframerate() != 16000 or wav.getnframes() > 16000 * 60):
                     raise ValueError("Unsupported recognition WAV")
-                samples = array.array("h", wav.readframes(wav.getnframes()))
-        if sys.byteorder != "little":
-            samples.byteswap()
+                samples = pcm16_to_float(wav.readframes(wav.getnframes()))
         stream = self.asr.create_stream()
-        stream.accept_waveform(16000, [value / 32768 for value in samples])
+        stream.accept_waveform(16000, samples)
         self.asr.decode_stream(stream)
         text = stream.result.text
         del stream
@@ -237,12 +261,10 @@ class SherpaEngine:
 
     def synthesize(self, text):
         generated = self.tts.generate(text, sid=self.sid, speed=1.0)
-        if len(generated.samples) > generated.sample_rate * 45:
+        samples = generated.samples
+        if len(samples) > generated.sample_rate * 45:
             raise ValueError("Synthesized reply too long")
-        pcm = array.array("h", (max(-32768, min(32767, int(value * 32767))) for value in generated.samples))
-        if sys.byteorder != "little":
-            pcm.byteswap()
-        return pcm.tobytes(), generated.sample_rate
+        return float_to_pcm16(samples), generated.sample_rate
 
 
 if __name__ == "__main__":

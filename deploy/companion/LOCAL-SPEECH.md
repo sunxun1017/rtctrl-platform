@@ -69,3 +69,31 @@ worker仍忙时拒绝新一轮准备，待推理完成可重试，不串播旧�
 - https://huggingface.co/csukuangfj/icefall-tts-aishell3-vits-low-2024-04-06
 - https://www.openslr.org/93/
 - https://cloud.baidu.com/doc/qianfan-docs/s/qm8qxemze
+
+
+## 性能与资源维护
+
+`local_speech_threads`只接受整数1或2，默认2。两个模型串行推理，共享预算；
+不是把进程总线程数限制为2，页面统计会包括主线程及模型线程池。
+语音子进程单独设置`MALLOC_ARENA_MAX=2`，减少glibc线程arena保留；
+这是分配策略，不是内存硬上限，也不释放ONNX模型自身的缓存。音频和人脸进程不受此设置影响。
+PCM转换用NumPy批处理，保持小端、截断、饱和语义；不换模型、不降低采样率或改变音色。
+页面新增语音进程CPU、峰值RSS和线程数。CPU按单核100%计，约200%表示使用两个核心，
+不代表整板超载；峰值RSS是该进程启动至今高水位，不是实时占用。
+
+在空闲时，用公开测试WAV运行有界基准（不录音、不播放、不访问云端，不记录识别文字）：
+
+```sh
+# 先从实际进程列表读取WORKER_PID，不复用文档中的历史PID。
+perf stat -p "$WORKER_PID" -e task-clock,context-switches,page-faults,cycles,instructions -- \
+  python3 -B deploy/companion/profile-speech.py --pid "$WORKER_PID" \
+  --socket /run/rtctrl-companion/speech.sock \
+  --wav /userdata/rtctrl-speech/sherpa-onnx-zipformer-ctc-small-zh-int8-2025-07-16/test_wavs/0.wav \
+  --rounds 10
+```
+
+脚本核对Unix socket对端PID，避免测错进程；输入文件上限2MiB、时长60秒、轮数1–20。
+每轮输出墙钟/CPU秒、RSS/峰值/线程，TTS额外输出声音长度和RTF。
+VITS输出时长有随机波动，因此比较合成速度时要看RTF，不能只比同一句话的一次墙钟时间。
+首次请求单列为warm-up；热结果用中位数，短测不能替代数小时稳定性和温升验收。
+perf record可按49Hz低频采样，先读perf报告再决定是否继续优化模型；不要默认改CPU频率或全局调度。

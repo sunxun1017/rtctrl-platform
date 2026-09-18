@@ -119,3 +119,16 @@ ASR dev_pid1537和TTS per5003均明确返回无权限。仅用固定文字/生�
 不连接Wi-Fi限制仍有效；不改图库、不装自启动、不动机械控制。旧Android配置板端备份。
 release/asan各21项CTest通过；安装、来源/许可/哈希、限制见deploy/companion/LOCAL-SPEECH.md，
 详细实测见docs/verification-companion-20260918.md最新章节。PID与内存均需下次重新核验。
+
+
+## 2026-09-18 perf与语音资源优化
+
+板载perf确认主要为ONNX SGEMM/线程池；现PCM用NumPy批处理，worker单独MALLOC_ARENA_MAX=2。
+local_speech_threads严格1/2，最终2；单线程ASR2.84s/TTS5.68s明显慢于双线程。
+修复完成ACK早于busy释放的偶发连续请求失败；10轮20次最终基准全部成功。
+热ASR中位1.848s，TTS3.300s/RTF0.6492，多轮workerRSS387.9MiB，空闲CPU近0、推理约200%（单核口径）。
+这覆盖上一节“约346MB”的短时资源快照；不把初轮低RSS当长期上限。人脸仍约30FPS。
+新增可复现profile-speech.py及页面worker CPU/线程/峰值RSS，进程重启/失败清除统计基线。
+release/asan22项CTest通过，最后修复重跑两套9组companion通过；当前150用例有执行证据。
+format-check依旧被原有未修改C++格式问题阻塞。原有不连接Wi-Fi、不动人脸图库/执行器的边界未变。
+证据见docs/verification-companion-performance-20260918.md及docs/performance/companion-20260918。

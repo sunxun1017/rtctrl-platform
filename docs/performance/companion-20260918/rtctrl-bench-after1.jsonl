@@ -1,0 +1,8 @@
+{"round": 0, "op": "asr", "seconds": 3.3578, "ok": true, "cpu_seconds": 3.36, "after": {"VmHWM": 289228, "VmRSS": 289228, "Threads": 1, "cpu_ticks": 3704, "face_fps": 29.9175}}
+{"round": 0, "op": "tts", "seconds": 5.7369, "ok": true, "cpu_seconds": 5.67, "after": {"VmHWM": 321460, "VmRSS": 321460, "Threads": 1, "cpu_ticks": 4271, "face_fps": 30.3051}}
+{"round": 1, "op": "asr", "seconds": 2.9216, "ok": true, "cpu_seconds": 2.88, "after": {"VmHWM": 369388, "VmRSS": 369388, "Threads": 1, "cpu_ticks": 4559, "face_fps": 29.9826}}
+{"round": 1, "op": "tts", "seconds": 5.6164, "ok": true, "cpu_seconds": 5.58, "after": {"VmHWM": 370956, "VmRSS": 370956, "Threads": 1, "cpu_ticks": 5117, "face_fps": 30.428}}
+{"round": 2, "op": "asr", "seconds": 2.8405, "ok": true, "cpu_seconds": 2.84, "after": {"VmHWM": 371344, "VmRSS": 371344, "Threads": 1, "cpu_ticks": 5401, "face_fps": 29.5467}}
+{"round": 2, "op": "tts", "seconds": 5.6843, "ok": true, "cpu_seconds": 5.68, "after": {"VmHWM": 394968, "VmRSS": 394968, "Threads": 1, "cpu_ticks": 5969, "face_fps": 30.0979}}
+{"round": 3, "op": "asr", "seconds": 2.8434, "ok": true, "cpu_seconds": 2.84, "after": {"VmHWM": 394968, "VmRSS": 394968, "Threads": 1, "cpu_ticks": 6253, "face_fps": 29.9915}}
+{"round": 3, "op": "tts", "seconds": 5.6912, "ok": true, "cpu_seconds": 5.62, "after": {"VmHWM": 394976, "VmRSS": 394976, "Threads": 1, "cpu_ticks": 6815, "face_fps": 30.3218}}

@@ -95,7 +95,7 @@ PYTHONPATH=.deps/companion-python python3 -m unittest discover -s tests -p 'test
 ```
 完整 transport 集成测试需要固定依赖；未安装时相关测试明确 skip。
 测试含真实本地 WebSocket Upgrade/分片限制和真实 libopus（主机具备时），其余声卡用替身。
-CTest 默认注册八组 companion 测试；Python应用不由 C++ 编译器构建。
+CTest 默认注册九组 companion 测试；Python应用不由 C++ 编译器构建。
 
 上板验收仍需：实际声卡录放、真实语音往返、与视觉并发的峰值内存/CPU、30分钟运行及网络中断恢复。
 不能把宿主测试或后端 hello 当成这些验收已完成。
@@ -172,3 +172,6 @@ API为同源 `GET /api/device` 和 `POST /api/device`，不接受任意命令、
 配置用 `config/companion/rv1126b-local.json`；模型、资源实测、许可和联网要求见
 [本地语音部署](../../deploy/companion/LOCAL-SPEECH.md)。音频留在本地，识别文字发送千帆。
 这是按住说话的单轮对话，非完全离线；默认模型8kHz，需试听确认音质。
+
+资源/PCM数值测试还需 `python3 -m pip install -r apps/companion/requirements-test.txt`。
+板端复用固件现有NumPy1.25，不用宿主测试依赖覆盖固件。

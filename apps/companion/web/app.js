@@ -118,6 +118,9 @@
         if (finite(m.memory_used_mb) && finite(m.memory_total_mb)) metrics.push("内存 " + Math.round(m.memory_used_mb) + " / " + Math.round(m.memory_total_mb) + " MB");
         if (finite(m.rss_mb)) metrics.push("伴随服务 " + m.rss_mb.toFixed(1) + " MB");
         if (finite(m.local_speech_rss_mb)) metrics.push("本地语音模型 " + m.local_speech_rss_mb.toFixed(1) + " MB");
+        if (finite(m.local_speech_cpu_percent)) metrics.push("语音 CPU " + m.local_speech_cpu_percent.toFixed(1) + "%（单核100%）");
+        if (finite(m.local_speech_peak_rss_mb)) metrics.push("语音峰值 " + m.local_speech_peak_rss_mb.toFixed(1) + " MB");
+        if (finite(m.local_speech_threads)) metrics.push("语音线程 " + m.local_speech_threads);
         if (local && m.local_speech_running === false) metrics.push("本地模型进程未运行");
         if (finite(m.cpu_percent)) metrics.push("伴随服务 CPU " + m.cpu_percent.toFixed(1) + "%");
         if (face.available && finite(face.fps)) metrics.push("识别 " + face.fps.toFixed(1) + " FPS");

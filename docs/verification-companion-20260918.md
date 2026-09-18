@@ -203,3 +203,6 @@ release和asan CTest各21/21通过。增加ASR/TTS协议、私有目录/Unix soc
 音色为神经合成，但8k带宽不能称高保真；两个实际板端音色试听已交付，尚未主观验收。
 
 测试补充：CTest环境的8组companion共138项均OK、无语音测试跳过；SocketCAN loopback因未配置vcan仍按既有规则SKIP。系统python单独discover虽138项OK但缺依赖跳过19项，不作为完整语音验证依据。
+
+
+后续perf与资源优化实测见[性能记录](verification-companion-performance-20260918.md)，其中多轮RSS约388MiB覆盖上述较早短时快照。

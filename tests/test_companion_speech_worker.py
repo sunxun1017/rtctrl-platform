@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import subprocess
 import sys
 import tempfile
 import threading
@@ -29,6 +30,36 @@ class Engine:
         return b"\0" * 100, 22050
 
 
+class SampleConversionTests(unittest.TestCase):
+    def test_thread_budget_rejects_invalid_values(self):
+        from apps.companion.speech_worker import SherpaEngine
+        for threads in (0, 3, True, 1.5):
+            with self.assertRaises(ValueError):
+                SherpaEngine(Path("/unused"), threads=threads)
+
+    def test_pcm_full_range_preserved(self):
+        import numpy as np
+        from apps.companion.speech_worker import pcm16_to_float
+        samples = np.arange(-32768, 32768, dtype="<i2")
+        actual = pcm16_to_float(samples.tobytes())
+        self.assertEqual(actual.dtype, np.float32)
+        np.testing.assert_array_equal(actual, samples.astype(np.float32) / 32768)
+
+    def test_synthesis_matches_scalar_and_rejects_nonfinite(self):
+        import array
+        import numpy as np
+        from apps.companion.speech_worker import float_to_pcm16
+        samples = np.concatenate((np.linspace(-1.5, 1.5, 10001, dtype=np.float32),
+                                  np.array([-1, 0, 1, 1/32767, -1/32767], dtype=np.float32)))
+        expected = array.array("h", (max(-32768, min(32767, int(value * 32767))) for value in samples))
+        if sys.byteorder != "little":
+            expected.byteswap()
+        self.assertEqual(float_to_pcm16(samples), expected.tobytes())
+        for value in (float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                float_to_pcm16([value])
+
+
 class SpeechWorkerTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
@@ -43,9 +74,17 @@ class SpeechWorkerTests(unittest.TestCase):
         self.thread = threading.Thread(target=self.worker.serve)
         self.thread.start()
         for _ in range(100):
-            if self.worker.socket_path.exists():
-                break
-            time.sleep(.005)
+            try:
+                with socket.socket(socket.AF_UNIX) as probe:
+                    probe.settimeout(.1)
+                    probe.connect(str(self.worker.socket_path))
+                    probe.sendall(b'{"operation":"health"}\n')
+                    if json.loads(probe.recv(4096)).get("ready"):
+                        break
+            except (OSError, ValueError):
+                time.sleep(.005)
+        else:
+            self.fail("Speech worker did not become ready")
 
     def tearDown(self):
         self.engine.release.set()
@@ -67,6 +106,41 @@ class SpeechWorkerTests(unittest.TestCase):
 
     def asr(self):
         return {"operation": "asr", "input": str(self.source), "output": str(self.output)}
+
+    def test_profile_reports_resources_and_rejects_wrong_pid(self):
+        with wave.open(str(self.source), "wb") as output:
+            output.setparams((1, 2, 16000, 0, "NONE", "not compressed"))
+            output.writeframes(b"\0" * 320)
+        script = Path(__file__).resolve().parents[1] / "deploy/companion/profile-speech.py"
+        command = [sys.executable, str(script), "--pid", str(os.getpid()),
+                   "--socket", str(self.worker.socket_path), "--wav", str(self.source), "--rounds", "1"]
+        # Profiling creates its own real /tmp private turn directory.
+        previous = self.worker.temp_root
+        self.worker.temp_root = Path(tempfile.gettempdir()).resolve()
+        try:
+            result = subprocess.run(command, capture_output=True, text=True, timeout=5)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            rows = [json.loads(line) for line in result.stdout.splitlines()]
+            self.assertEqual([row.get("operation") for row in rows[1:]], ["asr", "tts"])
+            self.assertGreater(rows[-1]["audio_s"], 0)
+            self.assertNotIn("测试识别", result.stdout)
+            command[command.index("--pid") + 1] = str(os.getpid() + 1)
+            result = subprocess.run(command, capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Socket peer does not match worker PID", result.stderr)
+        finally:
+            self.worker.temp_root = previous
+
+    def test_success_ack_is_sent_only_after_busy_is_released(self):
+        original = self.worker._send
+        completion_states = []
+        def checked_send(peer, value):
+            if value == {"ok": True}:
+                completion_states.append(self.worker.busy.locked())
+            original(peer, value)
+        self.worker._send = checked_send
+        self.assertTrue(self.request(self.asr())["ok"])
+        self.assertEqual(completion_states, [False])
 
     def test_health_and_socket_private(self):
         self.assertTrue(self.request({"operation": "health"})["ready"])

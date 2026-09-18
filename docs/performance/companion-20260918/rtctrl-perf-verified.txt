@@ -1,0 +1,13 @@
+# started on Fri Sep 18 08:00:46 2026
+
+
+ Performance counter stats for process id '2380':
+
+        104,823.10 msec task-clock                       #    1.986 CPUs utilized          
+             5,685      context-switches                 #   54.234 /sec                   
+            43,072      page-faults                      #  410.902 /sec                   
+   145,068,654,766      cycles                           #    1.384 GHz                    
+    80,237,438,881      instructions                     #    0.55  insn per cycle         
+
+      52.785687526 seconds time elapsed
+

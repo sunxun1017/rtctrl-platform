@@ -96,3 +96,11 @@ allocator 的 cacheable 控制内部 MPP 池保留，不改变 CPU cache 属性�
 原Android后端realtime与manual停止机制不同，尾静音是协议适配，不应延长真实采集。
 上传帧、STT、TTS音频、ALSA硬件运行、用户听见是不同验收层；hello成功不代表ASR/LLM/TTS正常。
 证据：[板端记录](../../../../docs/verification-companion-20260918.md)。
+
+
+## 2026-09-18 语音worker完成与资源测量
+
+适用于当前Python Unix socket ASR/TTS worker：成功ACK必须在释放串行busy后发送，否则下一请求可能偶发busy。
+连续10轮公开样本及确定性测试验证修复。CPU监控需包括模型子进程；按(PID,starttime)重置/proc差分，单核100%口径允许超过100。
+模型RSS随预热/长度增长，初次加载快照不是长期上限；线程数和arena策略应由板端perf及多轮RTF/RSS验证，不套用主机结论。
+证据：docs/verification-companion-performance-20260918.md。模型、runtime、allocator或进程架构变化时需重新验证。

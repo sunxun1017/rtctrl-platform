@@ -1,0 +1,13 @@
+# started on Fri Sep 18 07:54:50 2026
+
+
+ Performance counter stats for process id '1563':
+
+         34,600.82 msec task-clock                       #    0.981 CPUs utilized          
+             1,053      context-switches                 #   30.433 /sec                   
+            41,989      page-faults                      #    1.214 K/sec                  
+    48,132,665,392      cycles                           #    1.391 GHz                    
+    25,272,139,880      instructions                     #    0.53  insn per cycle         
+
+      35.280023351 seconds time elapsed
+

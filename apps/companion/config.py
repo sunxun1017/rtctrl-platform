@@ -17,7 +17,7 @@ DEFAULTS = {
     "qianfan_token_env": "BAIDU_QIANFAN_API_KEY", "qianfan_proxy_url": "",
     "local_asr_command": [], "local_tts_command": [],
     "local_asr_timeout_s": 60, "local_tts_timeout_s": 90,
-    "local_speech_root": "", "local_speech_socket": "", "local_tts_kind": "vits", "local_tts_speaker": 0,
+    "local_speech_root": "", "local_speech_socket": "", "local_tts_kind": "vits", "local_tts_speaker": 0, "local_speech_threads": 2,
 
 }
 
@@ -52,6 +52,8 @@ def validate(values):
             raise ValueError("invalid " + key)
         if command and not os.path.isabs(command[0]):
             raise ValueError(key + " needs an absolute executable path")
+    if type(config["local_speech_threads"]) is not int or config["local_speech_threads"] not in (1, 2):
+        raise ValueError("local_speech_threads must be 1 or 2")
     if config["local_tts_kind"] not in ("vits", "vits_aishell3"):
         raise ValueError("unsupported local_tts_kind")
     if type(config["local_tts_speaker"]) is not int or not 0 <= config["local_tts_speaker"] < 174:

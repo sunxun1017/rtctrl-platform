@@ -1,6 +1,7 @@
 """Read-only face/status and local resource sampler. Never opens the camera."""
 import json
 import math
+import os
 import resource
 import threading
 import time
@@ -15,6 +16,8 @@ class Monitor:
         self.last_progress = 0.
         self.last_cpu = time.process_time()
         self.last_wall = time.monotonic()
+        self.worker_sample = None
+        self.clock_ticks = os.sysconf("SC_CLK_TCK")
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
     def start(self):
@@ -62,6 +65,48 @@ class Monitor:
             self.last_frame = None
             return {"available": False, "reason": "视觉服务不可用", "faces": []}
 
+    @staticmethod
+    def read_process(pid):
+        # comm may contain spaces and parentheses; fields after its final ')' start at state (3).
+        with open("/proc/%d/stat" % pid) as stream:
+            fields = stream.read().rsplit(")", 1)[1].split()
+        ticks = int(fields[11]) + int(fields[12])
+        started = int(fields[19])
+        threads = int(fields[17])
+        values = {}
+        with open("/proc/%d/status" % pid) as stream:
+            for line in stream:
+                if line.startswith(("VmRSS:", "VmHWM:")):
+                    values[line.split(":", 1)[0]] = int(line.split()[1]) / 1024
+        return started, ticks, threads, values
+
+    def sample_worker(self, now):
+        worker = getattr(self.core, "speech_worker", None)
+        if worker is None:
+            self.worker_sample = None
+            return {}
+        metrics = {"local_speech_running": worker.poll() is None,
+                   "local_speech_rss_mb": None, "local_speech_peak_rss_mb": None,
+                   "local_speech_cpu_percent": None, "local_speech_threads": None}
+        if not metrics["local_speech_running"]:
+            self.worker_sample = None
+            return metrics
+        try:
+            started, ticks, threads, memory = self.read_process(worker.pid)
+            identity = (worker.pid, started)
+            previous = self.worker_sample
+            self.worker_sample = (identity, ticks, now)
+            if previous and previous[0] == identity and now > previous[2] and ticks >= previous[1]:
+                # Single-core percent: a two-core inference may legitimately exceed 100%.
+                metrics["local_speech_cpu_percent"] = round(
+                    100 * (ticks - previous[1]) / self.clock_ticks / (now - previous[2]), 2)
+            metrics["local_speech_threads"] = threads
+            metrics["local_speech_rss_mb"] = round(memory["VmRSS"], 2) if "VmRSS" in memory else None
+            metrics["local_speech_peak_rss_mb"] = round(memory["VmHWM"], 2) if "VmHWM" in memory else None
+        except (OSError, ValueError, IndexError):
+            self.worker_sample = None
+        return metrics
+
     def run(self):
         while not self.stop_event.is_set():
             self.core.post("face", self.sample_face())
@@ -79,18 +124,7 @@ class Monitor:
                 metrics["memory_used_mb"] = round((memory["MemTotal"]-memory["MemAvailable"]) / 1024)
             except (OSError, ValueError, KeyError):
                 pass
-            worker = getattr(self.core, "speech_worker", None)
-            if worker is not None:
-                metrics["local_speech_running"] = worker.poll() is None
-                metrics["local_speech_rss_mb"] = None
-                if metrics["local_speech_running"]:
-                    try:
-                        with open("/proc/%d/status" % worker.pid) as stream:
-                            for line in stream:
-                                if line.startswith("VmRSS:"):
-                                    metrics["local_speech_rss_mb"] = round(int(line.split()[1]) / 1024, 2)
-                    except (OSError, ValueError):
-                        pass
+            metrics.update(self.sample_worker(now))
             with self.core.lock:
                 self.core.data["metrics"].update(metrics)
             self.last_cpu, self.last_wall = cpu, now
