@@ -94,7 +94,7 @@ class LocalVoiceTests(unittest.TestCase):
         with patch.object(self.transport, "_execute", side_effect=execute), patch.object(self.transport, "_reply", return_value="你好呀"):
             self.transport._run(self.transport._generation, b"\0" * 1920)
         self.assertFalse(self.errors)
-        self.assertEqual([x["type"] for x in self.messages if isinstance(x, dict)], ["stt", "llm", "tts", "tts", "tts"])
+        self.assertEqual([x["type"] for x in self.messages if isinstance(x, dict) and x["type"] != "latency"], ["stt", "llm", "tts", "tts", "tts"])
         self.assertTrue(any(isinstance(x, PcmAudio) for x in self.messages))
         self.assertTrue(all(not Path(path).exists() for path in paths))
 

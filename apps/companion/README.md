@@ -189,3 +189,12 @@ RV1126B Zipformer 安装新增 `rknn_zipformer_stream` 后，可显式配置 `lo
 静音/停止/离开页面结束连续模式，控制台失联最迟15s停止；重新连接不会恢复录音。
 这是半双工停顿断句，没有自动语义标点、AEC或说话打断。空音不发送云端。
 模型选择、资源代价、复现与回退见[流式验收记录](../../docs/verification-streaming-asr-20260918.md)。
+
+
+## 本地合成首音与耗时
+
+Melo NPU可配置 `local_tts_streaming: true`，保持原音色和完整生成批次，
+`local_tts_prebuffer_s: 2.0`启动缓冲后边生成边播放；短句可能仍需等完整合成。
+全局默认关闭，当前板端验收配置开启。播放器每轮只启动一次aplay，结束标记后等待drain。
+控制台设备状态下显示每轮软件阶段耗时，“播放提交”指向aplay管道写入，不是声学出声时刻。
+[对照结果与复现](../../docs/verification-voice-latency-20260918.md)含短句/长句首音边界和回退说明。

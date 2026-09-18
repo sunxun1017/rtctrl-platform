@@ -84,6 +84,8 @@ class SpeechWorker:
         return value
 
     def _process(self, peer, request):
+        if request.get("operation") == "tts_stream":
+            return self._process_stream(peer, request)
         response = None
         try:
             operation = request.get("operation")
@@ -126,6 +128,61 @@ class SpeechWorker:
                 self._send(peer, response)
             peer.close()
 
+    def _process_stream(self, peer, request):
+        deadline = time.monotonic() + 120
+        total = 0
+        framing_clean = True
+        response = {"type": "done", "ok": False, "error": "local speech operation failed"}
+        def cancelled():
+            return self.stop.is_set() or time.monotonic() >= deadline or not self._connected(peer)
+        def write(data):
+            view = memoryview(data)
+            # Bound a stalled reader independently of the operation deadline.
+            write_deadline = min(deadline, time.monotonic() + 5)
+            while view:
+                if cancelled() or time.monotonic() >= write_deadline:
+                    raise TimeoutError("Speech stream cancelled or blocked")
+                if not select.select([], [peer], [], .1)[1]:
+                    continue
+                try:
+                    count = peer.send(view[:16384])
+                except (BlockingIOError, socket.timeout):
+                    continue
+                if not count:
+                    raise ConnectionError("Speech peer closed")
+                view = view[count:]
+        def audio(pcm, rate):
+            nonlocal total, framing_clean
+            if (rate != 44100 or not isinstance(pcm, bytes) or not pcm or len(pcm) % 2):
+                raise ValueError("Invalid streamed PCM")
+            total += len(pcm)
+            if total > rate * 2 * 45:
+                raise ValueError("Streamed PCM too long")
+            framing_clean = False
+            write(json.dumps({"type": "audio", "rate": rate, "bytes": len(pcm)}).encode() + b"\n")
+            write(pcm)
+            framing_clean = True
+        try:
+            text = request.get("text")
+            if not isinstance(text, str) or not text.strip() or len(text) > 120:
+                raise ValueError("Invalid synthesis text")
+            peer.setblocking(False)
+            self.engine.synthesize_stream(text, audio, cancelled=cancelled)
+            if not total or cancelled():
+                raise ValueError("Empty or cancelled speech stream")
+            response = {"type": "done", "ok": True}
+        except Exception:
+            pass
+        finally:
+            self.busy.release()
+            # A partially sent frame cannot be repaired, but EOF fails closed.
+            try:
+                peer.settimeout(.2)
+                if framing_clean:
+                    self._send(peer, response)
+            finally:
+                peer.close()
+
     def serve(self):
         self.socket_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
         # Reclaim only an owned stale socket, never a live worker or another file.
@@ -165,7 +222,7 @@ class SpeechWorker:
                                           "tts_backend": getattr(self.engine, "tts_backend", "cpu"),
                                           "tts_kind": getattr(self.engine, "tts_kind", "vits")})
                         peer.close()
-                    elif request.get("operation") not in ("asr", "tts"):
+                    elif request.get("operation") not in ("asr", "tts", "tts_stream"):
                         raise ValueError("Unsupported operation")
                     elif not self.busy.acquire(blocking=False):
                         self._send(peer, {"ok": False, "error": "local speech worker busy"})
@@ -333,6 +390,13 @@ class SherpaEngine:
         text = stream.result.text
         del stream
         return text
+
+    def synthesize_stream(self, text, on_audio, cancelled=None):
+        if self.tts_kind != "melo_npu":
+            raise ValueError("Streaming synthesis requires Melo NPU")
+        def emit(samples, rate):
+            on_audio(float_to_pcm16(samples), rate)
+        return self.tts.synthesize_stream(text, emit, cancelled=cancelled)
 
     def synthesize(self, text):
         if self.tts_kind == "melo_npu":

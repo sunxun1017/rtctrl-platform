@@ -72,7 +72,7 @@
             if (local) {
                 progressLabels.waiting_recognition = ["本地识别中", "录音已结束，正在设备上识别你说的话。音频不会上传。"];
                 progressLabels.waiting_reply = ["等待千帆回答", "已将识别文字发送到千帆，正在等待回答。音频保留在本地处理。"];
-                progressLabels.waiting_audio = ["本地合成中", "正在设备上将回答合成为声音，请稍候。完成后由设备扬声器播放。"];
+                progressLabels.waiting_audio = ["本地合成中", "正在设备上合成声音，准备就绪后由扬声器播放。"];
                 progressLabels.receiving_audio = ["正在播放回答", "本地合成的语音已送往设备播放；如没有声音，请检查音量和扬声器。"];
             }
             [label, hint] = progressLabels[current.voice_progress] || (state === "speaking" ? progressLabels.waiting_audio : progressLabels.waiting_recognition);
@@ -153,6 +153,12 @@
             $("metrics").textContent += " · 本轮录音峰值 " + peak + " / 32768" +
                 (peak > 0 ? "（" + (20 * Math.log10(peak / 32768)).toFixed(1) + " dBFS，" + (peak / 32768 * 100).toFixed(1) + "%）" : "（本轮尚无有效电平）");
         }
+        const timing = current.latency_ms && Object.keys(current.latency_ms).length ? current.latency_ms : current.last_latency_ms || {};
+        const stages = [["asr_first_partial_ms", "识别首字"], ["asr_finalize_ms", "识别收尾"], ["cloud_ms", "千帆"],
+            ["tts_first_audio_ms", "合成首批"], ["tts_total_ms", "合成全部"],
+            ["playback_queue_ms", "播放提交"], ["stop_to_audio_ms", "停录至播放提交"]];
+        $("latency").textContent = stages.filter(([key]) => finite(timing[key])).map(([key, title]) =>
+            title + " " + (timing[key] / 1000).toFixed(2) + "s").join(" · ");
         const c = current.capabilities || {};
         const capabilities = [];
         if (c.audio_input === false || c.recording === false) capabilities.push("录音未就绪");

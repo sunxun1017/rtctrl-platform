@@ -71,18 +71,25 @@ class MeloNpu:
             rule_fsts=",".join(str(model / name) for name in ("date.fst", "number.fst", "phone.fst")),
             max_num_sentences=1, silence_scale=1.0))
 
-    def synthesize(self, text):
+    def synthesize(self, text, on_audio=None, cancelled=None):
         import numpy as np
         # One queued latent plus one in flight; one decoder owns native context.
         jobs = queue.Queue(maxsize=1)
         stop = threading.Event()
         producer_done = threading.Event()
         parts, errors = [], []
+        emitted = 0
+
+        def check_cancelled():
+            if cancelled is not None and cancelled():
+                raise RuntimeError("Melo synthesis cancelled")
 
         def consumer():
+            nonlocal emitted
             total = 0
             try:
                 while not stop.is_set():
+                    check_cancelled()
                     try:
                         z = jobs.get(timeout=.02)
                     except queue.Empty:
@@ -93,13 +100,19 @@ class MeloNpu:
                     total += len(wave)
                     if total > RATE * 45:
                         raise ValueError("Synthesized reply too long")
-                    parts.append(wave)
+                    check_cancelled()
+                    if on_audio is None:
+                        parts.append(wave)
+                    else:
+                        on_audio(wave, RATE)
+                    emitted += 1
             except BaseException as error:
                 errors.append(error)
                 stop.set()
 
         def callback(samples, progress):
             try:
+                check_cancelled()
                 values = np.asarray(samples, dtype=np.float32)
                 if (values.size == 0 or values.size % 192 or values.size > 192 * 4000 or
                         not np.isfinite(values).all()):
@@ -108,6 +121,7 @@ class MeloNpu:
                 latent = values.reshape(1, 192, -1).copy()
                 latent.flags.writeable = False
                 while not stop.is_set():
+                    check_cancelled()
                     try:
                         jobs.put(latent, timeout=.02)
                         return 1
@@ -133,9 +147,12 @@ class MeloNpu:
             worker.join()
         if errors:
             raise RuntimeError("Melo pipelined synthesis failed") from errors[0]
-        if not parts:
+        if not emitted:
             raise ValueError("Empty Melo synthesis")
-        return np.concatenate(parts), RATE
+        return (np.concatenate(parts), RATE) if on_audio is None else None
+
+    def synthesize_stream(self, text, on_audio, cancelled=None):
+        return self.synthesize(text, on_audio=on_audio, cancelled=cancelled)
 
 
 class NativeDecoder:

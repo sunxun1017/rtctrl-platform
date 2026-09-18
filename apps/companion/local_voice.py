@@ -7,6 +7,7 @@ import http.client
 import json
 import os
 import queue
+import select
 from pathlib import Path
 import signal
 import socket
@@ -18,7 +19,7 @@ import uuid
 import wave
 from urllib.parse import urlsplit
 
-from .audio import OpusCodec, FRAME_BYTES, PcmAudio
+from .audio import OpusCodec, FRAME_BYTES, PcmAudio, PcmStreamChunk
 
 
 class LocalVoiceTransport:
@@ -36,6 +37,7 @@ class LocalVoiceTransport:
         self._asr_stream = None
         self._frames = None
         self._http = None
+        self._speech_peer = None
         self._session = uuid.uuid4().hex
 
     @staticmethod
@@ -146,6 +148,7 @@ class LocalVoiceTransport:
         try:
             self._asr_stream.exchange(3)
             previous = ""
+            first_partial = False
             started = time.monotonic()
             while self._active(generation):
                 try:
@@ -159,6 +162,9 @@ class LocalVoiceTransport:
                 result = self._asr_stream.exchange(1, pcm)
                 text = result.get("text", "")
                 if text != previous:
+                    if text and not first_partial:
+                        first_partial = True
+                        self._timing(generation, "asr_first_partial_ms", started)
                     previous = text
                     self._emit(generation, {"type": "stt", "text": text, "partial": True})
                 if automatic and result.get("endpoint"):
@@ -170,7 +176,9 @@ class LocalVoiceTransport:
                     break
             if not self._active(generation):
                 return
+            finalize_started = time.monotonic()
             text = self._asr_stream.exchange(2).get("text", "").strip()
+            self._timing(generation, "asr_finalize_ms", finalize_started)
             if not text:
                 self._emit(generation, {"type": "asr_empty"})
                 return
@@ -201,6 +209,8 @@ class LocalVoiceTransport:
         self._terminate(self._process)
         if self._http:
             self._http.close()
+        if self._speech_peer:
+            self._speech_peer.close()
 
     def close(self):
         with self._lock:
@@ -281,6 +291,92 @@ class LocalVoiceTransport:
                 if self._http is connection:
                     self._http = None
 
+    def _timing(self, generation, name, started):
+        self._emit(generation, {"type": "latency", "values": {
+            name: round((time.monotonic() - started) * 1000, 1)}})
+
+    def _stream_tts(self, generation, text):
+        started = time.monotonic()
+        deadline = started + min(120, self.config.get("local_tts_timeout_s", 90))
+        peer = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        with self._lock:
+            if not self._active(generation):
+                peer.close()
+                return
+            self._speech_peer = peer
+        def read_exact(count):
+            parts = bytearray()
+            while len(parts) < count:
+                if not self._active(generation):
+                    raise RuntimeError("Synthesis cancelled")
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError("Synthesis stream timeout")
+                if not select.select([peer], [], [], min(.2, remaining))[0]:
+                    continue
+                block = peer.recv(min(65536, count - len(parts)))
+                if not block:
+                    raise RuntimeError("Synthesis stream closed before completion")
+                parts.extend(block)
+            return bytes(parts)
+        total = 0
+        rate = None
+        chunks = 0
+        pending = []
+        playing = False
+        def deliver():
+            nonlocal playing
+            if not playing:
+                self._timing(generation, "tts_first_audio_ms", started)
+                self._emit(generation, {"type": "tts", "state": "start"})
+                self._emit(generation, {"type": "tts", "state": "sentence_start", "text": text})
+                playing = True
+            for block in pending:
+                self._emit(generation, PcmStreamChunk(block, rate, False))
+            pending.clear()
+        try:
+            peer.settimeout(2)
+            peer.connect(self.config["local_speech_socket"])
+            peer.sendall(json.dumps({"operation": "tts_stream", "text": text}, ensure_ascii=False).encode() + b"\n")
+            peer.setblocking(False)
+            while True:
+                header = bytearray()
+                while not header.endswith(b"\n"):
+                    header.extend(read_exact(1))
+                    if len(header) > 4096:
+                        raise ValueError("Synthesis header too large")
+                message = json.loads(header)
+                if not isinstance(message, dict):
+                    raise ValueError("Invalid synthesis header")
+                if message.get("type") == "done":
+                    if message.get("ok") is not True or not total:
+                        raise RuntimeError("Synthesis stream failed")
+                    if pending:
+                        deliver()
+                    self._emit(generation, PcmStreamChunk(b"", rate, True))
+                    self._timing(generation, "tts_total_ms", started)
+                    self._emit(generation, {"type": "tts", "state": "stop"})
+                    return
+                size, next_rate = message.get("bytes"), message.get("rate")
+                if (message.get("type") != "audio" or type(size) is not int or size <= 0 or size % 2 or
+                        type(next_rate) is not int or next_rate != 44100 or
+                        (rate is not None and rate != next_rate) or total + size > next_rate * 2 * 45 or chunks >= 128):
+                    raise ValueError("Invalid synthesis chunk")
+                pcm = read_exact(size)
+                rate = next_rate
+                total += size
+                chunks += 1
+                pending.append(pcm)
+                # A tiny greeting can finish before the next batch is ready.
+                # Keep a bounded startup cushion instead of emitting it into a gap.
+                if playing or total >= rate * 2 * self.config.get("local_tts_prebuffer_s", 2.):
+                    deliver()
+        finally:
+            peer.close()
+            with self._lock:
+                if self._speech_peer is peer:
+                    self._speech_peer = None
+
     def _run(self, generation, pcm, recognized_text=None):
         stage = "录音"
         try:
@@ -305,10 +401,18 @@ class LocalVoiceTransport:
                 if not self._active(generation):
                     return
                 stage = "千帆文字回答"
+                cloud_started = time.monotonic()
                 reply = self._reply(text.strip())
+                self._timing(generation, "cloud_ms", cloud_started)
                 self._emit(generation, {"type": "llm", "text": reply, "emotion": "neutral"})
                 stage = "本地语音合成"
+                if self.config.get("local_tts_streaming"):
+                    self._stream_tts(generation, reply)
+                    return
+                tts_started = time.monotonic()
                 self._execute(generation, self.config["local_tts_command"], "local_tts_timeout_s", input=source, output=speech, text=reply)
+                self._timing(generation, "tts_first_audio_ms", tts_started)
+                self._timing(generation, "tts_total_ms", tts_started)
                 self._emit(generation, {"type": "tts", "state": "start"})
                 self._emit(generation, {"type": "tts", "state": "sentence_start", "text": reply})
                 stage = "本地音频输出"

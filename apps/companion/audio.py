@@ -34,6 +34,20 @@ class PcmAudio(NamedTuple):
             raise ValueError("Invalid local PCM audio")
 
 
+class PcmStreamChunk(NamedTuple):
+    """Owned local PCM segment; end closes the utterance (empty end is valid)."""
+    data: bytes
+    sample_rate: int
+    end: bool = False
+
+    def validate(self):
+        if (type(self.sample_rate) is not int or self.sample_rate not in (8000, 16000, 22050, 24000, 44100, 48000) or
+                type(self.end) is not bool or not isinstance(self.data, bytes) or
+                (not self.data and not self.end) or len(self.data) % 2 or
+                len(self.data) > self.sample_rate * 2 * 45):
+            raise ValueError("Invalid local PCM stream chunk")
+
+
 class AudioError(RuntimeError):
     pass
 
@@ -159,6 +173,13 @@ class AudioIO:
         self._codec = None
         self._inflight = False
         self._play_until = 0.0
+        self.first_write_monotonic = 0.0
+        self._stream_open = False
+        self._stream_ending = False
+        self._stream_started = False
+        self._stream_rate = 0
+        self._stream_bytes = 0
+        self._stream_deadline = 0.0
 
     def _command(self, capture, sample_rate=None):
         return ["arecord" if capture else "aplay", "-q", "-D",
@@ -246,6 +267,13 @@ class AudioIO:
         self._stop.set()
         self._capture_stop.set()
         with self._lock:
+            self._stream_open = self._stream_ending = self._stream_started = False
+            self._stream_rate = self._stream_bytes = 0
+            self._stream_deadline = 0.0
+            self._inflight = False
+            self._play_until = 0.0
+            while not self._queue.empty():
+                self._queue.get_nowait()
             self._terminate(self._capture)
             self._capture = None
             self._terminate(self._playback)
@@ -280,6 +308,10 @@ class AudioIO:
             raise ValueError("play expects an Opus bytes packet of 1..4096 bytes")
         with self._lock:
             self._ensure_started()
+            if self._stream_open:
+                raise AudioError("PCM stream must finish before Opus playback")
+            if not self.playback_busy():
+                self.first_write_monotonic = 0.0
             try:
                 self._queue.put_nowait((self._generation, packet))
             except queue.Full as error:
@@ -293,15 +325,42 @@ class AudioIO:
             self._ensure_started()
             if self.playback_busy():
                 raise AudioError("Previous playback must finish before local PCM")
+            self.first_write_monotonic = 0.0
             try:
                 self._queue.put_nowait((self._generation, audio))
             except queue.Full as error:
                 raise AudioError("Playback queue is full") from error
 
+    def play_pcm_stream(self, chunk):
+        if not isinstance(chunk, PcmStreamChunk):
+            raise ValueError("Expected local PCM stream chunk")
+        chunk.validate()
+        with self._lock:
+            self._ensure_started()
+            if self._stream_open:
+                if self._stream_ending or chunk.sample_rate != self._stream_rate:
+                    raise AudioError("PCM stream ended or sample rate changed")
+            elif self.playback_busy():
+                raise AudioError("Previous playback must finish before PCM stream")
+            if self._queue.qsize() >= min(16, self._queue.maxsize):
+                raise AudioError("PCM stream queue is full")
+            total = (self._stream_bytes if self._stream_open else 0) + len(chunk.data)
+            if total > chunk.sample_rate * 2 * 45:
+                raise AudioError("PCM stream exceeds 45 seconds")
+            if not self._stream_open:
+                self._stream_open = True
+                self._stream_started = False
+                self._stream_rate = chunk.sample_rate
+                self.first_write_monotonic = 0.0
+            self._stream_bytes = total
+            self._stream_ending = chunk.end
+            self._stream_deadline = time.monotonic() + 15.0
+            self._queue.put_nowait((self._generation, chunk))
+
     def playback_busy(self):
         """Includes 100 ms ALSA tail margin; not a hardware sample-clock query."""
         with self._lock:
-            return (not self._queue.empty() or self._inflight or
+            return (self._stream_open or not self._queue.empty() or self._inflight or
                     time.monotonic() < self._play_until + 0.1)
 
     def _output(self):
@@ -312,14 +371,26 @@ class AudioIO:
                         generation, packet = self._queue.get_nowait()
                     except queue.Empty:
                         packet = None
+                    if (packet is None and self._stream_open and
+                            time.monotonic() > max(self._stream_deadline, self._play_until + 15.0)):
+                        raise AudioError("PCM stream end/chunk timed out")
                     if self._playback is not None and self._playback.poll() is not None:
                         raise AudioError("aplay exited: %s (check device/permissions)" % self._playback.returncode)
                     if packet is not None:
                         if generation != self._generation or self._stop.is_set():
                             continue
                         self._inflight = True
+                        stream_pcm = isinstance(packet, PcmStreamChunk)
                         local_pcm = isinstance(packet, PcmAudio)
-                        if local_pcm:
+                        close_pcm = local_pcm or (stream_pcm and packet.end)
+                        if stream_pcm:
+                            packet.validate()
+                            pcm, rate = packet.data, packet.sample_rate
+                            if not self._stream_started:
+                                self._terminate(self._playback)
+                                self._playback = None
+                                self._stream_started = True
+                        elif local_pcm:
                             packet.validate()
                             pcm, rate = packet.data, packet.sample_rate
                             self._terminate(self._playback)
@@ -337,22 +408,27 @@ class AudioIO:
                     self._stop.wait(0.01)
                     continue
                 offset = 0
+                write_deadline = time.monotonic() + max(15.0, len(pcm) / (rate * 2) + 3.0)
                 while offset < len(pcm) and not self._stop.is_set():
                     with self._lock:
                         if generation != self._generation:
                             break
+                        if stream_pcm and time.monotonic() > write_deadline:
+                            raise AudioError("PCM stream write timed out")
                         if process.poll() is not None:
                             raise AudioError("aplay exited: %s (check device/permissions)" % process.returncode)
                         if select.select([], [fd], [], 0)[1]:
                             try:
                                 count = os.write(fd, pcm[offset:])
                                 offset += count
+                                if count and not self.first_write_monotonic:
+                                    self.first_write_monotonic = time.monotonic()
                                 self._play_until = max(time.monotonic(), self._play_until) + count / (rate * 2)
                             except BlockingIOError:
                                 pass
                     if offset < len(pcm):
                         self._stop.wait(0.01)
-                if local_pcm:
+                if close_pcm:
                     # EOF lets aplay drain the actual ALSA tail. Do not report
                     # completion merely because all bytes fitted in the pipe.
                     with self._lock:
@@ -373,14 +449,23 @@ class AudioIO:
                                 raise AudioError("Local PCM playback failed")
                             self._playback = None
                             self._play_until = 0.0
+                            if stream_pcm:
+                                self._stream_open = self._stream_ending = self._stream_started = False
+                                self._stream_rate = self._stream_bytes = 0
+                                self._stream_deadline = 0.0
                 with self._lock:
-                    self._inflight = False
+                    if generation == self._generation:
+                        self._inflight = False
         except Exception as error:
             self._fail(error)
 
     def interrupt(self):
         with self._lock:
             self._generation += 1
+            self._stream_open = self._stream_ending = self._stream_started = False
+            self._stream_rate = self._stream_bytes = 0
+            self._stream_deadline = 0.0
+            self.first_write_monotonic = 0.0
             self._inflight = False
             self._play_until = 0.0
             while True:

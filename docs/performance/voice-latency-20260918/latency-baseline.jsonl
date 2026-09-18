@@ -1,0 +1,3 @@
+{"round": 0, "connect_tls_proxy_s": 0.1792093340000065, "wait_response_headers_s": 1.3615804999999455, "cloud_total_s": 1.5584636680005133, "tts_total_s": 3.4891260849999526, "audio_s": 3.633922902494331, "reply_chars": 22}
+{"round": 1, "connect_tls_proxy_s": 0.09827387500081386, "wait_response_headers_s": 1.459613458999229, "cloud_total_s": 1.562443751000501, "tts_total_s": 3.492613251999501, "audio_s": 3.7384126984126986, "reply_chars": 21}
+{"round": 2, "connect_tls_proxy_s": 0.06564425000033225, "wait_response_headers_s": 1.395537792000141, "cloud_total_s": 1.4654619590000948, "tts_total_s": 4.542201709999972, "audio_s": 3.7268027210884354, "reply_chars": 22}

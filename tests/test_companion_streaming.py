@@ -76,11 +76,11 @@ class TurnTests(unittest.TestCase):
         frames=queue.Queue();frames.put(b'\0\0');frames.put(None)
         self.transport._stream_turn(self.transport._generation,frames,False)
         self.assertEqual(checked,[0]);self.transport._run.assert_called_once()
-        self.assertTrue(self.messages[0]['partial'])
+        self.assertTrue(next(m for m in self.messages if m['type']=='stt')['partial'])
     def test_auto_endpoint_manual_stop_once(self):
         self.turn('完整句',True)
         self.transport.send({'type':'listen','state':'stop'})
-        self.assertEqual([m['type'] for m in self.messages],['stt','asr_endpoint'])
+        self.assertEqual([m['type'] for m in self.messages if m['type'] != 'latency'],['stt','asr_endpoint'])
         self.transport._run.assert_called_once()
         self.assertEqual([c.args[0] for c in self.transport._asr_stream.exchange.call_args_list],[3,1,2])
     def test_empty_does_not_start_cloud(self):

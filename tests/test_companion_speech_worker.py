@@ -126,6 +126,86 @@ class RknnAdapterTests(unittest.TestCase):
                 validate({'local_asr_backend': invalid})
 
 
+class StreamingWorkerTests(unittest.TestCase):
+    def start_stream(self, engine):
+        server, client = socket.socketpair()
+        client.settimeout(2)
+        worker = SpeechWorker(engine, "/unused")
+        worker.busy.acquire()
+        job = threading.Thread(target=worker._process, args=(server, {"operation": "tts_stream", "text": "测试"}))
+        job.start()
+        self.addCleanup(client.close)
+        self.addCleanup(lambda: job.join(2))
+        return worker, client, job
+
+    def test_first_chunk_before_completion_and_busy_release(self):
+        from types import SimpleNamespace
+        first = threading.Event(); proceed = threading.Event()
+        def generate(text, emit, cancelled=None):
+            emit(b"\x01\x00" * 8, 44100)
+            first.set()
+            if not proceed.wait(1): raise RuntimeError("test timed out")
+            emit(b"\x02\x00" * 4, 44100)
+        worker, client, job = self.start_stream(SimpleNamespace(synthesize_stream=generate))
+        with client.makefile("rb") as stream:
+            header = json.loads(stream.readline())
+            self.assertEqual(header, {"type": "audio", "rate": 44100, "bytes": 16})
+            self.assertEqual(stream.read(16), b"\x01\x00" * 8)
+            self.assertTrue(worker.busy.locked())
+            proceed.set()
+            second = json.loads(stream.readline())
+            self.assertEqual(stream.read(second["bytes"]), b"\x02\x00" * 4)
+            self.assertEqual(json.loads(stream.readline()), {"type": "done", "ok": True})
+            self.assertFalse(worker.busy.locked())
+        job.join(1);self.assertFalse(job.is_alive())
+
+    def test_cumulative_limit_and_unsupported_engine_fail_closed(self):
+        from types import SimpleNamespace
+        def oversized(text, emit, cancelled=None): emit(b"x" * (44100 * 2 * 45 + 2), 44100)
+        for engine in (SimpleNamespace(synthesize_stream=oversized), SimpleNamespace()):
+            worker, client, job = self.start_stream(engine)
+            with client.makefile("rb") as stream:
+                result = json.loads(stream.readline())
+                self.assertEqual(result["type"], "done");self.assertFalse(result["ok"])
+            job.join(1);self.assertFalse(worker.busy.locked())
+
+    def test_cumulative_audio_limit(self):
+        from types import SimpleNamespace
+        block = b"\0\0" * (44100 * 20)
+        def generate(text, emit, cancelled=None):
+            for _ in range(3): emit(block, 44100)
+        worker, client, job = self.start_stream(SimpleNamespace(synthesize_stream=generate))
+        with client.makefile("rb") as stream:
+            for _ in range(2):
+                header = json.loads(stream.readline())
+                self.assertEqual(header["bytes"], len(block))
+                self.assertEqual(stream.read(header["bytes"]), block)
+            done = json.loads(stream.readline())
+            self.assertFalse(done["ok"])
+        job.join(1);self.assertFalse(worker.busy.locked())
+
+    def test_disconnected_peer_cancels_engine(self):
+        from types import SimpleNamespace
+        seen = threading.Event()
+        def generate(text, emit, cancelled=None):
+            limit = time.monotonic() + 1
+            while not cancelled() and time.monotonic() < limit: time.sleep(.005)
+            if cancelled(): seen.set()
+            raise RuntimeError("cancelled")
+        worker, client, job = self.start_stream(SimpleNamespace(synthesize_stream=generate))
+        client.close();job.join(2)
+        self.assertTrue(seen.is_set());self.assertFalse(job.is_alive());self.assertFalse(worker.busy.locked())
+
+    def test_operation_deadline_is_exposed_to_engine(self):
+        from types import SimpleNamespace
+        seen = []
+        def generate(text, emit, cancelled=None):
+            with patch("apps.companion.speech_worker.time.monotonic", return_value=time.monotonic()+121):
+                seen.append(cancelled())
+            raise TimeoutError("deadline")
+        worker, client, job = self.start_stream(SimpleNamespace(synthesize_stream=generate))
+        job.join(2);self.assertEqual(seen,[True]);self.assertFalse(worker.busy.locked())
+
 class SampleConversionTests(unittest.TestCase):
     def test_thread_budget_rejects_invalid_values(self):
         from apps.companion.speech_worker import SherpaEngine

@@ -1,10 +1,11 @@
 """Serialized companion state machine; all device work stays outside realtime control."""
 import json
+import math
 import queue
 import struct
 import threading
 import time
-from .audio import PcmAudio
+from .audio import PcmAudio, PcmStreamChunk
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
 SILENCE_FRAME = bytes(1920)
@@ -26,6 +27,8 @@ class Companion:
         self.audio = self.codec = self.transport = None
         self.generation = 0
         self.capture_epoch = 0
+        self.capture_stopped_at = 0.
+        self.audio_queued_at = 0.
         self.auto_until = 0.
         self.auto_due = 0.
         self.turn_audio_frames_sent = 0
@@ -39,12 +42,13 @@ class Companion:
         self.tts_ended = False
         self.accept_audio = False
         self.data = {
-            "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
+            "last_latency_ms": {}, "latency_ms": {}, "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
             "error": "", "connected": False, "muted": True, "continuous": False, "transcript_partial": False, "voice_progress": "idle",
             "face": {"available": False, "reason": "尚未连接视觉服务"},
             "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0,
                         "capture_peak_amplitude": 0},
             "capabilities": {"mode": config["mode"], "voice": "push-to-talk",
+                "streaming_tts": config.get("local_tts_streaming", False),
                 "streaming_asr": config.get("local_asr_streaming", False),
                 "automatic_endpoint": config.get("local_asr_streaming", False),
                 "wake_word": False, "aec": False, "automatic_barge_in": False,
@@ -270,6 +274,10 @@ class Companion:
             with self.lock:
                 self.data["metrics"]["capture_peak_amplitude"] = 0
             self.auto_due = 0.
+            self.capture_stopped_at = self.audio_queued_at = 0.
+            if self.data["latency_ms"]:
+                self._set(last_latency_ms=dict(self.data["latency_ms"]))
+            self._set(latency_ms={})
             self._set(state="listening", transcript="", transcript_partial=False, reply="", error="", emotion="neutral", voice_progress="recording")
             self._send("listen", state="start", mode="auto" if self.data["continuous"] else self.config.get("listen_mode", "manual"))
             generation = self.generation
@@ -279,6 +287,7 @@ class Companion:
         elif action == "stop":
             if self.data["state"] != "listening":
                 return
+            self.capture_stopped_at = time.monotonic()
             self.capture_epoch += 1
             if self.audio:
                 self.audio.stop_capture()
@@ -336,12 +345,17 @@ class Companion:
         return False
 
     def _message(self, value):
-        if isinstance(value, PcmAudio):
+        if isinstance(value, (PcmAudio, PcmStreamChunk)):
             if self.config.get("voice_backend") != "local":
                 raise ValueError("Local PCM is not accepted from an Android backend")
             value.validate()
             if self.accept_audio and not self.data["muted"] and self.audio:
-                self.audio.play_pcm(value)
+                if not self.audio_queued_at:
+                    self.audio_queued_at = time.monotonic()
+                if isinstance(value, PcmStreamChunk):
+                    self.audio.play_pcm_stream(value)
+                else:
+                    self.audio.play_pcm(value)
                 self.turn_audio_frames_received += 1
                 self._set(voice_progress="receiving_audio")
                 with self.lock:
@@ -370,6 +384,14 @@ class Companion:
             self._idle()
             return
         if not self.data["connected"] or (value.get("session_id") not in (None, self.session)):
+            return
+        if kind == "latency" and self.config.get("voice_backend") == "local":
+            values = value.get("values")
+            allowed = {"asr_first_partial_ms", "asr_finalize_ms", "cloud_ms", "tts_first_audio_ms", "tts_total_ms"}
+            if (not isinstance(values, dict) or set(values) - allowed or any(
+                    type(v) not in (int, float) or not math.isfinite(v) or not 0 <= v <= 240000 for v in values.values())):
+                raise ValueError("Invalid stage timing")
+            self._set(latency_ms=dict(self.data["latency_ms"], **values))
             return
         if kind == "asr_endpoint" and self.config.get("local_asr_streaming"):
             if self.data["state"] == "listening":
@@ -420,6 +442,13 @@ class Companion:
 
     def _tick(self):
         now = time.monotonic()
+        first_write = getattr(self.audio, "first_write_monotonic", 0.) if self.audio else 0.
+        if (self.audio_queued_at and first_write >= self.audio_queued_at and
+                "playback_queue_ms" not in self.data["latency_ms"]):
+            timing = dict(self.data["latency_ms"], playback_queue_ms=round((first_write - self.audio_queued_at) * 1000, 1))
+            if self.capture_stopped_at:
+                timing["stop_to_audio_ms"] = round((first_write - self.capture_stopped_at) * 1000, 1)
+            self._set(latency_ms=timing)
         if self.data["continuous"] and now >= self.auto_until:
             self._action("mute")
             return

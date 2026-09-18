@@ -220,3 +220,13 @@ perf在此BSP需等目标退出收尾；复用工具profile-melo.py采用父控�
 ASR native RSS约17MiB不含NPU，整机准备后约681/970MiB（未加载ASR约550），人脸约30FPS。
 属于停顿断句而非语义标点；仍无AEC/唤醒词/直接说话打断。Melo音色不变。
 旧CLI与配置可回退；证据与限制见[流式验收](../docs/verification-streaming-asr-20260918.md)。
+
+
+## 2026-09-18 对话延迟与流式TTS
+
+固定文字实测千帆1.47–1.56s，TLS/代理0.07–0.18s；回复21–22字原TTS3.49–4.54s，主要为合成等待。
+Melo新增原完整batch回调、worker PCM流、单aplay连续写，默认2s预缓冲避免0.4s首片播完等后片的空档。
+板端local_tts_streaming=true（全局默认false）；固定长句TTS首批中位6.726→2.300s，短句2.588→2.265s。
+并非整体对话提速66%；TTS总生成6.384s仍在，音色/参数/采样率不变。真实固定句扬声器drain完成、无欠载日志。
+新增每轮latency_ms及页面分段显示，首次写管道不等于声学首音。release/asan各16组通过。
+用户麦克风本轮未开启；证据/回退见[延迟验收](../docs/verification-voice-latency-20260918.md)。

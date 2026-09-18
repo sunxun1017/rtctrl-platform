@@ -15,7 +15,7 @@ DEFAULTS = {
     "face_poll_s": 1, "face_stale_s": 5,
     "voice_backend": "android", "qianfan_model": "ernie-4.5-turbo-32k",
     "qianfan_token_env": "BAIDU_QIANFAN_API_KEY", "qianfan_proxy_url": "",
-    "local_asr_streaming": False, "local_asr_backend": "cpu", "local_asr_command": [], "local_tts_command": [],
+    "local_tts_prebuffer_s": 2.0, "local_tts_streaming": False, "local_asr_streaming": False, "local_asr_backend": "cpu", "local_asr_command": [], "local_tts_command": [],
     "local_asr_timeout_s": 60, "local_tts_timeout_s": 90,
     "local_speech_root": "", "local_speech_socket": "", "local_tts_kind": "vits", "local_tts_speaker": 0, "local_speech_threads": 2,
 
@@ -71,7 +71,7 @@ def validate(values):
             raise ValueError("qianfan_proxy_url must be a credential-free loopback HTTP CONNECT proxy")
     if config["listen_mode"] not in ("manual", "realtime"):
         raise ValueError("listen_mode must be manual or realtime")
-    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming"):
+    for key in ("wifi_enabled", "device_settings_enabled", "local_asr_streaming", "local_tts_streaming"):
         if type(config[key]) is not bool:
             raise ValueError(key + " must be boolean")
     if type(config["allow_insecure_ws"]) is not bool:
@@ -79,7 +79,7 @@ def validate(values):
     for key, low, high in (("port", 1, 65535), ("playback_queue_frames", 2, 32),
                            ("network_timeout_s", 1, 15), ("max_listen_s", 1, 120),
                            ("response_timeout_s", 5, 240), ("local_asr_timeout_s", 1, 120),
-                           ("local_tts_timeout_s", 1, 120), ("face_poll_s", .2, 10),
+                           ("local_tts_timeout_s", 1, 120), ("local_tts_prebuffer_s", .5, 5), ("face_poll_s", .2, 10),
                            ("face_stale_s", 1, 60)):
         value = config[key]
         if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
@@ -89,6 +89,9 @@ def validate(values):
             raise ValueError(key + " must be an integer")
     if config["bind"] not in ("127.0.0.1", "localhost"):
         raise ValueError("bind must be loopback; use an SSH tunnel for remote control")
+    if config["local_tts_streaming"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
+            config["local_tts_kind"] != "melo_npu" or not config["local_speech_socket"]):
+        raise ValueError("streaming TTS requires live local Melo NPU and worker socket")
     if config["local_asr_streaming"] and (config["mode"] != "live" or config["voice_backend"] != "local" or
             config["local_asr_backend"] != "rknn" or not config["local_speech_root"]):
         raise ValueError("streaming ASR requires live local RKNN and model root")

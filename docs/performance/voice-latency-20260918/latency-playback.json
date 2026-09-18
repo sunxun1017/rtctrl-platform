@@ -1,0 +1,1 @@
+{"latency_ms": {"cloud_ms": 0.0, "tts_first_audio_ms": 2374.0, "playback_queue_ms": 26.8, "stop_to_audio_ms": 2405.1, "tts_total_ms": 6531.2}, "metrics": {"audio_frames_sent": 0, "audio_frames_received": 7, "queue_overflows": 0, "capture_peak_amplitude": 0}, "audio_error": null, "wall_s": 10.574748046999957}

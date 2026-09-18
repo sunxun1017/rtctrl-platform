@@ -47,4 +47,28 @@ class PipelineTests(unittest.TestCase):
   with self.assertRaises(RuntimeError):self.run_case(generate,lambda *a:np.zeros(44100*45+1))
  def test_empty(self):
   with self.assertRaises(ValueError):self.run_case(lambda *a,**k:None,lambda *a:None)
+ def test_stream_concat_matches_original_pcm(self):
+  from apps.companion.speech_worker import float_to_pcm16
+  def generate(*a,callback,**kw):
+   for value in (.1,.2): callback(np.full(192,value,np.float32),0)
+  engine=SimpleNamespace(prefix=SimpleNamespace(generate=generate),decoder=object())
+  def decode(z,d):return np.full(200,float(z.flat[0]),np.float32)
+  with patch.object(p,'decode_chunks',side_effect=decode):
+   baseline,rate=p.MeloNpu.synthesize(engine,'test')
+   parts=[]
+   p.MeloNpu.synthesize(engine,'test',on_audio=lambda samples,rate:parts.append(float_to_pcm16(samples)))
+  self.assertEqual(b''.join(parts),float_to_pcm16(baseline))
+ def test_audio_callback_precedes_generate_completion(self):
+  heard=threading.Event()
+  def generate(*a,callback,**kw):
+   callback(np.ones(192,np.float32),0)
+   self.assertTrue(heard.wait(1))
+   callback(np.ones(192,np.float32),1)
+  engine=SimpleNamespace(prefix=SimpleNamespace(generate=generate),decoder=object())
+  with patch.object(p,'decode_chunks',return_value=np.ones(20,np.float32)):
+   p.MeloNpu.synthesize(engine,'test',on_audio=lambda *a:heard.set())
+ def test_cancelled_callback_stops_without_thread_leak(self):
+  engine=SimpleNamespace(prefix=SimpleNamespace(generate=lambda *a,callback,**kw:callback(np.zeros(192),0)),decoder=object())
+  with self.assertRaises(RuntimeError):
+   p.MeloNpu.synthesize(engine,'test',on_audio=lambda *a:None,cancelled=lambda:True)
 if __name__=='__main__':unittest.main()

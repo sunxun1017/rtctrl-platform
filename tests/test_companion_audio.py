@@ -92,6 +92,77 @@ class AudioTests(unittest.TestCase):
         for patcher in reversed(self.patchers):
             patcher.stop()
 
+    def test_stream_chunks_reuse_process_exact_bytes_and_end_drain(self):
+        first, second = b"\x01\x02" * 111, b"\xfe\xff" * 71
+        self.io.play_pcm_stream(audio.PcmStreamChunk(first, 44100))
+        eventually(lambda: len(self.processes) == 1)
+        command, process = self.processes[0]
+        self.assertEqual(command[command.index("-r") + 1], "44100")
+        self.assertEqual(process.peer.read(len(first)), first)
+        eventually(lambda: self.io.first_write_monotonic > 0)
+        stamp = self.io.first_write_monotonic
+        eventually(lambda: not self.io._inflight)
+        self.assertTrue(self.io.playback_busy())
+        self.assertFalse(process.stdin.closed)
+        self.io.play_pcm_stream(audio.PcmStreamChunk(second, 44100))
+        self.assertEqual(process.peer.read(len(second)), second)
+        self.io.play_pcm_stream(audio.PcmStreamChunk(b"", 44100, True))
+        eventually(lambda: process.stdin.closed)
+        self.assertEqual(len(self.processes), 1)
+        self.assertEqual(self.io.first_write_monotonic, stamp)
+        self.assertTrue(self.io.playback_busy())
+        process.returncode = 0
+        eventually(lambda: not self.io.playback_busy())
+        self.assertEqual(self.errors, [])
+
+    def test_stream_interrupt_clears_state_and_new_utterance_timestamp(self):
+        self.io.play_pcm_stream(audio.PcmStreamChunk(b"\0\1" * 8, 8000))
+        eventually(lambda: self.io.first_write_monotonic > 0)
+        old = self.processes[0][1]
+        self.io.interrupt()
+        self.assertTrue(old.terminated)
+        self.assertFalse(self.io.playback_busy())
+        self.assertEqual(self.io.first_write_monotonic, 0)
+        self.io.play_pcm_stream(audio.PcmStreamChunk(b"\2\3", 16000, True))
+        eventually(lambda: len(self.processes) == 2)
+        process = self.processes[-1][1]
+        self.assertEqual(process.peer.read(2), b"\2\3")
+        eventually(lambda: process.stdin.closed)
+        process.returncode = 0
+        eventually(lambda: not self.io.playback_busy())
+
+    def test_stream_missing_end_errors_and_reaps(self):
+        self.io.play_pcm_stream(audio.PcmStreamChunk(b"\0\0", 8000))
+        eventually(lambda: len(self.processes) == 1 and not self.io._inflight)
+        process = self.processes[0][1]
+        with self.io._lock:
+            self.io._stream_deadline = time.monotonic() - 20
+            self.io._play_until = time.monotonic() - 20
+        eventually(lambda: bool(self.errors))
+        self.assertIn("timed out", self.errors[0])
+        self.assertTrue(process.terminated)
+        self.assertFalse(self.io._stream_open)
+        self.assertFalse(self.io.playback_busy())
+
+    def test_stream_validation_limits_and_interleaving(self):
+        for chunk in (audio.PcmStreamChunk(b"",8000), audio.PcmStreamChunk(b"x",8000),
+                      audio.PcmStreamChunk(b"xx",8000,1), audio.PcmStreamChunk(b"xx",True)):
+            with self.assertRaises(ValueError): self.io.play_pcm_stream(chunk)
+        # Hold consumer to validate queue and cumulative budget deterministically.
+        with self.io._lock:
+            self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",8000))
+            with self.assertRaises(audio.AudioError): self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",16000))
+            with self.assertRaises(audio.AudioError): self.io.play(b"opus")
+            with self.assertRaises(audio.AudioError): self.io.play_pcm(audio.PcmAudio(b"xx",8000))
+            for _ in range(15): self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",8000))
+            with self.assertRaisesRegex(audio.AudioError,"queue"): self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",8000))
+            self.io.interrupt()
+            self.io.play_pcm_stream(audio.PcmStreamChunk(bytes(8000*2*45),8000))
+            with self.assertRaisesRegex(audio.AudioError,"45 seconds"): self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",8000))
+            self.io.play_pcm_stream(audio.PcmStreamChunk(b"",8000,True))
+            with self.assertRaises(audio.AudioError): self.io.play_pcm_stream(audio.PcmStreamChunk(b"xx",8000))
+            self.io.interrupt()
+
     def test_pcm_native_rate_exact_bytes_and_wait_for_drain(self):
         pcm = b"\x00\x10\xff\x7f\x00\x80" * 71
         with mock.patch.object(FakeCodec, "decode", side_effect=AssertionError("lossy decode")):
