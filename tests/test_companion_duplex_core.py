@@ -88,6 +88,63 @@ class DuplexTests(unittest.TestCase):
         self.assertFalse(self.core.snapshot()["continuous"])
         self.assertFalse(audio.recording)
 
+    def echo_reference(self):
+        self.speaking()
+        self.core.audio.first_write_monotonic=time.monotonic()
+        self.message("tts",state="sentence_start",text="明天上午可以到公园散步，再看看湖边的风景。")
+        self.message("duplex_started")
+        wait_for(lambda:self.core.snapshot()["input_state"]=="recognizing")
+
+    def test_echo_is_quarantined_and_not_sent_or_queued(self):
+        self.echo_reference()
+        self.message("duplex_partial",text="明天上午可以到公园散步")
+        self.message("duplex_final",text="明天上午可以到公园散步")
+        wait_for(lambda:bool(self.core.snapshot()["echo_suspect"]))
+        self.assertEqual(len(self.replies()),1)
+        self.assertEqual(self.core.snapshot()["pending_utterances"],0)
+        self.assertEqual(self.core.snapshot()["next_transcript"],"")
+        self.assertEqual(self.core.snapshot()["metrics"]["echo_suspicions"],1)
+        self.assertTrue(self.core.audio.recording)
+
+    def test_user_confirmation_queues_once_and_dismiss_does_not(self):
+        self.echo_reference()
+        self.message("duplex_final",text="再看看湖边的风景")
+        wait_for(lambda:bool(self.core.snapshot()["echo_suspect"]))
+        self.core.action("dismiss_echo:" + str(self.core.snapshot()["echo_suspect_id"]))
+        self.assertEqual(self.core.snapshot()["pending_utterances"],0)
+        self.message("duplex_final",text="再看看湖边的风景")
+        wait_for(lambda:bool(self.core.snapshot()["echo_suspect"]))
+        candidate=str(self.core.snapshot()["echo_suspect_id"])
+        self.core.action("confirm_echo:" + candidate)
+        with self.assertRaises(ValueError):self.core.action("confirm_echo:" + candidate)
+        self.assertEqual(self.core.snapshot()["pending_utterances"],1)
+        self.assertEqual(self.core.snapshot()["echo_suspect"],"")
+
+    def test_overlap_still_checked_after_playback_has_drained(self):
+        self.echo_reference()
+        self.core.audio.busy=False
+        self.core.last_playback_at=time.monotonic()-5
+        self.message("duplex_final",text="明天上午可以到公园散步")
+        wait_for(lambda:bool(self.core.snapshot()["echo_suspect"]))
+        self.assertEqual(self.core.snapshot()["pending_utterances"],0)
+
+    def test_distinct_near_end_text_still_queues_while_playing(self):
+        self.echo_reference()
+        self.message("duplex_final",text="我想听一首歌曲")
+        wait_for(lambda:self.core.snapshot()["pending_utterances"]==1)
+        self.assertEqual(self.core.snapshot()["echo_suspect"],"")
+
+    def test_stale_confirmation_does_not_submit_replacement(self):
+        self.echo_reference()
+        self.message("duplex_final",text="明天上午可以到公园散步")
+        wait_for(lambda:bool(self.core.snapshot()["echo_suspect"]))
+        old=self.core.snapshot()["echo_suspect_id"]
+        self.message("duplex_final",text="再看看湖边的风景")
+        wait_for(lambda:self.core.snapshot()["echo_suspect_id"]!=old)
+        with self.assertRaises(ValueError):self.core.action("confirm_echo:"+str(old))
+        self.assertEqual(self.core.snapshot()["pending_utterances"],0)
+        self.assertEqual(self.core.snapshot()["echo_suspect"],"再看看湖边的风景")
+
     def test_requires_aec(self):
         with self.assertRaises(ValueError):validate(dict(full_duplex=True))
 

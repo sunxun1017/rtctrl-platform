@@ -101,6 +101,14 @@
         $("pending-count").textContent = queued ? "待回应 " + queued + " / 3" : "没有排队的话";
         $("next-transcript").textContent = typeof current.next_transcript === "string" && current.next_transcript ? current.next_transcript : (inputActive ? "你可以继续说，听到的新一句会显示在这里。" : "开始连续对话后，等待回答和播放时也能听你说。");
         $("duplex-note").textContent = queued >= 3 ? "已有 3 句等待回应，请等队列减少后再说。当前回答不会自动中断。" : "下一句会等当前回答播放结束后再回应；立即静音可停止所有采集。";
+        const echoSuspect = typeof current.echo_suspect === "string" ? current.echo_suspect : "";
+        const showEcho = fullDuplex && current.continuous && !!echoSuspect;
+        $("echo-review").hidden = !showEcho;
+        $("echo-text").textContent = echoSuspect;
+        const echoDisabled = !showEcho || !reachable || !current.connected || current.muted || ["offline", "error", "connecting"].includes(state) || pending > 0;
+        $("confirm-echo").disabled = echoDisabled;
+        $("dismiss-echo").disabled = echoDisabled;
+        $("echo-note").textContent = inputActive ? "内容与近期播放相似，暂未发送，也未加入待回应队列。麦克风仍在听；如果这是你说的，请确认。" : "内容与近期播放相似，暂未发送，也未加入待回应队列。这只是疑似判断。";
         if (inputActive && ["thinking", "speaking"].includes(state)) {
             if (state === "speaking") label = "边说边听";
             hint += " 你可以继续说，新的一句会排队回应，不会自动打断。";
@@ -222,6 +230,8 @@
         held = false;
         action("stop");
     }
+    $("confirm-echo").addEventListener("click", () => { if (!$("confirm-echo").disabled) action("confirm_echo:" + current.echo_suspect_id); });
+    $("dismiss-echo").addEventListener("click", () => { if (!$("dismiss-echo").disabled) action("dismiss_echo:" + current.echo_suspect_id); });
     $("continuous").addEventListener("click", () => { stopTalk(); action(current.continuous ? "mute" : "continuous"); });
     $("connect").addEventListener("click", () => { stopTalk(); action(current.connected ? "disconnect" : "connect"); });
     $("mute").addEventListener("click", () => { stopTalk(); action(current.muted ? "unmute" : "mute"); });

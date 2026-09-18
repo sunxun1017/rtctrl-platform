@@ -7,6 +7,7 @@ import threading
 import time
 from collections import deque
 from .audio import PcmAudio, PcmStreamChunk
+from .echo_guard import EchoGuard
 
 AUDIO_PARAMS = {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
 SILENCE_FRAME = bytes(1920)
@@ -32,6 +33,11 @@ class Companion:
         self.audio_queued_at = 0.
         self.auto_until = 0.
         self.auto_due = 0.
+        self.echo_sequence = 0
+        self.echo_guard = EchoGuard()
+        self.last_playback_at = -1000.
+        self.echo_refresh_at = 0.
+        self.duplex_overlap = False
         self.pending_utterances = deque()
         self.response_busy = False
         self.response_produced = False
@@ -46,12 +52,12 @@ class Companion:
         self.tts_ended = False
         self.accept_audio = False
         self.data = {
-            "input_state": "off", "next_transcript": "", "pending_utterances": 0,
+            "input_state": "off", "next_transcript": "", "pending_utterances": 0, "echo_suspect": "", "echo_suspect_id": 0,
             "last_latency_ms": {}, "latency_ms": {}, "state": "offline", "emotion": "neutral", "transcript": "", "reply": "",
             "error": "", "connected": False, "muted": True, "continuous": False, "transcript_partial": False, "voice_progress": "idle",
             "face": {"available": False, "reason": "尚未连接视觉服务"},
             "metrics": {"audio_frames_sent": 0, "audio_frames_received": 0, "queue_overflows": 0,
-                        "capture_peak_amplitude": 0},
+                        "capture_peak_amplitude": 0, "echo_suspicions": 0},
             "capabilities": {"mode": config["mode"], "voice": "push-to-talk",
                 "streaming_tts": config.get("local_tts_streaming", False),
                 "streaming_asr": config.get("local_asr_streaming", False),
@@ -171,9 +177,13 @@ class Companion:
             self._fail("会话维护失败，已停止录放音；请重新连接")
 
     def _release(self):
+        self.echo_guard.clear()
+        self.duplex_overlap = False
+        self.last_playback_at = -1000.
+        self.echo_refresh_at = 0.
         self.pending_utterances.clear()
         self.response_busy = self.response_produced = False
-        self._set(input_state="off", next_transcript="", pending_utterances=0)
+        self._set(input_state="off", next_transcript="", pending_utterances=0, echo_suspect="", echo_suspect_id=0)
         self.auto_until = self.auto_due = 0.
         self._set(continuous=False)
         self.generation += 1
@@ -202,6 +212,22 @@ class Companion:
 
     def _duplex(self):
         return self.config.get("full_duplex", False) and self.data["continuous"]
+
+    def _echo_context(self):
+        return (self.duplex_overlap or
+                (self.audio and self.audio.playback_busy() and getattr(self.audio, "first_write_monotonic", 0.) > 0) or
+                time.monotonic() - self.last_playback_at < 3.)
+
+    def _accept_duplex_text(self, text):
+        self._set(next_transcript=text, echo_suspect="", echo_suspect_id=0)
+        if self.response_busy:
+            if len(self.pending_utterances) >= 3:
+                self._fail("待回复的话超过三句，已停止会话；请重新开启后逐句交流")
+                return
+            self.pending_utterances.append(text)
+            self._set(pending_utterances=len(self.pending_utterances))
+        else:
+            self._start_duplex_reply(text)
 
     def _start_duplex_reply(self, text):
         self.response_busy = True
@@ -244,6 +270,17 @@ class Companion:
             self.audio.stop_capture()
 
     def _action(self, action):
+        if action.startswith(("confirm_echo:", "dismiss_echo:")):
+            command, candidate_id = action.split(":", 1)
+            if not self._duplex() or self.data["muted"] or not self.data["connected"]:
+                raise ValueError("请先开启连续对话")
+            if candidate_id != str(self.data["echo_suspect_id"]) or not self.data["echo_suspect"]:
+                raise ValueError("这条待确认内容已变化，请查看最新提示")
+            text = self.data["echo_suspect"]
+            self._set(echo_suspect="", echo_suspect_id=0)
+            if command == "confirm_echo" and text:
+                self._accept_duplex_text(text)
+            return
         if action == "continuous":
             if not self.config.get("local_asr_streaming"):
                 raise ValueError("当前配置不支持流式对话")
@@ -449,27 +486,29 @@ class Companion:
             if self.data["muted"] or not self.data["connected"]:
                 return
             if kind == "duplex_waiting":
+                self.duplex_overlap = False
                 self._set(input_state="waiting_speech")
                 if self.data["state"] == "listening":
                     self._set(voice_progress="waiting_speech")
             elif kind == "duplex_started":
+                self.duplex_overlap = bool(self.audio and self.audio.playback_busy() and getattr(self.audio, "first_write_monotonic", 0.) > 0) or time.monotonic() - self.last_playback_at < 3.
                 self._set(input_state="recognizing", next_transcript="")
                 if self.data["state"] == "listening":
                     self._set(voice_progress="recording")
             elif kind == "duplex_partial":
-                self._set(next_transcript=self._text(value.get("text", "")))
+                text = self._text(value.get("text", ""))
+                suspect = self._echo_context() and self.echo_guard.suspected(text, time.monotonic())
+                self._set(next_transcript="" if suspect else text)
             elif kind == "duplex_final":
                 text = self._text(value.get("text", "")).strip()
                 if text:
-                    self._set(next_transcript=text)
-                    if self.response_busy:
-                        if len(self.pending_utterances) >= 3:
-                            self._fail("待回复的话超过三句，已停止会话；请重新开启后逐句交流")
-                            return
-                        self.pending_utterances.append(text)
-                        self._set(pending_utterances=len(self.pending_utterances))
+                    if self._echo_context() and self.echo_guard.suspected(text, time.monotonic()):
+                        with self.lock:
+                            self.data["metrics"]["echo_suspicions"] += 1
+                        self.echo_sequence += 1
+                        self._set(echo_suspect=text, echo_suspect_id=self.echo_sequence, next_transcript="")
                     else:
-                        self._start_duplex_reply(text)
+                        self._accept_duplex_text(text)
             return
         if kind == "response_complete" and self._duplex():
             self.response_produced = True
@@ -511,6 +550,8 @@ class Companion:
                     self.capture_epoch += 1
                     if self.audio:
                         self.audio.pause_capture() if self.config.get("aec_enabled") else self.audio.stop_capture()
+                if self._duplex() and self.data["reply"]:
+                    self.echo_guard.remember(self.data["reply"], time.monotonic())
                 self.silence_remaining = 0
                 self.silence_due = 0.
                 self.accept_audio = True
@@ -522,6 +563,8 @@ class Companion:
                 self.tts_ended = True
             elif state == "sentence_start" and self.data["state"] == "speaking":
                 self._set(reply=self._text(value.get("text", "")))
+                if self._duplex():
+                    self.echo_guard.remember(self.data["reply"], time.monotonic())
         elif kind == "error":
             self._fail("后端返回错误，请检查服务与认证配置")
         # Remote messages can never arm or command an actuator.
@@ -534,6 +577,13 @@ class Companion:
 
     def _tick(self):
         now = time.monotonic()
+        if self._duplex() and self.audio and self.audio.playback_busy() and getattr(self.audio, "first_write_monotonic", 0.) > 0:
+            self.last_playback_at = now
+            if self.data["input_state"] == "recognizing":
+                self.duplex_overlap = True
+            if now >= self.echo_refresh_at and self.data["reply"]:
+                self.echo_guard.remember(self.data["reply"], now)
+                self.echo_refresh_at = now + 5.
         first_write = getattr(self.audio, "first_write_monotonic", 0.) if self.audio else 0.
         if (self.audio_queued_at and first_write >= self.audio_queued_at and
                 "playback_queue_ms" not in self.data["latency_ms"]):

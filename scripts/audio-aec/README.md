@@ -99,3 +99,8 @@ Use one quiet run before a separately announced speaking run; match the announce
 needs no microphone: it concurrently runs fixture ASR and local Unix-socket TTS, counting
 PCM without saving/playing it. It measures inference contention, not acoustic/full-cloud quality.
 See docs/verification-full-duplex-20260918.md for measured results and limits.
+
+`duplex_probe.py --run-local-test --digital-loopback --duration 15 --config BOARD_CONFIG --wav FIXED_WAV`
+does not open microphone/speaker: a memory audio adapter feeds the fixed played waveform directly into real local RKNN ASR.
+The probe derives fixture reference text locally before running; it never calls cloud. This tests textual echo quarantine
+under deliberate loopback, not acoustic cancellation. Normal mode still requires coordinated microphone authorization.
