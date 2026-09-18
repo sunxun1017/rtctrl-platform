@@ -1,0 +1,19 @@
+{
+  "samples": 25600,
+  "sample_rate": 8000,
+  "seconds": 3.2,
+  "length_equal": true,
+  "finite": true,
+  "max_abs_error": 0.0012785512953996658,
+  "rmse": 0.00011257861020911503,
+  "snr_db": 48.924589217811,
+  "correlation": 0.9999944645286583,
+  "reference_peak": 0.18297602236270905,
+  "actual_peak": 0.182861328125,
+  "reference_clipped_samples": 0,
+  "actual_clipped_samples": 0,
+  "same_latent": true,
+  "gain_normalized": false,
+  "time_aligned_or_shifted": false,
+  "whole_sentence_single_inference": true
+}

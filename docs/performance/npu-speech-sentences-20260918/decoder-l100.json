@@ -1,0 +1,27 @@
+{
+  "latent_length": 100,
+  "input_shapes": [
+    [
+      1,
+      96,
+      100
+    ],
+    [
+      1,
+      256,
+      1
+    ]
+  ],
+  "output_shape": [
+    1,
+    1,
+    25600
+  ],
+  "source_sha256": "5511d651b7840c0a93a6bbfd4afd070a2c7f39ca1ec3ff2ecd73191519bbb852",
+  "onnx_sha256": "a26d5297988d044138f5465ca7cab3680fbe2e583994e6c3470e642ac28495e8",
+  "rknn_sha256": "e5ab3796f4e782c34d3f7809d3adbb91e6f96ca1e64ad459685e1c14fbbf24c3",
+  "nodes": 114,
+  "target": "rv1126b",
+  "quantized": false,
+  "status": "converted_not_board_validated"
+}

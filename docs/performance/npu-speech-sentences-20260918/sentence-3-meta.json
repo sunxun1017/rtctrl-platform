@@ -1,0 +1,60 @@
+{
+  "text": "你好呀，我是小伴",
+  "tokens": [
+    0,
+    19,
+    81,
+    3,
+    14,
+    51,
+    3,
+    7,
+    88,
+    3,
+    7,
+    196,
+    3,
+    24,
+    117,
+    3,
+    26,
+    101,
+    3,
+    8,
+    42,
+    3,
+    0,
+    1
+  ],
+  "frontend_callback_batches": 1,
+  "frontend": "sherpa-onnx 1.13.8 actual OfflineTts frontend, token-output instrumented same ONNX metadata",
+  "rules": [
+    "date.fst",
+    "number.fst",
+    "phone.fst",
+    "new_heteronym.fst"
+  ],
+  "sid": 0,
+  "speed": 1.0,
+  "noise_scale": 0.6669999957084656,
+  "noise_scale_dur": 0.800000011920929,
+  "latent_length": 100,
+  "latent_shape": [
+    1,
+    96,
+    100
+  ],
+  "speaker_shape": [
+    1,
+    256,
+    1
+  ],
+  "samples": 25600,
+  "sample_rate": 8000,
+  "duration": 3.2,
+  "cpu_ort_seconds": 0.08307093700000223,
+  "same_noise_realization": true,
+  "source_sha256": "5511d651b7840c0a93a6bbfd4afd070a2c7f39ca1ec3ff2ecd73191519bbb852",
+  "cpu_decoder_max_abs_error": 0.0,
+  "cpu_decoder_mean_abs_error": 0.0
+}

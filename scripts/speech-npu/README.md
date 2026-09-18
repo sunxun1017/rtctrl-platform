@@ -72,3 +72,28 @@ ONNX reference using identical inputs; timing success does not establish audio q
 
 Use the existing system `librknnrt.so`. Do not set `LD_LIBRARY_PATH` to Model Zoo's bundled
 runtime, and do not replace the board runtime for these probes.
+
+
+## Whole-sentence comparison
+
+`make-sentence-fixtures.py MODEL_DIR OUTPUT_DIR` requires isolated host packages
+sherpa-onnx 1.13.8, ONNX and ONNX Runtime. It captures actual frontend token IDs with
+an instrumentation-only graph, asserts one frontend callback batch, then exports
+full CPU waveform and its latent/speaker inputs. Do not concatenate multiple
+frontend batches. Random generation means regenerated lengths can change; frozen
+fixtures are not overwritten.
+
+For each fixture, read latent_length from meta.json, then:
+
+```bash
+python convert-vits-decoder.py MODEL_DIR/model.onnx MODEL_OUTPUT --length LENGTH
+# Copy the resulting model and matching latent.f32 / speaker.f32 to the board.
+./rknn_tensor_runner decoder-lLENGTH.rknn npu 5 latent.f32 speaker.f32
+# Copy npu.0.f32 back to the host.
+python compare-sentence.py reference.f32 npu.0.f32 comparison
+```
+
+The compare script checks sample count/finiteness and records unnormalized
+waveform error, correlation, clipping and PCM16 listening files at native 8 kHz.
+This is a whole-sentence, fixed-shape probe; it does not validate arbitrary-length
+production synthesis or perceptual quality. See ../../docs/verification-tts-sentences-20260918.md.
