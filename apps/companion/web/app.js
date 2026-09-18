@@ -182,8 +182,8 @@
                 (peak > 0 ? "（" + (20 * Math.log10(peak / 32768)).toFixed(1) + " dBFS，" + (peak / 32768 * 100).toFixed(1) + "%）" : "（本轮尚无有效电平）");
         }
         const timing = current.latency_ms && Object.keys(current.latency_ms).length ? current.latency_ms : current.last_latency_ms || {};
-        const stages = [["asr_first_partial_ms", "识别首字"], ["asr_finalize_ms", "识别收尾"], ["cloud_ms", "千帆"],
-            ["tts_first_audio_ms", "合成首批"], ["tts_total_ms", "合成全部"],
+        const stages = [["asr_first_partial_ms", "识别首字"], ["asr_finalize_ms", "识别收尾"], ["cloud_first_token_ms", "千帆首字"], ["cloud_first_sentence_ms", "千帆首句"], ["cloud_ms", "千帆全部"],
+            ["tts_first_pcm_ms", "首个音频"], ["tts_first_audio_ms", "起播缓冲就绪"], ["tts_total_ms", "合成全部"],
             ["playback_queue_ms", "播放提交"], ["stop_to_audio_ms", "停录至播放提交"]];
         $("latency").textContent = stages.filter(([key]) => finite(timing[key])).map(([key, title]) =>
             title + " " + (timing[key] / 1000).toFixed(2) + "s").join(" · ");

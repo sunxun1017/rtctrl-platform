@@ -476,7 +476,7 @@ class Companion:
             return
         if kind == "latency" and self.config.get("voice_backend") == "local":
             values = value.get("values")
-            allowed = {"asr_first_partial_ms", "asr_finalize_ms", "cloud_ms", "tts_first_audio_ms", "tts_total_ms"}
+            allowed = {"asr_first_partial_ms", "asr_finalize_ms", "cloud_ms", "cloud_first_token_ms", "cloud_first_sentence_ms", "tts_first_pcm_ms", "tts_first_audio_ms", "tts_total_ms"}
             if (not isinstance(values, dict) or set(values) - allowed or any(
                     type(v) not in (int, float) or not math.isfinite(v) or not 0 <= v <= 240000 for v in values.values())):
                 raise ValueError("Invalid stage timing")
@@ -562,9 +562,12 @@ class Companion:
                 self.accept_audio = False
                 self.tts_ended = True
             elif state == "sentence_start" and self.data["state"] == "speaking":
-                self._set(reply=self._text(value.get("text", "")))
+                sentence = self._text(value.get("text", ""))
+                if not (self.config.get("voice_backend") == "local" and
+                        self.config.get("local_tts_streaming") and self.config.get("qianfan_streaming", True)):
+                    self._set(reply=sentence)
                 if self._duplex():
-                    self.echo_guard.remember(self.data["reply"], time.monotonic())
+                    self.echo_guard.remember(sentence, time.monotonic())
         elif kind == "error":
             self._fail("后端返回错误，请检查服务与认证配置")
         # Remote messages can never arm or command an actuator.

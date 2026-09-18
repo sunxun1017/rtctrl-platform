@@ -30,6 +30,15 @@ class DuplexTests(unittest.TestCase):
         self.message("unused")
         self.transport.message(b"response")
         wait_for(lambda:self.core.snapshot()["state"]=="speaking" and self.core.audio.busy)
+    def test_stream_sentence_does_not_replace_full_reply(self):
+        self.core.config["local_tts_streaming"] = True
+        self.speaking()
+        self.message("llm", text="第一句完整回答。第二句完整回答。")
+        self.message("tts", state="sentence_start", text="第二句完整回答。")
+        wait_for(lambda:self.core.snapshot()["reply"] == "第一句完整回答。第二句完整回答。")
+        time.sleep(.05)
+        self.assertEqual(self.core.snapshot()["reply"], "第一句完整回答。第二句完整回答。")
+
     def test_recognizes_while_playing_and_waits_for_drain(self):
         self.speaking();audio=self.core.audio;epoch=self.core.capture_epoch
         before=self.core.turn_audio_frames_sent

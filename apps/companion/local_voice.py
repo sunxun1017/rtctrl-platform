@@ -40,6 +40,7 @@ class LocalVoiceTransport:
         self._asr_stream = None
         self._frames = None
         self._http = None
+        self._http_abort = None
         self._speech_peer = None
         self._session = uuid.uuid4().hex
 
@@ -359,7 +360,14 @@ class LocalVoiceTransport:
             except queue.Full:
                 pass
         self._terminate(self._process)
+        if self._http_abort:
+            self._http_abort()
         if self._http:
+            if self._http.sock:
+                try:
+                    self._http.sock.shutdown(socket.SHUT_RDWR)
+                except OSError:
+                    pass
             self._http.close()
         if self._speech_peer:
             self._speech_peer.close()
@@ -447,8 +455,12 @@ class LocalVoiceTransport:
         self._emit(generation, {"type": "latency", "values": {
             name: round((time.monotonic() - started) * 1000, 1)}})
 
-    def _stream_tts(self, generation, text):
-        started = time.monotonic()
+    def _stream_tts(self, generation, text, stream=None):
+        own_stream = stream is None
+        if own_stream:
+            stream = {"started": time.monotonic(), "playing": False, "first_pcm": False,
+                      "rate": None, "total": 0, "pending": []}
+        started = stream["started"]
         deadline = started + min(120, self.config.get("local_tts_timeout_s", 90))
         peer = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         with self._lock:
@@ -474,18 +486,7 @@ class LocalVoiceTransport:
         total = 0
         rate = None
         chunks = 0
-        pending = []
-        playing = False
-        def deliver():
-            nonlocal playing
-            if not playing:
-                self._timing(generation, "tts_first_audio_ms", started)
-                self._emit(generation, {"type": "tts", "state": "start"})
-                self._emit(generation, {"type": "tts", "state": "sentence_start", "text": text})
-                playing = True
-            for block in pending:
-                self._emit(generation, PcmStreamChunk(block, rate, False))
-            pending.clear()
+        pending = stream["pending"]
         try:
             peer.settimeout(2)
             peer.connect(self.config["local_speech_socket"])
@@ -503,11 +504,10 @@ class LocalVoiceTransport:
                 if message.get("type") == "done":
                     if message.get("ok") is not True or not total:
                         raise RuntimeError("Synthesis stream failed")
-                    if pending:
-                        deliver()
-                    self._emit(generation, PcmStreamChunk(b"", rate, True))
-                    self._timing(generation, "tts_total_ms", started)
-                    self._emit(generation, {"type": "tts", "state": "stop"})
+                    if pending and own_stream:
+                        self._deliver_tts(generation, stream)
+                    if own_stream:
+                        self._finish_tts(generation, stream)
                     return
                 size, next_rate = message.get("bytes"), message.get("rate")
                 if (message.get("type") != "audio" or type(size) is not int or size <= 0 or size % 2 or
@@ -515,19 +515,203 @@ class LocalVoiceTransport:
                         (rate is not None and rate != next_rate) or total + size > next_rate * 2 * 45 or chunks >= 128):
                     raise ValueError("Invalid synthesis chunk")
                 pcm = read_exact(size)
+                if not stream["first_pcm"]:
+                    self._timing(generation, "tts_first_pcm_ms", started)
+                    stream["first_pcm"] = True
+                if stream["rate"] is not None and stream["rate"] != next_rate:
+                    raise ValueError("Synthesis sample rate changed")
+                stream["rate"] = next_rate
+                stream["total"] += size
+                if stream["total"] > next_rate * 2 * 45:
+                    raise ValueError("Synthesis reply too large")
                 rate = next_rate
                 total += size
                 chunks += 1
-                pending.append(pcm)
+                pending.append((text if chunks == 1 else None, pcm))
                 # A tiny greeting can finish before the next batch is ready.
                 # Keep a bounded startup cushion instead of emitting it into a gap.
-                if playing or total >= rate * 2 * self.config.get("local_tts_prebuffer_s", 2.):
-                    deliver()
+                if stream["playing"] or stream["total"] >= rate * 2 * self.config.get("local_tts_prebuffer_s", 2.):
+                    self._deliver_tts(generation, stream)
         finally:
             peer.close()
             with self._lock:
                 if self._speech_peer is peer:
                     self._speech_peer = None
+
+    def _deliver_tts(self, generation, stream):
+        if not stream["playing"]:
+            self._timing(generation, "tts_first_audio_ms", stream["started"])
+            self._emit(generation, {"type": "tts", "state": "start"})
+            stream["playing"] = True
+        for sentence, block in stream["pending"]:
+            if sentence:
+                self._emit(generation, {"type": "tts", "state": "sentence_start", "text": sentence})
+            self._emit(generation, PcmStreamChunk(block, stream["rate"], False))
+        stream["pending"].clear()
+
+    def _finish_tts(self, generation, stream):
+        if not stream["first_pcm"]:
+            raise ValueError("No synthesized audio")
+        if stream["pending"]:
+            self._deliver_tts(generation, stream)
+        self._emit(generation, PcmStreamChunk(b"", stream["rate"], True))
+        self._timing(generation, "tts_total_ms", stream["started"])
+        self._emit(generation, {"type": "tts", "state": "stop"})
+
+    def _reply_deltas(self, generation, text, cancelled):
+        from .cloud_stream import content_deltas
+        token = os.environ.get(self.config.get("qianfan_token_env", "BAIDU_QIANFAN_API_KEY"), "")
+        payload = json.dumps({"model": self.config.get("qianfan_model", "ernie-4.5-turbo-32k"),
+            "messages": [{"role": "system", "content": "请用自然口语中文回答，默认一到两句话、最多60个汉字，不使用Markdown。"},
+                         {"role": "user", "content": text}], "max_tokens": 192,
+            "stream": True}, ensure_ascii=False).encode("utf-8")
+        proxy = self.config.get("qianfan_proxy_url", "")
+        if proxy:
+            parsed = urlsplit(proxy)
+            if (parsed.scheme != "http" or parsed.hostname not in ("127.0.0.1", "localhost") or
+                    not parsed.port or parsed.username or parsed.password or parsed.path not in ("", "/") or
+                    parsed.query or parsed.fragment):
+                raise RuntimeError("Invalid cloud proxy")
+            connection = http.client.HTTPSConnection(parsed.hostname, parsed.port, timeout=8)
+            connection.set_tunnel("qianfan.baidubce.com", 443)
+        else:
+            connection = http.client.HTTPSConnection("qianfan.baidubce.com", timeout=8)
+        deadline = time.monotonic() + 45
+        def active():
+            if cancelled.is_set() or not self._active(generation):
+                return False
+            if time.monotonic() > deadline:
+                raise TimeoutError("Cloud stream timed out")
+            return True
+        with self._lock:
+            if not active():
+                connection.close()
+                return
+            self._http = connection
+        network_socket = []
+        def expire():
+            live_socket = network_socket[0] if network_socket else connection.sock
+            if live_socket:
+                try:
+                    live_socket.shutdown(socket.SHUT_RDWR)
+                except OSError:
+                    pass
+            connection.close()
+        with self._lock:
+            self._http_abort = expire
+        timer = threading.Timer(45, expire)
+        timer.daemon = True
+        timer.start()
+        try:
+            connection.connect()
+            network_socket.append(connection.sock)
+            if not active():
+                return
+            connection.request("POST", "/v2/chat/completions", body=payload,
+                headers={"Content-Type": "application/json", "Accept": "text/event-stream",
+                         "Authorization": "Bearer " + token})
+            response = connection.getresponse()
+            if response.status != 200:
+                raise RuntimeError("Cloud streaming request failed")
+            yield from content_deltas(response, active)
+        finally:
+            timer.cancel()
+            connection.close()
+            with self._lock:
+                if self._http_abort is expire:
+                    self._http_abort = None
+                if self._http is connection:
+                    self._http = None
+
+    def _stream_reply(self, generation, text):
+        from .cloud_stream import SentenceBuffer
+        sentences = queue.Queue(maxsize=4)
+        cancelled = threading.Event()
+        completed = threading.Event()
+        errors = []
+        cloud_started = time.monotonic()
+        def put(sentence):
+            while self._active(generation) and not cancelled.is_set():
+                try:
+                    sentences.put(sentence, timeout=.1)
+                    return
+                except queue.Full:
+                    pass
+            raise RuntimeError("Cloud stream cancelled")
+        def produce():
+            reply = ""
+            first_sentence = True
+            splitter = SentenceBuffer()
+            deltas = self._reply_deltas(generation, text, cancelled)
+            try:
+                for delta in deltas:
+                    if not reply:
+                        self._timing(generation, "cloud_first_token_ms", cloud_started)
+                    delta = delta[:max(0, 120 - len(reply))]
+                    reply += delta
+                    ready = splitter.feed(delta)
+                    if ready:
+                        self._emit(generation, {"type": "llm", "text": reply, "emotion": "neutral"})
+                    for sentence in ready:
+                        if first_sentence:
+                            self._timing(generation, "cloud_first_sentence_ms", cloud_started)
+                            first_sentence = False
+                        put(sentence)
+                    if len(reply) >= 120:
+                        break
+                if not reply.strip():
+                    raise ValueError("Empty cloud reply")
+                self._emit(generation, {"type": "llm", "text": reply, "emotion": "neutral"})
+                for sentence in splitter.feed("", final=True):
+                    if first_sentence:
+                        self._timing(generation, "cloud_first_sentence_ms", cloud_started)
+                        first_sentence = False
+                    put(sentence)
+                self._timing(generation, "cloud_ms", cloud_started)
+            except Exception:
+                errors.append(True)
+            finally:
+                deltas.close()
+                completed.set()
+        producer = threading.Thread(target=produce, name="companion-cloud-stream", daemon=True)
+        producer.start()
+        stream = None
+        try:
+            while self._active(generation):
+                if errors:
+                    raise RuntimeError("Cloud streaming failed")
+                try:
+                    sentence = sentences.get(timeout=.1)
+                except queue.Empty:
+                    if completed.is_set():
+                        break
+                    continue
+                if stream is None:
+                    stream = {"started": time.monotonic(), "playing": False, "first_pcm": False,
+                              "rate": None, "total": 0, "pending": []}
+                self._stream_tts(generation, sentence, stream)
+            if errors:
+                raise RuntimeError("Cloud streaming failed")
+            if self._active(generation) and stream is not None:
+                self._finish_tts(generation, stream)
+        finally:
+            cancelled.set()
+            with self._lock:
+                if self._http_abort:
+                    self._http_abort()
+                connection = self._http
+                if connection and connection.sock:
+                    try:
+                        connection.sock.shutdown(socket.SHUT_RDWR)
+                    except OSError:
+                        pass
+                if connection:
+                    connection.close()
+            # Keep the parent worker owned until the finite network deadline exits;
+            # a new turn must never race a retired cloud reader.
+            producer.join(timeout=46)
+            if producer.is_alive():
+                raise RuntimeError("Cloud reader did not stop")
 
     def _run(self, generation, pcm, recognized_text=None):
         stage = "录音"
@@ -553,6 +737,10 @@ class LocalVoiceTransport:
                 if not self._active(generation):
                     return
                 stage = "千帆文字回答"
+                if self.config.get("local_tts_streaming") and self.config.get("qianfan_streaming", True):
+                    stage = "流式回答与语音合成"
+                    self._stream_reply(generation, text.strip())
+                    return
                 cloud_started = time.monotonic()
                 reply = self._reply(text.strip())
                 self._timing(generation, "cloud_ms", cloud_started)

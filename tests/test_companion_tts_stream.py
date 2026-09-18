@@ -107,7 +107,7 @@ class TtsStreamClientTests(unittest.TestCase):
         def handler(peer):
             peer.sendall(audio(first))
             self.assertFalse(heard.wait(.05))
-            self.assertEqual(self.messages, [])
+            self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
             peer.sendall(audio(second))
             self.assertTrue(heard.wait(1), "two-second buffer must release before done")
             self.assert_no_success_end()
@@ -123,7 +123,7 @@ class TtsStreamClientTests(unittest.TestCase):
         def handler(peer):
             peer.sendall(audio(first))
             time.sleep(.05)
-            self.assertEqual(self.messages, [])
+            self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
             peer.sendall(header(type="done",ok=True))
         self.serve(handler);self.execute()
         self.assertEqual([m.data for m in self.messages if isinstance(m,PcmStreamChunk)], [first,b""])
@@ -143,10 +143,29 @@ class TtsStreamClientTests(unittest.TestCase):
             except (RuntimeError,ValueError,OSError) as error:client_errors.append(error)
         client=threading.Thread(target=run);client.start()
         self.assertTrue(sent.wait(1));time.sleep(.05)
-        self.assertEqual(self.messages, [])
+        self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
         self.transport.close();client.join(2)
         self.assertFalse(client.is_alive());self.assertTrue(client_errors)
-        self.assertEqual(self.messages, [])
+        self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
+
+    def test_shared_short_sentences_keep_startup_buffer_and_one_end(self):
+        self.transport.config["local_tts_prebuffer_s"] = 2
+        stream = {"started": time.monotonic(), "playing": False, "first_pcm": False,
+                  "rate": None, "total": 0, "pending": []}
+        block = b"\x01\0" * 17640
+        for _ in range(2):
+            self.serve(lambda peer: peer.sendall(audio(block) + header(type="done", ok=True)))
+            self.transport._stream_tts(0, "测试回答", stream)
+            self.job.join(2)
+            self.assertFalse(any(isinstance(m, PcmStreamChunk) for m in self.messages))
+        self.transport._finish_tts(0, stream)
+        self.assertEqual([m.data for m in self.messages if isinstance(m, PcmStreamChunk)], [block, block, b""])
+        states = [m["state"] for m in self.messages if isinstance(m, dict) and m.get("type") == "tts"]
+        self.assertEqual(states, ["start", "sentence_start", "sentence_start", "stop"])
+        names = [name for m in self.messages if isinstance(m, dict) and m.get("type") == "latency" for name in m["values"]]
+        self.assertEqual(names.count("tts_first_pcm_ms"), 1)
+        self.assertEqual(names.count("tts_first_audio_ms"), 1)
+        self.assertEqual(names.count("tts_total_ms"), 1)
 
     def test_bad_headers(self):
         packets = [b"not-json\n", b"[]\n", b"x" * 4097,
@@ -163,7 +182,7 @@ class TtsStreamClientTests(unittest.TestCase):
     def test_mid_pcm_eof(self):
         self.serve(lambda peer: peer.sendall(header(type="audio",rate=44100,bytes=100)+b"xx"))
         with self.assertRaises(RuntimeError):self.execute()
-        self.assertEqual(self.messages, [])
+        self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
         self.assert_no_success_end()
 
     def test_missing_done(self):
@@ -212,7 +231,7 @@ class TtsStreamClientTests(unittest.TestCase):
         self.assertFalse(client.is_alive())
         self.assertTrue(closed.wait(1))
         self.assertTrue(client_errors)
-        self.assertEqual(self.messages, [])
+        self.assertFalse(any(isinstance(m, PcmStreamChunk) or (isinstance(m, dict) and m.get("type") == "tts") for m in self.messages))
         self.assertIsNone(self.transport._speech_peer)
 
 
