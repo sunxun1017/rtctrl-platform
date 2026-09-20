@@ -59,6 +59,11 @@ release/asan本轮完整各39/39，审查修复后BSP两组各2/2（22+18用例�
 [验证记录](../docs/verification-linux-platform-20260921.md)。另一并行任务负责Android协议codec，
 其验证单列于[协议记录](../docs/verification-patchx-protocol-20260921.md)，不把封帧成功视为电机可运行。
 
+并行协议任务已从Android参考commit ed91ef7确认发送封帧，实现独立rtctrl_patchx_codec叶子库：
+固定容量编码/流重组、无SoC/设备路径/物理IO依赖，不实现虚假的IActuatorProtocol安全语义。
+该任务独立release/asan各40/40通过，最终codec专项复跑通过；新增C++格式检查通过。
+MCU真实返回帧/ACK、使能、停止与watchdog仍未确认，没有板端运行或升级操作。
+
 ## 2026-09-18 交互终端
 
 新增独立非实时 `apps/companion`，说明见[使用入口](../apps/companion/README.md)、

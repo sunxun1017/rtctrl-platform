@@ -44,11 +44,14 @@ V4L2，显示用 DRM/KMS；未来 IMU 驱动优先输出 IIO。这里只给出�
 | SH3001，I²C3 | 当前树未找到匹配驱动 | 官方寄存器资料、ID/地址、中断和方向；后续独立IIO驱动 |
 | CAP1188，SPI3，8路触摸 | 现有 `KEYBOARD_CAP11XX` 仅I²C，不能绑定SPI3 | SPI模式/速率、CS/IRQ/reset、键值映射；需可跨板复用的SPI实现 |
 | 灯、底部键、Recovery、光感 | GPIO LED / GPIO keys等可选通用驱动 | GPIO或ADC、有效电平、光感实际器件；屏TP预留不当作已装触摸 |
-| RK3568 UART0 ↔ GD32 USART1 | 通用串口transport可复用 | 原固件协议、波特率、帧/校验、单位、反馈、停机和watchdog |
+| RK3568 UART0 ↔ GD32 USART1 | 通用串口transport；独立PatchX发送封帧codec已实现 | 实板串口映射、MCU返回帧、单位、反馈、停机和watchdog |
 
 GD32 管理 3×TB6612 的六路 PWM/方向、A/B 反馈和限位。TB6612 不是直接挂在
 RK3568 I²C/SPI 下的设备，不给 Linux 虚构六路 PWM 引脚。MCU Flash 属于 GD32，
 也不新增主控 SPI Flash 节点。UART0 不能直接等同 `/dev/ttyS0`。
+并行任务找到Android发送封帧并完成平台无关codec，见
+[协议审计](../../../../docs/verification-patchx-protocol-20260921.md)；
+这不证明真实MCU返回帧同构，也没有证据把“复位”命令当作急停。
 
 图中屏背光规格 40mA 与原图约80mA、逻辑电源二极管后的电压均已标有疑点；
 配置文件不补猜测数值。充电/PD、GPIO 和 regulator 的运行状态须由原板资料确认。
@@ -108,7 +111,7 @@ sh scripts/collect-linux-hardware.sh --root /path/to/exported-root /tmp/hardware
 1. 核对板型号及电源/时钟/存储，建立真实板级DTS和启动链，先串口启动Linux。
 2. 按实际节点启用屏幕、USB音频、网络、摄像头；每项完成枚举、失败恢复和板端验收。
 3. 为尚缺的芯片补独立驱动；CAP1188输出input事件、SH3001输出IIO数据，业务只消费通用能力。
-4. 结合原MCU协议增加独立codec与执行器适配器，再接产品；先离线协议回放、再禁能握手。
+4. 在已独立实现的封帧codec之上补齐真实反馈及安全契约，再接执行器适配器和产品；先离线协议回放、再禁能握手。
    原有Dynamixel协议不能替代GD32，`open_safe`、队列内急停和MCU watchdog须各有验证。
 
 ## 本轮验证
