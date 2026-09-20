@@ -138,7 +138,10 @@ TransportStatus PosixSerialTransport::open() noexcept {
     tty.c_cflag &= ~CSTOPB;
     tty.c_cflag &= ~PARENB;
     tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;
-    tty.c_cc[VMIN] = 0;
+    // With VMIN=0 Linux may return zero for an idle tty, indistinguishable
+    // from EOF in map_result(). VMIN=1 makes idle reads return EAGAIN while
+    // O_NONBLOCK keeps try_receive() non-blocking; a real hangup stays EOF.
+    tty.c_cc[VMIN] = 1;
     tty.c_cc[VTIME] = 0;
     if (::cfsetispeed(&tty, speed) != 0 || ::cfsetospeed(&tty, speed) != 0 ||
         ::tcsetattr(fd_, TCSANOW, &tty) != 0) {

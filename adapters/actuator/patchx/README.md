@@ -56,3 +56,8 @@ ctest --test-dir build/patchx-release -R rtctrl_patchx_codec_test --output-on-fa
 `RTCTRL_BUILD_CONTROL=ON` 时构建适配器；`RTCTRL_BUILD_TESTS=ON` 时在自身子目录注册测试。
 无需开启串口能力。测试覆盖独立字节向量、全部两片拆分位置、逐字节读取、连续帧、CRC/数据/尾部损坏、
 长度边界、嵌入分隔符、溢出保留、超时/重连重置。完整验证结果见上述审计记录。
+
+开启 `RTCTRL_ENABLE_SERIAL` 后另有 `rtctrl_patchx_pty_test`，通过内核创建的 PTY 验证实际
+Linux 串口适配器与 codec 的双向收发、空闲和挂断；不会打开任何实物串口。
+PC/ARM64 QEMU 用户态的复现命令、已发现缺陷与验证边界见
+[PC 验证记录](../../../docs/verification-pc-qemu-20260921.md)。
