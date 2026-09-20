@@ -1,0 +1,3 @@
+add_executable(rtctrl_patchx_codec_test test_patchx_codec.cpp)
+target_link_libraries(rtctrl_patchx_codec_test PRIVATE rtctrl_patchx_codec rtctrl_source_loopback)
+add_test(NAME rtctrl_patchx_codec_test COMMAND rtctrl_patchx_codec_test)
