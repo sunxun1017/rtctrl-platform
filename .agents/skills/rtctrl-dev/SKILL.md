@@ -15,6 +15,8 @@ IDE 打开的文件只是线索，不自动扩大任务范围。对可逆实现�
 缺少会改变接口或目标硬件的必要信息时，先完成独立调查，再问最关键的问题。
 
 先检查 `git status --short` 和相关差异，识别用户在研内容；不清理、不恢复、不顺带修复无关文件。
+涉及提交整理、分支/worktree、冲突或历史恢复时，按需使用
+[Git 管理 skill](../git-advanced-workflows/SKILL.md)。
 读取根目录 `CONTRIBUTING.md`、相关目录约定，并按
 [项目地图](references/project-map.md)定位源码和 ADR。
 文档描述目标架构，源码和 CMake 决定当前实现；有冲突时明确指出差异，不能默默选择方便的解释。

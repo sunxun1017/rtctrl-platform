@@ -6,6 +6,8 @@
 
 - [项目地图](skills/rtctrl-dev/references/project-map.md)：模块、适配器和构建入口。
 - [已验证经验](skills/rtctrl-dev/references/lessons.md)：历史问题、适用条件和失效边界。
+- [Git 管理](skills/git-advanced-workflows/SKILL.md)：项目级 Git skill，覆盖提交、分支、冲突与恢复；
+  2026-09-21 从固定上游版本安装并适配，来源和许可证见 [记录](skills/git-advanced-workflows/references/sources.md)。
 - [视频程序说明](../apps/face_recognition/VIDEO.md)：采集、推理、浏览器预览的实际实现。
 - [最近缓存与 swap 实验](../outputs/cache-swap-20260912/README.md)：原始数据、对照和限制。
 - [上一轮 ftrace 证据](../outputs/ftrace-20260912/)：调度、NEON、模型副本释放。

@@ -7,6 +7,9 @@
 rtctrl-dev 此时仅提供工程约束，不自动接管练习。用户明确要求代写或改文件时按最新请求切换。
 用户当前明确要求优先于本文件和 skill 的默认约定。
 
+Git 状态、提交整理、分支/worktree、冲突及历史恢复使用
+[git-advanced-workflows](.agents/skills/git-advanced-workflows/SKILL.md)，与开发或教学 skill 按需配合。
+
 - 默认中文交流；从当前需求、相关源码和实际构建关系理解任务，保留已有未提交修改。
 - 有独立且有价值的分析或审查任务时，请使用子 agent；简单修改直接完成。
   分工和工具不可用时的回退见 skill；主 agent 负责最终验证与整合。
@@ -16,6 +19,8 @@ rtctrl-dev 此时仅提供工程约束，不自动接管练习。用户明确要
 可显式调用：`$rtctrl-dev 帮我完善 RKNN backend，并验证实际参与构建的目标。`
 
 教学示例：`$rtctrl-mentor 我想自己写 RKNN 资源管理，先讲原理和取舍，再给第一步提示。`
+
+Git 示例：`$git-advanced-workflows 检查当前改动，按独立主题整理本地提交，暂不推送。`
 
 ## 跨任务项目记忆
 
