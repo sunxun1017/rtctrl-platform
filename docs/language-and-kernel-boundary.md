@@ -7,7 +7,7 @@
 | Linux platform/misc 驱动、UAPI | C | 直接使用 platform、DMA、IRQ、hrtimer、ioctl 与设备电源管理 API，便于传统 RK3588/RISC-V BSP 审核和移植 |
 | 实时 runtime、控制、安全、HAL | C++17 | 固定容量容器、RAII、强类型接口和可替换叶子适配器；不依赖 GC |
 | 设备树 binding | YAML | 用 schema 描述真实 MMIO、IRQ、DMA 和 watchdog 参数，不在源码写死板卡资源 |
-| 构建与板端检查 | POSIX Shell + CMake | WSL、ARM64 与 RV64 共用入口；脚本不进入实时路径 |
+| 构建与板端检查 | POSIX Shell + CMake + Python3 | 通用工具读取平台数据，Python用于离线内核配置审计，Shell用于只读现场采集；均不进入实时路径 |
 | 非实时交互终端 | Python3 + 原生 Opus/ALSA | 云端语音、HTTP 与表情编排，独立进程；不进入实时环，见 [ADR 0009](adr/0009-companion-nonrealtime-service.md) |
 | 离线训练/分析 | Python | 服务 PyTorch、仿真和数据处理，只输出模型或参数，不进入 1 kHz 环 |
 

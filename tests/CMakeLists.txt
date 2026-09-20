@@ -58,6 +58,12 @@ endif()
 if(Python3_Interpreter_FOUND)
     add_test(NAME rtctrl_include_boundaries
         COMMAND ${Python3_EXECUTABLE} -B ${PROJECT_SOURCE_DIR}/scripts/check-architecture.py)
+    add_test(NAME rtctrl_linux_kernel_config
+        COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/test_linux_kernel_config.py)
+    add_test(NAME rtctrl_linux_hardware_snapshot
+        COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/test_linux_hardware_snapshot.py)
+    set_tests_properties(rtctrl_linux_kernel_config rtctrl_linux_hardware_snapshot
+        PROPERTIES TIMEOUT 30 LABELS "bsp")
 endif()
 if(NOT CMAKE_CROSSCOMPILING)
     add_test(NAME rtctrl_package_consumer

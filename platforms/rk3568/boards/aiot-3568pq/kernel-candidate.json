@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "board": "aiot-3568pq",
+  "soc": "rk3568",
+  "arch": "arm64",
+  "source": "third_party/linux-rk3588",
+  "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "defconfig": "rockchip_linux_defconfig",
+  "cross_compile": "aarch64-linux-gnu-",
+  "fragments": [
+    "platforms/rk3568/linux-5.10.cfg",
+    "platforms/rk3568/boards/aiot-3568pq/peripherals.cfg"
+  ]
+}

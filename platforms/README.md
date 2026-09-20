@@ -36,6 +36,25 @@ public submodule therefore stays clean and updateable.
 Kernel profiles are board-specific because a DTB, defconfig, BSP commit, and
 physical wiring cannot be selected safely from the SoC name alone.
 
+## Hardware-independent candidate configuration
+
+When wiring or the boot chain is still unknown, use a separate
+`boards/<board>/kernel-candidate.json`, not a deployment `profile.env`.
+`scripts/prepare-linux-config.py --candidate PATH --output NEW_DIRECTORY`
+consumes schema 1: `board`, `soc`, `arch`, repository-relative `source`, full
+`source_commit`, `defconfig`, `cross_compile`, and ordered repository-relative
+`fragments`. The tool contains no board/SoC defaults. Common SoC driver options
+and carrier peripherals live in separate fragments; runtime policies are explicit
+inputs rather than implicit real-time defaults. An optional `--prepare-headers`
+runs prepare/modules_prepare; `--check-config FILE` audits an existing config.
+
+The source must match the pinned clean Git commit. The generated manifest records
+input and output hashes and remains non-deployable: no DTB, Image, or complete
+module build. Existing profile loaders do not discover candidate JSON files.
+The first candidate is [AIoT-3568PQ](rk3568/boards/aiot-3568pq/README.md).
+The passive `scripts/collect-linux-hardware.sh` collector is also hardware-neutral;
+it reads standard proc/sys metadata and supports an offline `--root` tree.
+
 ## RK3588 board profiles
 
 The build system separates SoC-wide defaults from carrier-specific facts:

@@ -43,10 +43,15 @@ defconfig、实时配置片段和 DTB：
 
 ## 板端原则
 
-- 生产配置采用 `PREEMPT_RT + HIGH_RES_TIMERS + HZ_PERIODIC`，默认不启用 `NO_HZ_FULL`。
+- 周期实时控制负载的生产起始配置采用 `PREEMPT_RT + HIGH_RES_TIMERS + HZ_PERIODIC`，默认不启用 `NO_HZ_FULL`；其他产品通过显式策略片段选择，不自动套用。
 - systemd/cgroup v2 设备默认关闭 `RT_GROUP_SCHED`，避免非 root cgroup 无 RT 带宽。
 - CPU 与 IRQ 归属根据板端拓扑、`/proc/interrupts` 和压力数据决定，不在源码中写死 CPU 号。
 - systemd 的 `LimitRTPRIO`、`LimitMEMLOCK`、`LimitRTTIME` 都要按应用峰值和故障注入结果给有限值。
 - WSL 只做编译、单测、仿真和趋势观察，不自动替换内核、不写 `.wslconfig`、IRQ affinity、sysctl 或启动参数。
+
+缺少接线资料时，可用平台数据驱动的 `scripts/prepare-linux-config.py` 做候选配置审计。
+工具不内置板名、SoC、架构或实时策略；配置与芯片选项留在 `platforms/`。
+候选不是可部署板级profile，也不会从SoC名称猜选DTB。
+接口与首个候选见 [platforms/README.md](../platforms/README.md)。
 
 参考：[Linux 实时内核配置](https://docs.kernel.org/core-api/real-time/kernel-configuration.html)、[CPU 隔离](https://docs.kernel.org/admin-guide/cpu-isolation.html)、[IRQ affinity](https://docs.kernel.org/core-api/irq/irq-affinity.html)、[cgroup v2 CPU controller](https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu)。
