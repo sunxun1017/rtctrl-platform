@@ -76,3 +76,10 @@ shell解释、采集器子shell写状态失败及grep失败被当作成功；还
 没有可刷机镜像、板级DTS、充电/电源实测、显示时序、BH6080描述符、摄像头实装型号、
 Wi-Fi固件配对或CAP1188 SPI/SH3001驱动验收。Android采集命令需现场权限复验。
 原机设备树后续提供；电机物理停机、使能和MCU watchdog不能从主机封帧编译推定。
+
+## 后续PC验证交接
+
+并行任务随后完成 [PTY与QEMU验证](verification-pc-qemu-20260921.md)：
+Host release和ASan/UBSan各41/41，ARM64用户态codec、PTY和Dynamixel三项3/3。
+PTY复现并修正Linux串口空闲被误判Closed的问题，详见该记录中的VMIN与O_NONBLOCK条件。
+这些结果补充协议与系统调用层的执行证据，不扩大上文RK3568配置/对象编译的硬件验收范围。

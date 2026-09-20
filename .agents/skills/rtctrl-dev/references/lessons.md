@@ -1,5 +1,14 @@
 # 已验证项目经验
 
+## 2026-09-21：Linux非阻塞tty的空闲不等于EOF
+
+适用于当前PosixSerialTransport的Linux非规范tty：VMIN=0、VTIME=0时，空闲read可能返回0，
+与现有map_result的Closed语义冲突。本轮PTY先复现失败，改VMIN=1且保留O_NONBLOCK后，
+空闲得到EAGAIN/WouldBlock，真实挂断仍为Closed/Error；原生及ARM64 QEMU user用例均通过。
+证据：[PC/QEMU验证](../../../../docs/verification-pc-qemu-20260921.md)。
+QEMU系统调用使用宿主Linux，此结论不外推其他OS或目标厂商UART，换内核/tty驱动需复核；
+不把所有零字节读取改为WouldBlock来掩盖EOF。
+
 ## 2026-09-21：候选内核配置需要检查解析结果和输出边界
 
 适用于平台数据驱动的BSP配置：片段中的请求可能被Kconfig依赖消除；本轮实际遇到

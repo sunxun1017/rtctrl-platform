@@ -66,6 +66,13 @@ release/asan本轮完整各39/39，审查修复后BSP两组各2/2（22+18用例�
 该任务独立release/asan各40/40通过，最终codec专项复跑通过；新增C++格式检查通过。
 MCU真实返回帧/ACK、使能、停止与watchdog仍未确认，没有板端运行或升级操作。
 
+2026-09-21 PC补验（代码提交88bccd4）：真实PosixSerialTransport接PTY发现VMIN=0/VTIME=0空闲read返回0被误判Closed，
+改VMIN=1并保留O_NONBLOCK后空闲、碎片双向收发、CRC恢复、关闭/重开及HUP通过。
+Host release和ASan/UBSan完整各41/41；GCC11.4构建的AArch64 codec/PTY/Dynamixel经
+QEMU user6.2及Ubuntu ARM64运行库执行3/3，无跳过。QEMU的PTY仍由宿主Linux提供，
+不证明厂商UART、板级启动、外设或实时性能；未连接真机。命令和证据见
+[PC/QEMU验证](../docs/verification-pc-qemu-20260921.md)。
+
 ## 2026-09-18 交互终端
 
 新增独立非实时 `apps/companion`，说明见[使用入口](../apps/companion/README.md)、
