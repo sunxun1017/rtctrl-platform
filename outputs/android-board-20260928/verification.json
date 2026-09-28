@@ -1,0 +1,7 @@
+{
+  "bundle_members": 1983,
+  "live_tree_members": 6276,
+  "sorted_fdt_equals_live_tree": false,
+  "fdt_bytes": 151680,
+  "kernel_config_lines": 6197
+}

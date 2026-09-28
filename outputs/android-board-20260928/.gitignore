@@ -1,0 +1,10 @@
+# Keep device-specific raw captures and binaries local; track reusable methods.
+/*
+!/.gitignore
+!/*.md
+!/*.py
+!/*.ps1
+!/collect-extra.sh
+!/collector-used.sh
+!/verification.json
+!/SHA256SUMS
