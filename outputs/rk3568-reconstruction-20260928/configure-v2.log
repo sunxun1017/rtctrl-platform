@@ -1,0 +1,157 @@
++ make -C /home/sx/projects/rtctrl-platform/third_party/linux-rk3588 O=/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- rockchip_linux_defconfig
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+  GEN     Makefile
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.[ch]
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTCC  scripts/kconfig/util.o
+  HOSTLD  scripts/kconfig/conf
+#
+# configuration written to /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config
+#
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
++ bash /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/kconfig/merge_config.sh -m -O /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2 /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config /home/sx/projects/rtctrl-platform/platforms/rk3568/linux-5.10.cfg /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg
+Using /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config as base
+Merging /home/sx/projects/rtctrl-platform/platforms/rk3568/linux-5.10.cfg
+Merging /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg
+Value of CONFIG_CPU_FREQ is redefined by fragment /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg:
+Previous value: CONFIG_CPU_FREQ=y
+New value: # CONFIG_CPU_FREQ is not set
+
+Value of CONFIG_ARM_ROCKCHIP_DMC_DEVFREQ is redefined by fragment /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg:
+Previous value: CONFIG_ARM_ROCKCHIP_DMC_DEVFREQ=y
+New value: # CONFIG_ARM_ROCKCHIP_DMC_DEVFREQ is not set
+
+Value of CONFIG_CHARGER_BQ25700 is redefined by fragment /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg:
+Previous value: CONFIG_CHARGER_BQ25700=y
+New value: # CONFIG_CHARGER_BQ25700 is not set
+
+Value of CONFIG_BATTERY_RK817 is redefined by fragment /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg:
+Previous value: CONFIG_BATTERY_RK817=y
+New value: # CONFIG_BATTERY_RK817 is not set
+
+Value of CONFIG_TYPEC_FUSB302 is redefined by fragment /home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot.cfg:
+Previous value: CONFIG_TYPEC_FUSB302=y
+New value: # CONFIG_TYPEC_FUSB302 is not set
+
+#
+# merged configuration written to /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config (needs make)
+#
++ make -C /home/sx/projects/rtctrl-platform/third_party/linux-rk3588 O=/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+  GEN     Makefile
+#
+# configuration written to /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config
+#
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
++ make -C /home/sx/projects/rtctrl-platform/third_party/linux-rk3588 O=/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- prepare modules_prepare
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+  SYNC    include/config/auto.conf.cmd
+  GEN     Makefile
+  GEN     Makefile
+  HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/dtc/flattree.o
+  HOSTCC  scripts/dtc/fstree.o
+  HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/dtc/livetree.o
+  HOSTCC  scripts/dtc/treesource.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
+  LEX     scripts/dtc/dtc-lexer.lex.c
+  YACC    scripts/dtc/dtc-parser.tab.[ch]
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/dtc/yamltree.o
+  HOSTLD  scripts/dtc/dtc
+  HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/resource_tool
+  HOSTCC  scripts/sorttable
+  HOSTCC  scripts/asn1_compiler
+  HOSTCC  scripts/extract-cert
+  WRAP    arch/arm64/include/generated/uapi/asm/kvm_para.h
+  WRAP    arch/arm64/include/generated/uapi/asm/errno.h
+  WRAP    arch/arm64/include/generated/uapi/asm/ioctl.h
+  WRAP    arch/arm64/include/generated/uapi/asm/ioctls.h
+  WRAP    arch/arm64/include/generated/uapi/asm/ipcbuf.h
+  WRAP    arch/arm64/include/generated/uapi/asm/msgbuf.h
+  WRAP    arch/arm64/include/generated/uapi/asm/poll.h
+  WRAP    arch/arm64/include/generated/uapi/asm/resource.h
+  WRAP    arch/arm64/include/generated/uapi/asm/sembuf.h
+  WRAP    arch/arm64/include/generated/uapi/asm/shmbuf.h
+  WRAP    arch/arm64/include/generated/uapi/asm/siginfo.h
+  WRAP    arch/arm64/include/generated/uapi/asm/socket.h
+  WRAP    arch/arm64/include/generated/uapi/asm/sockios.h
+  WRAP    arch/arm64/include/generated/uapi/asm/stat.h
+  WRAP    arch/arm64/include/generated/uapi/asm/swab.h
+  WRAP    arch/arm64/include/generated/uapi/asm/termbits.h
+  WRAP    arch/arm64/include/generated/uapi/asm/termios.h
+  WRAP    arch/arm64/include/generated/uapi/asm/types.h
+  WRAP    arch/arm64/include/generated/asm/early_ioremap.h
+  WRAP    arch/arm64/include/generated/asm/mcs_spinlock.h
+  WRAP    arch/arm64/include/generated/asm/qrwlock.h
+  WRAP    arch/arm64/include/generated/asm/qspinlock.h
+  WRAP    arch/arm64/include/generated/asm/set_memory.h
+  WRAP    arch/arm64/include/generated/asm/user.h
+  WRAP    arch/arm64/include/generated/asm/bugs.h
+  WRAP    arch/arm64/include/generated/asm/delay.h
+  WRAP    arch/arm64/include/generated/asm/div64.h
+  WRAP    arch/arm64/include/generated/asm/dma-mapping.h
+  WRAP    arch/arm64/include/generated/asm/dma.h
+  WRAP    arch/arm64/include/generated/asm/emergency-restart.h
+  WRAP    arch/arm64/include/generated/asm/hw_irq.h
+  WRAP    arch/arm64/include/generated/asm/irq_regs.h
+  WRAP    arch/arm64/include/generated/asm/kdebug.h
+  WRAP    arch/arm64/include/generated/asm/kmap_size.h
+  WRAP    arch/arm64/include/generated/asm/local.h
+  WRAP    arch/arm64/include/generated/asm/local64.h
+  WRAP    arch/arm64/include/generated/asm/mm-arch-hooks.h
+  WRAP    arch/arm64/include/generated/asm/mmiowb.h
+  WRAP    arch/arm64/include/generated/asm/msi.h
+  WRAP    arch/arm64/include/generated/asm/serial.h
+  WRAP    arch/arm64/include/generated/asm/switch_to.h
+  WRAP    arch/arm64/include/generated/asm/trace_clock.h
+  WRAP    arch/arm64/include/generated/asm/unaligned.h
+  WRAP    arch/arm64/include/generated/asm/vga.h
+  UPD     include/config/kernel.release
+  UPD     include/generated/uapi/linux/version.h
+  UPD     include/generated/utsrelease.h
+  CC      scripts/mod/empty.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  MKELF   scripts/mod/elfconfig.h
+  HOSTCC  scripts/mod/modpost.o
+  CC      scripts/mod/devicetable-offsets.s
+  UPD     scripts/mod/devicetable-offsets.h
+  HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTLD  scripts/mod/modpost
+  CC      kernel/bounds.s
+  UPD     include/generated/bounds.h
+  UPD     include/generated/timeconst.h
+  CC      arch/arm64/kernel/asm-offsets.s
+  UPD     include/generated/asm-offsets.h
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/checksyscalls.sh
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/atomic/check-atomics.sh
+  LDS     arch/arm64/kernel/vdso/vdso.lds
+  CC      arch/arm64/kernel/vdso/vgettimeofday.o
+  AS      arch/arm64/kernel/vdso/note.o
+  AS      arch/arm64/kernel/vdso/sigreturn.o
+  LD      arch/arm64/kernel/vdso/vdso.so.dbg
+  VDSOSYM include/generated/vdso-offsets.h
+  LDS     scripts/module.lds
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+Audited 88 settings: /home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2/.config
+Candidate only: no board DTB, boot image, module installation or flashing.

@@ -1,0 +1,3 @@
+usage: build-firstboot.py [-h] --kernel KERNEL --output OUTPUT --dtc DTC
+                          [--cpp CPP]
+build-firstboot.py: error: Output must be new or empty; previous evidence is never overwritten

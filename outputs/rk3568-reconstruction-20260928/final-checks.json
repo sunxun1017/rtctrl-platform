@@ -1,0 +1,7 @@
+{
+  "dtb_audit_checks": 49,
+  "fault_injection_tests": 8,
+  "aarch64_driver_objects": 10,
+  "nonempty_output_refused_without_changes": true,
+  "deployable": false
+}

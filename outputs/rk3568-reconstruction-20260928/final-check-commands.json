@@ -1,0 +1,47 @@
+[
+  {
+    "name": "audit-final",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py",
+      "/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-dtb-v2/rk3568-aiot-3568pq-firstboot.dtb"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "fault-tests-final",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/test-firstboot-audit.py",
+      "/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-dtb-v2/rk3568-aiot-3568pq-firstboot.dtb",
+      "-v"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "config-audit-final",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/sx/projects/rtctrl-platform/scripts/prepare-linux-config.py",
+      "--candidate",
+      "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/firstboot-candidate.json",
+      "--check-config",
+      "/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-config/.config"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "nonempty-output-refused",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/build-firstboot.py",
+      "--kernel",
+      "/home/sx/projects/rtctrl-platform/third_party/linux-rk3588",
+      "--dtc",
+      "/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-final/scripts/dtc/dtc",
+      "--output",
+      "/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-dtb-v2"
+    ],
+    "expected_exit": 2
+  }
+]

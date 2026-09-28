@@ -1,0 +1,52 @@
+[
+  {
+    "path": "drivers/mfd/rk808.o",
+    "sha256": "5f44119a35d04de7729664c2a045a443031de76816d9a29d05f199cbf3096546",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/regulator/fan53555.o",
+    "sha256": "d5c5f75985343e5c0cedd6bc3d80e4b891f47ce103348660cc598a06e8043e47",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/regulator/rk808-regulator.o",
+    "sha256": "5112a2bf1d76ef58b8e0c633923b4fa1ee9af10dcd37aab2d609d6d1631bcb7b",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/soc/rockchip/io-domain.o",
+    "sha256": "c1133fa8a0780c081c79a80f417084deb21f3b714734c9efaf729b1941724a2f",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/mmc/host/sdhci-of-dwcmshc.o",
+    "sha256": "5fd0c9c60962b0221b4dbb60459eb1858e1a87ff0948c00746cceea344e311de",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/usb/host/ehci-platform.o",
+    "sha256": "f6ea9519f49bc2fe7835369a7884fbb6d662e8689a38ec8805a82e509672cd55",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/usb/host/ohci-platform.o",
+    "sha256": "4f83430c3154f7854f12330b7b8c22c0fce71136f1270b038309ed815ea40051",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/phy/rockchip/phy-rockchip-inno-usb2.o",
+    "sha256": "b74f51b51314111817c4979fb41122ca2ab3d24c373a73b47021c5191e68fb28",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/soc/rockchip/fiq_debugger/rk_fiq_debugger.o",
+    "sha256": "3bc8ca5d12ce0558b058844ad238b774a479d3a8345855257c19f3a0e42da23d",
+    "machine": "AArch64"
+  },
+  {
+    "path": "drivers/thermal/rockchip_thermal.o",
+    "sha256": "556511c593f3d2b0514708b250f81f385e7457ef58a783b640d545387fb2078c",
+    "machine": "AArch64"
+  }
+]

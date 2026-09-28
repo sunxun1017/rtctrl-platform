@@ -2,8 +2,9 @@
 
 本轮目标：以 Linux 为产品路线，先完成可离线验证的 BSP 配置和证据采集工具。
 用户要求业务、核心模块和通用工具不依赖具体硬件；设备差异放在可替换适配器及配置数据中。
-目前只有《帕奇硬件框图.pdf》三页，尚无原机设备树、原厂 BSP 或板端访问。
-因此这里是 `kernel-candidate.json`，尚不是部署用 `profile.env`。
+2026-09-28 已从原Android实物取得设备树、内核配置与外设枚举，原机是4.19.232，原厂BSP仍不可得。
+已新增[无原厂BSP重建入口](RECONSTRUCTION.md)、独立`firstboot-candidate.json`和`bsp/`板级DTS。
+原有`kernel-candidate.json`及下方框图表保留为早期全功能候选，不能覆盖本次实物证据；尚无部署用`profile.env`。
 
 ## 平台边界
 
@@ -22,6 +23,9 @@ V4L2，显示用 DRM/KMS；未来 IMU 驱动优先输出 IIO。这里只给出�
 无需为未知芯片先新增一套空的核心接口，也不通过 `#ifdef RK3568` 改业务逻辑。
 
 ## 框图与驱动对应
+
+本节是早期框图假设表。实物已确认的差异（ap6398s声明、MXC6655绑定、USB8声道16kHz、ttySMT0等）
+以[采集报告](../../../../outputs/android-board-20260928/README.md)和[重建说明](RECONSTRUCTION.md)为准。
 
 依据：PDF 第 1 页系统框图、第 2 页电源、第 3 页电滑环和接口。
 文件 SHA256：`094f83b44b7cf90357664a4a0b34149084ec09937ea895cc2d2a4909d01ded0d`。
@@ -61,7 +65,7 @@ RK3568 I²C/SPI 下的设备，不给 Linux 虚构六路 PWM 引脚。MCU Flash 
 候选复用仓库锁定的 Orange Pi/Rockchip Linux **5.10.160**，commit
 `9f9e9d18574d0914c0d192a90c3babfe1fd63c95`。目录名 `linux-rk3588` 是历史名称，
 这棵树实际也含 RK3568 驱动。它是厂商 BSP；用户的 Linux 产品路线不等于已选择上游 mainline。
-原板 BSP 到手后重新评估该候选，不复用 Orange Pi 的板级 DTB。
+目前采用无原厂BSP重建路线；若后续取得原厂源码再重新评估，不复用 Orange Pi 的板级 DTB。
 
 从仓库根目录，在 Linux/WSL 执行（输出须为新目录或空目录）：
 
@@ -90,7 +94,8 @@ olddefconfig → 逐项审计 → 可选prepare/modules_prepare。板级fragment
 ## 后续补原机信息
 
 通用采集器 `scripts/collect-linux-hardware.sh` 可在Linux或具备相应toybox命令的
-Android shell执行，实际Android/SELinux权限尚未验收：
+Android shell执行。2026-09-28已在原Android通过`su 0`实际执行，但逐文件遍历较慢，中止后改tar取得完整树；
+不能将该轮中止的snapshot/devicetree当成完整采集。原始记录见上述采集报告。示例：
 
 ```sh
 # 在原机执行；父目录必须已存在，输出目录必须为空或不存在。

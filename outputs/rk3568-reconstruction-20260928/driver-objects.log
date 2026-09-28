@@ -1,0 +1,38 @@
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config'
+  GEN     Makefile
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/atomic/check-atomics.sh
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/checksyscalls.sh
+  CC      drivers/mfd/rk808.o
+  CC      drivers/regulator/fan53555.o
+  CC      drivers/thermal/rockchip_thermal.o
+  CC      drivers/regulator/rk808-regulator.o
+  CC      drivers/mmc/host/sdhci-of-dwcmshc.o
+  CC      drivers/phy/rockchip/phy-rockchip-inno-usb2.o
+  CC      drivers/usb/host/ehci-platform.o
+  CC      drivers/soc/rockchip/fiq_debugger/rk_fiq_debugger.o
+In file included from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/device.h:25,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/acpi.h:15,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/drivers/mmc/host/sdhci-of-dwcmshc.c:10:
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/drivers/mmc/host/sdhci-of-dwcmshc.c:808:28: error: 'dwcmshc_runtime_suspend' undeclared here (not in a function); did you mean 'pm_runtime_suspend'?
+  808 |         SET_RUNTIME_PM_OPS(dwcmshc_runtime_suspend, dwcmshc_runtime_resume, NULL)
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/pm.h:345:28: note: in definition of macro 'SET_RUNTIME_PM_OPS'
+  345 |         .runtime_suspend = suspend_fn, \
+      |                            ^~~~~~~~~~
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/drivers/mmc/host/sdhci-of-dwcmshc.c:808:53: error: 'dwcmshc_runtime_resume' undeclared here (not in a function); did you mean 'pm_runtime_resume'?
+  808 |         SET_RUNTIME_PM_OPS(dwcmshc_runtime_suspend, dwcmshc_runtime_resume, NULL)
+      |                                                     ^~~~~~~~~~~~~~~~~~~~~~
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/pm.h:346:27: note: in definition of macro 'SET_RUNTIME_PM_OPS'
+  346 |         .runtime_resume = resume_fn, \
+      |                           ^~~~~~~~~
+make[4]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/Makefile.build:273: drivers/mmc/host/sdhci-of-dwcmshc.o] Error 1
+make[3]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/Makefile.build:516: drivers/mmc/host] Error 2
+make[2]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/Makefile.build:516: drivers/mmc] Error 2
+make[2]: *** Waiting for unfinished jobs....
+  CC      drivers/usb/host/ohci-platform.o
+  CC      drivers/soc/rockchip/io-domain.o
+make[1]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/Makefile:1938: drivers] Error 2
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config'
+make: *** [Makefile:185: __sub-make] Error 2
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'

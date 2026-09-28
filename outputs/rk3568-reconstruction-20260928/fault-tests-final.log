@@ -1,0 +1,13 @@
+test_actuator_uart_regression (__main__.AuditFaults) ... ok
+test_android_partition_bootargs (__main__.AuditFaults) ... ok
+test_camera_probe_regression (__main__.AuditFaults) ... ok
+test_emmc_high_speed_regression (__main__.AuditFaults) ... ok
+test_missing_memory_reservations (__main__.AuditFaults) ... ok
+test_real_compiled_candidate (__main__.AuditFaults) ... ok
+test_wrong_io_voltage_domain (__main__.AuditFaults) ... ok
+test_wrong_regulator_voltage (__main__.AuditFaults) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK

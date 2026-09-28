@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "deployable": false,
+  "board_boot_tested": false,
+  "image_built": false,
+  "modules_built": false,
+  "dtb": "rk3568-aiot-3568pq-firstboot.dtb",
+  "dtb_sha256": "f78f55290c92fe5d559326cc1c769b0e7bfa427f801d778a0e1d240f5fc89526",
+  "new_board_warnings": [],
+  "dtc_version": "Version: DTC 1.6.0-g183df9e9",
+  "sources": {
+    "rk3568-aiot-3568pq-firstboot.dts": "d39a7f6590b54f66cbf3482b97d05b1c5a067b4c333876c0e47d78bd38c10575",
+    "rk3568-aiot-3568pq-power.dtsi": "025d4d17a10c1b02e6fdd615d192dcf8fa7650e9f5becae35f9b1370aab7429c",
+    "firstboot.cfg": "d880cd659dad563c2cf2d2694b4b91793961f86f0eb6caf0971366ec10669aef",
+    "firstboot-candidate.json": "c36d926fe433992006167ef13378debe4b0057a1408cd4d9ab6e208e1732d9eb",
+    "verify-firstboot.py": "4661ef551969999c3f8e170e80c42aa0956b15cca7ae7024347043dbe9aa9f9d",
+    "build-firstboot.py": "fb6c85f237155ddeab024157d014f1f88ce5e8627ddba06f95bac02ac261e850"
+  }
+}

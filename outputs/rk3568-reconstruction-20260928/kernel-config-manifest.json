@@ -1,0 +1,29 @@
+{
+  "board_candidate": "aiot-3568pq",
+  "soc_candidate": "rk3568",
+  "arch": "arm64",
+  "status": "config-only; board wiring and boot not validated",
+  "source": "/home/sx/projects/rtctrl-platform/third_party/linux-rk3588",
+  "commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "dirty": false,
+  "defconfig": "rockchip_linux_defconfig",
+  "compiler": "aarch64-linux-gnu-gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "cross_compile": "aarch64-linux-gnu-",
+  "candidate_sha256": "c36d926fe433992006167ef13378debe4b0057a1408cd4d9ab6e208e1732d9eb",
+  "fragments": [
+    {
+      "path": "platforms/rk3568/linux-5.10.cfg",
+      "sha256": "3f208e8388e34a6e62cbeb8673f186964df4f38e8cc5b9f71337abce0bbad41a"
+    },
+    {
+      "path": "platforms/rk3568/boards/aiot-3568pq/firstboot.cfg",
+      "sha256": "d880cd659dad563c2cf2d2694b4b91793961f86f0eb6caf0971366ec10669aef"
+    }
+  ],
+  "config_sha256": "83cbbcb1b1664f452290495c2c30b36e8716382544242f548d76e3627283630a",
+  "headers_prepared": true,
+  "dtb": null,
+  "image_built": false,
+  "modules_built": false,
+  "deployable": false
+}

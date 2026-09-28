@@ -1,0 +1,17 @@
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+  GEN     Makefile
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/atomic/check-atomics.sh
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/checksyscalls.sh
+  CC      drivers/mfd/rk808.o
+  CC      drivers/regulator/fan53555.o
+  CC      drivers/thermal/rockchip_thermal.o
+  CC      drivers/regulator/rk808-regulator.o
+  CC      drivers/mmc/host/sdhci-of-dwcmshc.o
+  CC      drivers/phy/rockchip/phy-rockchip-inno-usb2.o
+  CC      drivers/usb/host/ehci-platform.o
+  CC      drivers/soc/rockchip/fiq_debugger/rk_fiq_debugger.o
+  CC      drivers/soc/rockchip/io-domain.o
+  CC      drivers/usb/host/ohci-platform.o
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-config-v2'
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'

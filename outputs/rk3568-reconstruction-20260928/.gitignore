@@ -1,0 +1,10 @@
+# Generated DTB/DTS stay local. Text configuration and audit evidence are tracked.
+/*
+!/.gitignore
+!/*.md
+!/*.py
+!/*.json
+!/*.sh
+!/*.log
+!/firstboot.config
+!/SHA256SUMS
