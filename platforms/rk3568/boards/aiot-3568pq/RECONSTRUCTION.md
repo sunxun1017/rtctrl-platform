@@ -69,11 +69,13 @@ python3 platforms/rk3568/boards/aiot-3568pq/test-firstboot-audit.py \
 这版BSP的eMMC驱动把runtime PM函数包在`CONFIG_PM_SLEEP`内，关闭SUSPEND会实际编译失败。
 因此配置保留`CONFIG_SUSPEND=y`，仅DT的`rockchip-suspend`节点disabled；没有声称系统休眠被彻底移除。
 首轮不调用suspend/reboot/poweroff；PMIC和TCS的关机路径也可能改变电源状态，需独立验收。
+原厂关机已观察到 MCU 看门狗与断电标志日志；写入是否被 MCU 接收及物理断电尚未验证。
+首次启动前还须核对 MCU 遗留看门狗状态，详见[电源生命周期适配](POWER-LIFECYCLE.md)。
 
 原内存范围、memreserve来自一次Android启动，不能当作独立确认的loader/DDR/BL31契约。
 没有把原initrd地址、序列号、MAC、Android分区root或运行时DTB加载地址写入新板级文件。
 后续必须检查bootloader如何修正`/memory`和chosen，以及Image/initramfs/DTB加载范围是否重叠。
-首轮命令行只选择`rdinit=/init`，目前尚未制作initramfs；`ro`本身也不能保证任意用户态不写块设备。
+首轮命令行选择`rdinit=/init`，后续已生成最小initramfs；`ro`本身也不能保证任意用户态不写块设备。
 
 ## 后续外设按证据恢复
 
@@ -91,7 +93,7 @@ python3 platforms/rk3568/boards/aiot-3568pq/test-firstboot-audit.py \
 ## 没有原厂 BSP 时的启动路线
 
 推荐以保留现有loader/DDR/信任固件为第一选择，先备份与解析原boot、dtbo、uboot/trust等启动输入，
-检查是否支持不改eMMC的RAM加载或外部介质。这里尚未执行分区备份、解锁、AVB修改或loader替换。
+检查是否支持不改eMMC的RAM加载或外部介质。后续已在板端保存五个启动分区副本，但整包尚未可靠回传；未执行解锁、AVB修改或loader替换。
 无法拿到原厂可恢复镜像时，读取本机启动分区仍有价值，但备份可读不等于已经验证恢复过程。
 
 公开U-Boot已经支持RK3568，Rockchip提供rkbin中的DDR/BL31等二进制，

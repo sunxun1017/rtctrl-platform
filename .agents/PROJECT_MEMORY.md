@@ -330,6 +330,7 @@ FIQ1500000、eMMC52MHz、USB2 host为本轮候选；UART0、显示/CSI2、WiFi�
 串口日志级别曾临时调整并确认恢复7/4/1/7，未重启/刷写。用户明确当前只有串口；USB OTG、恢复入口、完整启动链与首次启动仍待核实。
 
 随后用户明确要求关机并按独立主题分批提交。已执行`su 0 setprop sys.powerctl shutdown`，串口最终确认`reboot: Power down`。
-原厂shutdown驱动会关闭MCU看门狗并发送MCU断电标志；新Linux物理断电行为尚未适配/验证。
+原厂shutdown驱动打印关闭MCU看门狗及写入断电标志的动作；未取得MCU应答或电源测量，不能据此确认写入生效/整板掉电。
+MCU与GD32/UART0的对应关系、内核交接时看门狗状态尚未确认，见[电源生命周期适配](../platforms/rk3568/boards/aiot-3568pq/POWER-LIFECYCLE.md)。
 关机命令和输出摘要见[启动准备关机记录](../outputs/rk3568-boot-preparation-20260928/README.md)。
 Git只保存精选报告/脚本/配置/审计证据；原机标识、二进制产物与原始串口流保留本地，未随提交分发。
