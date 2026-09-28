@@ -1,0 +1,20 @@
+{
+  "kernel_size": 33046536,
+  "kernel_addr": 268468224,
+  "ramdisk_size": 822304,
+  "ramdisk_addr": 285212672,
+  "second_size": 4491776,
+  "second_addr": 284164096,
+  "tags_addr": 268435712,
+  "page_size": 2048,
+  "header_version": 2,
+  "os_version": 369099098,
+  "header_sha256": "e7bc5d2d2bacf21e9bb98b5060e51c687a587ddcfa8f47655edfc45455a059d5",
+  "full_partition_backed_up": false,
+  "cmdline": "console=ttyFIQ0 androidboot.baseband=N/A androidboot.wificountrycode=CN androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 androidboot.verifiedbootstate=orange firmware_class.path=/vendor/etc/firmware init=/init rootwait ro loop.max_part=7 buildvariant=userdebug",
+  "recovery_dtbo_size": 0,
+  "recovery_dtbo_offset": 0,
+  "header_size": 1660,
+  "dtb_size": 1650869,
+  "dtb_addr": 300941312
+}

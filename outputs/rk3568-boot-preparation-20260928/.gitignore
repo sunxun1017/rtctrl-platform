@@ -1,0 +1,21 @@
+# Raw serial streams, partition data, chunks, Image and cpio remain local.
+/*
+!/.gitignore
+!/*.md
+!/*.py
+!/*.ps1
+!/*.json
+!/*.patch
+!/commands.sh
+!/*build.log
+!/*config.log
+!/kernel.config
+!/busybox.config
+!/busybox-LICENSE
+!/SHA256SUMS
+!/verification-output.txt
+!/initramfs-list.txt
+!/busybox-smoke.txt
+!/22-shutdown-state.command.sh
+!/23-orderly-shutdown.command.sh
+!/shutdown-evidence.txt

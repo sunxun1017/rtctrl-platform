@@ -1,0 +1,26 @@
+{
+  "uboot": {
+    "bytes": 512,
+    "prefix_hex": "d00dfeed00000e000000004800000b5000000028000000110000001000000000",
+    "sha256": "5b91c8a40b3e3a6fbe0b6b29441fd6143bf11a121419735ca188e7c7930eab7f",
+    "hash_verified": true
+  },
+  "trust": {
+    "bytes": 512,
+    "prefix_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560",
+    "hash_verified": true
+  },
+  "dtbo": {
+    "bytes": 512,
+    "prefix_hex": "d7b7ab1e0000026f000000200000002000000001000000200000080000000000",
+    "sha256": "09f23fa0dac7505a46dae4968f8a3e252c43115e3dd3b2719bab13aa9d5b5cce",
+    "hash_verified": true
+  },
+  "vbmeta": {
+    "bytes": 512,
+    "prefix_hex": "4156423000000001000000000000000000000000000000000000000000000000",
+    "sha256": "1d2bc3e9536032a26f72d36c2d94335841617ffbae0d01700bb8a04d9ac26b1e",
+    "hash_verified": true
+  }
+}

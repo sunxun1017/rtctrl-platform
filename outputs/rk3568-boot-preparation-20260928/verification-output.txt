@@ -1,0 +1,24 @@
+{
+  "deployable": false,
+  "board_boot_tested": false,
+  "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "source_patch": "0001-arm64-cache-kasan-include.patch",
+  "image_bytes": 34888192,
+  "image_text_offset": 0,
+  "image_size": 35520512,
+  "image_flags": 10,
+  "sha256": {
+    "Image": "c0efb3bb522005cf106500c26c5c2c02d5905c2bfa9ecb273c2663db20aad4ec",
+    "initramfs.cpio.gz": "2a97a6a3af2054417cd47459770629673a4655131a77c3a12dd8d30568854956",
+    "rk3568-aiot-3568pq-firstboot.dtb": "f78f55290c92fe5d559326cc1c769b0e7bfa427f801d778a0e1d240f5fc89526",
+    "kernel.config": "5991ffb855f078dbb0013dc93c9b33deeb08eec6425c0c14e2d984403606fa1f",
+    "busybox.config": "739dd67391cc6ef2af6e5963857c9175ece243e6a0cc20201911cf8e3eedc0e8",
+    "0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a"
+  },
+  "checks": [
+    "ARM64 Image header",
+    "static AArch64 shell via user-mode QEMU",
+    "deterministic initramfs",
+    "manifest overwrite refused"
+  ]
+}

@@ -294,3 +294,42 @@ Melo新增原完整batch回调、worker PCM流、单aplay连续写，默认2s预
 本地 duplex core 15项通过，release/asan各24组companion通过；后续经用户授权已单文件备份部署并重启。
 板端语法/导入/哈希核验通过，语音已准备且静音、无错误，人脸短时约30FPS；未采音，首次声学改善待用户验收。
 见[回声保护追加记录](../docs/verification-echo-guard-20260918.md)。
+
+## 2026-09-28 Android RK3568 原机资料已采集
+
+用户要求实际操作并保留命令与输出，已从CH340串口以1500000/8N1读取原机：3568A、Android11、Linux4.19.232 #49，
+不同于此前离线5.10.160候选；`su 0`可只读采集。原始FDT151680字节与整包均经板端/主机SHA-256一致性验证；
+完整运行树6276条目、内核配置6197行；运行树与原FDT节点属性一致，仅缺FDT头部两项memreserve。
+证据入口：[采集记录及命令输出](../outputs/android-board-20260928/README.md)、[设备树分析](../outputs/android-board-20260928/device-tree-review.md)。
+
+运行时确认：DSI720×720；SPI3 CAP1188已绑定/event0；MXC6655已绑定；Bothlent USB声卡8通道16kHz S16_LE采集；
+RK809板载声卡存在；UART0为/dev/ttySMT0，不能沿用/dev/ttyS0。DT WiFi声明ap6398s，SDIO02d0:a9bf绑定bcmsdh_sdmmc。
+OV5695、Goodix、RJGT102有节点但未见driver绑定；不能据此断言器件未装，也不称其正常。
+GD32串口连接/协议、实际WiFi模组料号与摄像头功能仍未核实。
+本次只读硬件元数据、板端新增临时采集目录；未刷机、重启、发MCU指令或主动采音/采帧。
+完整固件分区、厂商源码、完整上电日志未取得；不将反编译DTS视为已可部署Linux配置。
+
+### 2026-09-28 无原厂 BSP 重建首轮
+
+用户明确原厂BSP不可得，授权在项目内重建。新增AIoT板级firstboot-candidate.json与bsp/源码，使用锁定5.10.160的SoC DTSI，
+不包含EVB板级DTSI；原机供电/pinctrl/IO域重建，198项属性与原FDT一致。特别vccio4/6为1.8V，不能照抄EVB3.3V。
+FIQ1500000、eMMC52MHz、USB2 host为本轮候选；UART0、显示/CSI2、WiFi、GPU/NPU和DDR调频关闭。
+90项配置审计、49项DTB审计、8项错误注入、10个AArch64驱动对象通过；DTC新增板级警告0。
+实际SUSPEND=n会触发该BSP eMMC runtime-PM条件编译错误，保留SUSPEND=y、DT休眠节点disabled；不能说系统休眠能力全局关闭。
+无Image/initramfs/板测/刷机；manifest仍deployable=false。loader、启动镜像格式/AVB、恢复路径与内存fixup待核实。
+入口：[重建说明](../platforms/rk3568/boards/aiot-3568pq/RECONSTRUCTION.md)、[全部命令与验证](../outputs/rk3568-reconstruction-20260928/README.md)。
+
+### 2026-09-28 首次启动产物准备（尚未上板）
+
+已构建5.10.160 ARM64 Image（34888192字节）、最小静态BusyBox initramfs，与首轮DTB组成离线候选。
+完整构建需要PREEMPT_RT及保存的cache.h包含顺序补丁；非RT缺migrate_tasks，RT原树有WARN头文件循环。
+补丁保存在板目录patches，构建后已反向移除，third_party源码干净。QEMU仅验证ARM64用户态shell，不是内核/板测。
+产物摘要、命令、失败/成功输出见[启动准备记录](../outputs/rk3568-boot-preparation-20260928/README.md)。
+原boot已校验头部为Android v2，另有second和dtb段；头部地址不视为已确认加载地址。
+原boot/uboot/trust/dtbo/vbmeta已复制到板端普通临时文件并打包，但串口丢字节导致整包未回传，不能称恢复备份完成。
+串口日志级别曾临时调整并确认恢复7/4/1/7，未重启/刷写。用户明确当前只有串口；USB OTG、恢复入口、完整启动链与首次启动仍待核实。
+
+随后用户明确要求关机并按独立主题分批提交。已执行`su 0 setprop sys.powerctl shutdown`，串口最终确认`reboot: Power down`。
+原厂shutdown驱动会关闭MCU看门狗并发送MCU断电标志；新Linux物理断电行为尚未适配/验证。
+关机命令和输出摘要见[启动准备关机记录](../outputs/rk3568-boot-preparation-20260928/README.md)。
+Git只保存精选报告/脚本/配置/审计证据；原机标识、二进制产物与原始串口流保留本地，未随提交分发。

@@ -1,0 +1,23 @@
+drwxr-xr-x   1 root     root            0 Jan  1  1970 bin
+drwxr-xr-x   1 root     root            0 Jan  1  1970 dev
+drwxr-xr-x   1 root     root            0 Jan  1  1970 proc
+drwxr-xr-x   1 root     root            0 Jan  1  1970 sys
+drwxr-xr-x   1 root     root            0 Jan  1  1970 tmp
+crw-------   1 root     root       5,   1 Jan  1  1970 dev/console
+crw-rw-rw-   1 root     root       1,   3 Jan  1  1970 dev/null
+-rwxr-xr-x   1 root     root      1042880 Jan  1  1970 bin/busybox
+-rwxr-xr-x   1 root     root          432 Jan  1  1970 init
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/sh -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/mount -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/echo -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/uname -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/cat -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/setsid -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/cttyhack -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/sleep -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/ls -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/dmesg -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/grep -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/readlink -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/hexdump -> busybox
+lrwxrwxrwx   1 root     root            7 Jan  1  1970 bin/mkdir -> busybox

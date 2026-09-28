@@ -1,0 +1,11 @@
+Command: su 0 setprop sys.powerctl shutdown
+Source: 23-orderly-shutdown.output.txt (full raw output retained locally)
+console:/ $ su 0 setprop sys.powerctl shutdown
+[ 4484.980498] init: Received sys.powerctl='shutdown' from pid: 16822 (setprop)
+[ 4484.981192] init: Entering shutdown mode
+[ 4487.626258] [0;32;34m[smdt][drivers/smdt/mcuinf.c +1081][mcuinterface_shutdown][0mreboot reason mcu_poweroff_reson=3
+[ 4487.627264] [0;32;34m[smdt][drivers/smdt/mcuinf.c +445][WriteWatchdogOffFlagToMCU][0m### [smdt]:MCU write watchdog off!
+[ 4487.686498] [0;32;34m[smdt][drivers/smdt/mcuinf.c +587][WritePowerOffFlagToMCU][0m### [smdt]:MCU write power off!
+[ 4487.747417] xhci-hcd xhci-hcd.1.auto: Host halt failed, -110
+[ 4488.267985] gpiod_set_value: invalid GPIO (errorpointer)
+[ 4488.275039] reboot: Power down

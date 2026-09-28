@@ -1,0 +1,32 @@
+{
+  "deployable": false,
+  "board_boot_tested": false,
+  "busybox_sha256": "fcea8623d9cd1961d9411ed075fab4a8e6e2ca97c3513c639031042d2b2b0b26",
+  "archive_sha256": "2a97a6a3af2054417cd47459770629673a4655131a77c3a12dd8d30568854956",
+  "entries": [
+    "bin",
+    "dev",
+    "proc",
+    "sys",
+    "tmp",
+    "dev/console",
+    "dev/null",
+    "bin/busybox",
+    "init",
+    "bin/sh",
+    "bin/mount",
+    "bin/echo",
+    "bin/uname",
+    "bin/cat",
+    "bin/setsid",
+    "bin/cttyhack",
+    "bin/sleep",
+    "bin/ls",
+    "bin/dmesg",
+    "bin/grep",
+    "bin/readlink",
+    "bin/hexdump",
+    "bin/mkdir"
+  ],
+  "policy": "RAM mounts only; interactive root shell; no automatic block writes"
+}

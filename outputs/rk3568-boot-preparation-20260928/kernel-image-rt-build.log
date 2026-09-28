@@ -1,0 +1,52 @@
+make: Entering directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
+make[1]: Entering directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-config'
+  SYNC    include/config/auto.conf.cmd
+  GEN     Makefile
+  GEN     Makefile
+  CC      kernel/bounds.s
+  CALL    /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/atomic/check-atomics.sh
+In file included from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/static_key.h:1,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/kasan-enabled.h:5,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/arch/arm64/include/asm/cache.h:56,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/cache.h:6,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/spinlock_types_rt.h:9,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/spinlock_types.h:19,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/ratelimit_types.h:7,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/printk.h:9,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/kernel.h:16,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/asm-generic/bug.h:20,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/arch/arm64/include/asm/bug.h:26,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/bug.h:5,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/page-flags.h:10,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/kernel/bounds.c:10:
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/jump_label.h: In function 'static_key_slow_inc':
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/jump_label.h:81:35: error: implicit declaration of function 'WARN' [-Werror=implicit-function-declaration]
+   81 | #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+      |                                   ^~~~
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/jump_label.h:301:9: note: in expansion of macro 'STATIC_KEY_CHECK_USE'
+  301 |         STATIC_KEY_CHECK_USE(key);
+      |         ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/static_key.h:1,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/kasan-enabled.h:5,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/arch/arm64/include/asm/cache.h:56,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/cache.h:6,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/spinlock_types_rt.h:9,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/spinlock_types.h:19,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/ratelimit_types.h:7,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/printk.h:9,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/kernel.h:16,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/asm-generic/bug.h:20,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/arch/arm64/include/asm/bug.h:26,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/bug.h:5,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/page-flags.h:10,
+                 from /home/sx/projects/rtctrl-platform/third_party/linux-rk3588/kernel/bounds.c:10:
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/jump_label.h: In function 'static_key_enable':
+/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/include/linux/jump_label.h:332:17: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
+  332 |                 WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+      |                 ^~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[2]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/scripts/Makefile.build:117: kernel/bounds.s] Error 1
+make[1]: *** [/home/sx/projects/rtctrl-platform/third_party/linux-rk3588/Makefile:1342: prepare0] Error 2
+make[1]: Leaving directory '/home/sx/projects/rtctrl-platform/.deps/kernel/aiot-3568pq-firstboot-final-config'
+make: *** [Makefile:185: __sub-make] Error 2
+make: Leaving directory '/home/sx/projects/rtctrl-platform/third_party/linux-rk3588'
