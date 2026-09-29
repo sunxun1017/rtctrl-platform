@@ -338,3 +338,7 @@ Git只保存精选报告/脚本/配置/审计证据；原机标识、二进制�
 2026-09-29：根据原FDT与buses.txt生成[原机设备树框图](../platforms/rk3568/boards/aiot-3568pq/DEVICE-TREE-DIAGRAM.md)。
 复核既有证据：I²C5 mcuinf@62 compatible=smdtmcu,STM8S00K3，5-0062已绑定McuCom；此前对MCU接口的表述过于笼统。
 该I²C板控节点不与UART0/GD32混同；关机函数源码对应、协议及ACK仍未确认。此次未连接/唤醒板子。
+
+2026-09-29：用户确认PatchX-Android-Main仓库有权限；本地WSL SSH的git ls-remote已成功，默认master及HEAD
+为ed91ef7486cdebca00aa32d497f5aa45cb226c0e，与此前协议审计版本一致。旧网页404不能表述为仓库无法访问。
+命令和结果见[协议审计补充](../docs/verification-patchx-protocol-20260921.md)，后续远端版本仍需重新查询。

@@ -9,6 +9,17 @@
 本次读取本地副本，HEAD 为 `ed91ef7486cdebca00aa32d497f5aa45cb226c0e`，提交日期 2025-10-28。
 2026-09-21 访问公开 GitHub 页面返回 404；不据此判定仓库删除或私有，也没有重新拉取证明远端最新状态。
 
+2026-09-29 补充：用户确认具有仓库权限后，使用本地 WSL SSH 执行只读查询成功：
+
+```sh
+GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=yes" \
+  git ls-remote --symref git@github.com:patchx-team/PatchX-Android-Main.git HEAD refs/heads/main refs/heads/master
+```
+
+返回默认分支 `refs/heads/master`，HEAD/master 均为 `ed91ef7486cdebca00aa32d497f5aa45cb226c0e`，
+与本报告已分析的本地提交一致。本次未拉取、切换分支或修改参考仓库；此结论只覆盖查询时的默认分支，
+不表示其他分支没有额外内容。此前网页404不代表本地SSH无访问权限。
+
 以下路径均相对于该参考仓库的 `PatchX-Android-Main-C/app/src/main/java/`。
 外层工程没有找到第二套 MCU 字节协议，不能把两个目录当成两份互相验证的固件实现。
 
