@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1160" viewBox="0 0 1680 1160">
+<rect width="1680" height="1160" fill="#f1f5f9"/>
+<g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif">
+<text x="50" y="53" font-size="32" fill="#0f172a" font-weight="bold">3568A · Android 原机设备树框图</text>
+<text x="50" y="88" font-size="19" fill="#0f172a" font-weight="normal">依据 2026-09-28 原始 FDT 与运行记录整理 · Linux 4.19.232 · 主要板级外设视图</text>
+<rect x="555" y="115" width="570" height="72" rx="15" fill="#16324f"/>
+<text x="614" y="145" font-size="25" fill="#ffffff" font-weight="bold">Rockchip RK3568 / board: 3568A</text>
+<text x="611" y="172" font-size="18" fill="#d9e9f8" font-weight="normal">总线连接、功能链路与供电引用的分组概览</text>
+<path d="M840 187 V209 H28 V958 M840 209 H578 V958 M840 209 H1128 V958" fill="none" stroke="#94a3b8" stroke-width="2"/>
+<path d="M28 268 H50" stroke="#94a3b8" stroke-width="2"/>
+<rect x="50" y="234" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="70" y="269" font-size="23" fill="#0f172a" font-weight="bold">I²C0 · 电源管理</text>
+<text x="70" y="296" font-size="16" fill="#64748b" font-weight="normal">fdd40000</text>
+<text x="70" y="332" font-size="17" fill="#087a60" font-weight="normal">● 0x1c  TCS452x → CPU 供电</text>
+<text x="70" y="363" font-size="17" fill="#087a60" font-weight="normal">● 0x20  RK809 → 多路 regulator / codec</text>
+<text x="70" y="394" font-size="17" fill="#087a60" font-weight="normal">● 0x22  FUSB302 · Type-C</text>
+<text x="70" y="425" font-size="17" fill="#087a60" font-weight="normal">● 0x6b  BQ25703 · 充电</text>
+<path d="M578 268 H600" stroke="#94a3b8" stroke-width="2"/>
+<rect x="600" y="234" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="620" y="269" font-size="23" fill="#0f172a" font-weight="bold">I²C1 / I²C2 · 触摸与相机控制</text>
+<text x="620" y="296" font-size="16" fill="#64748b" font-weight="normal">fe5a0000 / fe5b0000</text>
+<text x="620" y="332" font-size="17" fill="#965c0a" font-weight="normal">○ I²C1: 0x14 Goodix GT9xx；0x30 XRM117x</text>
+<text x="620" y="363" font-size="17" fill="#965c0a" font-weight="normal">○ I²C2: 0x36 OV5695 图像传感器</text>
+<text x="620" y="394" font-size="17" fill="#087a60" font-weight="normal">● I²C2: 0x0c VM149C 对焦</text>
+<text x="620" y="425" font-size="17" fill="#334155" font-weight="normal">数据链路：OV5695 → DPHY0 → ISP vir0</text>
+<path d="M1128 268 H1150" stroke="#94a3b8" stroke-width="2"/>
+<rect x="1150" y="234" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="1170" y="269" font-size="23" fill="#0f172a" font-weight="bold">I²C3 / I²C5 · 传感器与板控</text>
+<text x="1170" y="296" font-size="16" fill="#64748b" font-weight="normal">fe5c0000 / fe5e0000</text>
+<text x="1170" y="332" font-size="17" fill="#965c0a" font-weight="normal">○ I²C3: 0x68 RJGT102；0x50 AT88 节点</text>
+<text x="1170" y="363" font-size="17" fill="#087a60" font-weight="normal">● I²C5: 0x15 MXC6655 加速度传感器</text>
+<text x="1170" y="394" font-size="17" fill="#087a60" font-weight="normal">● I²C5: 0x62 STM8S00K3 → McuCom</text>
+<text x="1170" y="425" font-size="17" fill="#965c0a" font-weight="normal">○ I²C5: 0x50 AT24C16；0x51 PCF8563</text>
+<path d="M28 516 H50" stroke="#94a3b8" stroke-width="2"/>
+<rect x="50" y="482" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="70" y="517" font-size="23" fill="#0f172a" font-weight="bold">SPI3 · 身体触摸</text>
+<text x="70" y="544" font-size="16" fill="#64748b" font-weight="normal">fe640000 · CS0</text>
+<text x="70" y="580" font-size="17" fill="#087a60" font-weight="normal">● CAP1188 → input/event0</text>
+<text x="70" y="611" font-size="17" fill="#334155" font-weight="normal">100 kHz · mode 3 · SPI3 M1 引脚组</text>
+<text x="70" y="642" font-size="17" fill="#334155" font-weight="normal">reset: GPIO0_B6</text>
+<text x="70" y="673" font-size="17" fill="#965c0a" font-weight="normal">注意：与 Goodix reset 声明重复</text>
+<path d="M578 516 H600" stroke="#94a3b8" stroke-width="2"/>
+<rect x="600" y="482" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="620" y="517" font-size="23" fill="#0f172a" font-weight="bold">UART · 调试与外部控制</text>
+<text x="620" y="544" font-size="16" fill="#64748b" font-weight="normal">fdd50000 / fe660000</text>
+<text x="620" y="580" font-size="17" fill="#334155" font-weight="normal">UART0 → Android /dev/ttySMT0</text>
+<text x="620" y="611" font-size="17" fill="#965c0a" font-weight="normal">外部 GD32 连接及协议实测仍待核对</text>
+<text x="620" y="642" font-size="17" fill="#334155" font-weight="normal">UART2 → FIQ debugger → 调试串口</text>
+<text x="620" y="673" font-size="17" fill="#334155" font-weight="normal">调试口：1500000 baud；不同于 UART0</text>
+<path d="M1128 516 H1150" stroke="#94a3b8" stroke-width="2"/>
+<rect x="1150" y="482" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="1170" y="517" font-size="23" fill="#0f172a" font-weight="bold">存储与无线</text>
+<text x="1170" y="544" font-size="16" fill="#64748b" font-weight="normal">SDHCI / SDIO</text>
+<text x="1170" y="580" font-size="17" fill="#334155" font-weight="normal">SDHCI fe310000 → eMMC · 8 bit</text>
+<text x="1170" y="611" font-size="17" fill="#334155" font-weight="normal">原树 max-frequency=200 MHz</text>
+<text x="1170" y="642" font-size="17" fill="#087a60" font-weight="normal">● SDIO fe2c0000 → bcmsdh_sdmmc</text>
+<text x="1170" y="673" font-size="17" fill="#334155" font-weight="normal">DT Wi-Fi: ap6398s；BT 为厂商平台节点</text>
+<path d="M28 764 H50" stroke="#94a3b8" stroke-width="2"/>
+<rect x="50" y="730" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="70" y="765" font-size="23" fill="#0f172a" font-weight="bold">显示与背光</text>
+<text x="70" y="792" font-size="16" fill="#64748b" font-weight="normal">VOP2 → DSI0 → panel@0</text>
+<text x="70" y="828" font-size="17" fill="#334155" font-weight="normal">原机 DSI connected · 720 × 720</text>
+<text x="70" y="859" font-size="17" fill="#334155" font-weight="normal">4 lanes · pixel clock 35.5 MHz</text>
+<text x="70" y="890" font-size="17" fill="#334155" font-weight="normal">panel reset GPIO0_A5 / enable GPIO0_C5</text>
+<text x="70" y="921" font-size="17" fill="#334155" font-weight="normal">PWM fe6e0000 → 背光 · 40 kHz</text>
+<path d="M578 764 H600" stroke="#94a3b8" stroke-width="2"/>
+<rect x="600" y="730" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="620" y="765" font-size="23" fill="#0f172a" font-weight="bold">音频与 USB</text>
+<text x="620" y="792" font-size="16" fill="#64748b" font-weight="normal">I²S fe410000 / USB host</text>
+<text x="620" y="828" font-size="17" fill="#334155" font-weight="normal">I²S → RK809/RK817 codec → 板载声卡</text>
+<text x="620" y="859" font-size="17" fill="#334155" font-weight="normal">RK809 codec 控制来自 I²C0</text>
+<text x="620" y="890" font-size="17" fill="#087a60" font-weight="normal">运行时补充：USB Bothlent UAC 声卡</text>
+<text x="620" y="921" font-size="17" fill="#334155" font-weight="normal">8 通道 / 16 kHz / S16_LE；非 DT 固定子节点</text>
+<path d="M1128 764 H1150" stroke="#94a3b8" stroke-width="2"/>
+<rect x="1150" y="730" width="510" height="222" rx="12" fill="white" stroke="#cbd5e1"/>
+<text x="1170" y="765" font-size="23" fill="#0f172a" font-weight="bold">供电关系与系统资源</text>
+<text x="1170" y="792" font-size="16" fill="#64748b" font-weight="normal">原树逻辑描述，不是电路原理图</text>
+<text x="1170" y="828" font-size="17" fill="#334155" font-weight="normal">dc_12v → vcc3v3_sys / vcc5v0_sys / USB</text>
+<text x="1170" y="859" font-size="17" fill="#334155" font-weight="normal">RK809 → CPU 以外的多路电源与 IO 域</text>
+<text x="1170" y="890" font-size="17" fill="#334155" font-weight="normal">vccio4 / vccio6 = 1.8 V；LDO4 = 3.1 V</text>
+<text x="1170" y="921" font-size="17" fill="#334155" font-weight="normal">4 个 CPU 节点；3 段 RAM；2 项 memreserve</text>
+<text x="50" y="1020" font-size="20" fill="#0f172a" font-weight="normal">● 采集时已有 driver 绑定（不等于功能验收）    ○ DT 声明 / 已枚举，但采集时未见 driver 绑定</text>
+<text x="50" y="1060" font-size="20" fill="#965c0a" font-weight="normal">I²C5 的 STM8 板控节点不能直接等同 UART0 的 GD32；关机协议与 ACK 仍待核对。</text>
+<text x="50" y="1096" font-size="18" fill="#64748b" font-weight="normal">图中省略 SoC 内部时钟、复位、IOMMU 及大量备用/禁用节点；不代表新 Linux 已启用这些设备。</text>
+<text x="50" y="1130" font-size="16" fill="#64748b" font-weight="normal">原始 FDT SHA-256: a028987f730f3c8e4be9cb6e771b91a5665932712c51e1e540b96654de4dd28b</text>
+</g></svg>
