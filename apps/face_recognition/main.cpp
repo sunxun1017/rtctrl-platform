@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
         rknn::RknnBackend detector(get("--detector").c_str()),
             recognizer(get("--recognizer").c_str());
         auto faces = rtctrl::face::detect(detector, image);
-        if (action == "enroll") {
+        if (action == "enroll") { // 登记新人
             if (faces.size() != 1)
                 throw std::runtime_error(
                     "enrollment requires exactly one detected face");
@@ -69,11 +69,11 @@ int main(int argc, char** argv) {
             rtctrl::face::save_gallery(get("--gallery"), gallery);
             std::cout << "{\"enrolled\":" << rtctrl::face::json_string(get("--name"))
                       << "}\n";
-        } else {
+        } else { // 识别人脸
             std::ostringstream result;
             result << "{\"faces\":[";
             bool first = true;
-            for (const auto& f : faces) {
+            for (const auto& f : faces) { // 从人脸库里面找
                 auto embedding = rtctrl::face::embed(recognizer, image, f);
                 auto match = rtctrl::face::match(gallery, embedding, threshold, gap);
                 if (!first)

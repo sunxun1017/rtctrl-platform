@@ -147,6 +147,11 @@ Options parse(int argc, char** argv) {
         throw std::runtime_error("--enroll-image requires --enroll-name");
     return o;
 }
+/**
+ * @brief The 'single-frame mailbox' between the capture thread and the inference
+ * thread
+ *
+ */
 struct Latest {
     std::mutex mutex;
     std::condition_variable ready;
@@ -309,7 +314,8 @@ int main(int argc, char** argv) {
         std::signal(SIGINT, interrupt);
         std::signal(SIGTERM, interrupt);
         cv::setNumThreads(1);
-        std::unique_ptr<rknn::RknnBackend> detector_backend, recognizer_backend;
+        std::unique_ptr<rknn::RknnBackend> detector_backend /*检测人脸*/,
+            recognizer_backend /*得到人脸特征向量*/;
         if (options.native_input) {
             // Explicit model contract: never guess normalization from tensor shape.
             if (rtctrl::face::model_fingerprint(options.detector) !=
@@ -338,10 +344,12 @@ int main(int argc, char** argv) {
         auto& detector = *detector_backend;
         auto& recognizer = *recognizer_backend;
         rtctrl::face::Gallery gallery;
-        if (!options.gallery.empty())
+        if (!options.gallery.empty()) // 如果指定了人脸库路径
             gallery = rtctrl::face::load_gallery(
                 options.gallery,
-                rtctrl::face::model_fingerprint(options.recognizer),
+                rtctrl::face::model_fingerprint(
+                    options
+                        .recognizer), // 得到当前识别模型的标识，用来检查库里的特征是否与该模型匹配
                 !options.enrollment.empty());
         rtctrl::face::PreviewServer preview(
             options.bind, static_cast<unsigned short>(options.port));
@@ -364,10 +372,12 @@ int main(int argc, char** argv) {
         auto last_enrollment = Clock::now() - std::chrono::seconds(2);
         auto started = Clock::now(), previous = started;
         while (!interrupted) {
-            if (async_preview)
+            if (async_preview) // 异步要检查
                 async_preview->check();
             if (options.duration &&
-                millis(started, Clock::now()) >= options.duration * 1000.0)
+                millis(started, Clock::now()) >=
+                    options.duration *
+                        1000.0) // 开始到现在大于我们设定的持续时间，就会停止
                 break;
             cv::Mat image;
             uint32_t sequence;
@@ -376,8 +386,10 @@ int main(int argc, char** argv) {
             const auto wait_begin = Clock::now();
             Clock::time_point dequeued;
             {
-                auto& latest = worker.latest;
-                std::unique_lock<std::mutex> lock(latest.mutex);
+                auto& latest =
+                    worker.latest; // 锁尽可能短些吧，采集和推理线程会同时使用它
+                std::unique_lock<std::mutex> lock(
+                    latest.mutex); // 花括号就是为了限制锁的范围
                 latest.ready.wait_for(lock, std::chrono::milliseconds(100), [&] {
                     return latest.available || !latest.error.empty();
                 });
@@ -407,7 +419,7 @@ int main(int argc, char** argv) {
             auto detected = Clock::now();
             std::vector<rtctrl::face::Match> matches;
             matches.reserve(faces.size());
-            for (auto& face : faces) {
+            for (auto& face : faces) { // 根据人脸的数量，得到相应数量的特征
                 auto embedding = rtctrl::face::embed(recognizer, image, face);
                 if (!enrolled && faces.size() == 1 &&
                     millis(last_enrollment, Clock::now()) >= 1000) {

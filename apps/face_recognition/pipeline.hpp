@@ -25,6 +25,16 @@ struct Match {
 };
 void normalize(std::vector<float>& values);
 cv::Mat align_face(const cv::Mat& bgr, const Face& face);
+/**
+ * @brief
+ * 输入一张图片，返回检测到的人脸框、置信度和五个关键点，但是不负责告诉我们这个人是谁，并没有生成特征向量
+ *
+ * @param backend 推理后端
+ * @param bgr     输入图片，按BGR通道顺序解释
+ * @param threshold 检测置信度阈值，低于它的候选框被丢弃
+ * @param max_faces 最多返回多少张人脸
+ * @return std::vector<Face>
+ */
 std::vector<Face> detect(inference::Backend& backend,
                          const cv::Mat& bgr,
                          float threshold = 0.8f,

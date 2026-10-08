@@ -38,6 +38,14 @@ void copy_rgb_input(const cv::Mat& bgr, T* destination, int side) {
         }
     }
 }
+/**
+ * @brief
+ * 输入并执行模型，把BGR转成RGB，按照后端要求的类型和布局写入输入缓冲，然后调用backend.run()
+ *
+ * @param backend
+ * @param bgr
+ * @param side
+ */
 void submit(inference::Backend& backend, const cv::Mat& bgr, int side) {
     require(!bgr.empty() && bgr.type() == CV_8UC3, "expected nonempty BGR8 image");
     require(backend.input_count() == 1, "model must have exactly one input");
@@ -120,20 +128,26 @@ cv::Mat align_face(const cv::Mat& bgr, const Face& face) {
     return result;
 }
 std::vector<Face> detect(inference::Backend& backend,
-                         const cv::Mat& bgr,
+                         const cv::Mat& bgr, /*输入图片，按BGR通道顺序解释*/
                          float threshold,
                          std::size_t max_faces) {
+    /* 检查参数，注意CV_8UC3只检查3通道、8位无符号类型，不能验证数据实际是不是BGR，通道顺序需要调用方保证
+     */
     require(!bgr.empty() && bgr.type() == CV_8UC3, "expected BGR8 image");
     require(threshold > 0 && threshold <= 1 && max_faces > 0 && max_faces <= 1024,
             "invalid detection limits");
-    float scale = std::min(320.f / bgr.cols, 320.f / bgr.rows);
+    float scale = std::min(
+        320.f / bgr.cols,
+        320.f / bgr.rows); // 保证比例缩放，使得最小的缩放比例，让一边达到320
     int w = std::max(1, int(std::round(bgr.cols * scale))),
         h = std::max(1, int(std::round(bgr.rows * scale)));
-    int left = (320 - w) / 2, top = (320 - h) / 2;
+    int left = (320 - w) / 2, top = (320 - h) / 2; // 最终要320x320，因此需要补边
     cv::Mat image = detector_letterbox(bgr, w, h);
     submit(backend, image, 320);
     constexpr std::size_t count = 4200;
-    const std::vector<float>*loc = nullptr, *conf = nullptr, *land = nullptr;
+    const std::vector<float>*loc /*人脸框的位置和大小*/ = nullptr,
+                                 *conf /*背景人脸两次的得分*/ = nullptr,
+                                 *land = nullptr;
     require(backend.output_count() == 3, "expected three RetinaFace outputs");
     for (std::size_t i = 0; i < 3; ++i) {
         const auto& s = backend.output_spec(i);
@@ -217,6 +231,30 @@ std::vector<Face> detect(inference::Backend& backend,
     }
     return result;
 }
+
+/*
+整张 BGR 图片 + 人脸信息
+        ↓
+根据五官关键点对齐人脸
+        ↓
+得到 112×112 人脸图
+        ↓
+送入识别模型
+        ↓
+得到 512 个 float
+        ↓
+归一化
+        ↓
+返回 embedding
+ */
+/**
+ * @brief Turn a detected face into a 512-dimensional face feature vector
+ *
+ * @param backend
+ * @param bgr
+ * @param face
+ * @return std::vector<float>
+ */
 std::vector<float>
 embed(inference::Backend& backend, const cv::Mat& bgr, const Face& face) {
     submit(backend, align_face(bgr, face), 112);
