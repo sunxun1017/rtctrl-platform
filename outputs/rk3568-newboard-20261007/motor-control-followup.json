@@ -1,0 +1,99 @@
+{
+  "time_utc": "2026-10-07T04:38:45.487229+00:00",
+  "user_feedback": "motor continues rotating in one direction after primary app stopped",
+  "additional_actions": [
+    "am force-stop --user 0 com.patchx_sys",
+    "am force-stop --user 0 com.smdt.test.basic"
+  ],
+  "package_states": [
+    {
+      "package": "com.patchx_main",
+      "exit_code": 1,
+      "pids": "",
+      "stderr": ""
+    },
+    {
+      "package": "com.patchx_sys",
+      "exit_code": 0,
+      "pids": "5308",
+      "stderr": ""
+    },
+    {
+      "package": "com.smdt.test.basic",
+      "exit_code": 1,
+      "pids": "",
+      "stderr": ""
+    },
+    {
+      "package": "android.app.smdt.server",
+      "exit_code": 0,
+      "pids": "810",
+      "stderr": ""
+    },
+    {
+      "package": "com.cghs.stresstest",
+      "exit_code": 0,
+      "pids": "1195",
+      "stderr": ""
+    }
+  ],
+  "trace_scope_pids": [
+    810,
+    1274,
+    1195,
+    2059
+  ],
+  "trace_duration_seconds": 8,
+  "trace_timeout_exit_code": 124,
+  "trace_threads": 67,
+  "trace_file_sha256": "b86c9edc3f3a5371e6301a07bc0821e72694b140384b87a09e333dd26cac02b8",
+  "trace_device_open_observed": false,
+  "ongoing_motor_command_sender_identified": false,
+  "motor_retains_previous_command_hypothesis": "unverified",
+  "hardware_motor_commands_sent": false,
+  "vendor_multifunction_server_stopped": false,
+  "physical_stop_after_additional_actions_confirmed": null,
+  "background_restarted_pid": 5308,
+  "background_app_additional_actions": [
+    "pm disable-user --user 0 com.patchx_sys",
+    "am force-stop --user 0 com.patchx_sys"
+  ],
+  "final_app_states": [
+    {
+      "package": "com.patchx_main",
+      "pidof_exit": 1,
+      "pids": "",
+      "state": "User 0: ceDataInode=1398196 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=3 instant=false virtual=false"
+    },
+    {
+      "package": "com.patchx_sys",
+      "pidof_exit": 1,
+      "pids": "",
+      "state": "User 0: ceDataInode=1398241 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=3 instant=false virtual=false"
+    },
+    {
+      "package": "com.smdt.test.basic",
+      "pidof_exit": 1,
+      "pids": "",
+      "state": "User 0: ceDataInode=1390009 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false"
+    }
+  ],
+  "user_feedback_after_background_force_stop": "still rotating",
+  "physical_stop_after_background_disabled_confirmed": true,
+  "physical_confirmation_basis": "User reported now resolved after background application was disabled and stopped; no independent motion measurement",
+  "physical_confirmation_time_utc": "2026-10-07T04:40:02.256450+00:00",
+  "after_user_confirmation_pid_checks": [
+    {
+      "package": "com.patchx_main",
+      "exit_code": 1,
+      "pids": "",
+      "stderr": ""
+    },
+    {
+      "package": "com.patchx_sys",
+      "exit_code": 1,
+      "pids": "",
+      "stderr": ""
+    }
+  ]
+}

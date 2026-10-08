@@ -1,0 +1,19 @@
+{
+  "scope": "local failures simulated with subprocess mocked; no ADB or board action",
+  "passed_checks": [
+    "collector refuses size failure; incomplete receipt explicit",
+    "collector refuses initial hash failure",
+    "deployer refuses missing-recovery before any ADB",
+    "deployer refuses duplicate-recovery before any ADB",
+    "deployer and comparer both refuse truncated recovery",
+    "current actual eight backups accepted and fully rehashed",
+    "all three diagnostic scripts parse"
+  ],
+  "failed_checks": [],
+  "source_sha256": {
+    "compare-baseline.py": "0068a3c9a9f223fefe5b6a2c8d5c012ed3d2da3311fa3e9e55878f95751428c0",
+    "deploy-userland.py": "f3af282275c2dc1f43287eea732c28cbb7bd8f4d3d618be9c17e18ccc2b92587",
+    "collect-baseline.py": "b455b93bbba899dc76bf219fc40ec1ad8e4e32432205c4a6ea7940f78f2896a2"
+  },
+  "original_board_runtime_steps_unchanged": 19
+}

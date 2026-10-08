@@ -1,0 +1,141 @@
+{
+  "old_file": "outputs/rk3568-backup-linux-20261003/extra/android-running.dtb",
+  "new_file": "outputs/rk3568-newboard-20261007/baseline-v1/android-live.dtb",
+  "old_sha256": "f81341ac00389e88a91864dfc251ae0e10217135539a38b4bf434e1ae9ddef52",
+  "new_sha256": "7438f8f456bedf09353c19be96127a79ca570a8e09b47c9e92e90829705c76cc",
+  "old_nodes": 760,
+  "new_nodes": 760,
+  "old_properties": 4756,
+  "new_properties": 4756,
+  "added_nodes": [],
+  "removed_nodes": [],
+  "reservations_equal": true,
+  "property_differences": [
+    {
+      "path": "/chosen/bootargs",
+      "old_bytes": 676,
+      "new_bytes": 676
+    },
+    {
+      "path": "/ethernet@fe010000/local-mac-address",
+      "old_bytes": 6,
+      "new_bytes": 6
+    },
+    {
+      "path": "/ethernet@fe2a0000/local-mac-address",
+      "old_bytes": 6,
+      "new_bytes": 6
+    },
+    {
+      "path": "/serial-number",
+      "old_bytes": 17,
+      "new_bytes": 17
+    },
+    {
+      "path": "/shimetaos_property/boot_count",
+      "old_bytes": 3,
+      "new_bytes": 3
+    },
+    {
+      "path": "/shimetaos_property/cpuid",
+      "old_bytes": 17,
+      "new_bytes": 17
+    },
+    {
+      "path": "/shimetaos_property/serial",
+      "old_bytes": 17,
+      "new_bytes": 17
+    },
+    {
+      "path": "/smdt_os_param/cpuid",
+      "old_bytes": 17,
+      "new_bytes": 17
+    }
+  ],
+  "all_other_properties_equal": true,
+  "new_kernel_boot_verified": false,
+  "physical_peripheral_functions_verified": false,
+  "bootarg_changed_keys": [
+    "androidboot.serialno",
+    "cid",
+    "cpuid"
+  ],
+  "original_partition_comparison": [
+    {
+      "partition": "boot",
+      "bytes": 41943040,
+      "sha256": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "old_original_equal": true
+    },
+    {
+      "partition": "dtbo",
+      "bytes": 4194304,
+      "sha256": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "old_original_equal": true
+    },
+    {
+      "partition": "uboot",
+      "bytes": 4194304,
+      "sha256": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "old_original_equal": true
+    },
+    {
+      "partition": "trust",
+      "bytes": 4194304,
+      "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "old_original_equal": true
+    },
+    {
+      "partition": "vbmeta",
+      "bytes": 1048576,
+      "sha256": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752",
+      "old_original_equal": true
+    },
+    {
+      "partition": "baseparameter",
+      "bytes": 1048576,
+      "sha256": "b3ea054f37f20610cdb9d914287b24107d28ae0ae6e61a0134f462659506cb67",
+      "old_original_equal": true
+    },
+    {
+      "partition": "misc",
+      "bytes": 4194304,
+      "sha256": "07180514a13a608005a12f037860bdfb2a3f8359e7838c51f030ddf09fd85d84",
+      "old_original_equal": true
+    }
+  ],
+  "backed_up_partitions": [
+    "baseparameter.img",
+    "boot.img",
+    "dtbo.img",
+    "misc.img",
+    "recovery.img",
+    "trust.img",
+    "uboot.img",
+    "vbmeta.img"
+  ],
+  "local_full_backups_reverified": 8,
+  "backed_up_bytes": 161480704,
+  "android_config_sha256": "709d54fd7827fae674a8f03746529150038dff7fc493f558cb1e2fc51cc75fff",
+  "android_kexec_enabled": false,
+  "static_userland_verified": true,
+  "protected_partitions_unchanged": true,
+  "existing_linux_candidate": [
+    {
+      "file": "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/package-v1/boot-padded.img",
+      "bytes": 41943040,
+      "sha256": "90e663bc12d33026764bf7b95ac6beede816801c6f7c2fb537615f28059dc0b1",
+      "crc32": "4427a536",
+      "tested_on_new_board": false
+    },
+    {
+      "file": "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/package-v1/runtime/snd-soc-rk817.ko",
+      "bytes": 606536,
+      "sha256": "c43e470ccf7219bd344ba9d7315b38599f6b0eafb8a2ea6700eee34de9e13d85",
+      "crc32": "abe30705",
+      "tested_on_new_board": false
+    }
+  ],
+  "serial_recovery_connected": false,
+  "full_linux_migration_completed": false
+}

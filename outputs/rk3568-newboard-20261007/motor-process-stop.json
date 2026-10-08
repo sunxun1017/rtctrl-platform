@@ -1,0 +1,18 @@
+{
+  "time_utc": "2026-10-07T04:30:29.155733+00:00",
+  "package": "com.patchx_main",
+  "first_stopped_pid": 1967,
+  "observed_restarted_pid": 4422,
+  "actions": [
+    "pm disable-user --user 0 com.patchx_main",
+    "am force-stop --user 0 com.patchx_main"
+  ],
+  "final_pidof_returncode": 1,
+  "final_pidof_stdout": "",
+  "stopped": true,
+  "enabled_state": "disabled-user",
+  "package_uninstalled": false,
+  "physical_motor_stop_confirmed_by_user": false,
+  "board_motor_commands_sent": false,
+  "restore_command": "pm enable --user 0 com.patchx_main"
+}
