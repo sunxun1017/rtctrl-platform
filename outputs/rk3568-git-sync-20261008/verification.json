@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-08",
+  "scope": "current rtctrl-platform branch only",
+  "branch": "codex/rk3568-platform",
+  "initial_head": "29c5956",
+  "initial_unpushed_commits": 26,
+  "first_verified_remote_head": "bda88eed9ceb06b6015240b8d6e1af58d5ed1cef",
+  "first_batch_new_commits": 9,
+  "release_tests": 41,
+  "asan_ubsan_tests": 41,
+  "face_tests": 12,
+  "changed_face_format_passed": 4,
+  "whole_repository_format_preexisting_failures": 53,
+  "dt_positive_groups": 8,
+  "dt_positive_checks": 1103,
+  "dt_fault_suites_passed": 8,
+  "patches_sequentially_applied": 14,
+  "patch_affected_source_files": 23,
+  "offline_input_tests": 9,
+  "offline_format_tests": 15,
+  "python_json_shell": {
+    "passed": {
+      "python": 596,
+      "json": 444,
+      "shell": 116,
+      "gitiles_xssi_envelope": 1
+    },
+    "errors": []
+  },
+  "powershell_sources_parsed": 36,
+  "hardware_operations_in_git_sync": 0,
+  "publication_review": {
+    "newly_committed_files_before_handoff": 1488,
+    "binary_files": 0,
+    "files_over_two_megabytes": 0,
+    "forbidden_generated_trees": 0
+  },
+  "limits": [
+    "Historical DT tests and package tests use local captured/rebuilt inputs that are not published.",
+    "No new board boot, motor action, Linux migration acceptance, or real-time guarantee was established.",
+    "Two unsealed historical Python utilities had line-end whitespace normalized; no claim of exact original-byte restoration is made.",
+    "Thirteen sealed source/harness inputs and six receipt/command plans were restored using verified hashes/copies; original frozen input bytes are preserved in Git."
+  ]
+}

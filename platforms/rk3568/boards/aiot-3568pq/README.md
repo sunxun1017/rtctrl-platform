@@ -6,6 +6,10 @@
 已新增[无原厂BSP重建入口](RECONSTRUCTION.md)、独立`firstboot-candidate.json`和`bsp/`板级DTS。
 原有`kernel-candidate.json`及下方框图表保留为早期全功能候选，不能覆盖本次实物证据；尚无部署用`profile.env`。
 
+最新进度见[适配验收状态](ADAPTATION-STATUS.md)：2026-10-06源码Linux声音镜像已从内存启动，
+自然初始休眠、顺序单方向传输、正常清理和返回原Android通过。全双工、实物声音/屏幕、
+新电池/充电和正式启动恢复仍未完成；下面的早期框图与离线配置结果按原阶段保留。
+
 ## 平台边界
 
 | 层 | 职责 | 换硬件时的变化 |

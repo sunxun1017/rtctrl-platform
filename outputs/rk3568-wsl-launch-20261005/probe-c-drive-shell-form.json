@@ -1,0 +1,14 @@
+{
+  "windows_workdir": "C:\\",
+  "command": "C:\\Windows\\System32\\wsl.exe -d Ubuntu-22.04 --cd /home/sx/projects/rtctrl-platform -- /bin/true",
+  "finished_at": "2026-10-05T21:42:32.2172721+08:00",
+  "duration_ms": 30116,
+  "wsl_exit_code": -1,
+  "error": "Wsl/Service/0x8007274c",
+  "notes": [
+    "The outer PowerShell wrapper exited 0 to print a receipt; that is not WSL success.",
+    "Chinese stderr was corrupted by UTF-16/UTF-8 decoding; raw tool output retains NUL-separated ASCII error code.",
+    "Only one Linux process-start probe was performed. No termination/restart/network change."
+  ],
+  "publication_note": "Raw tool responses remain local; this receipt preserves only timing and result metadata."
+}

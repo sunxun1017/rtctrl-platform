@@ -1,0 +1,71 @@
+{
+  "time": "2026-10-05T21:41:30.4164986+08:00",
+  "source_tool_chunks": [
+    "d92011",
+    "5761ab"
+  ],
+  "services": {
+    "WSLService": {
+      "state": "Running",
+      "pid": 6952
+    },
+    "vmcompute": {
+      "state": "Running",
+      "pid": 9848
+    },
+    "hns": {
+      "state": "Running",
+      "pid": 4380
+    }
+  },
+  "wsl_service_package_path_version": "2.7.12.0",
+  "linux_kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "linux_uptime_seconds": 190985.2,
+  "linux_loadavg": "0.35 0.46 0.52 1/920 2379271",
+  "linux_memory_kib": {
+    "MemTotal": 7964384,
+    "MemAvailable": 3798868,
+    "SwapTotal": 2097152,
+    "SwapFree": 2096748
+  },
+  "linux_limits": {
+    "pid_max": 4194304,
+    "threads_max": 62136,
+    "file_nr": "2567 0 9223372036854775807"
+  },
+  "windows_memory_kib": {
+    "FreePhysicalMemory": 2166476,
+    "TotalVisibleMemorySize": 16450076,
+    "FreeVirtualMemory": 7749212,
+    "TotalVirtualMemorySize": 40567324
+  },
+  "vmmemWSL_working_set_bytes": 4530548736,
+  "process_scan": {
+    "time": "2026-10-05T21:43:06.4368160+08:00",
+    "process_count": 93,
+    "sshd_tmux_screen_found": false,
+    "tcp22_listener_found": false,
+    "make_ninja_cc1_gcc_found": false,
+    "existing_bash_pids": [
+      "2090",
+      "13808",
+      "1606839",
+      "764810"
+    ]
+  },
+  "parent_reported_success": {
+    "source": "Parent message; not independently repeated by audit",
+    "chunk": "3452d8",
+    "windows_workdir": "C:\\",
+    "command_form": "wsl.exe -d Ubuntu-22.04 --cd /home/sx/projects/rtctrl-platform --exec /usr/bin/python3 -c <read-only package sha/header check>",
+    "exit_code": 0,
+    "wall_seconds": 0.7153171,
+    "package_sha_prefix": "67f351",
+    "notes": "Formal agent also reported actual OF-source tests passed using same local cwd/direct-exec form"
+  },
+  "unresolved": [
+    "cwd, shell/direct-exec form, console/session and transient effects were not isolated",
+    "No ETW or full WSL stack trace was collected",
+    "No system recovery was attempted"
+  ]
+}
