@@ -8,7 +8,8 @@ namespace rtctrl::ipc {
 namespace {
 
 bool to_float(double input, float& output) noexcept {
-    constexpr double max_float = static_cast<double>(std::numeric_limits<float>::max());
+    constexpr double max_float =
+        static_cast<double>(std::numeric_limits<float>::max());
     if (!std::isfinite(input) || input < -max_float || input > max_float) {
         return false;
     }
@@ -31,14 +32,15 @@ MailboxFrameStatus encode_mailbox_command(const model::CommandFrame& input,
     next.created_time_ns = static_cast<std::uint64_t>(input.created_time_ns);
     next.valid_until_ns = static_cast<std::uint64_t>(input.valid_until_ns);
     next.joint_count = static_cast<std::uint32_t>(model::kJointCount);
-    next.flags = input.mode == model::CommandMode::SafeStop ? RTCTRL_MB_COMMAND_FLAG_SAFE_STOP
-                                                            : RTCTRL_MB_COMMAND_FLAG_POSITION;
+    next.flags = input.mode == model::CommandMode::SafeStop
+                     ? RTCTRL_MB_COMMAND_FLAG_SAFE_STOP
+                     : RTCTRL_MB_COMMAND_FLAG_POSITION;
     for (std::size_t i = 0; i < model::kJointCount; ++i) {
         auto& joint = next.joint[i];
         if (!to_float(input.target_position[i], joint.position) ||
             !to_float(input.target_velocity[i], joint.velocity) ||
-            !to_float(input.effort[i], joint.effort) || !to_float(input.kp[i], joint.kp) ||
-            !to_float(input.kd[i], joint.kd)) {
+            !to_float(input.effort[i], joint.effort) ||
+            !to_float(input.kp[i], joint.kp) || !to_float(input.kd[i], joint.kd)) {
             return MailboxFrameStatus::InvalidFrame;
         }
     }
@@ -47,7 +49,8 @@ MailboxFrameStatus encode_mailbox_command(const model::CommandFrame& input,
 }
 
 MailboxFrameStatus decode_mailbox_feedback(const rtctrl_mb_feedback_frame& input,
-                                           std::int64_t now_ns, std::int64_t max_age_ns,
+                                           std::int64_t now_ns,
+                                           std::int64_t max_age_ns,
                                            model::SensorFrame& output) noexcept {
     if (input.sequence == 0 ||
         input.joint_count != static_cast<std::uint32_t>(model::kJointCount)) {

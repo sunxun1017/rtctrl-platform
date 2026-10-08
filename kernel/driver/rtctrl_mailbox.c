@@ -94,7 +94,8 @@ struct rtctrl_file_ctx {
 };
 
 static void rtctrl_kref_release(struct kref* ref) {
-    struct rtctrl_mailbox_dev* mb = container_of(ref, struct rtctrl_mailbox_dev, refcount);
+    struct rtctrl_mailbox_dev* mb =
+        container_of(ref, struct rtctrl_mailbox_dev, refcount);
 
     kfree(mb);
 }
@@ -166,7 +167,8 @@ static int rtctrl_stop_locked(struct rtctrl_mailbox_dev* mb, int final_state) {
 }
 
 static enum hrtimer_restart rtctrl_watchdog_fn(struct hrtimer* timer) {
-    struct rtctrl_mailbox_dev* mb = container_of(timer, struct rtctrl_mailbox_dev, watchdog);
+    struct rtctrl_mailbox_dev* mb =
+        container_of(timer, struct rtctrl_mailbox_dev, watchdog);
     u64 now = ktime_get_ns();
     u64 expires;
     unsigned long flags;
@@ -176,7 +178,8 @@ static enum hrtimer_restart rtctrl_watchdog_fn(struct hrtimer* timer) {
         spin_unlock_irqrestore(&mb->state_lock, flags);
         return HRTIMER_NORESTART;
     }
-    expires = min(mb->last_kick_ns + mb->watchdog_timeout_ns, mb->command_deadline_ns);
+    expires =
+        min(mb->last_kick_ns + mb->watchdog_timeout_ns, mb->command_deadline_ns);
     if (now >= expires) {
         rtctrl_hw_disable_locked(mb);
         atomic_set(&mb->state, RTCTRL_MB_STATE_FAULTED);
@@ -236,7 +239,8 @@ static void rtctrl_reset_session_locked(struct rtctrl_mailbox_dev* mb) {
 
 static int rtctrl_open(struct inode* inode, struct file* file) {
     struct miscdevice* misc = file->private_data;
-    struct rtctrl_mailbox_dev* mb = container_of(misc, struct rtctrl_mailbox_dev, misc);
+    struct rtctrl_mailbox_dev* mb =
+        container_of(misc, struct rtctrl_mailbox_dev, misc);
     struct rtctrl_file_ctx* ctx;
     unsigned long flags;
     int error = 0;
@@ -326,8 +330,10 @@ static bool rtctrl_safe_damping(const float* value) {
     return (bits & 0x80000000U) == 0U && bits <= RTCTRL_SAFE_STOP_MAX_KD_BITS;
 }
 
-static bool rtctrl_command_valid(const struct rtctrl_mb_command_frame* frame, u32 expected_joints,
-                                 u64 now, bool* safe_command) {
+static bool rtctrl_command_valid(const struct rtctrl_mb_command_frame* frame,
+                                 u32 expected_joints,
+                                 u64 now,
+                                 bool* safe_command) {
     u32 index;
     u32 joint_count = frame->joint_count;
     u32 flags = frame->flags;
@@ -340,13 +346,15 @@ static bool rtctrl_command_valid(const struct rtctrl_mb_command_frame* frame, u3
     for (index = 0; index < joint_count; ++index) {
         const struct rtctrl_mb_joint_command* joint = &frame->joint[index];
 
-        if (!rtctrl_float_finite(&joint->position) || !rtctrl_float_finite(&joint->velocity) ||
-            !rtctrl_float_finite(&joint->effort) || !rtctrl_float_finite(&joint->kp) ||
-            !rtctrl_float_finite(&joint->kd))
+        if (!rtctrl_float_finite(&joint->position) ||
+            !rtctrl_float_finite(&joint->velocity) ||
+            !rtctrl_float_finite(&joint->effort) ||
+            !rtctrl_float_finite(&joint->kp) || !rtctrl_float_finite(&joint->kd))
             return false;
         if (*safe_command &&
-            (!rtctrl_float_zero(&joint->velocity) || !rtctrl_float_zero(&joint->effort) ||
-             !rtctrl_float_zero(&joint->kp) || !rtctrl_safe_damping(&joint->kd)))
+            (!rtctrl_float_zero(&joint->velocity) ||
+             !rtctrl_float_zero(&joint->effort) || !rtctrl_float_zero(&joint->kp) ||
+             !rtctrl_safe_damping(&joint->kd)))
             return false;
     }
     return true;
@@ -361,8 +369,10 @@ static bool rtctrl_feedback_valid(const struct rtctrl_mb_feedback_frame* frame,
     for (index = 0; index < frame->joint_count; ++index) {
         const struct rtctrl_mb_joint_feedback* joint = &frame->joint[index];
 
-        if (!rtctrl_float_finite(&joint->position) || !rtctrl_float_finite(&joint->velocity) ||
-            !rtctrl_float_finite(&joint->effort) || !rtctrl_float_finite(&joint->temperature_c))
+        if (!rtctrl_float_finite(&joint->position) ||
+            !rtctrl_float_finite(&joint->velocity) ||
+            !rtctrl_float_finite(&joint->effort) ||
+            !rtctrl_float_finite(&joint->temperature_c))
             return false;
     }
     return true;
@@ -380,7 +390,8 @@ static long rtctrl_get_info(struct rtctrl_mailbox_dev* mb, void __user* user) {
     }
     info = (struct rtctrl_mb_info){
         .abi_version = RTCTRL_MB_UAPI_ABI_VERSION,
-        .capabilities = RTCTRL_MB_CAP_IRQ | RTCTRL_MB_CAP_WATCHDOG | RTCTRL_MB_CAP_KERNEL_STAGED_IO,
+        .capabilities = RTCTRL_MB_CAP_IRQ | RTCTRL_MB_CAP_WATCHDOG |
+                        RTCTRL_MB_CAP_KERNEL_STAGED_IO,
         .max_joints = RTCTRL_MB_MAX_JOINTS,
         .ring_depth = RTCTRL_MB_RING_DEPTH,
         .watchdog_timeout_us = (u32)(mb->watchdog_timeout_ns / NSEC_PER_USEC),
@@ -409,7 +420,8 @@ static long rtctrl_arm(struct rtctrl_mailbox_dev* mb) {
         goto unlock_state;
     }
     status = readl(mb->regs + RTCTRL_REG_STATUS);
-    if ((status & (RTCTRL_MB_STATUS_READY | RTCTRL_MB_STATUS_FAULT)) != RTCTRL_MB_STATUS_READY ||
+    if ((status & (RTCTRL_MB_STATUS_READY | RTCTRL_MB_STATUS_FAULT)) !=
+            RTCTRL_MB_STATUS_READY ||
         !mb->staged_safe_command || mb->command_deadline_ns <= now) {
         result = -EIO;
         goto unlock_state;
@@ -452,7 +464,8 @@ static long rtctrl_disarm(struct rtctrl_mailbox_dev* mb) {
     state = rtctrl_wait_dma_quiesced(mb);
     spin_lock_irqsave(&mb->state_lock, flags);
     if (atomic_read(&mb->state) == RTCTRL_MB_STATE_STOPPING)
-        atomic_set(&mb->state, state ? RTCTRL_MB_STATE_FAULTED : RTCTRL_MB_STATE_DISARMED);
+        atomic_set(&mb->state,
+                   state ? RTCTRL_MB_STATE_FAULTED : RTCTRL_MB_STATE_DISARMED);
     spin_unlock_irqrestore(&mb->state_lock, flags);
     mutex_unlock(&mb->transition_lock);
     return state;
@@ -609,7 +622,8 @@ static long rtctrl_get_stats(struct rtctrl_mailbox_dev* mb, void __user* user) {
     return copy_to_user(user, &stats, sizeof(stats)) ? -EFAULT : 0;
 }
 
-static long rtctrl_ioctl(struct file* file, unsigned int command, unsigned long argument) {
+static long
+rtctrl_ioctl(struct file* file, unsigned int command, unsigned long argument) {
     struct rtctrl_file_ctx* ctx = file->private_data;
     struct rtctrl_mailbox_dev* mb = ctx->mb;
     void __user* user = (void __user*)argument;
@@ -624,7 +638,8 @@ static long rtctrl_ioctl(struct file* file, unsigned int command, unsigned long 
             return rtctrl_disarm(mb);
         case RTCTRL_MB_IOC_SUBMIT_COMMAND:
             mutex_lock(&ctx->command_lock);
-            if (copy_from_user(&ctx->command_staging, user, sizeof(ctx->command_staging))) {
+            if (copy_from_user(
+                    &ctx->command_staging, user, sizeof(ctx->command_staging))) {
                 mutex_unlock(&ctx->command_lock);
                 return -EFAULT;
             }
@@ -638,7 +653,8 @@ static long rtctrl_ioctl(struct file* file, unsigned int command, unsigned long 
                 mutex_unlock(&ctx->feedback_lock);
                 return result;
             }
-            result = copy_to_user(user, &ctx->feedback_staging, sizeof(ctx->feedback_staging))
+            result = copy_to_user(
+                         user, &ctx->feedback_staging, sizeof(ctx->feedback_staging))
                          ? -EFAULT
                          : 0;
             mutex_unlock(&ctx->feedback_lock);
@@ -674,8 +690,10 @@ static void rtctrl_init_layout(struct rtctrl_mailbox_dev* mb) {
 static int rtctrl_wait_dma_quiesced(struct rtctrl_mailbox_dev* mb) {
     u32 status;
 
-    return readl_poll_timeout(mb->regs + RTCTRL_REG_STATUS, status,
-                              status & RTCTRL_MB_STATUS_DMA_QUIESCED, 1,
+    return readl_poll_timeout(mb->regs + RTCTRL_REG_STATUS,
+                              status,
+                              status & RTCTRL_MB_STATUS_DMA_QUIESCED,
+                              1,
                               RTCTRL_DMA_QUIESCE_TIMEOUT_US);
 }
 
@@ -683,8 +701,10 @@ static int rtctrl_reset_endpoint(struct rtctrl_mailbox_dev* mb) {
     u32 control;
 
     writel(RTCTRL_CONTROL_RESET, mb->regs + RTCTRL_REG_CONTROL);
-    return readl_poll_timeout(mb->regs + RTCTRL_REG_CONTROL, control,
-                              !(control & RTCTRL_CONTROL_RESET), 1,
+    return readl_poll_timeout(mb->regs + RTCTRL_REG_CONTROL,
+                              control,
+                              !(control & RTCTRL_CONTROL_RESET),
+                              1,
                               RTCTRL_ENDPOINT_RESET_TIMEOUT_US);
 }
 
@@ -761,15 +781,16 @@ static int rtctrl_probe(struct platform_device* pdev) {
     if (error)
         return dev_err_probe(dev, error, "64-bit coherent DMA unavailable\n");
     mb->dma_bytes = PAGE_ALIGN(sizeof(struct rtctrl_mb_layout));
-    mb->dma_cpu = dma_alloc_coherent(dev, mb->dma_bytes, &mb->dma_handle, GFP_KERNEL);
+    mb->dma_cpu =
+        dma_alloc_coherent(dev, mb->dma_bytes, &mb->dma_handle, GFP_KERNEL);
     if (!mb->dma_cpu)
         return -ENOMEM;
     error = devm_add_action_or_reset(dev, rtctrl_free_dma, mb);
     if (error)
         return error;
     mb->layout = mb->dma_cpu;
-    if (device_property_read_u32(dev, "sx,joint-count", &mb->joint_count) || mb->joint_count == 0 ||
-        mb->joint_count > RTCTRL_MB_MAX_JOINTS)
+    if (device_property_read_u32(dev, "sx,joint-count", &mb->joint_count) ||
+        mb->joint_count == 0 || mb->joint_count > RTCTRL_MB_MAX_JOINTS)
         return dev_err_probe(dev, -EINVAL, "missing or invalid sx,joint-count\n");
     rtctrl_init_layout(mb);
     device_property_read_u32(dev, "sx,watchdog-timeout-us", &watchdog_us);
@@ -790,7 +811,8 @@ static int rtctrl_probe(struct platform_device* pdev) {
     atomic_set(&mb->state, RTCTRL_MB_STATE_DISARMED);
     mutex_unlock(&mb->transition_lock);
     mb->misc.minor = MISC_DYNAMIC_MINOR;
-    mb->misc.name = devm_kasprintf(dev, GFP_KERNEL, "rtctrl-mailbox-%s", dev_name(dev));
+    mb->misc.name =
+        devm_kasprintf(dev, GFP_KERNEL, "rtctrl-mailbox-%s", dev_name(dev));
     if (!mb->misc.name)
         return -ENOMEM;
     mb->misc.fops = &rtctrl_fops;
@@ -800,7 +822,9 @@ static int rtctrl_probe(struct platform_device* pdev) {
     if (error)
         return dev_err_probe(dev, error, "failed to register misc device\n");
     platform_set_drvdata(pdev, mb);
-    dev_info(dev, "staged DMA mailbox ready: %zu bytes, watchdog %u us\n", mb->dma_bytes,
+    dev_info(dev,
+             "staged DMA mailbox ready: %zu bytes, watchdog %u us\n",
+             mb->dma_bytes,
              watchdog_us);
     return 0;
 }
@@ -820,7 +844,8 @@ static void rtctrl_remove_common(struct platform_device* pdev) {
     hrtimer_cancel(&mb->watchdog);
     if (!was_in_reset && rtctrl_wait_dma_quiesced(mb) && rtctrl_assert_reset(mb)) {
         mb->preserve_dma = true;
-        dev_crit(mb->dev, "DMA active and reset failed; preserving coherent memory\n");
+        dev_crit(mb->dev,
+                 "DMA active and reset failed; preserving coherent memory\n");
     } else if (rtctrl_assert_reset(mb)) {
         dev_warn(mb->dev, "reset assert failed after DMA quiesced\n");
     }
@@ -935,7 +960,8 @@ static int rtctrl_resume(struct platform_device* pdev) {
     return error;
 }
 
-static const struct of_device_id rtctrl_of_match[] = {{.compatible = "sx,rtctrl-mailbox-v2"}, {}};
+static const struct of_device_id rtctrl_of_match[] = {
+    {.compatible = "sx,rtctrl-mailbox-v2"}, {}};
 MODULE_DEVICE_TABLE(of, rtctrl_of_match);
 
 static struct platform_driver rtctrl_driver = {

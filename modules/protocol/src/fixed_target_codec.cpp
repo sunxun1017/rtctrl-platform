@@ -18,7 +18,8 @@ constexpr std::size_t kSequenceOffset = 16;
 constexpr std::size_t kSenderTimeOffset = 24;
 constexpr std::size_t kLeaseOffset = 32;
 constexpr std::size_t kPayloadOffset = FixedTargetCodec::kHeaderSize;
-constexpr std::size_t kCrcOffset = FixedTargetCodec::kHeaderSize + FixedTargetCodec::kPayloadSize;
+constexpr std::size_t kCrcOffset =
+    FixedTargetCodec::kHeaderSize + FixedTargetCodec::kPayloadSize;
 
 void put_u16(std::byte* output, std::uint16_t value) noexcept {
     output[0] = static_cast<std::byte>(value & 0xffU);
@@ -45,7 +46,8 @@ std::uint16_t get_u16(const std::byte* input) noexcept {
 std::uint32_t get_u32(const std::byte* input) noexcept {
     std::uint32_t value = 0;
     for (std::size_t i = 0; i < 4; ++i) {
-        value |= static_cast<std::uint32_t>(std::to_integer<std::uint8_t>(input[i])) << (i * 8U);
+        value |= static_cast<std::uint32_t>(std::to_integer<std::uint8_t>(input[i]))
+                 << (i * 8U);
     }
     return value;
 }
@@ -53,7 +55,8 @@ std::uint32_t get_u32(const std::byte* input) noexcept {
 std::uint64_t get_u64(const std::byte* input) noexcept {
     std::uint64_t value = 0;
     for (std::size_t i = 0; i < 8; ++i) {
-        value |= static_cast<std::uint64_t>(std::to_integer<std::uint8_t>(input[i])) << (i * 8U);
+        value |= static_cast<std::uint64_t>(std::to_integer<std::uint8_t>(input[i]))
+                 << (i * 8U);
     }
     return value;
 }
@@ -85,9 +88,11 @@ std::uint32_t crc32c(const std::byte* data, std::size_t size) noexcept {
     return ~crc;
 }
 
-EncodeResult FixedTargetCodec::encode(const TargetEnvelope& input, std::byte* output,
+EncodeResult FixedTargetCodec::encode(const TargetEnvelope& input,
+                                      std::byte* output,
                                       std::size_t capacity) noexcept {
-    static_assert(std::numeric_limits<float>::is_iec559, "wire protocol requires IEEE-754 floats");
+    static_assert(std::numeric_limits<float>::is_iec559,
+                  "wire protocol requires IEEE-754 floats");
     if (output == nullptr || capacity < kFrameSize) {
         return {CodecStatus::BufferTooSmall, 0};
     }
@@ -107,7 +112,8 @@ EncodeResult FixedTargetCodec::encode(const TargetEnvelope& input, std::byte* ou
     put_u16(output + kFlagsOffset, 0);
     put_u32(output + kSessionOffset, input.session_id);
     put_u16(output + kPayloadSizeOffset, static_cast<std::uint16_t>(kPayloadSize));
-    put_u16(output + kJointCountOffset, static_cast<std::uint16_t>(model::kJointCount));
+    put_u16(output + kJointCountOffset,
+            static_cast<std::uint16_t>(model::kJointCount));
     put_u64(output + kSequenceOffset, input.sequence);
     put_u64(output + kSenderTimeOffset, input.sender_time_ns);
     put_u32(output + kLeaseOffset, input.lease_us);
@@ -119,7 +125,8 @@ EncodeResult FixedTargetCodec::encode(const TargetEnvelope& input, std::byte* ou
     return {CodecStatus::Ok, kFrameSize};
 }
 
-DecodeResult FixedTargetCodec::decode(const std::byte* input, std::size_t size,
+DecodeResult FixedTargetCodec::decode(const std::byte* input,
+                                      std::size_t size,
                                       TargetEnvelope& output) noexcept {
     if (input == nullptr || size == 0) {
         return {CodecStatus::NeedMoreData, 0};
@@ -138,7 +145,8 @@ DecodeResult FixedTargetCodec::decode(const std::byte* input, std::size_t size,
     }
     const bool shape_valid =
         std::to_integer<std::uint8_t>(input[kTypeOffset]) == kTargetFrameType &&
-        get_u16(input + kFlagsOffset) == 0 && get_u16(input + kPayloadSizeOffset) == kPayloadSize &&
+        get_u16(input + kFlagsOffset) == 0 &&
+        get_u16(input + kPayloadSizeOffset) == kPayloadSize &&
         get_u16(input + kJointCountOffset) == model::kJointCount;
     if (!shape_valid) {
         return {CodecStatus::InvalidFrame, 1};
@@ -159,8 +167,8 @@ DecodeResult FixedTargetCodec::decode(const std::byte* input, std::size_t size,
         return {CodecStatus::InvalidFrame, kFrameSize};
     }
     for (std::size_t i = 0; i < model::kJointCount; ++i) {
-        decoded.position[i] =
-            static_cast<double>(get_float(input + kPayloadOffset + i * sizeof(float)));
+        decoded.position[i] = static_cast<double>(
+            get_float(input + kPayloadOffset + i * sizeof(float)));
         if (!std::isfinite(decoded.position[i])) {
             return {CodecStatus::InvalidFrame, kFrameSize};
         }

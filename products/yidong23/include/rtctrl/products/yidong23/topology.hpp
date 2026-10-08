@@ -44,8 +44,9 @@ constexpr Topology kTopology{
     {{12, 5, 6}},
     {{hal::MotorProtocol::Encos, hal::MotorProtocol::Ti5, hal::MotorProtocol::Ti5}}};
 
-static_assert(kTopology.valid(),
-              "Yidong profile must cover every physical slot and logical joint once");
+static_assert(
+    kTopology.valid(),
+    "Yidong profile must cover every physical slot and logical joint once");
 
 constexpr std::size_t kLeftAnklePitch = 4;
 constexpr std::size_t kLeftAnkleRoll = 5;

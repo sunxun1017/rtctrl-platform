@@ -5,8 +5,8 @@
 namespace rtctrl::protocol {
 namespace {
 
-constexpr std::array<std::byte, 4> kHeader{std::byte{0xff}, std::byte{0xff}, std::byte{0xfd},
-                                           std::byte{0x00}};
+constexpr std::array<std::byte, 4> kHeader{
+    std::byte{0xff}, std::byte{0xff}, std::byte{0xfd}, std::byte{0x00}};
 
 std::uint8_t value(std::byte input) noexcept {
     return static_cast<std::uint8_t>(input);
@@ -25,20 +25,24 @@ std::uint16_t dynamixel_v2_crc16(const std::byte* data, std::size_t size) noexce
     }
     std::uint16_t crc = 0;
     for (std::size_t index = 0; index < size; ++index) {
-        const auto high_byte =
-            static_cast<std::uint16_t>(static_cast<unsigned int>(value(data[index])) * 256U);
+        const auto high_byte = static_cast<std::uint16_t>(
+            static_cast<unsigned int>(value(data[index])) * 256U);
         crc = static_cast<std::uint16_t>(crc ^ high_byte);
         for (unsigned int bit = 0; bit < 8U; ++bit) {
-            crc = (crc & 0x8000U) != 0U ? static_cast<std::uint16_t>((crc << 1U) ^ 0x8005U)
-                                        : static_cast<std::uint16_t>(crc << 1U);
+            crc = (crc & 0x8000U) != 0U
+                      ? static_cast<std::uint16_t>((crc << 1U) ^ 0x8005U)
+                      : static_cast<std::uint16_t>(crc << 1U);
         }
     }
     return crc;
 }
 
-bool encode_dynamixel_v2_packet(std::uint8_t id, std::uint8_t instruction,
-                                const std::byte* parameters, std::size_t parameter_size,
-                                std::byte* output, std::size_t capacity,
+bool encode_dynamixel_v2_packet(std::uint8_t id,
+                                std::uint8_t instruction,
+                                const std::byte* parameters,
+                                std::size_t parameter_size,
+                                std::byte* output,
+                                std::size_t capacity,
                                 std::size_t& output_size) noexcept {
     output_size = 0;
     if (id > kDynamixelBroadcastId || output == nullptr ||
@@ -58,7 +62,8 @@ bool encode_dynamixel_v2_packet(std::uint8_t id, std::uint8_t instruction,
         }
         output[cursor++] = parameters[index];
         if (cursor >= 10U && output[cursor - 3U] == std::byte{0xff} &&
-            output[cursor - 2U] == std::byte{0xff} && output[cursor - 1U] == std::byte{0xfd}) {
+            output[cursor - 2U] == std::byte{0xff} &&
+            output[cursor - 1U] == std::byte{0xfd}) {
             output[cursor++] = std::byte{0xfd};
         }
     }
@@ -77,7 +82,8 @@ bool encode_dynamixel_v2_packet(std::uint8_t id, std::uint8_t instruction,
     return true;
 }
 
-bool DynamixelV2StreamParser::push(const std::byte* data, std::size_t size) noexcept {
+bool DynamixelV2StreamParser::push(const std::byte* data,
+                                   std::size_t size) noexcept {
     if ((data == nullptr && size != 0U) || size > buffer_.size() - size_) {
         return false;
     }
@@ -100,7 +106,8 @@ void DynamixelV2StreamParser::discard(std::size_t count) noexcept {
 bool DynamixelV2StreamParser::pop(DynamixelV2Packet& packet) noexcept {
     while (size_ >= kHeader.size()) {
         std::size_t header = 0;
-        while (header + kHeader.size() <= size_ && !header_at(buffer_.data() + header)) {
+        while (header + kHeader.size() <= size_ &&
+               !header_at(buffer_.data() + header)) {
             ++header;
         }
         if (header != 0U) {
@@ -168,7 +175,8 @@ bool DynamixelV2StreamParser::pop(DynamixelV2Packet& packet) noexcept {
             continue;
         }
         if (packet.parameter_size != 0U) {
-            std::memcpy(packet.parameters.data(), body.data() + parameter_begin,
+            std::memcpy(packet.parameters.data(),
+                        body.data() + parameter_begin,
                         packet.parameter_size);
         }
         discard(total_size);

@@ -30,13 +30,17 @@ struct PolicyActionConfig {
 class PolicyActionMapper {
   public:
     explicit PolicyActionMapper(PolicyActionConfig config) noexcept
-        : config_(config), valid_(validate(config_)) {}
+        : config_(config)
+        , valid_(validate(config_)) {}
 
     bool valid() const noexcept {
         return valid_;
     }
-    bool map(const float* base_action, const float* delta_action, std::int64_t now_ns,
-             std::int64_t validity_ns, model::CommandFrame& output) noexcept;
+    bool map(const float* base_action,
+             const float* delta_action,
+             std::int64_t now_ns,
+             std::int64_t validity_ns,
+             model::CommandFrame& output) noexcept;
 
   private:
     static bool validate(const PolicyActionConfig& config) noexcept;

@@ -1,9 +1,10 @@
 # rtctrl-platform 项目记忆
 
-更新时间：2026-10-07。用于新任务接续工作；不是运行中设备的实时状态。
+更新时间：2026-10-08。用于新任务接续工作；不是运行中设备的实时状态。
 
 ## 先读哪里
 
+- 格式门禁（2026-10-08）：原先 53 个第一方源码格式问题已修正，全仓 `format-check` 已通过；release/ASan 各 41 项、人脸 12 项回归通过。此前记录中的格式失败属于修正前的历史状态。
 - [RK3568 Android→Linux 当前验收](../platforms/rk3568/boards/aiot-3568pq/ADAPTATION-STATUS.md)：最新v5有限实机通过；完整迁移未完成。源码历史与其它板卡结果分开看。
 - [项目地图](skills/rtctrl-dev/references/project-map.md)：模块、适配器和构建入口。
 - [已验证经验](skills/rtctrl-dev/references/lessons.md)：历史问题、适用条件和失效边界。
@@ -1243,3 +1244,19 @@ bootargs仅serialno/cid/cpuid变化，全部其余属性与保留区相同，支
 
 证据：[同步与验证记录](../outputs/rk3568-git-sync-20261008/README.md)，
 [有限检查结果](../outputs/rk3568-git-sync-20261008/verification.json)。
+
+
+## 2026-10-08：修正全仓格式门禁
+
+用户紧接项目保存要求修正刚才报告的格式问题，按仓库现有规则处理。
+起点为 `b77369b`，工作区干净；使用 clang-format 18.1.8 和既有 CMake `format` 目标，
+只修改与原失败清单精确一致的 53 个第一方 C/C++ 文件。
+没有改 `.clang-format`、格式目标范围或实验封存输入；采用既有 4 空格、85 列、无制表符规则。
+
+实际 `cmake --build --preset release --target format-check` 和 `git diff --check` 均通过；
+release、ASan/UBSan 构建及测试各 41/41，face-video 构建与人脸专项 12/12 通过。
+独立审查核对 token、宏、预处理条件和字符串：仅长字符串拆为值相同的相邻字面量，
+三处 include 排序保持条件块及依赖；无运行行为或公开契约变化。
+这是此前同一交付的格式补修，独立提交并同步到原 `codex/rk3568-platform` 分支；
+下一任务仍须查询实际 Git 引用，不把本条视为持续推送授权。
+没有重编内核/IgH SDK，也没有板端操作；纯格式检查不扩展任何硬件验收结论。

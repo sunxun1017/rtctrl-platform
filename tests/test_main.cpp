@@ -14,13 +14,13 @@
 #include "rtctrl/adapters/loopback/loopback_byte_transport.hpp"
 #include "rtctrl/adapters/posix/posix_realtime.hpp"
 #include "rtctrl/bridge/command_source.hpp"
+#include "rtctrl/bridge/framed_command_source.hpp"
 #include "rtctrl/ipc/shared_motor_abi.hpp"
 #include "rtctrl/ipc/spsc_ring.hpp"
 #include "rtctrl/protocol/fixed_target_codec.hpp"
 #include "rtctrl/runtime/realtime_engine.hpp"
 #include "rtctrl/safety/safety_policy.hpp"
 #include "rtctrl/transport/can_transport.hpp"
-#include "rtctrl/bridge/framed_command_source.hpp"
 #if RTCTRL_TEST_HAS_SOCKETCAN
 #include "rtctrl/adapters/socketcan/socketcan_fd_transport.hpp"
 #endif
@@ -512,7 +512,6 @@ void test_kernel_mailbox_codec() {
            "stale kernel feedback is rejected at the HAL boundary");
 }
 #endif
-
 
 void test_policy_action_mapper() {
     if constexpr (rtctrl::model::kJointCount >= 2) {

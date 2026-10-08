@@ -4,7 +4,8 @@
 
 namespace rtctrl::hal {
 
-ActuatorLinkStatus HalfDuplexSerialLink::map_status(transport::TransportStatus status) noexcept {
+ActuatorLinkStatus
+HalfDuplexSerialLink::map_status(transport::TransportStatus status) noexcept {
     switch (status) {
         case transport::TransportStatus::Ok:
             return ActuatorLinkStatus::Ok;
@@ -38,8 +39,9 @@ ActuatorLinkStatus HalfDuplexSerialLink::flush_transmit() noexcept {
         transmit_size_ = 0;
         return ActuatorLinkStatus::Ok;
     }
-    const auto result = transport_.try_send(transmit_buffer_.data() + transmit_offset_,
-                                            transmit_size_ - transmit_offset_);
+    const auto result =
+        transport_.try_send(transmit_buffer_.data() + transmit_offset_,
+                            transmit_size_ - transmit_offset_);
     if (result.status == transport::TransportStatus::Ok) {
         if (result.bytes == 0U || result.bytes > transmit_size_ - transmit_offset_) {
             return ActuatorLinkStatus::Error;
@@ -55,8 +57,9 @@ ActuatorLinkStatus HalfDuplexSerialLink::flush_transmit() noexcept {
     return map_status(result.status);
 }
 
-ActuatorLinkStatus HalfDuplexSerialLink::receive(std::int64_t now_ns,
-                                                 ActuatorPacketBatch& packets) noexcept {
+ActuatorLinkStatus
+HalfDuplexSerialLink::receive(std::int64_t now_ns,
+                              ActuatorPacketBatch& packets) noexcept {
     if (!open_) {
         return ActuatorLinkStatus::Closed;
     }
@@ -68,7 +71,8 @@ ActuatorLinkStatus HalfDuplexSerialLink::receive(std::int64_t now_ns,
     }
 
     ActuatorPacket packet{};
-    const auto result = transport_.try_receive(packet.payload.data(), packet.payload.size());
+    const auto result =
+        transport_.try_receive(packet.payload.data(), packet.payload.size());
     if (result.status != transport::TransportStatus::Ok) {
         return map_status(result.status);
     }
@@ -80,8 +84,9 @@ ActuatorLinkStatus HalfDuplexSerialLink::receive(std::int64_t now_ns,
     return packets.push(packet) ? ActuatorLinkStatus::Ok : ActuatorLinkStatus::Error;
 }
 
-ActuatorLinkStatus HalfDuplexSerialLink::transmit(std::int64_t,
-                                                  const ActuatorPacketBatch& packets) noexcept {
+ActuatorLinkStatus
+HalfDuplexSerialLink::transmit(std::int64_t,
+                               const ActuatorPacketBatch& packets) noexcept {
     if (!open_) {
         return ActuatorLinkStatus::Closed;
     }
@@ -99,14 +104,16 @@ ActuatorLinkStatus HalfDuplexSerialLink::transmit(std::int64_t,
             packet.size > transmit_buffer_.size() - total) {
             return ActuatorLinkStatus::Error;
         }
-        std::memcpy(transmit_buffer_.data() + total, packet.payload.data(), packet.size);
+        std::memcpy(
+            transmit_buffer_.data() + total, packet.payload.data(), packet.size);
         total += packet.size;
     }
     transmit_size_ = total;
     transmit_offset_ = 0;
     const auto status = flush_transmit();
     // WouldBlock means the complete transaction is retained in our fixed queue.
-    return status == ActuatorLinkStatus::WouldBlock ? ActuatorLinkStatus::Ok : status;
+    return status == ActuatorLinkStatus::WouldBlock ? ActuatorLinkStatus::Ok
+                                                    : status;
 }
 
 void HalfDuplexSerialLink::close() noexcept {

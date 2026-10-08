@@ -18,7 +18,8 @@ MailboxFrameStatus encode_mailbox_command(const model::CommandFrame& input,
                                           rtctrl_mb_command_frame& output) noexcept;
 
 MailboxFrameStatus decode_mailbox_feedback(const rtctrl_mb_feedback_frame& input,
-                                           std::int64_t now_ns, std::int64_t max_age_ns,
+                                           std::int64_t now_ns,
+                                           std::int64_t max_age_ns,
                                            model::SensorFrame& output) noexcept;
 
 } // namespace rtctrl::ipc

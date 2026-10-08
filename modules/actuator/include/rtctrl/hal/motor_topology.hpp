@@ -24,7 +24,9 @@ struct MotorRoute {
     MotorCalibration calibration{};
 };
 
-template <std::size_t JointCount, std::size_t MasterCount, std::size_t MaxMotorsPerMaster>
+template <std::size_t JointCount,
+          std::size_t MasterCount,
+          std::size_t MaxMotorsPerMaster>
 struct MotorTopology {
     std::array<MotorRoute, JointCount> routes{};
     std::array<std::uint8_t, MasterCount> motors_per_master{};
@@ -71,8 +73,8 @@ struct MotorTopology {
         return nullptr;
     }
 
-    constexpr const MotorRoute* for_physical_motor(std::size_t master,
-                                                   std::size_t motor) const noexcept {
+    constexpr const MotorRoute*
+    for_physical_motor(std::size_t master, std::size_t motor) const noexcept {
         for (const auto& route : routes) {
             if (route.master_id == master && route.motor_index == motor) {
                 return &route;

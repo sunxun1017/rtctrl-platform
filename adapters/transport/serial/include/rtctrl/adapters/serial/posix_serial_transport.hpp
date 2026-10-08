@@ -28,7 +28,8 @@ class PosixSerialTransport final : public IByteTransport {
     ~PosixSerialTransport() override;
 
     TransportStatus open() noexcept override;
-    IoResult try_receive(std::byte* destination, std::size_t capacity) noexcept override;
+    IoResult try_receive(std::byte* destination,
+                         std::size_t capacity) noexcept override;
     IoResult try_send(const std::byte* source, std::size_t size) noexcept override;
     void close() noexcept override;
 

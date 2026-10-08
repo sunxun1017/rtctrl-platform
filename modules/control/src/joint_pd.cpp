@@ -9,7 +9,8 @@ void JointPd::reset(const model::SensorFrame&) noexcept {
     command_sequence_ = 0;
 }
 
-bool JointPd::update(const model::SensorFrame& state, const ControlContext& context,
+bool JointPd::update(const model::SensorFrame& state,
+                     const ControlContext& context,
                      model::CommandFrame& command) noexcept {
     command = {};
     command.sequence = ++command_sequence_;

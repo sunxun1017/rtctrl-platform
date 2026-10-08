@@ -18,9 +18,11 @@ struct JointPdConfig {
 
 class JointPd final : public IController {
   public:
-    explicit JointPd(JointPdConfig config = {}) noexcept : config_(config) {}
+    explicit JointPd(JointPdConfig config = {}) noexcept
+        : config_(config) {}
     void reset(const model::SensorFrame& state) noexcept override;
-    bool update(const model::SensorFrame& state, const ControlContext& context,
+    bool update(const model::SensorFrame& state,
+                const ControlContext& context,
                 model::CommandFrame& command) noexcept override;
 
   private:

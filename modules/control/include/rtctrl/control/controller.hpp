@@ -17,7 +17,8 @@ class IController {
   public:
     virtual ~IController() = default;
     virtual void reset(const model::SensorFrame& state) noexcept = 0;
-    virtual bool update(const model::SensorFrame& state, const ControlContext& context,
+    virtual bool update(const model::SensorFrame& state,
+                        const ControlContext& context,
                         model::CommandFrame& command) noexcept = 0;
 };
 

@@ -5,7 +5,8 @@
 namespace rtctrl::hal {
 
 HalStatus SharedMemoryHal::open_safe(std::int64_t) noexcept {
-    if (!ipc::valid_shared_motor_region(region_) || config_.max_feedback_age_ns <= 0) {
+    if (!ipc::valid_shared_motor_region(region_) ||
+        config_.max_feedback_age_ns <= 0) {
         return HalStatus::IoError;
     }
     region_.motor_enable.store(0, std::memory_order_release);
@@ -25,7 +26,8 @@ HalStatus SharedMemoryHal::arm(std::int64_t) noexcept {
     return HalStatus::Ok;
 }
 
-HalStatus SharedMemoryHal::read(std::int64_t now_ns, model::SensorFrame& output) noexcept {
+HalStatus SharedMemoryHal::read(std::int64_t now_ns,
+                                model::SensorFrame& output) noexcept {
     if (!opened_) {
         return HalStatus::NotReady;
     }
@@ -54,7 +56,8 @@ HalStatus SharedMemoryHal::read(std::int64_t now_ns, model::SensorFrame& output)
     return output.fault_bits == 0 ? HalStatus::Ok : HalStatus::IoError;
 }
 
-HalStatus SharedMemoryHal::write(std::int64_t now_ns, const model::CommandFrame& input) noexcept {
+HalStatus SharedMemoryHal::write(std::int64_t now_ns,
+                                 const model::CommandFrame& input) noexcept {
     if (!opened_ || !armed_ || input.mode != model::CommandMode::Position ||
         input.created_time_ns > now_ns || input.valid_until_ns < now_ns) {
         return HalStatus::NotReady;
@@ -64,8 +67,11 @@ HalStatus SharedMemoryHal::write(std::int64_t now_ns, const model::CommandFrame&
     snapshot.created_ns = input.created_time_ns;
     snapshot.valid_until_ns = input.valid_until_ns;
     for (std::size_t i = 0; i < model::kJointCount; ++i) {
-        snapshot.joints[i] = {input.target_position[i], input.target_velocity[i], input.effort[i],
-                              input.kp[i], input.kd[i]};
+        snapshot.joints[i] = {input.target_position[i],
+                              input.target_velocity[i],
+                              input.effort[i],
+                              input.kp[i],
+                              input.kd[i]};
     }
     ipc::publish_command(region_, snapshot);
     return HalStatus::Ok;

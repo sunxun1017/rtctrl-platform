@@ -24,10 +24,13 @@ struct SafetyLimits {
 
 class SafetyPolicy {
   public:
-    explicit SafetyPolicy(SafetyLimits limits = {}) noexcept : limits_(limits) {}
-    SafetyDecision evaluate(const model::SensorFrame& state, const model::CommandFrame& command,
+    explicit SafetyPolicy(SafetyLimits limits = {}) noexcept
+        : limits_(limits) {}
+    SafetyDecision evaluate(const model::SensorFrame& state,
+                            const model::CommandFrame& command,
                             std::int64_t now_ns) const noexcept;
-    void make_safe_command(const model::SensorFrame& state, std::int64_t now_ns,
+    void make_safe_command(const model::SensorFrame& state,
+                           std::int64_t now_ns,
                            model::CommandFrame& command) const noexcept;
 
   private:

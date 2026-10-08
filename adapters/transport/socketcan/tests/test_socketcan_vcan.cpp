@@ -9,7 +9,8 @@
 int main() {
     const char* interface_name = std::getenv("RTCTRL_VCAN_INTERFACE");
     if (interface_name == nullptr || interface_name[0] == '\0') {
-        std::cout << "SKIP: set RTCTRL_VCAN_INTERFACE=vcan0 to run SocketCAN loopback\n";
+        std::cout
+            << "SKIP: set RTCTRL_VCAN_INTERFACE=vcan0 to run SocketCAN loopback\n";
         return 0;
     }
 
@@ -19,8 +20,9 @@ int main() {
     if (!receiver.set_filters(&filter, 1U) ||
         receiver.open() != rtctrl::transport::TransportStatus::Ok ||
         sender.open() != rtctrl::transport::TransportStatus::Ok) {
-        std::cerr << "failed to open vcan interface: receiver=" << receiver.last_error()
-                  << " sender=" << sender.last_error() << '\n';
+        std::cerr << "failed to open vcan interface: receiver="
+                  << receiver.last_error() << " sender=" << sender.last_error()
+                  << '\n';
         return 1;
     }
 
@@ -38,14 +40,16 @@ int main() {
         return 1;
     }
 
-    const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(250);
+    const auto deadline =
+        std::chrono::steady_clock::now() + std::chrono::milliseconds(250);
     rtctrl::transport::CanFrame received{};
     while (std::chrono::steady_clock::now() < deadline) {
         const auto rx = receiver.try_receive(received);
         if (rx.status == rtctrl::transport::TransportStatus::Ok) {
-            if (received.id != sent.id || received.size != sent.size || !received.fd ||
-                !received.bit_rate_switch ||
-                std::memcmp(received.data.data(), sent.data.data(), sent.size) != 0) {
+            if (received.id != sent.id || received.size != sent.size ||
+                !received.fd || !received.bit_rate_switch ||
+                std::memcmp(received.data.data(), sent.data.data(), sent.size) !=
+                    0) {
                 std::cerr << "CAN-FD loopback payload or metadata mismatch\n";
                 return 1;
             }
@@ -53,7 +57,8 @@ int main() {
             return 0;
         }
         if (rx.status != rtctrl::transport::TransportStatus::WouldBlock) {
-            std::cerr << "CAN-FD loopback receive failed: " << rx.native_error << '\n';
+            std::cerr << "CAN-FD loopback receive failed: " << rx.native_error
+                      << '\n';
             return 1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));

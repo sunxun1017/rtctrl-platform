@@ -16,11 +16,14 @@ class FixedTargetCodec final : public ITargetCodec {
     static constexpr std::uint8_t kTargetFrameType = 1;
     static constexpr std::size_t kHeaderSize = 36;
     static constexpr std::size_t kPayloadSize = model::kJointCount * sizeof(float);
-    static constexpr std::size_t kFrameSize = kHeaderSize + kPayloadSize + sizeof(std::uint32_t);
+    static constexpr std::size_t kFrameSize =
+        kHeaderSize + kPayloadSize + sizeof(std::uint32_t);
 
-    EncodeResult encode(const TargetEnvelope& input, std::byte* output,
+    EncodeResult encode(const TargetEnvelope& input,
+                        std::byte* output,
                         std::size_t capacity) noexcept override;
-    DecodeResult decode(const std::byte* input, std::size_t size,
+    DecodeResult decode(const std::byte* input,
+                        std::size_t size,
                         TargetEnvelope& output) noexcept override;
     void reset() noexcept override {}
 };

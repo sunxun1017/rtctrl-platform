@@ -20,8 +20,10 @@ class IByteTransport {
     // Configuration is owned by the concrete adapter and applied before open().
     virtual TransportStatus open() noexcept = 0;
     // Real-time implementations must be bounded, non-blocking and allocation-free.
-    virtual IoResult try_receive(std::byte* destination, std::size_t capacity) noexcept = 0;
-    virtual IoResult try_send(const std::byte* source, std::size_t size) noexcept = 0;
+    virtual IoResult try_receive(std::byte* destination,
+                                 std::size_t capacity) noexcept = 0;
+    virtual IoResult try_send(const std::byte* source,
+                              std::size_t size) noexcept = 0;
     virtual void close() noexcept = 0;
 };
 

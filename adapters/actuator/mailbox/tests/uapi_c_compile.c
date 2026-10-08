@@ -17,9 +17,11 @@ _Static_assert(offsetof(struct rtctrl_mb_layout, feedback) % 8U == 0U,
                "feedback ring keeps 64-bit frame fields aligned");
 _Static_assert(_IOC_SIZE(RTCTRL_MB_IOC_GET_INFO) == sizeof(struct rtctrl_mb_info),
                "GET_INFO ioctl encodes the ABI size");
-_Static_assert(_IOC_SIZE(RTCTRL_MB_IOC_SUBMIT_COMMAND) == sizeof(struct rtctrl_mb_command_frame),
+_Static_assert(_IOC_SIZE(RTCTRL_MB_IOC_SUBMIT_COMMAND) ==
+                   sizeof(struct rtctrl_mb_command_frame),
                "SUBMIT_COMMAND ioctl encodes the ABI size");
-_Static_assert(_IOC_SIZE(RTCTRL_MB_IOC_READ_FEEDBACK) == sizeof(struct rtctrl_mb_feedback_frame),
+_Static_assert(_IOC_SIZE(RTCTRL_MB_IOC_READ_FEEDBACK) ==
+                   sizeof(struct rtctrl_mb_feedback_frame),
                "READ_FEEDBACK ioctl encodes the ABI size");
 
 int main(void) {

@@ -15,7 +15,8 @@ HalStatus ProtocolActuatorHal::map_link_status(ActuatorLinkStatus status) noexce
     return HalStatus::IoError;
 }
 
-HalStatus ProtocolActuatorHal::map_protocol_status(ActuatorProtocolStatus status) noexcept {
+HalStatus
+ProtocolActuatorHal::map_protocol_status(ActuatorProtocolStatus status) noexcept {
     switch (status) {
         case ActuatorProtocolStatus::Ok:
             return HalStatus::Ok;
@@ -49,7 +50,8 @@ HalStatus ProtocolActuatorHal::open_safe(std::int64_t now_ns) noexcept {
         return startup_status;
     }
     if (!transmit_packets_.empty()) {
-        const auto transmit_status = map_link_status(link_.transmit(now_ns, transmit_packets_));
+        const auto transmit_status =
+            map_link_status(link_.transmit(now_ns, transmit_packets_));
         if (transmit_status != HalStatus::Ok) {
             close();
             return transmit_status;
@@ -63,7 +65,8 @@ HalStatus ProtocolActuatorHal::arm(std::int64_t now_ns) noexcept {
         return HalStatus::NotReady;
     }
     transmit_packets_.clear();
-    auto result = map_protocol_status(protocol_.encode_arm(now_ns, transmit_packets_));
+    auto result =
+        map_protocol_status(protocol_.encode_arm(now_ns, transmit_packets_));
     if (result != HalStatus::Ok) {
         return result;
     }
@@ -74,17 +77,19 @@ HalStatus ProtocolActuatorHal::arm(std::int64_t now_ns) noexcept {
     return result;
 }
 
-HalStatus ProtocolActuatorHal::read(std::int64_t now_ns, model::SensorFrame& output) noexcept {
+HalStatus ProtocolActuatorHal::read(std::int64_t now_ns,
+                                    model::SensorFrame& output) noexcept {
     if (!open_) {
         return HalStatus::NotReady;
     }
     receive_packets_.clear();
-    const auto link_result = map_link_status(link_.receive(now_ns, receive_packets_));
+    const auto link_result =
+        map_link_status(link_.receive(now_ns, receive_packets_));
     if (link_result != HalStatus::Ok) {
         return link_result;
     }
-    const auto result =
-        map_protocol_status(protocol_.decode_feedback(now_ns, receive_packets_, output));
+    const auto result = map_protocol_status(
+        protocol_.decode_feedback(now_ns, receive_packets_, output));
     if (result == HalStatus::Ok) {
         feedback_ready_ = true;
     }
@@ -97,8 +102,8 @@ HalStatus ProtocolActuatorHal::write(std::int64_t now_ns,
         return HalStatus::NotReady;
     }
     transmit_packets_.clear();
-    const auto protocol_result =
-        map_protocol_status(protocol_.encode_command(now_ns, input, transmit_packets_));
+    const auto protocol_result = map_protocol_status(
+        protocol_.encode_command(now_ns, input, transmit_packets_));
     if (protocol_result != HalStatus::Ok) {
         return protocol_result;
     }
@@ -110,7 +115,8 @@ void ProtocolActuatorHal::emergency_stop(std::int64_t now_ns) noexcept {
         return;
     }
     transmit_packets_.clear();
-    if (protocol_.encode_safe_stop(now_ns, transmit_packets_) == ActuatorProtocolStatus::Ok) {
+    if (protocol_.encode_safe_stop(now_ns, transmit_packets_) ==
+        ActuatorProtocolStatus::Ok) {
         (void)link_.transmit(now_ns, transmit_packets_);
     }
     armed_ = false;

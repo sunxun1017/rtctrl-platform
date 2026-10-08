@@ -39,9 +39,11 @@ class ITargetCodec {
     virtual ~ITargetCodec() = default;
 
     // Pure, bounded protocol processing: no system calls and no dynamic allocation.
-    virtual EncodeResult encode(const TargetEnvelope& input, std::byte* output,
+    virtual EncodeResult encode(const TargetEnvelope& input,
+                                std::byte* output,
                                 std::size_t capacity) noexcept = 0;
-    virtual DecodeResult decode(const std::byte* input, std::size_t size,
+    virtual DecodeResult decode(const std::byte* input,
+                                std::size_t size,
                                 TargetEnvelope& output) noexcept = 0;
     virtual void reset() noexcept = 0;
 };

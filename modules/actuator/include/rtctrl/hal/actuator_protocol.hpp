@@ -31,18 +31,20 @@ class IActuatorProtocol {
     virtual void reset() noexcept = 0;
     // Optional initial feedback request sent by open_safe(). An empty batch
     // means the protocol receives unsolicited feedback and needs no request.
-    virtual ActuatorProtocolStatus encode_startup(std::int64_t now_ns,
-                                                  ActuatorPacketBatch& packets) noexcept = 0;
-    virtual ActuatorProtocolStatus decode_feedback(std::int64_t now_ns,
-                                                   const ActuatorPacketBatch& packets,
-                                                   model::SensorFrame& output) noexcept = 0;
-    virtual ActuatorProtocolStatus encode_arm(std::int64_t now_ns,
-                                              ActuatorPacketBatch& packets) noexcept = 0;
-    virtual ActuatorProtocolStatus encode_command(std::int64_t now_ns,
-                                                  const model::CommandFrame& input,
-                                                  ActuatorPacketBatch& packets) noexcept = 0;
-    virtual ActuatorProtocolStatus encode_safe_stop(std::int64_t now_ns,
-                                                    ActuatorPacketBatch& packets) noexcept = 0;
+    virtual ActuatorProtocolStatus
+    encode_startup(std::int64_t now_ns, ActuatorPacketBatch& packets) noexcept = 0;
+    virtual ActuatorProtocolStatus
+    decode_feedback(std::int64_t now_ns,
+                    const ActuatorPacketBatch& packets,
+                    model::SensorFrame& output) noexcept = 0;
+    virtual ActuatorProtocolStatus
+    encode_arm(std::int64_t now_ns, ActuatorPacketBatch& packets) noexcept = 0;
+    virtual ActuatorProtocolStatus
+    encode_command(std::int64_t now_ns,
+                   const model::CommandFrame& input,
+                   ActuatorPacketBatch& packets) noexcept = 0;
+    virtual ActuatorProtocolStatus
+    encode_safe_stop(std::int64_t now_ns, ActuatorPacketBatch& packets) noexcept = 0;
 };
 
 } // namespace rtctrl::hal

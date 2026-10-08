@@ -11,12 +11,15 @@ namespace rtctrl::hal {
 class ProtocolActuatorHal final : public IActuatorHal {
   public:
     ProtocolActuatorHal(IActuatorLink& link, IActuatorProtocol& protocol) noexcept
-        : link_(link), protocol_(protocol) {}
+        : link_(link)
+        , protocol_(protocol) {}
 
     HalStatus open_safe(std::int64_t now_ns) noexcept override;
     HalStatus arm(std::int64_t now_ns) noexcept override;
-    HalStatus read(std::int64_t now_ns, model::SensorFrame& output) noexcept override;
-    HalStatus write(std::int64_t now_ns, const model::CommandFrame& input) noexcept override;
+    HalStatus read(std::int64_t now_ns,
+                   model::SensorFrame& output) noexcept override;
+    HalStatus write(std::int64_t now_ns,
+                    const model::CommandFrame& input) noexcept override;
     void emergency_stop(std::int64_t now_ns) noexcept override;
     void close() noexcept override;
 

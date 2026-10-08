@@ -97,13 +97,15 @@ struct IghBusState {
 
     bool ready() const noexcept {
         return link_up && slaves_responding == expected_slaves &&
-               working_counter_state == WorkingCounterState::Complete && all_slaves_online &&
-               all_slaves_operational;
+               working_counter_state == WorkingCounterState::Complete &&
+               all_slaves_online && all_slaves_operational;
     }
 };
 
-bool valid_igh_configuration(const IghMasterConfig& master, const SlaveConfig* slaves,
-                             std::size_t slave_count, const DomainEntryRegistration* entries,
+bool valid_igh_configuration(const IghMasterConfig& master,
+                             const SlaveConfig* slaves,
+                             std::size_t slave_count,
+                             const DomainEntryRegistration* entries,
                              std::size_t entry_count) noexcept;
 
 // Generic IgH ecrt master/domain owner. Configuration and close() are
@@ -120,8 +122,10 @@ class IghMaster final {
     IghMaster(IghMaster&&) = delete;
     IghMaster& operator=(IghMaster&&) = delete;
 
-    IghStatus activate(const SlaveConfig* slaves, std::size_t slave_count,
-                       const DomainEntryRegistration* entries, std::size_t entry_count) noexcept;
+    IghStatus activate(const SlaveConfig* slaves,
+                       std::size_t slave_count,
+                       const DomainEntryRegistration* entries,
+                       std::size_t entry_count) noexcept;
     IghStatus receive(std::uint64_t application_time_ns) noexcept;
     IghStatus send() noexcept;
     void close() noexcept;

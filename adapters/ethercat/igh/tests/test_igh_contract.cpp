@@ -14,13 +14,15 @@ int main() {
 
     const PdoEntryMapping mapped_entry{0x6040, 0, 16};
     const PdoMapping pdo{0x1600, &mapped_entry, 1};
-    const SyncManagerConfig sync{2, PdoDirection::Output, &pdo, 1, WatchdogMode::Enable};
+    const SyncManagerConfig sync{
+        2, PdoDirection::Output, &pdo, 1, WatchdogMode::Enable};
     const std::uint8_t mode = 8;
     const StartupSdoConfig startup_sdo{0x6060, 0, &mode, sizeof(mode), false};
-    const SlaveConfig slave{0, 0, 0x00000002, 0x12345678, &sync, 1, &startup_sdo, 1, {}};
+    const SlaveConfig slave{
+        0, 0, 0x00000002, 0x12345678, &sync, 1, &startup_sdo, 1, {}};
     unsigned int offset = 0;
-    const DomainEntryRegistration registration{0,      0, slave.vendor_id, slave.product_code,
-                                               0x6040, 0, &offset,         nullptr};
+    const DomainEntryRegistration registration{
+        0, 0, slave.vendor_id, slave.product_code, 0x6040, 0, &offset, nullptr};
     if (!valid_igh_configuration(master, &slave, 1, &registration, 1)) {
         std::cerr << "bounded IgH PDO configuration was rejected\n";
         return 1;

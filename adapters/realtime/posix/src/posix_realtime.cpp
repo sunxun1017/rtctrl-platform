@@ -38,8 +38,8 @@ MemoryLockReport PosixRealtimePlatform::lock_process_memory() noexcept {
     return report;
 }
 
-ThreadSetupReport
-PosixRealtimePlatform::configure_current_thread(const ThreadConfig& config) noexcept {
+ThreadSetupReport PosixRealtimePlatform::configure_current_thread(
+    const ThreadConfig& config) noexcept {
     ThreadSetupReport report{};
     if (config.name != nullptr) {
         (void)pthread_setname_np(pthread_self(), config.name);
@@ -54,7 +54,8 @@ PosixRealtimePlatform::configure_current_thread(const ThreadConfig& config) noex
         cpu_set_t set;
         CPU_ZERO(&set);
         CPU_SET(static_cast<unsigned>(config.cpu), &set);
-        report.affinity_error = pthread_setaffinity_np(pthread_self(), sizeof(set), &set);
+        report.affinity_error =
+            pthread_setaffinity_np(pthread_self(), sizeof(set), &set);
         report.affinity_active = report.affinity_error == 0;
     } else {
         report.affinity_active = true;
@@ -63,7 +64,8 @@ PosixRealtimePlatform::configure_current_thread(const ThreadConfig& config) noex
     if (config.priority > 0) {
         sched_param parameter{};
         parameter.sched_priority = config.priority;
-        report.scheduler_error = pthread_setschedparam(pthread_self(), SCHED_FIFO, &parameter);
+        report.scheduler_error =
+            pthread_setschedparam(pthread_self(), SCHED_FIFO, &parameter);
         report.fifo_active = report.scheduler_error == 0;
     } else {
         report.fifo_active = false;
@@ -73,10 +75,12 @@ PosixRealtimePlatform::configure_current_thread(const ThreadConfig& config) noex
 
 void PosixRealtimePlatform::prefault_stack() noexcept {
     volatile unsigned char
-        buffer[64 * 1024]{}; // TODO: make sure target system stack size is at least 64kB, or use
-                             // pthread_attr_getstacksize() to get the actual stack size
-    constexpr std::size_t kPageSize = 4096; // TODO: make sure target system page size is 4kB, or
-                                            // use sysconf(_SC_PAGESIZE) to get the actual page size
+        buffer[64 * 1024]{}; // TODO: make sure target system stack size is at least
+                             // 64kB, or use pthread_attr_getstacksize() to get the
+                             // actual stack size
+    constexpr std::size_t kPageSize =
+        4096; // TODO: make sure target system page size is 4kB, or
+              // use sysconf(_SC_PAGESIZE) to get the actual page size
     for (std::size_t i = 0; i < sizeof(buffer); i += kPageSize) {
         buffer[i] = 0;
     }

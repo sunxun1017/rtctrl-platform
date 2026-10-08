@@ -40,7 +40,8 @@ struct ImuSample {
 };
 
 struct AtomicDouble {
-    void store(double value, std::memory_order order = std::memory_order_relaxed) noexcept {
+    void store(double value,
+               std::memory_order order = std::memory_order_relaxed) noexcept {
         std::uint64_t encoded = 0;
         std::memcpy(&encoded, &value, sizeof(encoded));
         bits.store(encoded, order);
@@ -132,7 +133,8 @@ static_assert(std::atomic<std::int64_t>::is_always_lock_free,
               "shared timestamps require lock-free int64 atomics");
 
 inline bool valid_shared_motor_region(const SharedMotorRegion& region) noexcept {
-    return region.magic == kSharedMotorMagic && region.abi_version == kSharedMotorAbiVersion &&
+    return region.magic == kSharedMotorMagic &&
+           region.abi_version == kSharedMotorAbiVersion &&
            region.region_size == sizeof(SharedMotorRegion) &&
            region.joint_count == model::kJointCount;
 }
@@ -141,13 +143,15 @@ inline void initialize_shared_motor_region(SharedMotorRegion& region) noexcept {
     new (&region) SharedMotorRegion();
 }
 
-inline void publish_command(SharedMotorRegion& region, const CommandSnapshot& input) noexcept {
+inline void publish_command(SharedMotorRegion& region,
+                            const CommandSnapshot& input) noexcept {
     const auto sequence = region.command_seq.load(std::memory_order_relaxed);
     region.command_seq.store(sequence + 1U, std::memory_order_release);
     std::atomic_thread_fence(std::memory_order_release);
     region.command_generation.store(input.generation, std::memory_order_relaxed);
     region.command_created_ns.store(input.created_ns, std::memory_order_relaxed);
-    region.command_valid_until_ns.store(input.valid_until_ns, std::memory_order_relaxed);
+    region.command_valid_until_ns.store(input.valid_until_ns,
+                                        std::memory_order_relaxed);
     for (std::size_t i = 0; i < model::kJointCount; ++i) {
         region.command[i].position.store(input.joints[i].position);
         region.command[i].velocity.store(input.joints[i].velocity);
@@ -159,15 +163,19 @@ inline void publish_command(SharedMotorRegion& region, const CommandSnapshot& in
     region.command_seq.store(sequence + 2U, std::memory_order_release);
 }
 
-inline bool read_command(const SharedMotorRegion& region, CommandSnapshot& output) noexcept {
+inline bool read_command(const SharedMotorRegion& region,
+                         CommandSnapshot& output) noexcept {
     for (int attempt = 0; attempt < kSnapshotReadAttempts; ++attempt) {
         const auto before = region.command_seq.load(std::memory_order_acquire);
         if ((before & 1U) != 0U) {
             continue;
         }
-        output.generation = region.command_generation.load(std::memory_order_relaxed);
-        output.created_ns = region.command_created_ns.load(std::memory_order_relaxed);
-        output.valid_until_ns = region.command_valid_until_ns.load(std::memory_order_relaxed);
+        output.generation =
+            region.command_generation.load(std::memory_order_relaxed);
+        output.created_ns =
+            region.command_created_ns.load(std::memory_order_relaxed);
+        output.valid_until_ns =
+            region.command_valid_until_ns.load(std::memory_order_relaxed);
         for (std::size_t i = 0; i < model::kJointCount; ++i) {
             output.joints[i].position = region.command[i].position.load();
             output.joints[i].velocity = region.command[i].velocity.load();
@@ -184,12 +192,14 @@ inline bool read_command(const SharedMotorRegion& region, CommandSnapshot& outpu
     return false;
 }
 
-inline void publish_feedback(SharedMotorRegion& region, const FeedbackSnapshot& input) noexcept {
+inline void publish_feedback(SharedMotorRegion& region,
+                             const FeedbackSnapshot& input) noexcept {
     const auto sequence = region.feedback_seq.load(std::memory_order_relaxed);
     region.feedback_seq.store(sequence + 1U, std::memory_order_release);
     std::atomic_thread_fence(std::memory_order_release);
     region.feedback_generation.store(input.generation, std::memory_order_relaxed);
-    region.feedback_sample_time_ns.store(input.sample_time_ns, std::memory_order_relaxed);
+    region.feedback_sample_time_ns.store(input.sample_time_ns,
+                                         std::memory_order_relaxed);
     for (std::size_t i = 0; i < model::kJointCount; ++i) {
         region.feedback[i].position.store(input.joints[i].position);
         region.feedback[i].velocity.store(input.joints[i].velocity);
@@ -205,19 +215,23 @@ inline void publish_feedback(SharedMotorRegion& region, const FeedbackSnapshot& 
         region.imu.angular_velocity[i].store(input.imu.angular_velocity[i]);
         region.imu.linear_acceleration[i].store(input.imu.linear_acceleration[i]);
     }
-    region.imu.sample_time_ns.store(input.imu.sample_time_ns, std::memory_order_relaxed);
+    region.imu.sample_time_ns.store(input.imu.sample_time_ns,
+                                    std::memory_order_relaxed);
     std::atomic_thread_fence(std::memory_order_release);
     region.feedback_seq.store(sequence + 2U, std::memory_order_release);
 }
 
-inline bool read_feedback(const SharedMotorRegion& region, FeedbackSnapshot& output) noexcept {
+inline bool read_feedback(const SharedMotorRegion& region,
+                          FeedbackSnapshot& output) noexcept {
     for (int attempt = 0; attempt < kSnapshotReadAttempts; ++attempt) {
         const auto before = region.feedback_seq.load(std::memory_order_acquire);
         if ((before & 1U) != 0U) {
             continue;
         }
-        output.generation = region.feedback_generation.load(std::memory_order_relaxed);
-        output.sample_time_ns = region.feedback_sample_time_ns.load(std::memory_order_relaxed);
+        output.generation =
+            region.feedback_generation.load(std::memory_order_relaxed);
+        output.sample_time_ns =
+            region.feedback_sample_time_ns.load(std::memory_order_relaxed);
         for (std::size_t i = 0; i < model::kJointCount; ++i) {
             output.joints[i].position = region.feedback[i].position.load();
             output.joints[i].velocity = region.feedback[i].velocity.load();
@@ -231,9 +245,11 @@ inline bool read_feedback(const SharedMotorRegion& region, FeedbackSnapshot& out
         }
         for (std::size_t i = 0; i < output.imu.angular_velocity.size(); ++i) {
             output.imu.angular_velocity[i] = region.imu.angular_velocity[i].load();
-            output.imu.linear_acceleration[i] = region.imu.linear_acceleration[i].load();
+            output.imu.linear_acceleration[i] =
+                region.imu.linear_acceleration[i].load();
         }
-        output.imu.sample_time_ns = region.imu.sample_time_ns.load(std::memory_order_relaxed);
+        output.imu.sample_time_ns =
+            region.imu.sample_time_ns.load(std::memory_order_relaxed);
         std::atomic_thread_fence(std::memory_order_acquire);
         const auto after = region.feedback_seq.load(std::memory_order_relaxed);
         if (before == after) {

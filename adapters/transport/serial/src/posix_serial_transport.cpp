@@ -95,14 +95,17 @@ IoResult map_result(ssize_t result) noexcept {
 
 } // namespace
 
-PosixSerialTransport::PosixSerialTransport(const char* device, int baud_rate) noexcept
+PosixSerialTransport::PosixSerialTransport(const char* device,
+                                           int baud_rate) noexcept
     : PosixSerialTransport(PosixSerialOptions{device, baud_rate}) {}
 
-PosixSerialTransport::PosixSerialTransport(const PosixSerialOptions& options) noexcept
-    : baud_rate_(options.baud_rate), linux_rs485_(options.linux_rs485),
-      rts_high_while_sending_(options.rts_high_while_sending),
-      delay_before_send_ms_(options.delay_before_send_ms),
-      delay_after_send_ms_(options.delay_after_send_ms) {
+PosixSerialTransport::PosixSerialTransport(
+    const PosixSerialOptions& options) noexcept
+    : baud_rate_(options.baud_rate)
+    , linux_rs485_(options.linux_rs485)
+    , rts_high_while_sending_(options.rts_high_while_sending)
+    , delay_before_send_ms_(options.delay_before_send_ms)
+    , delay_after_send_ms_(options.delay_after_send_ms) {
     if (options.device == nullptr) {
         return;
     }
@@ -151,7 +154,8 @@ TransportStatus PosixSerialTransport::open() noexcept {
     if (linux_rs485_) {
         serial_rs485 rs485{};
         rs485.flags = SER_RS485_ENABLED;
-        rs485.flags |= rts_high_while_sending_ ? SER_RS485_RTS_ON_SEND : SER_RS485_RTS_AFTER_SEND;
+        rs485.flags |= rts_high_while_sending_ ? SER_RS485_RTS_ON_SEND
+                                               : SER_RS485_RTS_AFTER_SEND;
         rs485.delay_rts_before_send = delay_before_send_ms_;
         rs485.delay_rts_after_send = delay_after_send_ms_;
         if (::ioctl(fd_, TIOCSRS485, &rs485) != 0) {
@@ -163,7 +167,8 @@ TransportStatus PosixSerialTransport::open() noexcept {
     return TransportStatus::Ok;
 }
 
-IoResult PosixSerialTransport::try_receive(std::byte* destination, std::size_t capacity) noexcept {
+IoResult PosixSerialTransport::try_receive(std::byte* destination,
+                                           std::size_t capacity) noexcept {
     if (fd_ < 0) {
         return {TransportStatus::Closed, 0, 0};
     }
@@ -173,7 +178,8 @@ IoResult PosixSerialTransport::try_receive(std::byte* destination, std::size_t c
     return map_result(::read(fd_, destination, capacity));
 }
 
-IoResult PosixSerialTransport::try_send(const std::byte* source, std::size_t size) noexcept {
+IoResult PosixSerialTransport::try_send(const std::byte* source,
+                                        std::size_t size) noexcept {
     if (fd_ < 0) {
         return {TransportStatus::Closed, 0, 0};
     }

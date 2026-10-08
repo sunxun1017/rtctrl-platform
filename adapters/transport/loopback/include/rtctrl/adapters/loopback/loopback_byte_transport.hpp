@@ -17,7 +17,8 @@ class LoopbackByteTransport final : public IByteTransport {
         : max_chunk_(max_chunk == 0 ? 1 : max_chunk) {}
 
     TransportStatus open() noexcept override;
-    IoResult try_receive(std::byte* destination, std::size_t capacity) noexcept override;
+    IoResult try_receive(std::byte* destination,
+                         std::size_t capacity) noexcept override;
     IoResult try_send(const std::byte* source, std::size_t size) noexcept override;
     void close() noexcept override;
 

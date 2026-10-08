@@ -33,11 +33,16 @@ ec_watchdog_mode_t native_watchdog(WatchdogMode mode) noexcept {
     return EC_WD_DEFAULT;
 }
 
-bool valid_slave(const SlaveConfig& slave, std::size_t& sync_count, std::size_t& pdo_count,
-                 std::size_t& mapped_entry_count, std::size_t& startup_sdo_count,
+bool valid_slave(const SlaveConfig& slave,
+                 std::size_t& sync_count,
+                 std::size_t& pdo_count,
+                 std::size_t& mapped_entry_count,
+                 std::size_t& startup_sdo_count,
                  bool& has_dc) noexcept {
-    if (slave.vendor_id == 0U || slave.product_code == 0U || slave.sync_manager_count == 0U ||
-        slave.sync_manager_count > EC_MAX_SYNC_MANAGERS || slave.sync_managers == nullptr) {
+    if (slave.vendor_id == 0U || slave.product_code == 0U ||
+        slave.sync_manager_count == 0U ||
+        slave.sync_manager_count > EC_MAX_SYNC_MANAGERS ||
+        slave.sync_managers == nullptr) {
         return false;
     }
     if (slave.startup_sdo_count != 0U && slave.startup_sdos == nullptr) {
@@ -45,16 +50,18 @@ bool valid_slave(const SlaveConfig& slave, std::size_t& sync_count, std::size_t&
     }
     for (std::size_t i = 0; i < slave.startup_sdo_count; ++i) {
         const auto& sdo = slave.startup_sdos[i];
-        if (startup_sdo_count == kIghMaxStartupSdos || sdo.index == 0U || sdo.data == nullptr ||
-            sdo.size == 0U || (sdo.complete_access && sdo.subindex != 0U)) {
+        if (startup_sdo_count == kIghMaxStartupSdos || sdo.index == 0U ||
+            sdo.data == nullptr || sdo.size == 0U ||
+            (sdo.complete_access && sdo.subindex != 0U)) {
             return false;
         }
         ++startup_sdo_count;
     }
-    for (std::size_t sync_index = 0; sync_index < slave.sync_manager_count; ++sync_index) {
+    for (std::size_t sync_index = 0; sync_index < slave.sync_manager_count;
+         ++sync_index) {
         const auto& sync = slave.sync_managers[sync_index];
-        if (sync.index >= EC_MAX_SYNC_MANAGERS || sync.pdo_count == 0U || sync.pdos == nullptr ||
-            sync_count == kIghMaxSyncManagers) {
+        if (sync.index >= EC_MAX_SYNC_MANAGERS || sync.pdo_count == 0U ||
+            sync.pdos == nullptr || sync_count == kIghMaxSyncManagers) {
             return false;
         }
         ++sync_count;
@@ -65,7 +72,8 @@ bool valid_slave(const SlaveConfig& slave, std::size_t& sync_count, std::size_t&
                 return false;
             }
             ++pdo_count;
-            for (std::size_t entry_index = 0; entry_index < pdo.entry_count; ++entry_index) {
+            for (std::size_t entry_index = 0; entry_index < pdo.entry_count;
+                 ++entry_index) {
                 const auto& entry = pdo.entries[entry_index];
                 if (entry.index == 0U || entry.bit_length == 0U ||
                     mapped_entry_count == kIghMaxMappedEntries) {
@@ -97,12 +105,14 @@ struct IghMaster::Impl {
     std::array<ec_pdo_entry_reg_t, kIghMaxDomainEntries + 1U> registrations{};
 };
 
-bool valid_igh_configuration(const IghMasterConfig& master, const SlaveConfig* slaves,
-                             std::size_t slave_count, const DomainEntryRegistration* entries,
+bool valid_igh_configuration(const IghMasterConfig& master,
+                             const SlaveConfig* slaves,
+                             std::size_t slave_count,
+                             const DomainEntryRegistration* entries,
                              std::size_t entry_count) noexcept {
-    if (master.cycle_period_ns == 0U || slave_count == 0U || slave_count > kIghMaxSlaves ||
-        slaves == nullptr || entry_count == 0U || entry_count > kIghMaxDomainEntries ||
-        entries == nullptr) {
+    if (master.cycle_period_ns == 0U || slave_count == 0U ||
+        slave_count > kIghMaxSlaves || slaves == nullptr || entry_count == 0U ||
+        entry_count > kIghMaxDomainEntries || entries == nullptr) {
         return false;
     }
     std::size_t sync_count = 0;
@@ -111,12 +121,17 @@ bool valid_igh_configuration(const IghMasterConfig& master, const SlaveConfig* s
     std::size_t startup_sdo_count = 0;
     bool has_dc = false;
     for (std::size_t i = 0; i < slave_count; ++i) {
-        if (!valid_slave(slaves[i], sync_count, pdo_count, mapped_entry_count, startup_sdo_count,
+        if (!valid_slave(slaves[i],
+                         sync_count,
+                         pdo_count,
+                         mapped_entry_count,
+                         startup_sdo_count,
                          has_dc)) {
             return false;
         }
         for (std::size_t j = 0; j < i; ++j) {
-            if (slaves[i].alias == slaves[j].alias && slaves[i].position == slaves[j].position) {
+            if (slaves[i].alias == slaves[j].alias &&
+                slaves[i].position == slaves[j].position) {
                 return false;
             }
         }
@@ -133,7 +148,8 @@ bool valid_igh_configuration(const IghMasterConfig& master, const SlaveConfig* s
 }
 
 IghMaster::IghMaster(IghMasterConfig config) noexcept
-    : config_(config), impl_(new (std::nothrow) Impl) {
+    : config_(config)
+    , impl_(new(std::nothrow) Impl) {
     if (impl_ == nullptr) {
         last_error_ = ENOMEM;
     }
@@ -144,14 +160,16 @@ IghMaster::~IghMaster() {
     delete impl_;
 }
 
-IghStatus IghMaster::activate(const SlaveConfig* slaves, std::size_t slave_count,
+IghStatus IghMaster::activate(const SlaveConfig* slaves,
+                              std::size_t slave_count,
                               const DomainEntryRegistration* entries,
                               std::size_t entry_count) noexcept {
     if (active_ || impl_ == nullptr) {
         last_error_ = impl_ == nullptr ? ENOMEM : EALREADY;
         return IghStatus::NotReady;
     }
-    if (!valid_igh_configuration(config_, slaves, slave_count, entries, entry_count)) {
+    if (!valid_igh_configuration(
+            config_, slaves, slave_count, entries, entry_count)) {
         last_error_ = EINVAL;
         return IghStatus::InvalidConfig;
     }
@@ -182,8 +200,11 @@ IghStatus IghMaster::activate(const SlaveConfig* slaves, std::size_t slave_count
     ec_slave_config_t* dc_reference = nullptr;
     for (std::size_t slave_index = 0; slave_index < slave_count; ++slave_index) {
         const auto& slave = slaves[slave_index];
-        auto* native_slave = ecrt_master_slave_config(impl_->master, slave.alias, slave.position,
-                                                      slave.vendor_id, slave.product_code);
+        auto* native_slave = ecrt_master_slave_config(impl_->master,
+                                                      slave.alias,
+                                                      slave.position,
+                                                      slave.vendor_id,
+                                                      slave.product_code);
         if (native_slave == nullptr) {
             last_error_ = errno == 0 ? ENODEV : errno;
             close();
@@ -192,39 +213,49 @@ IghStatus IghMaster::activate(const SlaveConfig* slaves, std::size_t slave_count
         impl_->slaves[slave_index] = native_slave;
 
         const std::size_t slave_sync_begin = next_sync;
-        for (std::size_t sync_index = 0; sync_index < slave.sync_manager_count; ++sync_index) {
+        for (std::size_t sync_index = 0; sync_index < slave.sync_manager_count;
+             ++sync_index) {
             const auto& sync = slave.sync_managers[sync_index];
             const std::size_t sync_pdo_begin = next_pdo;
-            for (std::size_t pdo_index = 0; pdo_index < sync.pdo_count; ++pdo_index) {
+            for (std::size_t pdo_index = 0; pdo_index < sync.pdo_count;
+                 ++pdo_index) {
                 const auto& pdo = sync.pdos[pdo_index];
                 const std::size_t pdo_entry_begin = next_mapping;
-                for (std::size_t entry_index = 0; entry_index < pdo.entry_count; ++entry_index) {
+                for (std::size_t entry_index = 0; entry_index < pdo.entry_count;
+                     ++entry_index) {
                     const auto& entry = pdo.entries[entry_index];
-                    impl_->mapped_entries[next_mapping++] = {entry.index, entry.subindex,
-                                                             entry.bit_length};
+                    impl_->mapped_entries[next_mapping++] = {
+                        entry.index, entry.subindex, entry.bit_length};
                 }
-                impl_->pdos[next_pdo++] = {pdo.index, static_cast<unsigned int>(pdo.entry_count),
-                                           &impl_->mapped_entries[pdo_entry_begin]};
+                impl_->pdos[next_pdo++] = {
+                    pdo.index,
+                    static_cast<unsigned int>(pdo.entry_count),
+                    &impl_->mapped_entries[pdo_entry_begin]};
             }
-            impl_->syncs[next_sync++] = {sync.index, native_direction(sync.direction),
+            impl_->syncs[next_sync++] = {sync.index,
+                                         native_direction(sync.direction),
                                          static_cast<unsigned int>(sync.pdo_count),
                                          &impl_->pdos[sync_pdo_begin],
                                          native_watchdog(sync.watchdog)};
         }
-        result = ecrt_slave_config_pdos(native_slave,
-                                        static_cast<unsigned int>(slave.sync_manager_count),
-                                        &impl_->syncs[slave_sync_begin]);
+        result = ecrt_slave_config_pdos(
+            native_slave,
+            static_cast<unsigned int>(slave.sync_manager_count),
+            &impl_->syncs[slave_sync_begin]);
         if (result != 0) {
             last_error_ = native_error(result);
             close();
             return IghStatus::IoError;
         }
-        for (std::size_t sdo_index = 0; sdo_index < slave.startup_sdo_count; ++sdo_index) {
+        for (std::size_t sdo_index = 0; sdo_index < slave.startup_sdo_count;
+             ++sdo_index) {
             const auto& sdo = slave.startup_sdos[sdo_index];
-            result = sdo.complete_access ? ecrt_slave_config_complete_sdo(native_slave, sdo.index,
-                                                                          sdo.data, sdo.size)
-                                         : ecrt_slave_config_sdo(native_slave, sdo.index,
-                                                                 sdo.subindex, sdo.data, sdo.size);
+            result =
+                sdo.complete_access
+                    ? ecrt_slave_config_complete_sdo(
+                          native_slave, sdo.index, sdo.data, sdo.size)
+                    : ecrt_slave_config_sdo(
+                          native_slave, sdo.index, sdo.subindex, sdo.data, sdo.size);
             if (result != 0) {
                 last_error_ = native_error(result);
                 close();
@@ -233,8 +264,12 @@ IghStatus IghMaster::activate(const SlaveConfig* slaves, std::size_t slave_count
         }
         if (slave.distributed_clock.enabled) {
             const auto& dc = slave.distributed_clock;
-            result = ecrt_slave_config_dc(native_slave, dc.assign_activate, dc.sync0_cycle_ns,
-                                          dc.sync0_shift_ns, dc.sync1_cycle_ns, dc.sync1_shift_ns);
+            result = ecrt_slave_config_dc(native_slave,
+                                          dc.assign_activate,
+                                          dc.sync0_cycle_ns,
+                                          dc.sync0_shift_ns,
+                                          dc.sync1_cycle_ns,
+                                          dc.sync1_shift_ns);
             if (result != 0) {
                 last_error_ = native_error(result);
                 close();
@@ -258,12 +293,18 @@ IghStatus IghMaster::activate(const SlaveConfig* slaves, std::size_t slave_count
 
     for (std::size_t i = 0; i < entry_count; ++i) {
         const auto& entry = entries[i];
-        impl_->registrations[i] = {entry.alias,        entry.position,    entry.vendor_id,
-                                   entry.product_code, entry.index,       entry.subindex,
-                                   entry.byte_offset,  entry.bit_position};
+        impl_->registrations[i] = {entry.alias,
+                                   entry.position,
+                                   entry.vendor_id,
+                                   entry.product_code,
+                                   entry.index,
+                                   entry.subindex,
+                                   entry.byte_offset,
+                                   entry.bit_position};
     }
     impl_->registrations[entry_count] = {};
-    result = ecrt_domain_reg_pdo_entry_list(impl_->domain, impl_->registrations.data());
+    result =
+        ecrt_domain_reg_pdo_entry_list(impl_->domain, impl_->registrations.data());
     if (result != 0) {
         last_error_ = native_error(result);
         close();
@@ -345,7 +386,8 @@ IghStatus IghMaster::receive(std::uint64_t application_time_ns) noexcept {
             last_error_ = EIO;
             return IghStatus::IoError;
         }
-        state_.all_slaves_online = state_.all_slaves_online && slave_state.online != 0U;
+        state_.all_slaves_online =
+            state_.all_slaves_online && slave_state.online != 0U;
         state_.all_slaves_operational =
             state_.all_slaves_operational && slave_state.operational != 0U;
     }

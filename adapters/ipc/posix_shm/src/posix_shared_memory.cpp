@@ -35,8 +35,12 @@ bool PosixSharedMemoryRegion::set_name(const char* name) noexcept {
 }
 
 bool PosixSharedMemoryRegion::map_existing(bool owner) noexcept {
-    void* address =
-        ::mmap(nullptr, sizeof(SharedMotorRegion), PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);
+    void* address = ::mmap(nullptr,
+                           sizeof(SharedMotorRegion),
+                           PROT_READ | PROT_WRITE,
+                           MAP_SHARED,
+                           fd_,
+                           0);
     if (address == MAP_FAILED) {
         last_error_ = errno;
         return false;
@@ -78,7 +82,7 @@ bool PosixSharedMemoryRegion::attach(const char* name) noexcept {
         last_error_ = errno;
         return false;
     }
-    struct stat status{};
+    struct stat status {};
     int validation_error = 0;
     if (::fstat(fd_, &status) != 0) {
         validation_error = errno;

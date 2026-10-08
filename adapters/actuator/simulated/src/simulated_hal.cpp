@@ -22,7 +22,8 @@ HalStatus SimulatedHal::arm(std::int64_t) noexcept {
     return HalStatus::Ok;
 }
 
-HalStatus SimulatedHal::read(std::int64_t now_ns, model::SensorFrame& output) noexcept {
+HalStatus SimulatedHal::read(std::int64_t now_ns,
+                             model::SensorFrame& output) noexcept {
     if (!opened_) {
         return HalStatus::NotReady;
     }
@@ -38,12 +39,15 @@ HalStatus SimulatedHal::read(std::int64_t now_ns, model::SensorFrame& output) no
         const double desired = command_.mode == model::CommandMode::Position
                                    ? command_.target_position[i]
                                    : state_.position[i];
-        const double kp =
-            command_.mode == model::CommandMode::Position ? command_.kp[i] : config_.stiffness;
-        const double kd =
-            command_.mode == model::CommandMode::Position ? command_.kd[i] : config_.damping;
-        const double acceleration =
-            command_.effort[i] + kp * (desired - state_.position[i]) - kd * state_.velocity[i];
+        const double kp = command_.mode == model::CommandMode::Position
+                              ? command_.kp[i]
+                              : config_.stiffness;
+        const double kd = command_.mode == model::CommandMode::Position
+                              ? command_.kd[i]
+                              : config_.damping;
+        const double acceleration = command_.effort[i] +
+                                    kp * (desired - state_.position[i]) -
+                                    kd * state_.velocity[i];
         state_.velocity[i] += acceleration * dt;
         state_.position[i] += state_.velocity[i] * dt;
         state_.effort[i] = acceleration;
@@ -55,7 +59,8 @@ HalStatus SimulatedHal::read(std::int64_t now_ns, model::SensorFrame& output) no
     return HalStatus::Ok;
 }
 
-HalStatus SimulatedHal::write(std::int64_t, const model::CommandFrame& input) noexcept {
+HalStatus SimulatedHal::write(std::int64_t,
+                              const model::CommandFrame& input) noexcept {
     if (!opened_ || !armed_) {
         return HalStatus::NotReady;
     }

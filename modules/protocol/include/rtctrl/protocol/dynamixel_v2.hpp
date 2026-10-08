@@ -31,9 +31,12 @@ struct DynamixelV2Packet {
 
 std::uint16_t dynamixel_v2_crc16(const std::byte* data, std::size_t size) noexcept;
 
-bool encode_dynamixel_v2_packet(std::uint8_t id, std::uint8_t instruction,
-                                const std::byte* parameters, std::size_t parameter_size,
-                                std::byte* output, std::size_t capacity,
+bool encode_dynamixel_v2_packet(std::uint8_t id,
+                                std::uint8_t instruction,
+                                const std::byte* parameters,
+                                std::size_t parameter_size,
+                                std::byte* output,
+                                std::size_t capacity,
                                 std::size_t& output_size) noexcept;
 
 class DynamixelV2StreamParser final {

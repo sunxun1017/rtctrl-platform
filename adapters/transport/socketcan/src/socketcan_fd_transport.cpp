@@ -68,7 +68,8 @@ SocketCanFdTransport::~SocketCanFdTransport() {
     close();
 }
 
-bool SocketCanFdTransport::set_filters(const CanFilter* filters, std::size_t count) noexcept {
+bool SocketCanFdTransport::set_filters(const CanFilter* filters,
+                                       std::size_t count) noexcept {
     if (fd_ >= 0 || count > filters_.size() || (count != 0U && filters == nullptr)) {
         last_error_ = EINVAL;
         return false;
@@ -103,10 +104,15 @@ TransportStatus SocketCanFdTransport::open() noexcept {
     const int enabled = 1;
     const int loopback = config_.loopback ? 1 : 0;
     const int receive_own = config_.receive_own_messages ? 1 : 0;
-    if (::setsockopt(fd_, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enabled, sizeof(enabled)) != 0 ||
-        ::setsockopt(fd_, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback, sizeof(loopback)) != 0 ||
-        ::setsockopt(fd_, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS, &receive_own, sizeof(receive_own)) !=
-            0) {
+    if (::setsockopt(
+            fd_, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enabled, sizeof(enabled)) != 0 ||
+        ::setsockopt(
+            fd_, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback, sizeof(loopback)) != 0 ||
+        ::setsockopt(fd_,
+                     SOL_CAN_RAW,
+                     CAN_RAW_RECV_OWN_MSGS,
+                     &receive_own,
+                     sizeof(receive_own)) != 0) {
         last_error_ = errno;
         close();
         return TransportStatus::Error;
@@ -114,8 +120,11 @@ TransportStatus SocketCanFdTransport::open() noexcept {
 
     if (config_.receive_error_frames) {
         const can_err_mask_t error_mask = CAN_ERR_MASK;
-        if (::setsockopt(fd_, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &error_mask, sizeof(error_mask)) !=
-            0) {
+        if (::setsockopt(fd_,
+                         SOL_CAN_RAW,
+                         CAN_RAW_ERR_FILTER,
+                         &error_mask,
+                         sizeof(error_mask)) != 0) {
             last_error_ = errno;
             close();
             return TransportStatus::Error;
@@ -131,8 +140,11 @@ TransportStatus SocketCanFdTransport::open() noexcept {
                 native_filters[i].can_id |= CAN_EFF_FLAG;
             }
         }
-        const auto bytes = static_cast<socklen_t>(filter_count_ * sizeof(can_filter));
-        if (::setsockopt(fd_, SOL_CAN_RAW, CAN_RAW_FILTER, native_filters.data(), bytes) != 0) {
+        const auto bytes =
+            static_cast<socklen_t>(filter_count_ * sizeof(can_filter));
+        if (::setsockopt(
+                fd_, SOL_CAN_RAW, CAN_RAW_FILTER, native_filters.data(), bytes) !=
+            0) {
             last_error_ = errno;
             close();
             return TransportStatus::Error;
@@ -140,7 +152,8 @@ TransportStatus SocketCanFdTransport::open() noexcept {
     }
 
     if (config_.receive_timestamps &&
-        ::setsockopt(fd_, SOL_SOCKET, SO_TIMESTAMPNS, &enabled, sizeof(enabled)) != 0) {
+        ::setsockopt(fd_, SOL_SOCKET, SO_TIMESTAMPNS, &enabled, sizeof(enabled)) !=
+            0) {
         last_error_ = errno;
         close();
         return TransportStatus::Error;
@@ -155,7 +168,8 @@ TransportStatus SocketCanFdTransport::open() noexcept {
     sockaddr_can address{};
     address.can_family = AF_CAN;
     address.can_ifindex = static_cast<int>(interface_index);
-    if (::bind(fd_, reinterpret_cast<const sockaddr*>(&address), sizeof(address)) != 0) {
+    if (::bind(fd_, reinterpret_cast<const sockaddr*>(&address), sizeof(address)) !=
+        0) {
         last_error_ = errno;
         close();
         return TransportStatus::Error;
@@ -205,12 +219,14 @@ CanIoResult SocketCanFdTransport::try_receive(CanFrame& output) noexcept {
 
     for (cmsghdr* header = CMSG_FIRSTHDR(&message); header != nullptr;
          header = CMSG_NXTHDR(&message, header)) {
-        if (header->cmsg_level == SOL_SOCKET && header->cmsg_type == SCM_TIMESTAMPNS &&
+        if (header->cmsg_level == SOL_SOCKET &&
+            header->cmsg_type == SCM_TIMESTAMPNS &&
             header->cmsg_len >= CMSG_LEN(sizeof(timespec))) {
             timespec timestamp{};
             std::memcpy(&timestamp, CMSG_DATA(header), sizeof(timestamp));
             next.timestamp_ns =
-                static_cast<std::int64_t>(timestamp.tv_sec) * 1'000'000'000LL + timestamp.tv_nsec;
+                static_cast<std::int64_t>(timestamp.tv_sec) * 1'000'000'000LL +
+                timestamp.tv_nsec;
             break;
         }
     }
@@ -234,8 +250,9 @@ CanIoResult SocketCanFdTransport::try_send(const CanFrame& input) noexcept {
         canfd_frame native{};
         native.can_id = encode_id(input);
         native.len = input.size;
-        native.flags = static_cast<__u8>((input.bit_rate_switch ? CANFD_BRS : 0U) |
-                                         (input.error_state_indicator ? CANFD_ESI : 0U));
+        native.flags =
+            static_cast<__u8>((input.bit_rate_switch ? CANFD_BRS : 0U) |
+                              (input.error_state_indicator ? CANFD_ESI : 0U));
         std::memcpy(native.data, input.data.data(), input.size);
         sent = ::send(fd_, &native, CANFD_MTU, MSG_DONTWAIT);
         if (sent >= 0 && sent != CANFD_MTU) {

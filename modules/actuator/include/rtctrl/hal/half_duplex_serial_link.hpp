@@ -22,9 +22,11 @@ class HalfDuplexSerialLink final : public IActuatorLink {
         return {kActuatorPacketPayloadCapacity, kActuatorPacketBatchCapacity};
     }
     ActuatorLinkStatus open() noexcept override;
-    ActuatorLinkStatus receive(std::int64_t now_ns, ActuatorPacketBatch& packets) noexcept override;
-    ActuatorLinkStatus transmit(std::int64_t now_ns,
-                                const ActuatorPacketBatch& packets) noexcept override;
+    ActuatorLinkStatus receive(std::int64_t now_ns,
+                               ActuatorPacketBatch& packets) noexcept override;
+    ActuatorLinkStatus
+    transmit(std::int64_t now_ns,
+             const ActuatorPacketBatch& packets) noexcept override;
     void close() noexcept override;
 
   private:

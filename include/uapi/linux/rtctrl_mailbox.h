@@ -125,8 +125,11 @@ struct rtctrl_mb_stats {
 #define RTCTRL_MB_IOC_GET_INFO _IOR(RTCTRL_MB_IOC_MAGIC, 0x00, struct rtctrl_mb_info)
 #define RTCTRL_MB_IOC_ARM _IO(RTCTRL_MB_IOC_MAGIC, 0x01)
 #define RTCTRL_MB_IOC_DISARM _IO(RTCTRL_MB_IOC_MAGIC, 0x02)
-#define RTCTRL_MB_IOC_SUBMIT_COMMAND _IOW(RTCTRL_MB_IOC_MAGIC, 0x03, struct rtctrl_mb_command_frame)
-#define RTCTRL_MB_IOC_READ_FEEDBACK _IOR(RTCTRL_MB_IOC_MAGIC, 0x04, struct rtctrl_mb_feedback_frame)
-#define RTCTRL_MB_IOC_GET_STATS _IOR(RTCTRL_MB_IOC_MAGIC, 0x05, struct rtctrl_mb_stats)
+#define RTCTRL_MB_IOC_SUBMIT_COMMAND                                                \
+    _IOW(RTCTRL_MB_IOC_MAGIC, 0x03, struct rtctrl_mb_command_frame)
+#define RTCTRL_MB_IOC_READ_FEEDBACK                                                 \
+    _IOR(RTCTRL_MB_IOC_MAGIC, 0x04, struct rtctrl_mb_feedback_frame)
+#define RTCTRL_MB_IOC_GET_STATS                                                     \
+    _IOR(RTCTRL_MB_IOC_MAGIC, 0x05, struct rtctrl_mb_stats)
 
 #endif /* _UAPI_LINUX_RTCTRL_MAILBOX_H */

@@ -75,8 +75,8 @@ class IActuatorLink {
     virtual ActuatorLinkStatus open() noexcept = 0;
     virtual ActuatorLinkStatus receive(std::int64_t now_ns,
                                        ActuatorPacketBatch& packets) noexcept = 0;
-    virtual ActuatorLinkStatus transmit(std::int64_t now_ns,
-                                        const ActuatorPacketBatch& packets) noexcept = 0;
+    virtual ActuatorLinkStatus
+    transmit(std::int64_t now_ns, const ActuatorPacketBatch& packets) noexcept = 0;
     virtual void close() noexcept = 0;
 };
 

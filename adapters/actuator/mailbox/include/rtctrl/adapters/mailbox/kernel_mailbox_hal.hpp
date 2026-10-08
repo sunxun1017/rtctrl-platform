@@ -1,7 +1,7 @@
 #pragma once
 
-#include "rtctrl/hal/actuator_hal.hpp"
 #include "rtctrl/adapters/mailbox/kernel_mailbox_codec.hpp"
+#include "rtctrl/hal/actuator_hal.hpp"
 
 #include <cstdint>
 
@@ -19,7 +19,8 @@ struct KernelMailboxHalConfig {
 // mutates device-owned DMA slots.
 class KernelMailboxHal final : public IActuatorHal {
   public:
-    explicit KernelMailboxHal(KernelMailboxHalConfig config) noexcept : config_(config) {}
+    explicit KernelMailboxHal(KernelMailboxHalConfig config) noexcept
+        : config_(config) {}
     ~KernelMailboxHal() override;
 
     KernelMailboxHal(const KernelMailboxHal&) = delete;
@@ -27,8 +28,10 @@ class KernelMailboxHal final : public IActuatorHal {
 
     HalStatus open_safe(std::int64_t now_ns) noexcept override;
     HalStatus arm(std::int64_t now_ns) noexcept override;
-    HalStatus read(std::int64_t now_ns, model::SensorFrame& output) noexcept override;
-    HalStatus write(std::int64_t now_ns, const model::CommandFrame& input) noexcept override;
+    HalStatus read(std::int64_t now_ns,
+                   model::SensorFrame& output) noexcept override;
+    HalStatus write(std::int64_t now_ns,
+                    const model::CommandFrame& input) noexcept override;
     void emergency_stop(std::int64_t now_ns) noexcept override;
     void close() noexcept override;
 

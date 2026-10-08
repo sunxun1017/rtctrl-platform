@@ -12,7 +12,8 @@ TransportStatus LoopbackByteTransport::open() noexcept {
     return TransportStatus::Ok;
 }
 
-IoResult LoopbackByteTransport::try_receive(std::byte* destination, std::size_t capacity) noexcept {
+IoResult LoopbackByteTransport::try_receive(std::byte* destination,
+                                            std::size_t capacity) noexcept {
     if (!open_) {
         return {TransportStatus::Closed, 0, 0};
     }
@@ -29,7 +30,8 @@ IoResult LoopbackByteTransport::try_receive(std::byte* destination, std::size_t 
     return {TransportStatus::Ok, count, 0};
 }
 
-IoResult LoopbackByteTransport::try_send(const std::byte* source, std::size_t size) noexcept {
+IoResult LoopbackByteTransport::try_send(const std::byte* source,
+                                         std::size_t size) noexcept {
     if (!open_) {
         return {TransportStatus::Closed, 0, 0};
     }
@@ -50,7 +52,8 @@ void LoopbackByteTransport::close() noexcept {
     open_ = false;
 }
 
-bool LoopbackByteTransport::inject(const std::byte* source, std::size_t size) noexcept {
+bool LoopbackByteTransport::inject(const std::byte* source,
+                                   std::size_t size) noexcept {
     if (!open_ || source == nullptr || size > kCapacity - rx_size_) {
         return false;
     }

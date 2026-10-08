@@ -29,8 +29,8 @@ struct LoopMetrics {
         if (raw >= kBucketCount) {
             ++histogram_overflows;
         }
-        const auto bucket = static_cast<std::size_t>(
-            std::min<std::uint64_t>(raw, static_cast<std::uint64_t>(kBucketCount - 1)));
+        const auto bucket = static_cast<std::size_t>(std::min<std::uint64_t>(
+            raw, static_cast<std::uint64_t>(kBucketCount - 1)));
         ++jitter_histogram[bucket];
         ++samples;
         skipped_periods += skipped;
@@ -44,8 +44,8 @@ struct LoopMetrics {
         if (samples == 0) {
             return 0;
         }
-        const auto wanted =
-            static_cast<std::uint64_t>(std::ceil(quantile * static_cast<double>(samples)));
+        const auto wanted = static_cast<std::uint64_t>(
+            std::ceil(quantile * static_cast<double>(samples)));
         const auto threshold = std::max<std::uint64_t>(1, wanted);
         std::uint64_t cumulative = 0;
         for (std::size_t i = 0; i < kBucketCount; ++i) {
