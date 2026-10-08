@@ -1,0 +1,91 @@
+[
+  {
+    "command": "printf '%s' 'IyEvYmluL3NoCiMgSW5zcGVjdCB0aGlzIFJBTSBib290IHdpdGhvdXQgb3BlbmluZyBhIHNlbnNvciwgVUFSVCwgb3IgY2FsaWJyYXRpb24gaW50ZXJmYWNlLgpzZXQgLWV1CnRlc3QgIiQoaWQgLXUpIiA9IDAKdGVzdCAiJCh1bmFtZSAtcikiID0gNS4xMC4xNjAtcnQ4OS1nOWY5ZTlkMTg1NzRkLWRpcnR5CnRlc3QgIiQocmVhZGxpbmsgLWYgL3Byb2MvMS9leGUpIiA9IC9iaW4vYnVzeWJveAp0ZXN0ICIkKGhleGR1bXAgLXYgLWUgJzEvMSAiJTAyeCInIC9wcm9jLzEvY21kbGluZSkiID0gMmY2MjY5NmUyZjczNjgwMDJmNjk2ZTY5NzQwMAp0ZXN0ICIkKHNoYTI1NnN1bSAvcHJvYy8xL2V4ZSkiID0gJzUxNGMzZmE0OGU1MzgyODNhZWE3ODgxY2M3YzU0YzRhNzdjODU1ZGIw' > /tmp/accel/linux-enumeration.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'OWMwNTAwOGZlZjk1ODdmMmFjOTA2YTEgIC9wcm9jLzEvZXhlJwp0ZXN0ICEgLWUgL2Rldi9NY3VDb20KdGVzdCAhIC1kIC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDA2MgplY2hvIExJTlVYX0FDQ0VMX0VOVU1FUkFUSU9OX0JFR0lOCmNhdCAvcHJvYy9jbWRsaW5lCmNhdCAvcHJvYy9tb2R1bGVzCmxzIC1sZCAvc3lzL2J1cy9pMmMvZGV2aWNlcy81LTAwMTUKY2F0IC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDAxNS9uYW1lCnJlYWRsaW5rIC1mIC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDAxNS9vZl9ub2RlCnRlc3QgISAtZSAvc3lzL2J1cy9pMmMvZGV2aWNlcy81LTAwMTUvZHJpdmVyCmxzIC1sIC9kZXYvaTJjLTUKY2F0IC9wcm9jL2J1cy9pbnB1dC9kZXZpY2VzCmNhdCAv' >> /tmp/accel/linux-enumeration.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'cHJvYy90dHkvZHJpdmVyL3NlcmlhbAp0ZXN0ICIkKGNhdCAvc3lzL2Zpcm13YXJlL2RldmljZXRyZWUvYmFzZS9pMmNAZmU1ZTAwMDAvc3RhdHVzKSIgPSBva2F5CnRlc3QgIiQoY2F0IC9zeXMvZmlybXdhcmUvZGV2aWNldHJlZS9iYXNlL2kyY0BmZTVlMDAwMC9teGM2NjU1eGFAMTUvY29tcGF0aWJsZSkiID0gZ3NfbXhjNjY1NXhhCm1rZGlyIC1wIC90bXAvYWNjZWwtZGVidWcKbW91bnQgLXQgZGVidWdmcyBkZWJ1Z2ZzIC90bXAvYWNjZWwtZGVidWcKdHJhcCAndW1vdW50IC90bXAvYWNjZWwtZGVidWcnIEVYSVQKdHJhcCAnZXhpdCAxJyBIVVAgSU5UIFRFUk0KZ3JlcCAtRSAncGluICgxNnwxN3wxMDd8MTA4KSAnIC90bXAvYWNjZWwtZGVidWcvcGluY3RybC9waW5jdHJs' >> /tmp/accel/linux-enumeration.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'LXJvY2tjaGlwLXBpbmN0cmwvcGlubXV4LXBpbnMKdW1vdW50IC90bXAvYWNjZWwtZGVidWcKdHJhcCAtIEVYSVQgSFVQIElOVCBURVJNCmVjaG8gTElOVVhfQUNDRUxfVU5CT1VORF9OT0RFX0FORF9CVVNfVkVSSUZJRUQK' >> /tmp/accel/linux-enumeration.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "base64 -d /tmp/accel/linux-enumeration.sh.b64 > /tmp/accel/linux-enumeration.sh",
+    "wait": 0.1
+  },
+  {
+    "command": "printf '%s' 'IyEvYmluL3NoCiMgT25lLXNob3QgbG9hZCBvZiBwYXRjaGVkIHNvdXJjZSBkcml2ZXJzLiBObyBpbnB1dCBvcGVuLCBlbmFibGUsIG9yIGNhbGlicmF0aW9uLgpzZXQgLWV1CnRlc3QgIiQoaWQgLXUpIiA9IDAKdGVzdCAiJCh1bmFtZSAtcikiID0gNS4xMC4xNjAtcnQ4OS1nOWY5ZTlkMTg1NzRkLWRpcnR5CnRlc3QgIiQocmVhZGxpbmsgLWYgL3Byb2MvMS9leGUpIiA9IC9iaW4vYnVzeWJveAp0ZXN0ICIkKGhleGR1bXAgLXYgLWUgJzEvMSAiJTAyeCInIC9wcm9jLzEvY21kbGluZSkiID0gMmY2MjY5NmUyZjczNjgwMDJmNjk2ZTY5NzQwMAp0ZXN0ICIkKHNoYTI1NnN1bSAvcHJvYy8xL2V4ZSkiID0gJzUxNGMzZmE0OGU1MzgyODNhZWE3ODgxY2M3YzU0YzRhNzdjODU1ZGIw' > /tmp/accel/linux-probe.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'OWMwNTAwOGZlZjk1ODdmMmFjOTA2YTEgIC9wcm9jLzEvZXhlJwp0ZXN0ICEgLWUgL2Rldi9NY3VDb20KdGVzdCAhIC1lIC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDAxNS9kcml2ZXIKdGVzdCAhIC1lIC90bXAvYWNjZWwvcHJvYmUtYXR0ZW1wdGVkCm1vZHVsZXM9JChjYXQgL3Byb2MvbW9kdWxlcykKdGVzdCAteiAiJG1vZHVsZXMiCmNkIC90bXAvYWNjZWwKc2hhMjU2c3VtIC1jIHVwbG9hZC5zaGEyNTYKZWNobyBMSU5VWF9BQ0NFTF9EUklWRVJfTE9BRF9CRUdJTgppbnNtb2QgL3RtcC9hY2NlbC9zZW5zb3JfZGV2LmtvCnRlc3QgIiQoY2F0IC9zeXMvbW9kdWxlL3NlbnNvcl9kZXYvaW5pdHN0YXRlKSIgPSBsaXZlCnRvdWNoIC90bXAvYWNjZWwvcHJvYmUtYXR0ZW1wdGVk' >> /tmp/accel/linux-probe.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'Cmluc21vZCAvdG1wL2FjY2VsL214YzY2NTV4YS5rbwp0ZXN0ICIkKGNhdCAvc3lzL21vZHVsZS9teGM2NjU1eGEvaW5pdHN0YXRlKSIgPSBsaXZlCmNhdCAvcHJvYy9tb2R1bGVzCmRtZXNnIHwgZ3JlcCAtRSAnbXhjNjY1NXxzZW5zb3JfcHJvYmV8c2Vuc29yX2NoaXBfaW5pdHxpMmMuKih0aW1lb3V0fE5BQ0t8ZXJyb3IpJyB8fCB0cnVlCmNhdCAvcHJvYy9idXMvaW5wdXQvZGV2aWNlcwppZiB0ZXN0IC1lIC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDAxNS9kcml2ZXI7IHRoZW4KICAgIHRlc3QgIiQocmVhZGxpbmsgLWYgL3N5cy9idXMvaTJjL2RldmljZXMvNS0wMDE1L2RyaXZlcikiID0gL3N5cy9idXMvaTJjL2RyaXZlcnMvZ3NlbnNvcl9teGM2NjU1CiAgICAvdG1wL2Fj' >> /tmp/accel/linux-probe.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'Y2VsL3NlbnNvci1pbnNwZWN0IC0tcmVxdWlyZS1vZmYKICAgIHByaW50ZiAnJXNcbicgaWRlbnRpdHktb2ZmID4gL3RtcC9hY2NlbC9vdXRjb21lCiAgICBlY2hvIExJTlVYX0FDQ0VMX0lERU5USVRZX0FORF9ERUZBVUxUX09GRl9WRVJJRklFRAplbHNlCiAgICB0ZXN0ICEgLWQgL3N5cy9idXMvaTJjL2RldmljZXMvNS0wMDE1L2lucHV0CiAgICB0ZXN0ICEgLWUgL2Rldi9tbWE4NDUyX2RhZW1vbgogICAgcHJpbnRmICclc1xuJyBwcm9iZS1yZWplY3RlZCA+IC90bXAvYWNjZWwvb3V0Y29tZQogICAgZWNobyBMSU5VWF9BQ0NFTF9QUk9CRV9SRUpFQ1RFRF9OT19GQUxTRV9CSU5ESU5HCmZpCmVjaG8gTElOVVhfQUNDRUxfRElBR05PU1RJQ19DT01QTEVURV9OT19TQU1QTElO' >> /tmp/accel/linux-probe.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'Rwo=' >> /tmp/accel/linux-probe.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "base64 -d /tmp/accel/linux-probe.sh.b64 > /tmp/accel/linux-probe.sh",
+    "wait": 0.1
+  },
+  {
+    "command": "printf '%s' 'IyEvYmluL3NoCiMgUGVybWl0IG9ubHkgdGhpcyBvbmUtc2hvdCBzZW5zb3IgcGFpciB0byByZW1haW4gcmVzaWRlbnQgaW4gUkFNIHVudGlsIHJlc2V0LgojIFRoaXMgZGVsaWJlcmF0ZWx5IGRvZXMgbm90IGV4ZXJjaXNlIHRoZWlyIGtub3duLXVuc2FmZSBnZW5lcmljIHJlbW92ZSBwYXRoLgpzZXQgLWV1CnRlc3QgIiQodW5hbWUgLXIpIiA9IDUuMTAuMTYwLXJ0ODktZzlmOWU5ZDE4NTc0ZC1kaXJ0eQp0ZXN0ICIkKHJlYWRsaW5rIC1mIC9wcm9jLzEvZXhlKSIgPSAvYmluL2J1c3lib3gKdGVzdCAiJChoZXhkdW1wIC12IC1lICcxLzEgIiUwMngiJyAvcHJvYy8xL2NtZGxpbmUpIiA9IDJmNjI2OTZlMmY3MzY4MDAyZjY5NmU2OTc0MDAKdGVzdCAiJChzaGEyNTZzdW0gL3By' > /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'b2MvMS9leGUpIiA9ICc1MTRjM2ZhNDhlNTM4MjgzYWVhNzg4MWNjN2M1NGM0YTc3Yzg1NWRiMDljMDUwMDhmZWY5NTg3ZjJhYzkwNmExICAvcHJvYy8xL2V4ZScKdGVzdCAhIC1lIC9kZXYvTWN1Q29tCnRlc3QgISAtZSAvc3lzL2NsYXNzL25ldC93bGFuMApsb29wcz0kKGxvc2V0dXAgLWEpCnRlc3QgLXogIiRsb29wcyIKbW91bnRzPSQoY2F0IC9wcm9jL21vdW50cykKdGVzdCAtbiAiJG1vdW50cyIKcHJpbnRmICclc1xuJyAiJG1vdW50cyIgfAogICAgd2hpbGUgcmVhZCAtciBzb3VyY2UgcG9pbnQga2luZCByZW1haW5kZXI7IGRvCiAgICAgICAgY2FzZSAiJGtpbmQiIGluCiAgICAgICAgICAgIHJvb3Rmc3xkZXZ0bXBmc3xwcm9jfHN5c2ZzfHRtcGZzKSA7OwogICAgICAg' >> /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'ICAgICAqKSBleGl0IDEgOzsKICAgICAgICBlc2FjCiAgICBkb25lCm1vZHVsZXM9JChjYXQgL3Byb2MvbW9kdWxlcykKdGVzdCAtbiAiJG1vZHVsZXMiCm1vZHVsZV9jb3VudD0wCmZvciBuYW1lIGluICQocHJpbnRmICclc1xuJyAiJG1vZHVsZXMiIHwgd2hpbGUgcmVhZCAtciBuYW1lIHJlbWFpbmRlcjsgZG8gcHJpbnRmICclc1xuJyAiJG5hbWUiOyBkb25lKTsgZG8KICAgIGNhc2UgIiRuYW1lIiBpbgogICAgICAgIHNlbnNvcl9kZXZ8bXhjNjY1NXhhKSA7OwogICAgICAgICopIGV4aXQgMSA7OwogICAgZXNhYwogICAgdGVzdCAiJChjYXQgL3N5cy9tb2R1bGUvJG5hbWUvaW5pdHN0YXRlKSIgPSBsaXZlCiAgICBtb2R1bGVfY291bnQ9JCgobW9kdWxlX2NvdW50ICsgMSkp' >> /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'CmRvbmUKdGVzdCAiJG1vZHVsZV9jb3VudCIgPSAyCm91dGNvbWU9JChjYXQgL3RtcC9hY2NlbC9vdXRjb21lKQpjYXNlICIkb3V0Y29tZSIgaW4KICAgIGlkZW50aXR5LW9mZikKICAgICAgICB0ZXN0ICIkKHJlYWRsaW5rIC1mIC9zeXMvYnVzL2kyYy9kZXZpY2VzLzUtMDAxNS9kcml2ZXIpIiA9IC9zeXMvYnVzL2kyYy9kcml2ZXJzL2dzZW5zb3JfbXhjNjY1NQogICAgICAgIC90bXAvYWNjZWwvc2Vuc29yLWluc3BlY3QgLS1yZXF1aXJlLW9mZgogICAgICAgIDs7CiAgICBwcm9iZS1yZWplY3RlZCkKICAgICAgICB0ZXN0ICEgLWUgL3N5cy9idXMvaTJjL2RldmljZXMvNS0wMDE1L2RyaXZlcgogICAgICAgIHRlc3QgISAtZCAvc3lzL2J1cy9pMmMvZGV2aWNlcy81LTAwMTUv' >> /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'aW5wdXQKICAgICAgICB0ZXN0ICEgLWUgL2Rldi9tbWE4NDUyX2RhZW1vbgogICAgICAgIDs7CiAgICAqKSBleGl0IDEgOzsKZXNhYwpmb3IgcHJvY2VzcyBpbiAvcHJvYy9bMC05XSo7IGRvCiAgICB0ZXN0IC1kICIkcHJvY2VzcyIgfHwgY29udGludWUKICAgIG5hbWU9JChjYXQgIiRwcm9jZXNzL2NvbW0iKQogICAgY2FzZSAiJG5hbWUiIGluCiAgICAgICAgd3BhX3N1cHBsaWNhbnR8bmV0d29yay1oZWxwZXJ8c2Vuc29yLWluc3BlY3QpIGV4aXQgMSA7OwogICAgZXNhYwogICAgZm9yIGRlc2NyaXB0b3IgaW4gIiRwcm9jZXNzIi9mZC8qOyBkbwogICAgICAgIHRlc3QgLUwgIiRkZXNjcmlwdG9yIiB8fCBjb250aW51ZQogICAgICAgIHRhcmdldD0kKHJlYWRsaW5rICIkZGVz' >> /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'Y3JpcHRvciIpCiAgICAgICAgY2FzZSAiJHRhcmdldCIgaW4KICAgICAgICAgICAgL2Rldi9pMmMtKnwvZGV2L2lucHV0Lyp8L2Rldi9tbWE4NDUyX2RhZW1vbnwvZGV2L3R0eVMwfC9kZXYvTWN1Q29tKSBleGl0IDEgOzsKICAgICAgICBlc2FjCiAgICBkb25lCmRvbmUKZmlybXdhcmVfcGF0aD0kKGhleGR1bXAgLXYgLWUgJzEvMSAiJTAyeCInIC9zeXMvbW9kdWxlL2Zpcm13YXJlX2NsYXNzL3BhcmFtZXRlcnMvcGF0aCkKdGVzdCAiJGZpcm13YXJlX3BhdGgiID0gMGEKcHJpbnRmICclc1xuJyAiJG1vdW50cyIKZWNobyBBQ0NFTF9SQU1fT05MWV9SRVNFVF9SRUFEWV9TRU5TT1JfTU9EVUxFU19SRVRBSU5FRAo=' >> /tmp/accel/linux-return-guard.sh.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "base64 -d /tmp/accel/linux-return-guard.sh.b64 > /tmp/accel/linux-return-guard.sh",
+    "wait": 0.1
+  },
+  {
+    "command": "printf '%s' 'ZTc2MTM5ZjNjOWI5NzhjYmNlYjc4NmFlMjZlYjMxYzk2MThlMzI1MjlmMGRjOWE4ZTRiYmYxYjc3OGM3N2UxMiAgYWNjZWxlcm9tZXRlci5kdGIKNGRlZTA4ZWZhOWEwMjE0YTA4OWYwZTYxNWY4Y2M1ZjQwMDM1ZTNkMzMwOTA1ZDVlYzA1YWI2ZGUxYTk2ZDhhMSAgc2Vuc29yX2Rldi5rbwpmNmI2N2ZiNDU5Mzc1ZTkzYjkxNmIwZGYxYTliOWUxOTk2ZjkwZWRlNDEwYjM2NGJlZDYzNTE4YzM5MDA5OWY5ICBteGM2NjU1eGEua28KOWI3MDZiZDdlN2FjYjRiNzA0YjI4MzhlMDA0ZGQ3MWMxYzNlYmM5ZWEyY2RhNTlkZDY0ZDlkODJmNzY4Y2RmYiAgc2Vuc29yLWluc3BlY3QKYjQyMmI4Zjc1ZDk1OTVlNjE5NmQ0MWY5NjBmZDM2ZDFiZDM0ZmY3MTRlMGU2MmEwMmQ1MTU5ZmM4Y2Y0' > /tmp/accel/upload.sha256.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "printf '%s' 'NTBlZiAgbGludXgtZW51bWVyYXRpb24uc2gKMTkyNWFiZjJhODJiN2I2MjZhOTgyZDFiNDc3ZTdiMmE2Y2EwZGQ0OWVkMzYyZjE1ODM3OTFiYzM4ZDI5Njc2NSAgbGludXgtcHJvYmUuc2gKMWY2MGFiYWU5Zjc5ZjZmNTAzNTcwMzZjOGFhOTQyYWRhZDlkNDNiMWM2YTVlOTAxMjI0YjVhZDE0OGMwOTg0MiAgbGludXgtcmV0dXJuLWd1YXJkLnNoCg==' >> /tmp/accel/upload.sha256.b64",
+    "wait": 0.05
+  },
+  {
+    "command": "base64 -d /tmp/accel/upload.sha256.b64 > /tmp/accel/upload.sha256",
+    "wait": 0.1
+  },
+  {
+    "command": "cd /tmp/accel && sha256sum -c upload.sha256",
+    "wait": 1,
+    "expect": "(?m)^linux-return-guard.sh: OK\\r?$"
+  }
+]

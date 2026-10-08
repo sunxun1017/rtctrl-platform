@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/cap1188/linux-identity.sh",
+    "wait": 3,
+    "expect": "(?m)^CAP_SPI_DIAGNOSTIC_COMPLETE_NO_INPUT_DRIVER\\r?$"
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "status": "ANDROID_AUDIO_METADATA_BASELINE_VERIFIED_NO_PLAYBACK_CAPTURE",
+  "date": "2026-10-04",
+  "kernel": "4.19.232",
+  "battery_latest_percent": 25,
+  "usb_audio": {
+    "snapshot_card": 0,
+    "id": "Dongle",
+    "name": "Bothlent UAC Dongle",
+    "capture_pcm_count": 1
+  },
+  "board_audio": {
+    "snapshot_card": 1,
+    "id": "rockchiprk809co",
+    "name": "rockchip,rk809-codec",
+    "machine": "rk809-sound",
+    "codec_driver": "rk817-codec",
+    "cpu_dai": "fe410000.i2s",
+    "codec_dai": "rk817-hifi",
+    "playback_pcm_count": 1,
+    "capture_pcm_count": 1,
+    "control_count": 2,
+    "controls_read": {
+      "Playback Path": "HP_NO_MIC",
+      "Capture MIC Path": "MIC OFF"
+    },
+    "amp_gpio_mux_snapshot": "GPIO4_C4 pin148 GPIO owned; MUX unclaimed"
+  },
+  "boundaries": {
+    "metadata_only": true,
+    "card_number_stable_across_boots": false,
+    "playback_tested": false,
+    "capture_tested": false,
+    "path_control_changed": false,
+    "gpio_level_written": false,
+    "new_linux_audio_driver_built": false,
+    "new_linux_audio_driver_loaded": false,
+    "linux_board_audio_accepted": false,
+    "initial_unquoted_probe_used_as_evidence": false
+  },
+  "raw_evidence_sha256": {
+    "android-audio-baseline-v2.json": "b2f6d0f8876c6d2477f41a31cf70488238f6608c1d29d9a46a3a9a5f7a6370c2",
+    "android-audio-details-v3.json": "23cd25a5e6419ca609219975e9107c0b43b747f68aa319376fb8395a62138bb2"
+  },
+  "next_analysis": "NEXT-AUDIO.md; locked 5.10 codec driver exists but CONFIG_SND_SOC_RK817 is disabled"
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "command": "sh /tmp/display-return-guard.sh",
+    "wait": 5,
+    "expect": "(?m)^DISPLAY_RAM_ONLY_RESET_READY\\r?$"
+  },
+  {
+    "command": "dmesg",
+    "wait": 2
+  },
+  {
+    "command": "echo b > /proc/sysrq-trigger",
+    "wait": 40
+  }
+]

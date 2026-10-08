@@ -1,0 +1,152 @@
+{
+  "status": "CAP_SPI_RAM_DIAGNOSTIC_RETURNED_IDENTITY_REJECTED",
+  "date": "2026-10-04",
+  "linux_kernel": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "dtb": {
+    "bytes": 162562,
+    "sha256": "fdc469fc60abbb203bfa585232dfe9f0501c87340c534401183263ebc866acd4",
+    "crc32": "2bc429db",
+    "checks": 151,
+    "faults_rejected": 15,
+    "property_changes": 10,
+    "old_phandles_retained": 760,
+    "new_dtc_warnings": 0,
+    "i2c5_enabled": false,
+    "spi_m1_default_and_hs": true,
+    "only_cs0": true
+  },
+  "helper": {
+    "sha256": "81c5cc528e9d22994e3230722fe050c8f866dce18715de86a422bd52081f34ff",
+    "host_checks": 42,
+    "qemu_checks": 42,
+    "static_open_source": true,
+    "configuration_writes": 0,
+    "maximum_identity_transactions": 3
+  },
+  "android_baseline": {
+    "input_name": "cap1188_input",
+    "key_capability": "3fc",
+    "keycodes": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "binding": "cap1188",
+    "fresh_physical_identity_verified": false
+  },
+  "linux_identity": {
+    "device": "spidev3.0",
+    "device_numbers": "153:0",
+    "spi_mode": 3,
+    "bits_per_word": 8,
+    "speed_hz": 100000,
+    "lsb_first": false,
+    "product": "0x00",
+    "manufacturer": "0x00",
+    "revision": "not reported on mismatch",
+    "registers_read": [
+      "0xfd",
+      "0xfe",
+      "0xff"
+    ],
+    "exit_code": 1,
+    "accepted": false,
+    "counters": {
+      "MESSAGES_BEFORE": 0,
+      "MESSAGES_AFTER": 3,
+      "ERRORS_BEFORE": 0,
+      "ERRORS_AFTER": 0,
+      "TIMEOUTS_BEFORE": 0,
+      "TIMEOUTS_AFTER": 0
+    },
+    "pinmux_after": "spi3-hs on M1; CS0 M1; CS1/reset unclaimed",
+    "controller_error_free_is_not_chip_ack": true,
+    "hardware_cause_established": false
+  },
+  "boundaries": {
+    "input_registered": false,
+    "input_opened": false,
+    "reset_requested": false,
+    "initialization_written": false,
+    "modules_loaded": false,
+    "mcu_node_present": false,
+    "uart0_tx_rx": [
+      0,
+      0
+    ],
+    "motor_connected": false,
+    "motor_action": false,
+    "saveenv": false,
+    "startup_partition_write": false,
+    "switch_root": false,
+    "normal_poweroff_verified": false,
+    "all_peripherals_aligned": false
+  },
+  "runtime_checks": {
+    "busybox_applets": 52,
+    "reset_guard_fixtures": 25,
+    "stage_fixtures": 18,
+    "persistent_mounts_at_reset": false,
+    "loop_devices_at_reset": false,
+    "identity_helper_fds_at_reset": false,
+    "source_warning_bug_call_trace_to_ddr": false,
+    "reset_seconds": 349.427961
+  },
+  "returned_android": {
+    "kernel": "4.19.232",
+    "release": 11,
+    "root": true,
+    "boot_completed": true,
+    "adb_reconnected": true,
+    "battery_baseline_percent": 31,
+    "battery_final_percent": 30,
+    "serial_port_released": true
+  },
+  "startup_and_previous_rootfs": {
+    "before_after_full_sha_equal": true,
+    "full_emmc_compared": false,
+    "backup_restore_tested": false,
+    "sha256": {
+      "/dev/block/by-name/boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "/dev/block/by-name/uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "/dev/block/by-name/trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "/dev/block/by-name/dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "/dev/block/by-name/vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752",
+      "/cache/rtctrl-source-userspace-20261004/rootfs.ext4": "4fcebae566d889072954b2f5b220474fe9accd75bbb48471023f24841b6ed95e",
+      "/cache/rtctrl-network-rootfs-20261004/rootfs.img": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3"
+    }
+  },
+  "raw_evidence_sha256": {
+    "android-baseline.raw.txt": "d3845f76be81f0c724ea8255bb7dc866ef99778b70af813d15a7038b0b602d0a",
+    "android-stage.raw.txt": "f8429f3e1e6f571f847278a6be5b22430daa829dbb6bce7c33ba55813ffc4ce2",
+    "load-ram.raw.txt": "8f2303451d719830f4d66417bc289698c39e4726841624b91b34ef3497fc62f9",
+    "boot-ram.raw.txt": "2b2ac2edce97ddc0873717294ecee05bc70e81558873b9bc6af0a54b63c16ae1",
+    "linux-stage.raw.txt": "ccd0fdee01e84cb72f94a9a1c5ae1b67c62bf9c818348ae3b0cfc522d8b6be58",
+    "linux-enumeration.raw.txt": "307338749983a71a70fe5b805bcdd04ae42fada9c7500e7de141fdf066c7c746",
+    "linux-runtime-v2-upload.raw.txt": "8b130d926900daf460753d33ead59427467fbc44fc36b2644660f18a05211d25",
+    "linux-identity.raw.txt": "205c1be1557035ece223600bf978d4d63b4dbefd0b85426985bacf42e505afb9",
+    "linux-after-identity.raw.txt": "3083581a4b4e2ec69668b1c07fc8298d27edc77f7dff5b73e76a1291980d7c14",
+    "release-after-debugfs.raw.txt": "2d850ceef47b73d9a2654f2f895a47d3e54d1ab7ec99d0f61dc060ad884c4383",
+    "return-android.raw.txt": "ff412a69bed7b6a7263a338c57b5345c965e427cc804919406764bc250c5afe5",
+    "android-after.raw.txt": "e477a01c6cae5415eb803cda7558ead341ca9d5d93113fef49323fb2842ff666",
+    "android-final-state.raw.txt": "0dcff37d7839a5336c2c57a6964d5ef38877a330afa2f65c0a6709860078d12c"
+  },
+  "current_runtime_files": {
+    "cap1188-spi.dtb": "fdc469fc60abbb203bfa585232dfe9f0501c87340c534401183263ebc866acd4",
+    "cap1188-inspect": "81c5cc528e9d22994e3230722fe050c8f866dce18715de86a422bd52081f34ff",
+    "linux-enumeration.sh": "7dc9931847fdd4fbb847c04b2083780f80560ddc1b153f3fac374f218c5faf8a",
+    "linux-identity.sh": "25eb200757b14a97c59439f9d27d9f5ab85af6885b7b8a73b7112e11c5162071",
+    "linux-return-guard.sh": "3fced505afbba3213d03fcbc0e5cc93b896fd5dee50338e9eadc2465c1afcc27"
+  },
+  "limitations": [
+    "Identity rejected; no touch event/init/reset/lifecycle acceptance",
+    "No original Android direct SPI ID read: vendor driver kept bound",
+    "Electrical power/reset/CS/MISO and chip population were not measured",
+    "Other peripherals, MCU hardware feedback and motor safety contract still incomplete"
+  ]
+}

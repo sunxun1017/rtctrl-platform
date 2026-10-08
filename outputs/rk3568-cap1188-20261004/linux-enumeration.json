@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/cap1188/linux-enumeration.sh",
+    "wait": 3,
+    "expect": "(?m)^CAP_SPI_ENUMERATION_COMPLETE_NO_DEVICE_OPEN\\r?$"
+  }
+]

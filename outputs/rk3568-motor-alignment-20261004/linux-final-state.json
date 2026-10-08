@@ -1,0 +1,35 @@
+[
+  {
+    "wait": 1,
+    "command": "hexdump -C /proc/1/cmdline"
+  },
+  {
+    "wait": 1,
+    "command": "sha256sum /bin/busybox /bin/entropy-check /bin/serial-inspect /bin/network-helper"
+  },
+  {
+    "wait": 1,
+    "command": "cat /proc/tty/driver/serial"
+  },
+  {
+    "wait": 1,
+    "expect": "(?m)^okay\\r?$",
+    "command": "cat /sys/firmware/devicetree/base/serial@fdd50000/status"
+  },
+  {
+    "wait": 1,
+    "command": "cat /proc/mounts"
+  },
+  {
+    "wait": 1,
+    "command": "cat /proc/modules"
+  },
+  {
+    "wait": 1,
+    "command": "losetup -a"
+  },
+  {
+    "wait": 1,
+    "command": "hexdump -C /sys/module/firmware_class/parameters/path"
+  }
+]

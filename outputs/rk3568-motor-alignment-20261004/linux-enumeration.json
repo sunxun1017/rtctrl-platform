@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/linux-enumeration.sh",
+    "wait": 15,
+    "expect": "(?m)^LINUX_ENUMERATION_COMPLETE\\r?$"
+  }
+]

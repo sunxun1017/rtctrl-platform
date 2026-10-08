@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/linux-rootfs-read.sh",
+    "wait": 12,
+    "expect": "(?m)^CODEC_PTY_AND_READONLY_ROOTFS_PASSED\\r?$"
+  }
+]

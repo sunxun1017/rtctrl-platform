@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/linux-restore-empty-fw-path.sh",
+    "wait": 2,
+    "expect": "(?m)^FIRMWARE_CLASS_EMPTY_VALUE_RESTORED_BYTE_EXACT\\r?$"
+  }
+]

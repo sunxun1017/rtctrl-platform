@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/accel/linux-probe.sh",
+    "wait": 8,
+    "expect": "(?m)^LINUX_ACCEL_DIAGNOSTIC_COMPLETE_NO_SAMPLING\\r?$"
+  }
+]

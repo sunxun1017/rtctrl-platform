@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh -c '#!/bin/sh\n# Copy experiment scripts to RAM and release the read-only cache mount.\nset -eu\ntest \"$(uname -r)\" = 5.10.160-rt89-g9f9e9d18574d-dirty\ntest \"$(cat /sys/class/block/mmcblk0p12/size)\" = 786432\ngrep -qx PARTNAME=cache /sys/class/block/mmcblk0p12/uevent\ntest -z \"$(grep '\"'\"' /mnt/cache '\"'\"' /proc/mounts || true)\"\ntest -z \"$(losetup -a)\"\nowned=0\non_exit() {\n    status=$?\n    trap - EXIT HUP INT TERM\n    if [ \"$owned\" = 1 ]; then\n        cd / || status=1\n        umount /mnt/cache || status=1\n    fi\n    exit \"$status\"\n}\ntrap on_exit EXIT\ntrap '\"'\"'exit 1'\"'\"' HUP INT TERM\nmount -t ext4 -o ro,noload /dev/mmcblk0p12 /mnt/cache\nowned=1\ncd /mnt/cache/rtctrl-motor-alignment-20261004\nsha256sum -c upload.sha256\nfor name in linux-enumeration.sh linux-module-options.sh linux-module-cleanup.sh \\\n    rootfs-check.sh linux-rootfs-read.sh; do\n    test ! -e \"/tmp/$name\"\n    test ! -L \"/tmp/$name\"\n    cp \"$name\" \"/tmp/$name\"\ndone\ncd /\numount /mnt/cache\nowned=0\ntrap - EXIT HUP INT TERM\ntest -z \"$(grep '\"'\"' /mnt/cache '\"'\"' /proc/mounts || true)\"\necho MOTOR_ALIGNMENT_SCRIPTS_IN_RAM_CACHE_RELEASED\n'",
+    "wait": 5,
+    "expect": "(?m)^MOTOR_ALIGNMENT_SCRIPTS_IN_RAM_CACHE_RELEASED\\r?$"
+  }
+]

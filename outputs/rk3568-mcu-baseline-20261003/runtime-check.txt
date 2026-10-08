@@ -1,0 +1,14 @@
+Independent original-kernel RAM Linux
+SOURCE_TEST_OS=independent-original-kernel-Linux
+PatchX codec: vectors, fragmentation, corruption, bounds and byte transport passed
+PatchX POSIX PTY: idle, exact TX, fragmented RX, corruption, reopen and hangup passed
+MCU_CACHE_BYTES=000000000000
+SOURCE=kernel-cache; physical MCU status not queried
+LINUX_SOURCE_TESTS_PASSED
+SOURCE_TEST_MOUNTS_RELEASED
+
+Original Android after return
+PatchX codec: vectors, fragmentation, corruption, bounds and byte transport passed
+PatchX POSIX PTY: idle, exact TX, fragmented RX, corruption, reopen and hangup passed
+MCU_CACHE_BYTES=000000000000
+SOURCE=kernel-cache; physical MCU status not queried

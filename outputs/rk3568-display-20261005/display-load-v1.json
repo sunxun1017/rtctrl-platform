@@ -1,0 +1,50 @@
+[
+  {
+    "command": "ext4load mmc 0:c 400000 /rtctrl-display-20261005-v1/Image",
+    "wait": 4,
+    "expect": "34755072 bytes read"
+  },
+  {
+    "command": "crc32 400000 2125200",
+    "wait": 1,
+    "expect": "==> 6c3715bf"
+  },
+  {
+    "command": "ext4load mmc 0:c 3000000 /rtctrl-display-20261005-v1/display.dtb",
+    "wait": 4,
+    "expect": "166090 bytes read"
+  },
+  {
+    "command": "crc32 3000000 288ca",
+    "wait": 1,
+    "expect": "==> 6ea18539"
+  },
+  {
+    "command": "ext4load mmc 0:c 4000000 /rtctrl-display-20261005-v1/initramfs.cpio.gz",
+    "wait": 4,
+    "expect": "4308268 bytes read"
+  },
+  {
+    "command": "crc32 4000000 41bd2c",
+    "wait": 1,
+    "expect": "==> 74fea1e6"
+  },
+  {
+    "command": "fdt addr 3000000",
+    "wait": 1
+  },
+  {
+    "command": "fdt rsvmem print",
+    "wait": 1
+  },
+  {
+    "command": "fdt print /reserved-memory",
+    "wait": 1,
+    "expect": "no-map"
+  },
+  {
+    "command": "fdt print /backlight default-brightness-level",
+    "wait": 1,
+    "expect": "<0x00000000>"
+  }
+]

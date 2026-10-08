@@ -1,0 +1,20 @@
+[
+  {
+    "expect": "STANDARD_IDENTITY_RC=1",
+    "wait": 1,
+    "command": "if /tmp/accel/sensor-inspect; then echo STANDARD_IDENTITY_RC=0; else result=$?; echo STANDARD_IDENTITY_RC=$result; fi"
+  },
+  {
+    "wait": 0.5,
+    "command": "cat /proc/tty/driver/serial"
+  },
+  {
+    "wait": 0.5,
+    "command": "cat /proc/modules"
+  },
+  {
+    "expect": "probe-rejected",
+    "wait": 0.5,
+    "command": "cat /tmp/accel/outcome"
+  }
+]

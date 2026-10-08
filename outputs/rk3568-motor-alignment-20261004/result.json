@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "status": "UART0_USB_METADATA_AND_NEW_RAM_USERSPACE_BOARD_VERIFIED",
+  "kernel_image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+  "dtb_sha256": "7be4f96f90e10f1308ba6ecef8a5346d641d1bfbcf8746fbcdb704a2de9491d1",
+  "dtb_property_changes": [
+    "/serial@fdd50000/status"
+  ],
+  "dtb_audit_checks": 127,
+  "real_dtb_faults_rejected": 12,
+  "initramfs": {
+    "path": "outputs/rk3568-motor-alignment-20261004/build/userspace/v2/initramfs.cpio.gz",
+    "bytes": 4308268,
+    "sha256": "f0965ceed549acab8d5bd87df8bb831bb06a95d08b5b7bf3c5582045933323ee",
+    "crc32": "74fea1e6",
+    "newc_bytes": 11364864,
+    "gzip_streams": 1
+  },
+  "busybox_sha256": "514c3fa48e538283aea7881cc7c54c4a77c855db09c05008fef9587f2ac906a1",
+  "busybox_applet_count": 52,
+  "previous_51_applet_report_corrected": true,
+  "uart": {
+    "physical_address": "0xfdd50000",
+    "linux_device": "/dev/ttyS0",
+    "driver": "dw-apb-uart",
+    "major_minor": "4:64",
+    "console": false,
+    "pinmux_gpio_numbers": [
+      16,
+      17
+    ],
+    "observation_seconds": 10,
+    "initial_tx_rx": [
+      0,
+      0
+    ],
+    "final_tx_rx": [
+      0,
+      0
+    ],
+    "physical_tty_opened": false,
+    "termios_115200_8n1_board_verified": false,
+    "application_motor_frames_sent": false,
+    "electrical_zero_tx_proven": false,
+    "motor_controller_physical_correspondence_verified": false,
+    "motors_connected": false,
+    "controller_connection_confirmed": false,
+    "fd_snapshot_exclusivity_proven": false
+  },
+  "usb_microphone": {
+    "driver": "snd-usb-audio",
+    "format": "S16_LE",
+    "channels": 8,
+    "sample_rate": 16000,
+    "capture_state": "Stop",
+    "matches_android_metadata": true,
+    "audio_samples_recorded": false,
+    "channel_meanings_or_audio_quality_verified": false
+  },
+  "codec_and_posix_pty_on_source_kernel_passed": true,
+  "old_rootfs_sha256_unchanged": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3",
+  "old_rootfs_busybox_replaced": false,
+  "new_busybox_real_module_arguments_verified": true,
+  "module_config_bytes": 12,
+  "module_config_pm_band_parsed": [
+    0,
+    1
+  ],
+  "firmware_pm_readback_or_network_auth_tested": false,
+  "v2_firmware_path_restoration_was_false": true,
+  "v2_getter_before_after_hex": [
+    "0a",
+    "0a0a"
+  ],
+  "firmware_path_repaired_getter_hex": "0a",
+  "v3_firmware_search_path_not_modified": true,
+  "runtime_failure_tests_passed": 18,
+  "new_kernel_or_module_built": false,
+  "normal_reboot_poweroff_validated": false,
+  "sysrq_reset_seconds": 704.977365,
+  "source_kernel_warning_bug_calltrace_captured": [],
+  "ram_pid1": "/bin/sh /init",
+  "switch_root_performed": false,
+  "loops_cache_debugfs_devpts_and_test_module_released": true,
+  "android_11_root_boot_completed_after": true,
+  "startup_partition_sha256_unchanged": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+  },
+  "battery_percent_at_return": 53,
+  "printk_at_return": [
+    7,
+    4,
+    1,
+    7
+  ],
+  "kptr_restrict_at_return": 2,
+  "serial_host_port_released": true,
+  "credentials_packaged_or_new_wifi_authentication": false,
+  "startup_partition_write_saveenv_commit_push_performed": false,
+  "vendor_firmware_redistribution_license_verified": false,
+  "stop_enable_feedback_contract_or_physical_motor_verified": false,
+  "reference_audit_sha256": "3b114addb6cc05f36d382429f70e777e8389e045a9359016cdff5b95a473f778",
+  "firmware_source_audit_sha256": "906faafb31fd1551c7811cd1b3ddbd814350619ec8fd938f21747d099d85273b",
+  "evidence": {
+    "android-serial-baseline.txt": {
+      "sha256": "4026142c49205f5cdcb9b036a03d6e056e830d6acca2edc3f0abb77f7234f40d",
+      "public": false
+    },
+    "android-peripheral-baseline.txt": {
+      "sha256": "eb06aa16b7724a384ec5d8e5d98c6caad6b3fb218ce145eb06cc82eb5d15aa58",
+      "public": false
+    },
+    "uboot-console.raw.txt": {
+      "sha256": "213c0b684b0007bb31dc66e510488f410e852e408b63934099ec107b642e0733",
+      "public": false
+    },
+    "load-ram.raw.txt": {
+      "sha256": "d85c98243c8c75a2ac1baa4e99ed3d23a44c460448837360de3f0647dae1e629",
+      "public": false
+    },
+    "boot-ram.raw.txt": {
+      "sha256": "9cbd53693c632ba918309b7964d958ef106fd9c65e5b18e6aa5aa7a69cf7b5b6",
+      "public": false
+    },
+    "linux-stage.raw.txt": {
+      "sha256": "f53072185f074023be2aa0d92a1ed1b5725d71f4ae1ea73508351b46162b6b68",
+      "public": false
+    },
+    "linux-enumeration.raw.txt": {
+      "sha256": "9bc53babe3fd24bd57905cae1fe534a6a674b8473284dc606a54215beb20c8c8",
+      "public": false
+    },
+    "linux-rootfs-read.raw.txt": {
+      "sha256": "b6c0888b0008cc99a1646b6cc5ceb735bc9addb04846bea9095c50b16c0b29ed",
+      "public": false
+    },
+    "linux-module-options-v2.raw.txt": {
+      "sha256": "2332e9a19462a7b6444ad8ceacd28838de8cecc2d6c80ffc72dba7fef7ecbcc9",
+      "public": false
+    },
+    "linux-module-cleanup-v2.raw.txt": {
+      "sha256": "0b0fc0b74f988d25fde204f15b39cc7271d89898a5a03da340b4423b1494dcce",
+      "public": false
+    },
+    "linux-restore-empty-fw-path.raw.txt": {
+      "sha256": "c98d1ba312dc3a740ca315801898be0f4c923bf173cb7c037acc3ae771162302",
+      "public": false
+    },
+    "linux-module-options-v3.raw.txt": {
+      "sha256": "e753c8b18096f07af4e466d5374ca344816b641d62a8e7ca8370b8e4a6e3bf98",
+      "public": false
+    },
+    "linux-module-cleanup-v3.raw.txt": {
+      "sha256": "f64259d826c818216ccdaff592bb0cae3f98b54b3ada0fdaaaa8f193495e8cf5",
+      "public": false
+    },
+    "linux-final-state.raw.txt": {
+      "sha256": "339effc5059f8eea528498cc72aa4f78e56ed4251c85ab75f0290758c9ef4290",
+      "public": false
+    },
+    "linux-final-state-v2.raw.txt": {
+      "sha256": "6f40af897527227be4df3dadd859533603365ff61ebcf79496e940e750bb412f",
+      "public": false
+    },
+    "return-android.raw.txt": {
+      "sha256": "bbebeefab9dc9b74da0a95dc9b2c01fa0f5dc4dc70f133e8fb5ff86cc6089532",
+      "public": false
+    },
+    "android-after.txt": {
+      "sha256": "c26f697eb41b573be7da840a05d8a8ad22fbe1bab849d0ee320bc8ac2d92e4db",
+      "public": false
+    },
+    "android-firmware-directory.json": {
+      "sha256": "daf405de7a7c084d125bbb12ffba6033dda465a4f1b419db058bd722b11c9805",
+      "public": false
+    }
+  },
+  "remaining": [
+    "motor firmware/protocol and safe stop",
+    "MXC6655 driver error propagation and identity",
+    "CAP1188 SPI",
+    "RK809 board audio",
+    "display/camera/BT",
+    "normal power lifecycle and persistent Linux entry"
+  ]
+}

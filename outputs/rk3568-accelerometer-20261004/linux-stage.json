@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh -c '#!/bin/sh\n# Read only mount of cache and immediate release after copying files into RAM.\nset -eu\ntest \"$(cat /proc/1/comm)\" = sh\ntest \"$(uname -r)\" = 5.10.160-rt89-g9f9e9d18574d-dirty\ntest \"$(cat /sys/class/block/mmcblk0p12/uevent | grep '\"'\"'^PARTNAME='\"'\"')\" = PARTNAME=cache\nmkdir -p /tmp/accel-cache\nmount -t ext4 -o ro,noload /dev/mmcblk0p12 /tmp/accel-cache\ncd /tmp/accel-cache/rtctrl-accelerometer-20261004\nsha256sum -c upload.sha256\nmkdir /tmp/accel\ncp accelerometer.dtb sensor_dev.ko mxc6655xa.ko sensor-inspect \\\n    linux-enumeration.sh linux-probe.sh linux-return-guard.sh upload.sha256 /tmp/accel/\ncd /tmp/accel\nsha256sum -c upload.sha256\nchmod 700 sensor-inspect\ncd /\numount /tmp/accel-cache\necho ACCEL_INPUTS_IN_RAM_CACHE_RELEASED\n'",
+    "wait": 5,
+    "expect": "(?m)^ACCEL_INPUTS_IN_RAM_CACHE_RELEASED\\r?$"
+  }
+]

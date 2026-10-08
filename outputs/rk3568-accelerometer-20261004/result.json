@@ -1,0 +1,140 @@
+{
+  "status": "diagnostic_completed_sensor_address_no_response_on_android_and_linux",
+  "sensor_acceptance_passed": false,
+  "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "ram_boot_inputs": {
+    "Image": {
+      "sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+      "bytes": 34755072,
+      "crc32": "c91762d1"
+    },
+    "DTB": {
+      "sha256": "e76139f3c9b978cbceb786ae26eb31c9618e32529f0dc9a8e4bbf1b778c77e12",
+      "bytes": 162863,
+      "crc32": "85f45284"
+    },
+    "initramfs": {
+      "sha256": "f0965ceed549acab8d5bd87df8bb831bb06a95d08b5b7bf3c5582045933323ee",
+      "bytes": 4308268,
+      "crc32": "74fea1e6"
+    }
+  },
+  "runtime_sha256_board_verified": {
+    "accelerometer.dtb": "e76139f3c9b978cbceb786ae26eb31c9618e32529f0dc9a8e4bbf1b778c77e12",
+    "sensor_dev.ko": "4dee08efa9a0214a089f0e615f8cc5f40035e3d330905d5ec05ab6de1a96d8a1",
+    "mxc6655xa.ko": "f6b67fb459375e93b916b0df1a9b9e1996f90ede410b364bed63518c390099f9",
+    "sensor-inspect": "9b706bd7e7acb4b704b2838e004dd71c1c3ebc9ea2cda59dd64d9d82f768cdfb",
+    "linux-enumeration.sh": "d0fb87ef2b054be8fcb2b1e9c9508c2f709526597cb52d71668a526529a6f364",
+    "linux-probe.sh": "64584a5da7912c351be19097351ef26aadd598b36b8fc58312e4265d68687d17",
+    "linux-return-guard.sh": "1f60abae9f79f6f50357036c8aa942adad9d43b1c6a5e901224b5ad148c09842"
+  },
+  "preparation_manifests_are_pre_board_snapshots": true,
+  "driver_patch_sha256": "cff9f21c036173bc4465cf51ee414e77fc2456e8e0c15d84f0e74d414a64d184",
+  "board_modules": {
+    "sensor_dev.ko": {
+      "bytes": 683984,
+      "sha256": "4dee08efa9a0214a089f0e615f8cc5f40035e3d330905d5ec05ab6de1a96d8a1",
+      "elf": "ELF64 LE AArch64 ET_REL"
+    },
+    "mxc6655xa.ko": {
+      "bytes": 324656,
+      "sha256": "f6b67fb459375e93b916b0df1a9b9e1996f90ede410b364bed63518c390099f9",
+      "elf": "ELF64 LE AArch64 ET_REL"
+    }
+  },
+  "module_selection": "External obj-m, no kernel config change",
+  "kernel_config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+  "android_legacy_helper_sha256": "84707cdb9370ed576f9fd7224f2d7a6f7ee165dc156bad3a755c42ecb47d44b8",
+  "tests": {
+    "real_driver_function_cases": 72,
+    "module_audit_and_output_boundary_cases": 14,
+    "published_patch_source_preparation_cases": 10,
+    "source_preparation_test_sha256": "dfd16b197c5744798fea39cb76f12ff9a2e57b1ac9b157676ce4429ad2faefcb",
+    "dtb_checks": 151,
+    "compiled_dtb_faults_rejected": 13,
+    "linux_helper_cases": 13,
+    "android_helper_cases": {
+      "android_host_result": 18,
+      "android_qemu_result": 18
+    },
+    "actual_reset_script_fixture_cases": 16,
+    "actual_ram_busybox_applets": 52,
+    "fresh_verification_sha256": "c059b3da9e8d96a6b49ecfcf9a77c0f82ea3395175cd81175acb28f4bcdab5d6",
+    "hardware_calls_mocked_in_host_tests": true
+  },
+  "observed": {
+    "linux_probe_errno": -6,
+    "linux_identity_errno": 6,
+    "android_legacy_identity_error": "ENXIO",
+    "android_legacy_identity_exit": 2,
+    "linux_false_binding_rejected": true,
+    "android_binding_without_gsensor_input": true,
+    "identity_0x05_measured": false,
+    "default_off_hardware_readback_verified": false,
+    "sampling_tested": false,
+    "physical_cause_identified": false,
+    "uart0_final_tx_rx": [
+      0,
+      0
+    ],
+    "module_unload_tested": false,
+    "sensor_modules_retained_until_sysrq": true,
+    "sysrq_seconds": "538.169568",
+    "captured_source_warning_bug_calltrace_count": 0
+  },
+  "returned_android": {
+    "kernel": "4.19.232",
+    "release": "11",
+    "boot_completed": 1,
+    "root_verified": true,
+    "battery_percent": 41,
+    "startup_sha256_before_after": {
+      "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+    },
+    "old_rootfs_sha256_after": {
+      "/cache/rtctrl-source-userspace-20261004/rootfs.ext4": "4fcebae566d889072954b2f5b220474fe9accd75bbb48471023f24841b6ed95e",
+      "/cache/rtctrl-network-rootfs-20261004/rootfs.img": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3"
+    },
+    "network_rootfs_before_reference": "Prior phase android-after.txt; omitted from this phase initial raw"
+  },
+  "limits": [
+    "No measured chip identity, sample, orientation, physical OFF, or unload acceptance",
+    "ENXIO is not proof of an absent chip or a specific power/wiring defect",
+    "Legacy 24-byte messages apply only to the reviewed original Image and RK3x path",
+    "Register-index writes occurred; diagnostic reads are not electrically side-effect-free",
+    "Five startup partition hashes are not a full eMMC comparison or a tested restore",
+    "Only v1 sensor modules were board tested; v2 rebuild was a host comparison",
+    "No physical motor or MCU command; motors were disconnected",
+    "No boot flashing/saveenv, switch_root, calibration, or normal poweroff acceptance"
+  ],
+  "private_evidence_sha256": {
+    "android-after.raw.txt": "9e7e84904205b56a88bc8f2727aca84862deb194b517a106a0dd1bbc9088762b",
+    "android-baseline.raw.txt": "a083f8b55b6c23d0e98a8426bf930773b2d4a4baba734e110ce56b64d1a48f88",
+    "android-identity.raw.txt": "200fb70878aecb1b5bbe4dcd852217744c83910d7c18cd34aaaeb9c5068afd83",
+    "android-legacy-identity.raw.txt": "7e0b3113c21d60b72abf618b0a57b856840148aaf261b053867ad2cfc2994d2c",
+    "android-stage.raw.txt": "f89504406f8acd8283fb9c64aace7390fd3a699d49a45eab062554fee67d5f45",
+    "boot-ram.raw.txt": "5397ffab11ab24c65ab013513416fce52707c68f0ad16f50d1b9b28fe1586501",
+    "diagnose-pid1.raw.txt": "5e73c076a5fa5b5e067a244f5394c6c6823b1eeece2c5078dc6631de4ab93c20",
+    "diagnose-stage.raw.txt": "50e6ecab75614b7efe60719fa0dc86a870516d942423515fe876462f5357499d",
+    "linux-enumeration-v2.raw.txt": "a316fa95b0fc0116eaae5958c99a9de15cede8dcf0910d601d66d77f34a72638",
+    "linux-enumeration.raw.txt": "26a9eca799801f706a5c1fd3385eca7d4d7b03eb386053c23b3c2f6f596d4137",
+    "linux-identity.raw.txt": "76332a61f20c5b9402e3656cef8ebcd6069944498c9699aee2a17272a84c50d3",
+    "linux-probe-v2.raw.txt": "133d0b8e731869b1a7e3d265fd9f4a75ee39e78177326f0d1a15209baf6b538c",
+    "linux-probe.raw.txt": "39b2e5169b6b273c0dab5fa242e4e4a079906062955ea3302269ee7c0e402a9c",
+    "linux-runtime-v2-upload.raw.txt": "3b678ce7e122d62b7523b5cb3054029c46a6850e9d2ee286184400731538058b",
+    "linux-runtime-v3-upload.raw.txt": "5cf4b3913471463183548c7189552ff987a7dbd3934ccb76b49574eda74fedef",
+    "linux-runtime-v4-upload.raw.txt": "26adbc27d1e1dbc2c1e0b3c9a6f7efe92bca9f68124fcd2665d1bd612006e8c8",
+    "linux-stage-v3.raw.txt": "4d396677f9562ded7f33562978985ef2207ff72b8b6e5e660eaf437b532fad52",
+    "linux-stage.raw.txt": "13404f4c5cb88d717ac09d5c17a9d890db66d40c9af04a0de8d0c1db871e7467",
+    "load-ram.raw.txt": "84a71372191422a29fef0cf39204242c466ce1fa883ee7c5bc9bb99a8b4ff49b",
+    "return-android.raw.txt": "a972bee9a4102cd1adfb5bb4985c66ab23f5dee98a0157d9a59b11fe3de4d4fe",
+    "uboot-console.raw.txt": "067f15cfdfae70e14a64874cd859425f0938e361f849eb66f7495fe1f9cf18f5"
+  },
+  "private_final_android_state_sha256": "94dafc3490c7da4f7ec9a5650482171cfc311cebd169cac89ccedd0060863453",
+  "prior_network_rootfs_reference_sha256": "c26f697eb41b573be7da840a05d8a8ad22fbe1bab849d0ee320bc8ac2d92e4db",
+  "recorder_sha256": "14133fc4e0403d4bf59dc2f69a07fd16ae0ab63f596d26b35fb3436e3a1b66ed"
+}

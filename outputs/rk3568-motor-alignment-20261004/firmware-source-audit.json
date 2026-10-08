@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "commit": "ed91ef7486cdebca00aa32d497f5aa45cb226c0e",
+  "git_tree_file_entries": 1027,
+  "assets_entries": 736,
+  "res_raw_entries": 0,
+  "bin_files": 5,
+  "unique_bin_blobs": 4,
+  "bin_objects_read_or_downloaded": false,
+  "bin_sizes_known": false,
+  "bin_metadata": [
+    {"assets_path": "hlw/res_cae_model.bin", "oid": "00c1a879d34b83c9adca9ef508c42334d7a29c76"},
+    {"assets_path": "hlw/res_ivw_model.bin", "oid": "bee7742e1990c2f18618ebf9e9cc8d2e15254b2f"},
+    {"assets_path": "hlw_near/res_cae_model.bin", "oid": "fee1e92abd596d35d1d2e38a9707b7549c192627"},
+    {"assets_path": "hlw_near/res_ivw_model.bin", "oid": "bee7742e1990c2f18618ebf9e9cc8d2e15254b2f"},
+    {"assets_path": "vtn/one_ivw.3.13.1.bin", "oid": "bb632c4e09cef4645fdde415908ea59cf387de44"}
+  ],
+  "bin_name_context": "HlwEngine/HlwNearEngine/VtnEngine speech resources; no motor firmware evidence",
+  "gd32_stm32_mcu_motor_named_or_hex_dfu_elf_fw_assets_found": false,
+  "upgrade_input": "FirmwareUpgradeManager accepts caller File; no fixed search location",
+  "business_input": "MqttManager firmwareUpdate -> UpdateManager -> message url/version/size",
+  "filename_selection": "object_key final component, URL basename, sanitized version.bin or firmware.bin",
+  "download_directory": "Android external app files/downloads",
+  "application_id": "com.patchx_main",
+  "upgrade_tty_reference": "/dev/ttySMT4 at 115200",
+  "upgrade_target_is_uart0_motor_controller_verified": false,
+  "sdcard_update_bin_example": "testserial/MainActivity.java line 59 is inside a commented example",
+  "fresh_android_two_download_paths_result": "ENOENT",
+  "download_or_upgrade_executed": false,
+  "absence_elsewhere_or_inside_mcu_proven": false
+}

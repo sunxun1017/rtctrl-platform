@@ -1,0 +1,45 @@
+[
+  {
+    "command": "ext4load mmc 0:c 400000 /rtctrl-source-wifi-20261004/Image",
+    "wait": 4,
+    "expect": "34755072 bytes read"
+  },
+  {
+    "command": "crc32 400000 2125200",
+    "wait": 1,
+    "expect": "==> c91762d1"
+  },
+  {
+    "command": "ext4load mmc 0:c 3000000 /rtctrl-cap1188-20261004/cap1188-spi.dtb",
+    "wait": 4,
+    "expect": "162562 bytes read"
+  },
+  {
+    "command": "crc32 3000000 27b02",
+    "wait": 1,
+    "expect": "==> 2bc429db"
+  },
+  {
+    "command": "ext4load mmc 0:c 4000000 /rtctrl-motor-alignment-20261004/initramfs.cpio.gz",
+    "wait": 4,
+    "expect": "4308268 bytes read"
+  },
+  {
+    "command": "crc32 4000000 41bd2c",
+    "wait": 1,
+    "expect": "==> 74fea1e6"
+  },
+  {
+    "command": "fdt addr 3000000",
+    "wait": 1
+  },
+  {
+    "command": "fdt rsvmem print",
+    "wait": 1
+  },
+  {
+    "command": "fdt print /reserved-memory",
+    "wait": 1,
+    "expect": "no-map"
+  }
+]

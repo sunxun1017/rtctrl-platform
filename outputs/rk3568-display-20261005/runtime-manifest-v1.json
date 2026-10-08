@@ -1,0 +1,88 @@
+{
+  "files": {
+    "Image": "dafdda0cc331605471c1b24a33cb4f037bf4af79b4145eabf12513dabf4d86a7",
+    "display.dtb": "650228482eaed6f95d9892fce217f436072d851cc47398696d52b85e08200f70",
+    "initramfs.cpio.gz": "f0965ceed549acab8d5bd87df8bb831bb06a95d08b5b7bf3c5582045933323ee",
+    "prepare-android.sh": "9bd9caaf85e40e678c3af64e5458d9c8a18f9c696d731b1de010cabe2a6a49c1",
+    "linux-stage.sh": "ff058c39e3d5b8bedfb759c53fe45d563e617c1045e4246b2498ac2ca97c8258",
+    "linux-inspect.sh": "8d7ab06492747ba5495df1ae5f0695bdac7f3ca7afc1c3d1af8ea09a6b5fe708",
+    "linux-return-guard.sh": "6f7b260888db52665c64a29fa13e9573befaf8c5b4994090f96de0431bfe828b"
+  },
+  "upload_sha256": "78002734bf36d9e4e5404731044e2b1386b6db3da166f7244dc31534883be634",
+  "stage_script_sha256": "ff058c39e3d5b8bedfb759c53fe45d563e617c1045e4246b2498ac2ca97c8258",
+  "staging": "outputs/rk3568-display-20261005/build/staging-v1",
+  "android_work": "/data/local/tmp/rtctrl-display-20261005-v1",
+  "cache_directory": "/cache/rtctrl-display-20261005-v1",
+  "artifact": {
+    "Image": {
+      "sha256": "dafdda0cc331605471c1b24a33cb4f037bf4af79b4145eabf12513dabf4d86a7",
+      "bytes": 34755072,
+      "crc32": "6c3715bf"
+    },
+    "display.dtb": {
+      "sha256": "650228482eaed6f95d9892fce217f436072d851cc47398696d52b85e08200f70",
+      "bytes": 166090,
+      "crc32": "6ea18539"
+    },
+    "initramfs.cpio.gz": {
+      "sha256": "f0965ceed549acab8d5bd87df8bb831bb06a95d08b5b7bf3c5582045933323ee",
+      "bytes": 4308268,
+      "crc32": "74fea1e6"
+    }
+  },
+  "image_memory_bytes": 35389440,
+  "image_text_offset": 0,
+  "pid1_busybox_sha256": "514c3fa48e538283aea7881cc7c54c4a77c855db09c05008fef9587f2ac906a1",
+  "busybox_applet_count": 52,
+  "required_applets": [
+    "cat",
+    "cp",
+    "dmesg",
+    "grep",
+    "hexdump",
+    "losetup",
+    "ls",
+    "mkdir",
+    "mount",
+    "printf",
+    "readlink",
+    "sh",
+    "sha256sum",
+    "sleep",
+    "touch",
+    "umount",
+    "uname"
+  ],
+  "actual_busybox_parameter_tests": {
+    "hexdump": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "integer-sleep": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "fractional-sleep-refused": {
+      "exit_code": 1,
+      "passed": true
+    }
+  },
+  "transport": "octal printf; host and board SHA; U-Boot CRC binds newly built Image",
+  "image_identity_not_proven_by_kernel_release_alone": true,
+  "default_brightness_index": 0,
+  "brightness_write_allowed": false,
+  "display_device_open_allowed": false,
+  "board_tested": false,
+  "deployment_performed": false,
+  "physical_screen_connected": false,
+  "physical_display_response_tested": false,
+  "sessions": [
+    "display-load-v1.json",
+    "display-boot-v1.json",
+    "display-stage-v1.json",
+    "display-inspect-v1.json",
+    "display-return-v1.json",
+    "display-android-v1.json"
+  ],
+  "generator_sha256": "2ad28ef92a942d9d71e5d01a32e66a115b0f7fa9a429e08409589c86a3c6d9c0"
+}

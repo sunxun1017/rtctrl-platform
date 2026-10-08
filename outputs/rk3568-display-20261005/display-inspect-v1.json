@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/display/linux-inspect.sh",
+    "wait": 10,
+    "expect": "(?m)^DISPLAY_INSPECTION_COMPLETE_NO_DEVICE_OPEN_NO_BRIGHTNESS_WRITE\\r?$"
+  }
+]

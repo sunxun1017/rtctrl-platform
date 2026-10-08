@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/* Identity-only SPI diagnostic; no reset, LED, calibration or input driver. */
+#include "rk3568-aiot-3568pq-uart.dts"
+
+&spi3 {
+    status = "okay";
+    num-cs = <1>;
+    pinctrl-0 = <&spi3m1_cs0 &spi3m1_pins>;
+    pinctrl-1 = <&spi3m1_cs0 &spi3m1_pins_hs>;
+
+    cap1188@0 {
+        /* Supported explicitly by this locked BSP's diagnostic spidev. */
+        compatible = "rockchip,spidev";
+        status = "okay";
+        reg = <0>;
+        spi-max-frequency = <100000>;
+        spi-cpha;
+        spi-cpol;
+    };
+};

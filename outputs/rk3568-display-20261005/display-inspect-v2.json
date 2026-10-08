@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/display/linux-inspect.sh && echo DISPLAY_INSPECTION_EXIT_ZERO",
+    "wait": 10,
+    "expect": "(?m)^DISPLAY_INTERFACE_METADATA_VERIFIED_AT_ZERO_BRIGHTNESS\\r?$[\\s\\S]*^DISPLAY_INSPECTION_EXIT_ZERO\\r?$"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "wait": 0.5,
+    "command": "uname -r"
+  },
+  {
+    "wait": 0.5,
+    "command": "cat /proc/1/comm"
+  },
+  {
+    "wait": 0.5,
+    "command": "cat /sys/class/block/mmcblk0p12/uevent"
+  },
+  {
+    "wait": 0.5,
+    "command": "cat /proc/mounts"
+  },
+  {
+    "wait": 0.5,
+    "command": "ls -l /tmp/accel /tmp/accel-cache"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "audit_kind": "offline_binary_abi",
+  "original_image_sha256": "54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d",
+  "standard_helper_v1_sha256": "9b706bd7e7acb4b704b2838e004dd71c1c3ebc9ea2cda59dd64d9d82f768cdfb",
+  "original_i2c_msg": {"stride_bytes": 24, "addr_offset": 0, "flags_offset": 2, "len_offset": 4, "buf_offset": 8, "opaque_trailing_offset": 16, "opaque_trailing_bytes": 8, "opaque_field_names_known": false},
+  "rdwr_envelope": {"size_bytes": 16, "msgs_offset": 0, "nmsgs_offset": 8},
+  "standard_message_stride_bytes": 16,
+  "key_instruction_offsets": {"rdwr_message_size_24": "0x989074", "rdwr_array_size_multiply": "0x989078", "flags_load": "0x988c30", "len_load": "0x988c0c", "buf_load": "0x988c84", "addr_load": "0x98c41c"},
+  "opaque_trailing_review": {"preserved_by_rdwr_copy": true, "forwarded_to_i2c_transfer": true, "reads_found_in_reviewed_rk3x_message_path": false, "zero_initialization_supported_for_this_path": true, "scope": "Only this exact Image and reviewed native RK3x path."},
+  "efault_exact_failure_site_runtime_verified": false,
+  "legacy24_hardware_tested_by_this_offline_audit": false,
+  "scope": "An ABI mismatch explains the failed standard ioctl; it does not establish chip identity or absence. Field semantics were reviewed by disassembly, not inferred from a kernel version or automated text search."
+}

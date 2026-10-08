@@ -1,0 +1,42 @@
+{
+  "scope": "Bounded static audit of original Image CAP1188 probe/poll/transport/reset/remove paths; not complete firmware reconstruction",
+  "original_image_sha256": "54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d",
+  "original_image_bytes": 33046536,
+  "selected_symbol_ranges": 14,
+  "private_evidence": "private/vendor-audit-v1/symbols.json; resolved-calls-and-data-v2.json; lifecycle-v2",
+  "transport": {
+    "raw_write": "Two-byte [opcode, value] SPI message",
+    "raw_read": "Two separate spi_sync calls: transmit one opcode, then receive one byte",
+    "register_write": "raw [0x7d, register], then raw [0x7e, value]",
+    "register_read": "raw [0x7d, register], then raw read 0x7f",
+    "spi_sync_return_ignored_in_audited_helpers": true,
+    "allocation_null_test_occurs_after_dereference_in_audited_helpers": true
+  },
+  "input": {
+    "poll_interval_ms": 100,
+    "channels_to_keycodes": {"0": 2, "1": 3, "2": 4, "3": 5, "4": 6, "5": 7, "6": 8, "7": 9},
+    "each_poll_calls_init": true,
+    "init_raw_pairs": [[31,127],[56,3],[48,127],[49,127],[50,127],[51,127],[52,127],[53,127],[54,127],[55,127]],
+    "init_pairs_are_not_proven_valid_register_writes": true,
+    "poll_reads_register_03_twice": true,
+    "nonzero_status_path_writes_register_00_zero": true,
+    "multiple_changed_channels": "State loop updates all channels, but audited reporting path emits only last changed channel plus SYN",
+    "runtime_simultaneous_touch_verified": false,
+    "identity_check_seen_in_audited_probe_poll_paths": false
+  },
+  "reset": {
+    "optional_gpio_name": "reset",
+    "static_sequence": "direction output 0, sleep 100ms, set 1, sleep 100ms, set 0",
+    "input_registered_before_reset_call": true,
+    "fresh_android_gpio0_b6": "MUX UNCLAIMED; GPIO UNCLAIMED",
+    "physical_reset_waveform_verified": false
+  },
+  "lifecycle": {
+    "remove_callback": "printk and return 0; static g_spi not cleared in audited remove",
+    "framework": "Managed polled input allocation/registration includes unregister; closing polling synchronizes delayed work cancellation",
+    "unconditional_memory_leak_claim_supported": false,
+    "unload_race_or_stale_pointer_consequence_measured": false
+  },
+  "reimplementation": "Use official protocol and explicit identity/error gates; do not copy raw init pairs or claim original input registration validates a chip",
+  "board_touch_function_verified": false
+}

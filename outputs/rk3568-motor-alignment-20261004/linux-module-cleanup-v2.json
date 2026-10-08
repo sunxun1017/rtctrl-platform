@@ -1,0 +1,23 @@
+[
+  {
+    "wait": 1,
+    "command": "ls -l /tmp/rtctrl-motor-module-options/firmware-class-path"
+  },
+  {
+    "wait": 1,
+    "command": "hexdump -C /tmp/rtctrl-motor-module-options/firmware-class-path"
+  },
+  {
+    "wait": 1,
+    "command": "cat /sys/module/firmware_class/parameters/path"
+  },
+  {
+    "expect": "(?m)^MODULE_CONFIG_AND_FIRMWARE_PATH_RELEASED\\r?$",
+    "command": "sh /tmp/linux-module-cleanup-v2.sh",
+    "wait": 5
+  },
+  {
+    "wait": 1,
+    "command": "hexdump -C /sys/module/firmware_class/parameters/path"
+  }
+]

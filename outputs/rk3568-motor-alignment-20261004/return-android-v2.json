@@ -1,0 +1,15 @@
+[
+  {
+    "command": "sh /tmp/linux-return-guard.sh",
+    "expect": "(?m)^RAM_ONLY_RESOURCES_RELEASED\\r?$",
+    "wait": 2
+  },
+  {
+    "command": "dmesg",
+    "wait": 2
+  },
+  {
+    "command": "echo b > /proc/sysrq-trigger",
+    "wait": 40
+  }
+]

@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/* UART0 enumeration experiment; physical motor command semantics remain unverified. */
+#include "rk3568-aiot-3568pq-wifi-rng.dts"
+
+&uart0 {
+    status = "okay";
+};

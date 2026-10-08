@@ -1,0 +1,14 @@
+[
+  {
+    "wait": 0.5,
+    "command": "readlink -f /proc/1/exe"
+  },
+  {
+    "wait": 0.5,
+    "command": "hexdump -v -e '1/1 \"%02x\"' /proc/1/cmdline"
+  },
+  {
+    "wait": 0.5,
+    "command": "sha256sum /proc/1/exe"
+  }
+]

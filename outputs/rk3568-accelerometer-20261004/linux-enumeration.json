@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/accel/linux-enumeration.sh",
+    "wait": 3,
+    "expect": "(?m)^LINUX_ACCEL_UNBOUND_NODE_AND_BUS_VERIFIED\\r?$"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "accelerometer.dtb": "e76139f3c9b978cbceb786ae26eb31c9618e32529f0dc9a8e4bbf1b778c77e12",
+    "sensor_dev.ko": "4dee08efa9a0214a089f0e615f8cc5f40035e3d330905d5ec05ab6de1a96d8a1",
+    "mxc6655xa.ko": "f6b67fb459375e93b916b0df1a9b9e1996f90ede410b364bed63518c390099f9",
+    "sensor-inspect": "9b706bd7e7acb4b704b2838e004dd71c1c3ebc9ea2cda59dd64d9d82f768cdfb",
+    "linux-enumeration.sh": "b422b8f75d9595e6196d41f960fd36d1bd34ff714e0e62a02d5159fc8cf450ef",
+    "linux-probe.sh": "1925abf2a82b7b626a982d1b477e7b2a6ca0dd49ed362f1583791bc38d296765",
+    "linux-return-guard.sh": "1f60abae9f79f6f50357036c8aa942adad9d43b1c6a5e901224b5ad148c09842"
+  },
+  "transport": "shell printf percent-b octal",
+  "board_tested": false
+}

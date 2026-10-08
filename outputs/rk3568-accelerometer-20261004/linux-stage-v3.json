@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh -c '#!/bin/sh\n# Read only mount of cache and immediate release after copying files into RAM.\nset -eu\ntest \"$(readlink -f /proc/1/exe)\" = /bin/busybox\ntest \"$(hexdump -v -e '\"'\"'1/1 \"%02x\"'\"'\"' /proc/1/cmdline)\" = 2f62696e2f7368002f696e697400\ntest \"$(sha256sum /proc/1/exe)\" = '\"'\"'514c3fa48e538283aea7881cc7c54c4a77c855db09c05008fef9587f2ac906a1  /proc/1/exe'\"'\"'\ntest \"$(uname -r)\" = 5.10.160-rt89-g9f9e9d18574d-dirty\ntest \"$(cat /sys/class/block/mmcblk0p12/uevent | grep '\"'\"'^PARTNAME='\"'\"')\" = PARTNAME=cache\nmkdir -p /tmp/accel-cache\nmount -t ext4 -o ro,noload /dev/mmcblk0p12 /tmp/accel-cache\nrelease_cache()\n{\n    cd /\n    umount /tmp/accel-cache\n}\ntrap release_cache EXIT\ntrap '\"'\"'exit 1'\"'\"' HUP INT TERM\ncd /tmp/accel-cache/rtctrl-accelerometer-20261004\nsha256sum -c upload.sha256\nmkdir /tmp/accel\ncp accelerometer.dtb sensor_dev.ko mxc6655xa.ko sensor-inspect \\\n    linux-enumeration.sh linux-probe.sh linux-return-guard.sh upload.sha256 /tmp/accel/\ncd /tmp/accel\nsha256sum -c upload.sha256\nchmod 700 sensor-inspect\ncd /\numount /tmp/accel-cache\ntrap - EXIT HUP INT TERM\necho ACCEL_INPUTS_IN_RAM_CACHE_RELEASED\n'",
+    "wait": 5,
+    "expect": "(?m)^ACCEL_INPUTS_IN_RAM_CACHE_RELEASED\\r?$"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh -c 'set -eu\ncd /data/local/tmp/rtctrl-display-20261005-v1\ntest \"$(sha256sum upload.sha256)\" = '\"'\"'78002734bf36d9e4e5404731044e2b1386b6db3da166f7244dc31534883be634  upload.sha256'\"'\"'\nsha256sum -c upload.sha256\nsh prepare-android.sh'",
+    "wait": 10,
+    "expect": "(?m)^DISPLAY_INPUTS_STAGED\\r?$"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "command": "mount -t debugfs debugfs /tmp/cap-debug",
+    "wait": 1
+  },
+  {
+    "command": "grep -E 'pin (14|146|147|149|150|153) ' /tmp/cap-debug/pinctrl/pinctrl-rockchip-pinctrl/pinmux-pins",
+    "wait": 1,
+    "expect": "function spi3-hs group spi3m1-pins"
+  },
+  {
+    "command": "umount /tmp/cap-debug && echo CAP_AFTER_IDENTITY_DEBUGFS_RELEASED",
+    "wait": 1,
+    "expect": "(?m)^CAP_AFTER_IDENTITY_DEBUGFS_RELEASED\\r?$"
+  }
+]

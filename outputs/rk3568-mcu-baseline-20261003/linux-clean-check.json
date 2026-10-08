@@ -1,0 +1,8 @@
+[
+  {"command":"cat /proc/mounts"},
+  {"command":"losetup -a"},
+  {"command":"grep -c ext4 /proc/mounts","expect":"(?m)^0\r?$"},
+  {"command":"grep -c devpts /proc/mounts","expect":"(?m)^0\r?$"},
+  {"command":"cat /proc/tty/driver/serial"},
+  {"command":"echo SOURCE_STORAGE_RELEASED","expect":"(?m)^SOURCE_STORAGE_RELEASED\r?$"}
+]

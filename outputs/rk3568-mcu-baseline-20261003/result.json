@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-03",
+  "board": "AIoT-3568PQ / RK3568",
+  "scope": "Passive Android baseline, original-driver static analysis, independent source diagnostics and same-artifact RAM Linux comparison",
+  "kernel": {
+    "tested": "Original binary 4.19.232",
+    "image_bytes": 33046536,
+    "image_sha256": "54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d",
+    "complete_corresponding_source_obtained": false,
+    "source_5_10_candidate_board_tested": false
+  },
+  "source_programs": [
+    {
+      "name": "codec-test",
+      "cmake_target": "rtctrl_patchx_codec_test",
+      "bytes": 2136440,
+      "sha256": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c",
+      "android_passed": true,
+      "independent_linux_passed": true,
+      "hardware_uart_opened": false
+    },
+    {
+      "name": "pty-test",
+      "cmake_target": "rtctrl_patchx_pty_test",
+      "bytes": 2134160,
+      "sha256": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda",
+      "android_passed": true,
+      "independent_linux_passed": true,
+      "hardware_uart_opened": false,
+      "android_opened_paths": ["/dev/ptmx", "/dev/pts/0"]
+    },
+    {
+      "name": "read-cached-mcu-info",
+      "source": "read-cached-mcu-info.c",
+      "bytes": 646680,
+      "sha256": "97fca95e70d8634e19942f3c13ba02cf590fac401e1d553f855ed875ce532dc2",
+      "android_passed": true,
+      "independent_linux_passed": true,
+      "device": "/dev/McuCom",
+      "open_mode": "O_RDONLY|O_NONBLOCK|O_NOFOLLOW|O_CLOEXEC",
+      "ioctl_request": "0xc0",
+      "ioctl_calls_per_run": 1,
+      "buffer_bytes": 65,
+      "output_offsets": [32, 33, 34, 35, 36, 37],
+      "android_output_hex": "000000000000",
+      "linux_output_hex": "000000000000",
+      "physical_mcu_queried": false,
+      "kernel_cache_only": true,
+      "driver_fingerprint_checked_by_program": false
+    }
+  ],
+  "elf": {
+    "architecture": "AArch64",
+    "compiler": "GCC 11.4",
+    "all_three_static": true,
+    "pt_interp_present": false,
+    "dt_needed_present": false,
+    "manufacturer_userspace_runtime_required": false
+  },
+  "mcu_baseline": {
+    "i2c_device": "5-0062",
+    "driver": "McuCom",
+    "character_device": "10:61",
+    "runtime_skip_mcu_property_present_android_and_linux": true,
+    "static_skip_behavior": "Bypasses identity/version/watchdog initialization and worker creation; register helpers return 255 without I2C",
+    "physical_mcu_presence_proven": false,
+    "watchdog_disabled_proven": false,
+    "physical_ack_verified": false,
+    "fd_owner_enumeration_complete": false
+  },
+  "passive_windows": [
+    {"seconds": 30.31, "i2c_trace_events": 0, "uart0_tx_rx_delta": [0, 0], "uart4_tx_rx_delta": [0, 0], "overrun": 0, "dropped": 0},
+    {"seconds": 30.27, "i2c_trace_events": 0, "self_sched_positive_control_events": 10, "uart0_tx_rx_delta": [0, 0], "uart4_tx_rx_delta": [0, 0], "overrun": 0, "dropped": 0, "private_instance_removed": true}
+  ],
+  "linux_runtime": {
+    "pid1": "/bin/sh /init",
+    "original_kernel_and_fdt": true,
+    "ram_bootstrap_bytes": 621289,
+    "ram_bootstrap_sha256": "157acfd6f5d3ffbdcebe6ea492fe3b9e01a48207323c14fdb9bf25425437dc65",
+    "fdt_sha256": "f81341ac00389e88a91864dfc251ae0e10217135539a38b4bf434e1ae9ddef52",
+    "cache_mount_options_actually_tested": "ro",
+    "ext4_journal_replay_excluded_in_actual_test": false,
+    "future_script_cache_mount_options": "ro,noload",
+    "future_noload_version_board_tested": false,
+    "board_runner_sha256_actually_tested": "12090ced0f8bfa424c115719f2f38a8c14116a75c71a9aa58f29c1acf4d4109c",
+    "cache_and_devpts_released": true,
+    "loop_list_empty_before_reboot": true,
+    "cleanup_verified_by_independent_short_commands": true,
+    "reboot": "ordinary reboot -f after cleanup"
+  },
+  "final_android": {
+    "release": "11",
+    "boot_completed": "1",
+    "kernel": "4.19.232",
+    "root_shell_verified_by_serial": true,
+    "all_three_programs_repeated_after_return": true,
+    "startup_partition_hashes_match_backup": true,
+    "printk": [7, 4, 1, 7],
+    "kptr_restrict": 2,
+    "root_tracing_on": 0,
+    "root_tracer": "nop",
+    "trace_instances": ["wifi"],
+    "serial_port_released": true,
+    "adbd_running": true,
+    "wlan_ipv4_present": true,
+    "network_adb_recovered": false,
+    "network_evidence": "Host TCP/5555 timed out; board gateway ping lost both packets"
+  },
+  "original_startup_sha256": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+  },
+  "validation_boundary": {
+    "mcu_tool_executed": false,
+    "hardware_uart_tested": false,
+    "actuator_commands_sent": false,
+    "explicit_watchdog_or_power_ioctl_tests_performed": false,
+    "ordinary_reboot_may_invoke_original_mcu_callbacks": true,
+    "startup_partition_write_or_saveenv": false,
+    "zero_block_device_writes_claimed": false,
+    "all_components_open_source": false,
+    "motor_or_power_lifecycle_port_complete": false,
+    "commit_or_push_performed": false
+  }
+}

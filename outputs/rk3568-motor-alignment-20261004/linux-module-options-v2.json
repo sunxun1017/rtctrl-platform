@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/linux-module-options-v2.sh",
+    "wait": 8,
+    "expect": "(?m)^REAL_BUSYBOX_MODULE_OPTIONS_DELIVERED\\r?$"
+  }
+]

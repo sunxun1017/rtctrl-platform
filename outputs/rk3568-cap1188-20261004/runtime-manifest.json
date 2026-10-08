@@ -1,0 +1,14 @@
+{
+  "files": {
+    "cap1188-spi.dtb": "fdc469fc60abbb203bfa585232dfe9f0501c87340c534401183263ebc866acd4",
+    "cap1188-inspect": "81c5cc528e9d22994e3230722fe050c8f866dce18715de86a422bd52081f34ff",
+    "linux-enumeration.sh": "7dc9931847fdd4fbb847c04b2083780f80560ddc1b153f3fac374f218c5faf8a",
+    "linux-identity.sh": "c85ceec285c0c00bf7ce0a1f2cc29c155073fd833ca0e9912e410488a2290607",
+    "linux-return-guard.sh": "3fced505afbba3213d03fcbc0e5cc93b896fd5dee50338e9eadc2465c1afcc27"
+  },
+  "stage_script_sha256": "fd70d7f4e0daf74a324b5dfb2824d9d96cf39bf49225f6fba2789c38b59c32d5",
+  "transport": "shell printf percent-b octal; readback SHA before execution",
+  "dtb_bytes": 162562,
+  "dtb_crc32": "2bc429db",
+  "board_tested": false
+}

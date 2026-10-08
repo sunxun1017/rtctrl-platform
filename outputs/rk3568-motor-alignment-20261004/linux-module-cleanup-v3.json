@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/linux-module-cleanup-v3.sh",
+    "wait": 5,
+    "expect": "(?m)^MODULE_AND_TEST_CONFIG_RELEASED\\r?$"
+  }
+]

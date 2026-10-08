@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/* One-shot MXC6655 identity/default-OFF test. No MCU node or automatic sampling. */
+#include "rk3568-aiot-3568pq-uart.dts"
+
+&i2c5 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c5m0_xfer>;
+
+    mxc6655xa@15 {
+        compatible = "gs_mxc6655xa";
+        reg = <0x15>;
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&mxc6655xa_irq_gpio>;
+        /* Retained vendor irq-gpio value; irq_enable=0 means no IRQ request. */
+        irq-gpio = <&gpio3 RK_PC1 0x08>;
+        irq_enable = <0>;
+        poll_delay_ms = <30>;
+        type = <2>;
+        power-off-in-suspend = <1>;
+        layout = <1>;
+    };
+};
+
+&pinctrl {
+    mxc6655xa {
+        mxc6655xa_irq_gpio: mxc6655xa_irq_gpio {
+            rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+};
