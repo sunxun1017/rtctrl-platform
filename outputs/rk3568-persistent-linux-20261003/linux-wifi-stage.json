@@ -1,0 +1,10 @@
+[
+  {"command":"ls -l /proc/1/root/vendor/etc/firmware"},
+  {"command":"cp /vendor/etc/firmware/fw_bcm43456c5_ag.bin /proc/1/root/vendor/etc/firmware/fw_bcm43456c5_ag.bin"},
+  {"command":"cp /vendor/etc/firmware/nvram_ap6256.txt /proc/1/root/vendor/etc/firmware/nvram_ap6256.txt"},
+  {"command":"sha256sum /proc/1/root/vendor/etc/firmware/fw_bcm43456c5_ag.bin /proc/1/root/vendor/etc/firmware/nvram_ap6256.txt"},
+  {"command":"echo /vendor/etc/firmware > /sys/module/firmware_class/parameters/path"},
+  {"command":"ip link set wlan0 up","wait":8},
+  {"command":"ip link show wlan0"},
+  {"command":"dmesg | grep -E 'Final.*path|dhd_os_get_img|Firmware:|Firmware version|wl_android_wifi_on.*Failed|Failed to open primary' | tail -n 35","wait":2}
+]

@@ -1,0 +1,8 @@
+[
+  {"command":"getprop ro.build.version.release","expect":"(?m)^11\r?$"},
+  {"command":"getprop sys.boot_completed","expect":"(?m)^1\r?$"},
+  {"command":"su 0 sh -c 'echo 1 > /proc/sys/kernel/printk'"},
+  {"command":"ip -4 addr show wlan0"},
+  {"command":"getprop init.svc.adbd"},
+  {"command":"getprop service.adb.tcp.port"}
+]

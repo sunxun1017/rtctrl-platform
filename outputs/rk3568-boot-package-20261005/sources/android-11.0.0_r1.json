@@ -1,0 +1,21 @@
+)]}'
+{
+  "commit": "99894068024224a62595e051d69e748e2499f52e",
+  "tree": "247426dc0da259914a9ac97474569d2aaeca0afa",
+  "parents": [
+    "ecafcd1f728ef03bea6ca1b3b1eb3c7aa7ab4e01",
+    "41bec4c46b0045ba68939eb0689fddd416a2171a"
+  ],
+  "author": {
+    "name": "android-build-team Robot",
+    "email": "android-build-team-robot@google.com",
+    "time": "Wed Apr 15 02:16:52 2020 +0000"
+  },
+  "committer": {
+    "name": "android-build-team Robot",
+    "email": "android-build-team-robot@google.com",
+    "time": "Wed Apr 15 02:16:52 2020 +0000"
+  },
+  "message": "Snap for 6396429 from 41bec4c46b0045ba68939eb0689fddd416a2171a to rvc-release\n\nChange-Id: Ifc10a1044790647f3da711b82a008eca1d210be7\n",
+  "tree_diff": []
+}

@@ -1,0 +1,12 @@
+[
+  {"command":"sh /bin/open-rootfs.sh /dev/mmcblk2p12","wait":3,"expect":"ROOTFS_ENTER"},
+  {"command":"sh /usr/bin/check-base.sh","wait":2,"expect":"ROOTFS_BASELINE_END"},
+  {"command":"cat /var/lib/rtctrl/android-marker","expect":"android-baseline-20261003"},
+  {"command":"sha256sum /var/lib/rtctrl/android-marker","expect":"b948cf1ecbced740a80aaabb66d6a8eccb505ad3cc92841954e953476411a042"},
+  {"command":"sha256sum -c /etc/rtctrl/migration-files.sha256","wait":2,"expect":"nvram_ap6256.txt: OK"},
+  {"command":"cat /sys/module/firmware_class/parameters/path","expect":"/mnt/root/vendor/etc/firmware"},
+  {"command":"insmod /lib/modules/4.19.232/bcmdhd.ko","wait":6},
+  {"command":"cat /proc/modules"},
+  {"command":"ip link show"},
+  {"command":"dmesg | grep -E 'dhd|bcmsdh|firmware|Firmware' | tail -n 60"}
+]

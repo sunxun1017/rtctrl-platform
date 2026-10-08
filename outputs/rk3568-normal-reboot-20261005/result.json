@@ -1,0 +1,23 @@
+{
+  "normal_reboot_tested": true,
+  "normal_reboot_restart_uptime_seconds": 454.881364,
+  "normal_reboot_helper_sha256": "6c90fe3dca1f0ae6ffab50eddbfdccca27cc2f8ccf0821814456ae3980fe09f5",
+  "image_sha256": "dafdda0cc331605471c1b24a33cb4f037bf4af79b4145eabf12513dabf4d86a7",
+  "dtb_sha256": "650228482eaed6f95d9892fce217f436072d851cc47398696d52b85e08200f70",
+  "sysrq_used_for_this_return": false,
+  "android_return": "11 / 4.19.232 / boot_completed=1",
+  "protected_sha256_unchanged": {
+    "boot_sha256": true,
+    "uboot_sha256": true,
+    "trust_sha256": true,
+    "dtbo_sha256": true,
+    "vbmeta_sha256": true,
+    "source_rootfs_sha256": true,
+    "network_rootfs_sha256": true
+  },
+  "battery_after_percent": 78,
+  "normal_shutdown_to_first_DDR_warning_bug_calltrace_observed": false,
+  "poweroff_or_MCU_ACK_tested": false,
+  "startup_partition_written": false,
+  "tun_settings_changed": false
+}

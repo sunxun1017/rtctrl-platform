@@ -1,0 +1,15 @@
+{
+  "header_version": 2,
+  "page_size": 2048,
+  "kernel_file_bytes": 33046536,
+  "kernel_memory_span": 34066432,
+  "text_offset": 524288,
+  "image_flags": 10,
+  "kernel_sha256": "54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d",
+  "kernel_crc32": "28e3a67c",
+  "android_header_addresses_are_not_the_loading_plan": true,
+  "dtb_bytes": 151680,
+  "dtb_crc32": "60dbf153",
+  "initrd_bytes": 533234,
+  "initrd_crc32": "b9718d95"
+}

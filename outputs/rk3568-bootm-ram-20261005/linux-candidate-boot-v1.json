@@ -1,0 +1,10 @@
+[
+  {"command":"setenv kernel_addr_r 400000"},
+  {"command":"setenv fdt_addr_r 3000000"},
+  {"command":"setenv ramdisk_addr_r 4000000"},
+  {"command":"setenv initrd_high ffffffffffffffff"},
+  {"command":"setenv fdt_high ffffffffffffffff"},
+  {"command":"setenv bootargs console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=0"},
+  {"command":"printenv kernel_addr_r fdt_addr_r ramdisk_addr_r initrd_high fdt_high bootargs","expect":"kernel_addr_r=400000[\\s\\S]*fdt_addr_r=3000000[\\s\\S]*ramdisk_addr_r=4000000[\\s\\S]*bootargs=console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=0"},
+  {"command":"bootm 20000000","wait":40,"expect":"(?m)^LINUX_PID1_ROOT_READY\\r?$"}
+]

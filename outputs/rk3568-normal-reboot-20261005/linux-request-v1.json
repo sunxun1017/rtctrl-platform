@@ -1,0 +1,7 @@
+[
+  {
+    "command": "test \"$(sha256sum /tmp/display-return-guard.sh)\" = '48e950d2a51122fd0ea2238d7087a31aac77afee42e2faddef00146055cb35d2  /tmp/display-return-guard.sh' && sh /tmp/display-return-guard.sh && test \"$(sha256sum /tmp/normal-reboot)\" = '6c90fe3dca1f0ae6ffab50eddbfdccca27cc2f8ccf0821814456ae3980fe09f5  /tmp/normal-reboot' && /tmp/normal-reboot --request",
+    "expect": "(?m)^NORMAL_REBOOT_REQUESTED_DEVICE_SHUTDOWN\\r?$",
+    "wait": 40
+  }
+]

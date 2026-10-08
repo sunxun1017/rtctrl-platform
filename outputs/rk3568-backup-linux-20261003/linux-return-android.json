@@ -1,0 +1,3 @@
+[
+  {"command": "echo b > /proc/sysrq-trigger", "wait": 45}
+]

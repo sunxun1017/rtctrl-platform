@@ -1,0 +1,4 @@
+[
+  {"command":"su 0 ip addr show wlan0"},
+  {"command":"su 0 ip route"}
+]

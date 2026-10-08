@@ -1,0 +1,6 @@
+[
+  {
+    "command": "sh -x /tmp/pid1-return-guard.sh",
+    "wait": 3
+  }
+]

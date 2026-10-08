@@ -1,0 +1,8 @@
+[
+  {"command":"bdinfo","expect":"relocaddr   = 0xEDCF3000[\\s\\S]*sp start    = 0xEB9F85B0"},
+  {"command":"printenv kernel_addr_r fdt_addr_r ramdisk_addr_r","expect":"kernel_addr_r=0x00280000[\\s\\S]*fdt_addr_r=0x0a100000[\\s\\S]*ramdisk_addr_r=0x0a200000"},
+  {"command":"ext4ls mmc 0:c /rtctrl-bootm-ram-20261005-v1","expect":"41943040 boot-linux-ram-v1.img"},
+  {"command":"ext4load mmc 0:c 20000000 /rtctrl-bootm-ram-20261005-v1/boot-linux-ram-v1.img","wait":3,"expect":"41943040 bytes read"},
+  {"command":"printenv filesize","expect":"(?m)^filesize=0x2800000\\r?$"},
+  {"command":"crc32 20000000 2800000","expect":"==> c222e39e"}
+]

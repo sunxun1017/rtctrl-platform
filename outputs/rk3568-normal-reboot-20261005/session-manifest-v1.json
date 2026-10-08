@@ -1,0 +1,11 @@
+{
+  "helper_sha256": "6c90fe3dca1f0ae6ffab50eddbfdccca27cc2f8ccf0821814456ae3980fe09f5",
+  "stage_sha256": "84569376d220dffd310a892094b0051258161413aa94ea2dfb730e4bdac6874b",
+  "display_guard_sha256": "48e950d2a51122fd0ea2238d7087a31aac77afee42e2faddef00146055cb35d2",
+  "generator_sha256": "d48be656208cbeed3e39077728ee9d671534497789b41d8f275b4058adc1960a",
+  "display_runtime_manifest_sha256": "f0976a796235f6d0256539878b8c9c85dd49a67050f00048c108f771c8795816",
+  "applet_count": 52,
+  "stage_session_sha256": "499b66786b10de31f01a487d99724fe8255599b7860ddd818c360106929bbf52",
+  "request_session_sha256": "e019cb155e5401661794ba604d21f0923e8c272e189ecc414ad5a9a47bac8597",
+  "normal_reboot_board_tested": false
+}

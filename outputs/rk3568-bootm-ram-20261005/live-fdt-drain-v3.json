@@ -1,0 +1,4 @@
+[
+  {"command":"echo BOOTM_LIVE_FDT_RETRY_READY","wait":3,"expect":"(?m)^BOOTM_LIVE_FDT_RETRY_READY\\r?$"},
+  {"command":"sha256sum /tmp/bootm-live.dtb","wait":2,"expect":"(?m)^25cc8ad86242311ee6dacd6a4685cda10f2d569f011b292b5ee2cf8f270e2e19  /tmp/bootm-live.dtb\\r?$"}
+]

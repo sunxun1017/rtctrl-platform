@@ -1,0 +1,24 @@
+{
+  "completed": true,
+  "read_only": true,
+  "partition_write": false,
+  "image": "original/recovery.img",
+  "bytes": 100663296,
+  "sha256": "a94f4e7f0180844aa9ec67253276879f7407c9a85d2138c7636d764048890933",
+  "partition_sha_before_equals_after": true,
+  "seven_protected_sha_match": true,
+  "raw_stream_retained": "original/recovery.img.partial",
+  "raw_stream_bytes": 100663382,
+  "raw_stream_sha256": "63076da364493945a3546bea8d785233f87523f5eeec8d81357905e84eaac2e9",
+  "diagnostic_suffix_bytes": 86,
+  "diagnostic_suffix_sha256": "216892311492cbb6f3cfd06f21295f3f81a02cc34c3f31285f2cc1b4a788fe14",
+  "initial_strict_receipt_retained": "recovery-backup-v1.json",
+  "fresh_after_receipt": "recovery-fresh-after-v2.json",
+  "diagnosis": "Legacy exec-out merged dd stderr after the complete binary partition; the original size guard correctly rejected the unfiltered stream.",
+  "files_sha256": {
+    "recovery-backup-v1.json": "190af5dbce38a16899f661e5de95c1623602268aa5bedc5ed88d1341627ee6d9",
+    "recovery-fresh-after-v2.json": "6c327b68866b1229282b895d85721aeff49975ed521d3850e7a41e6903e4628c",
+    "extract-recovery-backup-v2.py": "88d3bf22a8fb6d7f151cb6a944d3357f9f8ff570b70d4ec26054cbf5417d3c3d",
+    "finalize-recovery-backup-v2.ps1": "e2a5e05d325394a0c1c3e39a9c224b7a4638b962dba9da3271a0afc41e4f8a3b"
+  }
+}

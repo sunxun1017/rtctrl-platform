@@ -1,0 +1,31 @@
+/data/local/tmp/rtctrl-persistent-20261003/rootfs.tar.gz: OK
+Discarding device blocks:  1024/65536           done
+Creating filesystem with 65536 1k blocks and 16384 inodes
+Filesystem UUID: d75164db-8894-4f7d-ac8a-bd75d804e5d3
+Superblock backups stored on blocks:
+	8193, 24577, 40961, 57345
+
+Allocating group tables: 0/8   done
+Writing inode tables: 0/8   done
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: 0/8   done
+
+922d0e38b0477e4b95b0f9c0c480fba3330387dc30c0c7abbeaf9b4e25393e47  lib/modules/4.19.232/bcmdhd.ko
+06d3bebe4b193b5db97b7f99bde94e2e85ca95dc35677079ecf86f8f9b0eb734  vendor/etc/firmware/fw_bcm43456c5_ag.bin
+c36643f35c32b9248bbb34870a3ab152237907713e999533592acd925dd04410  vendor/etc/firmware/nvram_ap6256.txt
+ROOTFS_BASELINE_BEGIN
+4.19.232
+sys
+etc
+mnt
+vendor
+tmp
+lib
+usr
+dev
+lost+found
+proc
+var
+bin
+5c2f1c653fdfe92d21c5baa68a64a460dd9aff3b8947d526048314700e1d5844  /bin/busybox
+ROOTFS_BASELINE_END

@@ -1,0 +1,45 @@
+[
+  {
+    "command": "ext4load mmc 0:c 400000 /rtctrl-rcu-reset-20261004/Image",
+    "wait": 4,
+    "expect": "34755072 bytes read"
+  },
+  {
+    "command": "crc32 400000 2125200",
+    "wait": 1,
+    "expect": "==> c91762d1"
+  },
+  {
+    "command": "ext4load mmc 0:c 3000000 /rtctrl-pid1-20261005-v3/uart.dtb",
+    "wait": 4,
+    "expect": "162414 bytes read"
+  },
+  {
+    "command": "crc32 3000000 27a6e",
+    "wait": 1,
+    "expect": "==> 407e3caa"
+  },
+  {
+    "command": "ext4load mmc 0:c 4000000 /rtctrl-pid1-20261005-v3/initramfs-pid1.cpio.gz",
+    "wait": 4,
+    "expect": "972203 bytes read"
+  },
+  {
+    "command": "crc32 4000000 ed5ab",
+    "wait": 1,
+    "expect": "==> a1b85ed0"
+  },
+  {
+    "command": "fdt addr 3000000",
+    "wait": 1
+  },
+  {
+    "command": "fdt rsvmem print",
+    "wait": 1
+  },
+  {
+    "command": "fdt print /reserved-memory",
+    "wait": 1,
+    "expect": "no-map"
+  }
+]

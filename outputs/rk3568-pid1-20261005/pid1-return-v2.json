@@ -1,0 +1,12 @@
+[
+  {
+    "command": "return",
+    "wait": 8,
+    "expect": "(?m)^LINUX_PID1_RAM_READY_NO_RESET\\r?$"
+  },
+  {
+    "command": "status",
+    "wait": 1,
+    "expect": "(?m)^PID1_STATUS phase=4 [^\\r\\n]*backward=63 pivot=1 old_unmounted=1 loop_detached=1 cache_unmounted=1\\r?$"
+  }
+]

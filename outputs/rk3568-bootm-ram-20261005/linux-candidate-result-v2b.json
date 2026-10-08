@@ -1,0 +1,430 @@
+{
+  "schema": 1,
+  "mode": "LINUX_PACKAGE_RAM_BOOTM_ONLY",
+  "package_version": "v2",
+  "trial": 2,
+  "checks": [
+    {
+      "name": "frozen PID1 session manifest",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-load-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-boot-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-tests-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-shell-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-inspect-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-exit-shell-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-return-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-ram-shell-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-return-check-v4.json",
+      "passed": true
+    },
+    {
+      "name": "frozen pid1-request-reboot-v4.json",
+      "passed": true
+    },
+    {
+      "name": "same frozen v2 package",
+      "passed": true
+    },
+    {
+      "name": "fresh -> start   ",
+      "passed": true
+    },
+    {
+      "name": "fresh -> size    ",
+      "passed": true
+    },
+    {
+      "name": "fresh -> start   ",
+      "passed": true
+    },
+    {
+      "name": "fresh -> size    ",
+      "passed": true
+    },
+    {
+      "name": "fresh relocaddr  ",
+      "passed": true
+    },
+    {
+      "name": "fresh sp start   ",
+      "passed": true
+    },
+    {
+      "name": "fresh fdt_blob",
+      "passed": true
+    },
+    {
+      "name": "load 41943040 bytes read",
+      "passed": true
+    },
+    {
+      "name": "load filesize=0x2800000",
+      "passed": true
+    },
+    {
+      "name": "load crc32 for 20000000 ... 227fffff ==> cab15fb2",
+      "passed": true
+    },
+    {
+      "name": "single bootm command",
+      "passed": true
+    },
+    {
+      "name": "actual BOOTM: transferring to board Android",
+      "passed": true
+    },
+    {
+      "name": "actual HASH(c): OK",
+      "passed": true
+    },
+    {
+      "name": "actual ANDROID: fdt overlay OK",
+      "passed": true
+    },
+    {
+      "name": "actual ANDROID: Hash OK",
+      "passed": true
+    },
+    {
+      "name": "actual Kernel: 0x00400000 - 0x02525200",
+      "passed": true
+    },
+    {
+      "name": "actual ramdisk:    0x04000000 - 0x040ed5ab",
+      "passed": true
+    },
+    {
+      "name": "actual Linux version 5.10.160-rt89-g9f9e9d18574d-dirty",
+      "passed": true
+    },
+    {
+      "name": "actual FDT destination",
+      "passed": true
+    },
+    {
+      "name": "exact one selected resource DT",
+      "passed": false
+    },
+    {
+      "name": "no repeated FDT_DTBO allocation",
+      "passed": false
+    },
+    {
+      "name": "native ROOT_READY",
+      "passed": true
+    },
+    {
+      "name": "codec-test exit0",
+      "passed": true
+    },
+    {
+      "name": "pty-test exit0",
+      "passed": true
+    },
+    {
+      "name": "two test children reaped",
+      "passed": true
+    },
+    {
+      "name": "actual read-only loop root",
+      "passed": true
+    },
+    {
+      "name": "actual read-only cache",
+      "passed": true
+    },
+    {
+      "name": "PID1 executable loop inode45",
+      "passed": true
+    },
+    {
+      "name": "PID1_EXECUTABLE_SHA_VERIFIED",
+      "passed": true
+    },
+    {
+      "name": "PID1_RETURN_GUARD_SHA_VERIFIED",
+      "passed": true
+    },
+    {
+      "name": "PID1_NORMAL_REBOOT_HELPER_IN_RAM",
+      "passed": true
+    },
+    {
+      "name": "root shell reaped",
+      "passed": true
+    },
+    {
+      "name": "native RAM return",
+      "passed": true
+    },
+    {
+      "name": "all ownership flags returned",
+      "passed": true
+    },
+    {
+      "name": "independent RAM guard",
+      "passed": true
+    },
+    {
+      "name": "seven unique RAM mounts",
+      "passed": true
+    },
+    {
+      "name": "no persistent mounts in guard output",
+      "passed": true
+    },
+    {
+      "name": "reboot independent guard",
+      "passed": true
+    },
+    {
+      "name": "ordinary reboot request",
+      "passed": true
+    },
+    {
+      "name": "ordinary reset reached",
+      "passed": true
+    },
+    {
+      "name": "no severe diagnostic request to DDR",
+      "passed": true
+    },
+    {
+      "name": "fresh after UART capture",
+      "passed": true
+    },
+    {
+      "name": "fresh Android kernel",
+      "passed": true
+    },
+    {
+      "name": "fresh Android android",
+      "passed": true
+    },
+    {
+      "name": "fresh Android boot_completed",
+      "passed": true
+    },
+    {
+      "name": "fresh Android root",
+      "passed": true
+    },
+    {
+      "name": "boot full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "uboot full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "trust full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "dtbo full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "vbmeta full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "source_rootfs full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "network_rootfs full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "final overlay bootargs_ext",
+      "passed": false
+    },
+    {
+      "name": "final overlay mode-bootloader",
+      "passed": false
+    },
+    {
+      "name": "final overlay mode-fastboot",
+      "passed": false
+    },
+    {
+      "name": "final overlay mode-normal",
+      "passed": true
+    },
+    {
+      "name": "full FDT transfer receipt",
+      "passed": true
+    },
+    {
+      "name": "complete final FDT semantic review",
+      "passed": false
+    }
+  ],
+  "passed": 65,
+  "total": 71,
+  "evidence": {
+    "rk3568-pid1-20261005/board-manifest-v4.json": {
+      "bytes": 2867,
+      "sha256": "6b71dc13c70b869864d316245adcc436ec85ff8c7c63cadfba883a98dca253dd"
+    },
+    "rk3568-pid1-20261005/pid1-load-v4.json": {
+      "bytes": 904,
+      "sha256": "802450905761cddfb2e42516fff26d05761efad78477da5d38609547ca9970b9"
+    },
+    "rk3568-pid1-20261005/pid1-boot-v4.json": {
+      "bytes": 973,
+      "sha256": "e64ba727a4e3e86872ba0ee9c6ee82a5e5dbf21dcb9c4a7905b460d00e4d8e11"
+    },
+    "rk3568-pid1-20261005/pid1-tests-v4.json": {
+      "bytes": 254,
+      "sha256": "6b7f762a0ea478463ea446c0b44cdbac5f4b5b5b2d8c3bf88d430f65111e2e55"
+    },
+    "rk3568-pid1-20261005/pid1-shell-v4.json": {
+      "bytes": 80,
+      "sha256": "469c1487d6a6c4f003eb186881ab3e1cf29a4104dd3a4fd74dbc97688139e6e3"
+    },
+    "rk3568-pid1-20261005/pid1-inspect-v4.json": {
+      "bytes": 24983,
+      "sha256": "028a76b5b0368fdd0be56039098e269805206b65ad9807f078a9ae7b0f5d741c"
+    },
+    "rk3568-pid1-20261005/pid1-exit-shell-v4.json": {
+      "bytes": 116,
+      "sha256": "8b9d0f30b87c6b09773ae146a5c03eff08e16c16b671f6d908eed2479c28e17a"
+    },
+    "rk3568-pid1-20261005/pid1-return-v4.json": {
+      "bytes": 283,
+      "sha256": "29f10d51f0167fad5ef611d9554593309d7e3ee63ca610a9e5c6253480c6c2e8"
+    },
+    "rk3568-pid1-20261005/pid1-ram-shell-v4.json": {
+      "bytes": 80,
+      "sha256": "469c1487d6a6c4f003eb186881ab3e1cf29a4104dd3a4fd74dbc97688139e6e3"
+    },
+    "rk3568-pid1-20261005/pid1-return-check-v4.json": {
+      "bytes": 333,
+      "sha256": "1c9812efa963b7d4a26d00f604f7acf675ff76b6808aaee185829426d23a7e9a"
+    },
+    "rk3568-pid1-20261005/pid1-request-reboot-v4.json": {
+      "bytes": 421,
+      "sha256": "6c3633fb720f01e27105a34dfa5103b329872980bf9cae97df66ab34a9487bb2"
+    },
+    "rk3568-boot-package-20261005/build/ram-candidate-v2/boot-padded.img": {
+      "bytes": 41943040,
+      "sha256": "67f351b822887c5e2fae10c099760a126d20daee2e9b2931b945a1176af37dbe"
+    },
+    "rk3568-pid1-20261005/private/uboot-before-linux-bootm-v2.raw.txt": {
+      "bytes": 35302,
+      "sha256": "d682ce1406fa6bcc1520894b62eb5b8758f9472476ee9be24cdd3cb7b4123ca1"
+    },
+    "rk3568-pid1-20261005/private/linux-candidate-load-v2.raw.txt": {
+      "bytes": 3057,
+      "sha256": "bdfff76d9e3151d6552480a4454c4a3112fa0dc20f55586ad32bbb76cfa854a9"
+    },
+    "rk3568-pid1-20261005/private/linux-candidate-boot-v2.raw.txt": {
+      "bytes": 38892,
+      "sha256": "4b6b02887d6af4446f79a7af9c13000001f932171898fd548723e0a9abf87db7"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-tests-v2.raw.txt": {
+      "bytes": 1279,
+      "sha256": "fc372d2c8e24d21e2d02b969e5fe02426261b362043970c2cde0068694b77fcd"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-shell-v2.raw.txt": {
+      "bytes": 388,
+      "sha256": "491f3b1a1a82b11530296edd36f29ca52fa263ce0f2fc3cbe6f71f1f989a74e8"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-inspect-v2.raw.txt": {
+      "bytes": 21905,
+      "sha256": "e20af8ddf9a625f115c53e84454ce6f3ea5ed7b07e1ab80b343f373d77d5a40d"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-exit-shell-v2.raw.txt": {
+      "bytes": 367,
+      "sha256": "33d70b8f2a971a191e8aefa1b08cd725fd4d8385fd2af87b124f24cbd1116221"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-return-v2.raw.txt": {
+      "bytes": 937,
+      "sha256": "b20839f611daaa6d2e2921e46ee9f0c29f891eb667fa1d91e3df0ece3b4a079b"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-ram-shell-v2.raw.txt": {
+      "bytes": 388,
+      "sha256": "927a30ecc224a03b4886b84279656ea8866b15426e1772ed01836996440744ae"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-return-check-v2.raw.txt": {
+      "bytes": 30733,
+      "sha256": "1e2bc21a9eb012663da4d74adb101eced266288e01e8034cbc177dfaddd78ae1"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-pid1-request-reboot-v2.raw.txt": {
+      "bytes": 162315,
+      "sha256": "0dbf07889400bf11394a53cd297e10d2542aacb4add8a3ac7d0cd26b34c35274"
+    },
+    "rk3568-pid1-20261005/private/android-before-linux-bootm-v2.json": {
+      "bytes": 7843,
+      "sha256": "bb7a38fc7fe0489886f360df50005a3ecb3319b9a093bc8feee8b793ccea9df2"
+    },
+    "rk3568-pid1-20261005/private/android-after-linux-bootm-v2-serial.json": {
+      "bytes": 3601,
+      "sha256": "de1a38c06cb144ba28bc7be71b52e86b6592a49ae0148206e153498e5b8a60d2"
+    },
+    "rk3568-pid1-20261005/private/android-baseline-after-linux-bootm-v2.raw.txt": {
+      "bytes": 12229,
+      "sha256": "b6dfcc72b4d4cc5cefc24220d597c4d84e595264ec47d2a845b1860ff6246d9c"
+    },
+    "rk3568-boot-package-20261005/dt-semantics-v2.py": {
+      "bytes": 5164,
+      "sha256": "b89b3e4dab11281e02ec4a31104907e8b66579ba2e44556c4108d470f468aa56"
+    },
+    "rk3568-pid1-20261005/private/linux-bootm-live-v2.dtb": {
+      "bytes": 163968,
+      "sha256": "6109dda4fa7460be615a9df127ca2fc2c420bc3148a15c5514472fb59228587e"
+    },
+    "rk3568-bootm-ram-20261005/live-fdt-transfer-v2.json": {
+      "bytes": 405,
+      "sha256": "e074b700ac78b2693c3223e556a66ba51199f5a5f60d3c880cc658abbb370460"
+    },
+    "rk3568-bootm-ram-20261005/live-fdt-review-v2.json": {
+      "bytes": 888,
+      "sha256": "cd07e3f17765d46dc4fdeddf53e70baf2b2cfbddf1ca7495553b6b35768721ae"
+    },
+    "rk3568-bootm-ram-20261005/audit-linux-candidate.py": {
+      "bytes": 10022,
+      "sha256": "f8b52ea776b5700afb626b00eead3f30405cf769832f65950b46fbab86d393c3"
+    }
+  },
+  "battery_percent": {
+    "before": 62,
+    "after": 62
+  },
+  "ordinary_restart_seconds": 505.770366,
+  "manual_island_repair": false,
+  "manual_guard_repair": false,
+  "flash_performed": false,
+  "full_emmc_diff": false,
+  "usb_recovery_confirmed": false
+}

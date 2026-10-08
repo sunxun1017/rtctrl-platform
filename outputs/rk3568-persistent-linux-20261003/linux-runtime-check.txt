@@ -1,0 +1,14 @@
+Kernel: 4.19.232
+PID1: /bin/sh /init in RAM
+Cache: PARTNAME=cache, 786432 sectors
+Rootfs: regular ext4 file, 67108864 bytes, child chroot
+Original module + firmware file SHA checks: OK
+RKNPU: renderD129, driver v0.7.2; inference not tested
+Wi-Fi: original bcmdhd loaded; firmware 611103 bytes and NVRAM 2874 bytes opened successfully
+Wi-Fi firmware: 7.45.96.150; wlan0 UP/LOWER_UP; association/DHCP not tested
+Wi-Fi module removed; rootfs/cache mounts removed; owned loop released
+Remaining mounts before reboot: rootfs/devtmpfs/proc/sysfs/tmpfs
+Normal kernel reboot returned Android 11; boot_completed=1
+Android readback: both marker SHA checks match
+Original boot/uboot/trust/dtbo/vbmeta SHA unchanged
+Printk: 7 4 1 7

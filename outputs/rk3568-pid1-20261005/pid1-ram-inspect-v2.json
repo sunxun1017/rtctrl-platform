@@ -1,0 +1,18 @@
+[
+  {
+    "command": "/bin/busybox ls -l /bin",
+    "wait": 2
+  },
+  {
+    "command": "/bin/busybox cat /proc/mounts",
+    "wait": 2
+  },
+  {
+    "command": "/bin/busybox readlink -f /proc/1/exe",
+    "expect": "(?m)^/bin/pid1\\r?$"
+  },
+  {
+    "command": "/bin/busybox sha256sum /bin/busybox /proc/1/exe /tmp/pid1-return-guard.sh",
+    "wait": 2
+  }
+]

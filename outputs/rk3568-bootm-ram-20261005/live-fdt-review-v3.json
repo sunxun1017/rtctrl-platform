@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "mode": "RAM_BOOTM_TRIAL_ONLY",
+  "live_sha256": "25cc8ad86242311ee6dacd6a4685cda10f2d569f011b292b5ee2cf8f270e2e19",
+  "base_sha256": "aadaba5cd92f3e4850d304fc122f327720bcaa06f715271784532a603150a9f7",
+  "parser_sha256": "b89b3e4dab11281e02ec4a31104907e8b66579ba2e44556c4108d470f468aa56",
+  "semantic_review_completed": true,
+  "accepted": true,
+  "node_count": 958,
+  "property_count": 4891,
+  "changed_property_count": 31,
+  "added_nodes": [],
+  "removed_nodes": [],
+  "unchanged_phandle_count": 761,
+  "unchanged_status_count": 168,
+  "status_and_power_properties_unchanged": true,
+  "overlay_retained": {
+    "chosen_symbol": "/chosen",
+    "chosen_phandle": "0x2f9",
+    "bootargs_ext_retained": true,
+    "normal": "0x5242c300",
+    "bootloader": "0x5242c309",
+    "fastboot": "0x5242c303"
+  },
+  "property_difference_categories": {
+    "private_runtime_identity": 3,
+    "chosen_bootargs_and_initrd": 3,
+    "display_handoff": 18,
+    "vop_assignment": 6,
+    "memory_reg_zero_length_tail": 1
+  },
+  "full_transfer": "640 chunks of 256 bytes and one of 128 bytes; 163968 bytes, full SHA and both board SHA observations agree",
+  "failed_transfers": "Both incomplete 1KiB captures are rejected in live-fdt-rejected-v3.json",
+  "address_review": "Kernel 00400000..025c0000; initrd 04000000..040ed5ab; FDT a100000..a12acc7; old initrd reservation a200000..a2c8c20; package 20000000..22800000. These intervals do not overlap. setup_machine_fdt independently reserves fdt_totalsize, covering the 128-byte tail beyond the explicit FDT memreserve.",
+  "boot_review": "Exactly one 3568a_v20 selection and one successful overlay, both hashes passed. No second resource DT read or FDT_DTBO double allocation. Actual kernel command line agrees with the final tree and the kernel unpacked initramfs and executed /init.",
+  "review": "display_next_steps independent complete transfer/tree/deployed-U-Boot review; root binds actual capture files in live-fdt-binding-v3.json and the full trial auditor",
+  "private_diff": "../rk3568-pid1-20261005/private/linux-bootm-live-v3-diff.json",
+  "formal_flash_approved": false,
+  "usb_recovery_confirmed": false
+}

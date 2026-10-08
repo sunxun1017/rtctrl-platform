@@ -1,0 +1,10 @@
+[
+  {"command":"ip link set wlan0 up","wait":8},
+  {"command":"ip link show wlan0"},
+  {"command":"for d in /sys/bus/sdio/devices/*; do printf '%s: ' \"$d\"; readlink \"$d/driver\"; done"},
+  {"command":"dmesg | grep -E 'Final.*path|dhd_os_get_img|Firmware:|firmware version|dhd_bus_start|Direct firmware|failed|Fail|Error' | tail -n 55","wait":2},
+  {"command":"printf 'linux-persistent-20261003\\n' > /var/lib/rtctrl/linux-marker"},
+  {"command":"sha256sum /var/lib/rtctrl/linux-marker"},
+  {"command":"sync"},
+  {"command":"cat /proc/mounts"}
+]

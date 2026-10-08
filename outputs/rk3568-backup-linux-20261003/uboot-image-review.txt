@@ -1,0 +1,27 @@
+2026-10-03 原 U-Boot ARM64 Image 放置规则：只读离线复核
+输入 original/uboot.img：4194304 字节
+SHA-256 4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e
+首个 FIT 在文件 0，uboot 数据位置 0x1000，长度 0x1408e8；未压缩 ARM64，初始 load 0x00a00000。
+第二个 FIT 在 0x200000；两个 U-Boot firmware 逐字节一致。
+firmware SHA-256 70f7a704fc85a94719b953c50aef073a7ef9df51f13b9c0feddfa82975f68ca6
+
+有界反汇编命令：
+aarch64-linux-gnu-objdump -D -b binary -m aarch64 --adjust-vma=0x9ff000 --start-address=0xa09de0 --stop-address=0xa09f80 outputs/rk3568-backup-linux-20261003/original/uboot.img
+
+下述为原文件偏移（反汇编地址减 0x9ff000）：
+0xae3c..0xae48：组成 0x644d5241，与 Image+56 的 32 位 magic 比较。
+0xae8c：ldr x2,[x24,#16] 读取 image_size；非零转 0xaf58。
+0xaf58：ldr x0,[x24,#8] 读取 text_offset，返回 0xaea8。
+0xaea8：ldr x1,[x24,#24] 读取 flags。
+0xaeac：361805a1 / tbz w1,#3,0xa09f60；bit3 为 0 才读取低 RAM 基址。
+bit3 为 1：0xaeb4 读原 ep；0xaeb8 减 text_offset；0xaebc..0xaec8 向上按 2MiB 对齐；
+0xaecc 加回 text_offset；0xaed4 比较 dst 与 ep；0xaed8 相等时跳过 0xaee0 的搬移调用。
+
+原 Image flags=0x0a、text_offset=0x80000、image_size=0x0207d000。
+ep=0x00280000 => ep-text_offset=0x00200000 已对齐 => dst=0x00280000，不搬移。
+内核完整内存区间为 [0x00280000,0x022fd000)，不能只按文件长度保留 RAM。
+
+实机 version 2017.09 (Mar 12 2026 - 16:01:04 +0800)，kernel_addr_r=0x00280000。
+实机 bdinfo：bank0 [0x00200000,0x08400000)，bank1 [0x09400000,0xf0000000)。
+relocaddr=0xedcf3000、TLB=0xefff0000、sp=0xeb9f85b0，避开此次低 RAM 加载。
+二进制分析与现场内存信息不单独证明启动和恢复成功；仍需加载 CRC 和板测日志。

@@ -1,0 +1,57 @@
+{
+  "board_tested": false,
+  "deployment_performed": false,
+  "production_manifest_sha256": "53f8807d3e2ab63fbe7d4b35cab33a391b28e00bf317179fedeac1a6f7306484",
+  "files": {
+    "rootfs-pid1.ext4": "3a87bd54f44b1e5d20701514c26669d086123e8b2ee8ed9087cc118c12fc679d",
+    "initramfs-pid1.cpio.gz": "54db3bb6fa94dd1570a306aa90e3caa6ae5ed7bb6b93d96afcae0c5f8881afef",
+    "uart.dtb": "7be4f96f90e10f1308ba6ecef8a5346d641d1bfbcf8746fbcdb704a2de9491d1",
+    "prepare-android.sh": "9b6580c20d1037c4a23fbb52be606da8fc552cebe0e7b9aab928a3ac7b31e4af"
+  },
+  "upload_sha256": "e8dc07178a73e6dce79f8ad0523174e9ed5707328d0b5b872cd94e887e36a1ce",
+  "artifacts": {
+    "pid1": {
+      "bytes": 767112,
+      "sha256": "249cc1cfd87cbddc8618e81e6b8fd742526de78fd964d4a4b3b59b8a7d76368b",
+      "crc32": "90d71549"
+    },
+    "rootfs-pid1.ext4": {
+      "bytes": 16777216,
+      "sha256": "3a87bd54f44b1e5d20701514c26669d086123e8b2ee8ed9087cc118c12fc679d",
+      "crc32": "dfca5db0"
+    },
+    "initramfs-pid1.cpio.gz": {
+      "bytes": 972203,
+      "sha256": "54db3bb6fa94dd1570a306aa90e3caa6ae5ed7bb6b93d96afcae0c5f8881afef",
+      "crc32": "a1b85ed0"
+    },
+    "Image": {
+      "sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+      "bytes": 34755072,
+      "crc32": "c91762d1"
+    },
+    "uart.dtb": {
+      "sha256": "7be4f96f90e10f1308ba6ecef8a5346d641d1bfbcf8746fbcdb704a2de9491d1",
+      "bytes": 162414,
+      "crc32": "407e3caa"
+    }
+  },
+  "image_memory_bytes": 35389440,
+  "image_cached_path": "/cache/rtctrl-rcu-reset-20261004/Image",
+  "rootfs_path": "/cache/rtctrl-pid1-20261005-v3/rootfs-pid1.ext4",
+  "payload": "outputs/rk3568-pid1-20261005/build/board-v4/payload",
+  "sessions": {
+    "pid1-load-v4.json": "802450905761cddfb2e42516fff26d05761efad78477da5d38609547ca9970b9",
+    "pid1-boot-v4.json": "e64ba727a4e3e86872ba0ee9c6ee82a5e5dbf21dcb9c4a7905b460d00e4d8e11",
+    "pid1-tests-v4.json": "6b7f762a0ea478463ea446c0b44cdbac5f4b5b5b2d8c3bf88d430f65111e2e55",
+    "pid1-shell-v4.json": "469c1487d6a6c4f003eb186881ab3e1cf29a4104dd3a4fd74dbc97688139e6e3",
+    "pid1-inspect-v4.json": "028a76b5b0368fdd0be56039098e269805206b65ad9807f078a9ae7b0f5d741c",
+    "pid1-exit-shell-v4.json": "8b9d0f30b87c6b09773ae146a5c03eff08e16c16b671f6d908eed2479c28e17a",
+    "pid1-return-v4.json": "29f10d51f0167fad5ef611d9554593309d7e3ee63ca610a9e5c6253480c6c2e8",
+    "pid1-ram-shell-v4.json": "469c1487d6a6c4f003eb186881ab3e1cf29a4104dd3a4fd74dbc97688139e6e3",
+    "pid1-return-check-v4.json": "1c9812efa963b7d4a26d00f604f7acf675ff76b6808aaee185829426d23a7e9a",
+    "pid1-request-reboot-v4.json": "6c3633fb720f01e27105a34dfa5103b329872980bf9cae97df66ab34a9487bb2"
+  },
+  "return_guard_sha256": "3b67917a88b9c09b056fbcae51903cbf3e4fc2da55fdc3a58414c8f2537caf76",
+  "generator_sha256": "755917ab2d1c65d412a36de4a7e4348fc202624ca06c20b82f2172418e4b3bef"
+}

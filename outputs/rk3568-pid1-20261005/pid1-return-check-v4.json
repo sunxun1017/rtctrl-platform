@@ -1,0 +1,11 @@
+[
+  {
+    "command": "test \"$(sha256sum /tmp/pid1-return-guard.sh)\" = '3b67917a88b9c09b056fbcae51903cbf3e4fc2da55fdc3a58414c8f2537caf76  /tmp/pid1-return-guard.sh' && sh /tmp/pid1-return-guard.sh",
+    "wait": 5,
+    "expect": "(?m)^PID1_INDEPENDENT_RAM_ONLY_RETURN_READY\\r?$"
+  },
+  {
+    "command": "dmesg",
+    "wait": 2
+  }
+]

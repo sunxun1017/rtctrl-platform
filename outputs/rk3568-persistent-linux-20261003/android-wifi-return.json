@@ -1,0 +1,5 @@
+[
+  {"command":"ip link show wlan0"},
+  {"command":"cmd wifi status","wait":2},
+  {"command":"su 0 dmesg | grep -E 'Firmware:|dhd_os_get_img.*open success|wifi_on.*Failed' | tail -n 8"}
+]

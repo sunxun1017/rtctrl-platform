@@ -1,0 +1,22 @@
+[
+  {
+    "command": "uname -r",
+    "expect": "(?m)^4\\.19\\.232\\r?$"
+  },
+  {
+    "command": "getprop sys.boot_completed",
+    "expect": "(?m)^1\\r?$"
+  },
+  {
+    "command": "su 0 sh -c 'ip -4 addr show wlan0'",
+    "wait": 2
+  },
+  {
+    "command": "su 0 sh -c 'dumpsys battery'",
+    "wait": 2
+  },
+  {
+    "command": "getprop service.adb.tcp.port",
+    "wait": 1
+  }
+]

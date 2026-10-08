@@ -1,0 +1,7 @@
+[
+  {
+    "command": "test \"$(sha256sum /tmp/pid1-return-guard.sh)\" = 'b3cbf88db7d3c335829d857d6dcefc00ca9c848bd9a16db6698835b3eef61b60  /tmp/pid1-return-guard.sh' && sh /tmp/pid1-return-guard.sh && test \"$(sha256sum /tmp/normal-reboot)\" = '6c90fe3dca1f0ae6ffab50eddbfdccca27cc2f8ccf0821814456ae3980fe09f5  /tmp/normal-reboot' && /tmp/normal-reboot --request",
+    "wait": 40,
+    "expect": "Restarting system"
+  }
+]

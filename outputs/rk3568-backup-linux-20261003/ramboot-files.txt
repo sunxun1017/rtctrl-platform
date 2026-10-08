@@ -1,0 +1,7 @@
+33046536 /cache/rtctrl-linux-20261003/Image
+ 151680 /cache/rtctrl-linux-20261003/android-running.dtb
+ 533234 /cache/rtctrl-linux-20261003/initramfs.cpio.gz
+33731450 total
+54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d  /cache/rtctrl-linux-20261003/Image
+f81341ac00389e88a91864dfc251ae0e10217135539a38b4bf434e1ae9ddef52  /cache/rtctrl-linux-20261003/android-running.dtb
+2a97a6a3af2054417cd47459770629673a4655131a77c3a12dd8d30568854956  /cache/rtctrl-linux-20261003/initramfs.cpio.gz

@@ -1,0 +1,16 @@
+[
+  {"command":"echo 1 > /proc/sys/kernel/printk"},
+  {"command":"uname -r","expect":"4.19.232"},
+  {"command":"cat /proc/1/cmdline"},
+  {"command":"cat /proc/mounts"},
+  {"command":"cat /sys/class/block/mmcblk2p12/uevent /sys/class/block/mmcblk2p12/size /sys/class/block/mmcblk2p12/start","expect":"PARTNAME=cache"},
+  {"command":"cat /proc/modules"},
+  {"command":"for d in /sys/bus/i2c/devices/5-0062 /sys/bus/i2c/devices/5-0015 /sys/bus/spi/devices/spi3.0; do printf '%s: ' \"$d\"; readlink \"$d/driver\"; done"},
+  {"command":"cat /proc/asound/cards"},
+  {"command":"for d in /sys/class/video4linux/*; do printf '%s: ' \"$d\"; cat \"$d/name\"; done"},
+  {"command":"ls -l /dev/dri /dev/mali0 /dev/ttySMT0"},
+  {"command":"readlink -f /sys/class/drm/renderD129/device/driver"},
+  {"command":"mount -t debugfs debugfs /sys/kernel/debug"},
+  {"command":"cat /sys/kernel/debug/rknpu/driver_version /sys/kernel/debug/rknpu/load","expect":"v0.7.2"},
+  {"command":"cat /sys/module/firmware_class/parameters/path","expect":"/mnt/root/vendor/etc/firmware"}
+]

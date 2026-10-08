@@ -1,0 +1,7 @@
+[
+  {"command": "getprop ro.build.version.release", "expect": "(?m)^11\\r?$"},
+  {"command": "uname -r", "expect": "4\\.19\\.232"},
+  {"command": "cat /proc/uptime"},
+  {"command": "su 0 sh -c 'echo 1 > /proc/sys/kernel/printk'"},
+  {"command": "su 0 sha256sum /dev/block/by-name/boot /dev/block/by-name/uboot /dev/block/by-name/trust /dev/block/by-name/dtbo /dev/block/by-name/vbmeta", "wait": 4}
+]

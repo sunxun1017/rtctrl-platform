@@ -1,0 +1,14 @@
+[
+  {
+    "command": "stat -L -c '%F:%t:%T' /proc/$$/fd/10",
+    "expect": "(?m)^character special file:5:0\\r?$"
+  },
+  {
+    "command": "cat /proc/$$/fdinfo/10",
+    "wait": 1
+  },
+  {
+    "command": "ls -l /proc/$$/fd",
+    "wait": 1
+  }
+]

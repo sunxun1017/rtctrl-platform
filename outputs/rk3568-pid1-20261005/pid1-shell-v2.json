@@ -1,0 +1,7 @@
+[
+  {
+    "command": "shell",
+    "wait": 3,
+    "expect": "pid1-rescue#"
+  }
+]

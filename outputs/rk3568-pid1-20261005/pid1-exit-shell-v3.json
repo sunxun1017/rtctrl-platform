@@ -1,0 +1,7 @@
+[
+  {
+    "command": "exit",
+    "wait": 3,
+    "expect": "(?m)^OWNED_SESSION_REAPED [^\\r\\n]*status=0\\r?$"
+  }
+]

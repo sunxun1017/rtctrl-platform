@@ -1,0 +1,14 @@
+[
+  {"command": "ext4load mmc 0:c 280000 /rtctrl-linux-20261003/Image", "wait": 4, "expect": "33046536 bytes read"},
+  {"command": "crc32 280000 1f84008", "expect": "28e3a67c"},
+  {"command": "ext4load mmc 0:c 3000000 /rtctrl-linux-20261003/android-running.dtb", "wait": 2, "expect": "151680 bytes read"},
+  {"command": "crc32 3000000 25080", "expect": "60dbf153"},
+  {"command": "ext4load mmc 0:c 4000000 /rtctrl-linux-20261003/initramfs.cpio.gz", "wait": 2, "expect": "533234 bytes read"},
+  {"command": "crc32 4000000 822f2", "expect": "b9718d95"},
+  {"command": "fdt addr 3000000"},
+  {"command": "fdt header"},
+  {"command": "fdt rsvmem print"},
+  {"command": "fdt print /memory"},
+  {"command": "fdt print /reserved-memory", "wait": 2},
+  {"command": "fdt print /chosen"}
+]

@@ -1,0 +1,262 @@
+[
+  {
+    "command": "/bin/busybox ln -s busybox /bin/[ && echo RAM_APPLET_LINKED_0",
+    "expect": "(?m)^RAM_APPLET_LINKED_0\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/[[ && echo RAM_APPLET_LINKED_1",
+    "expect": "(?m)^RAM_APPLET_LINKED_1\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ash && echo RAM_APPLET_LINKED_2",
+    "expect": "(?m)^RAM_APPLET_LINKED_2\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/cat && echo RAM_APPLET_LINKED_3",
+    "expect": "(?m)^RAM_APPLET_LINKED_3\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/chmod && echo RAM_APPLET_LINKED_4",
+    "expect": "(?m)^RAM_APPLET_LINKED_4\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/chown && echo RAM_APPLET_LINKED_5",
+    "expect": "(?m)^RAM_APPLET_LINKED_5\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/chroot && echo RAM_APPLET_LINKED_6",
+    "expect": "(?m)^RAM_APPLET_LINKED_6\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/cp && echo RAM_APPLET_LINKED_7",
+    "expect": "(?m)^RAM_APPLET_LINKED_7\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/cpio && echo RAM_APPLET_LINKED_8",
+    "expect": "(?m)^RAM_APPLET_LINKED_8\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/cttyhack && echo RAM_APPLET_LINKED_9",
+    "expect": "(?m)^RAM_APPLET_LINKED_9\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/dd && echo RAM_APPLET_LINKED_10",
+    "expect": "(?m)^RAM_APPLET_LINKED_10\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/df && echo RAM_APPLET_LINKED_11",
+    "expect": "(?m)^RAM_APPLET_LINKED_11\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/dmesg && echo RAM_APPLET_LINKED_12",
+    "expect": "(?m)^RAM_APPLET_LINKED_12\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/echo && echo RAM_APPLET_LINKED_13",
+    "expect": "(?m)^RAM_APPLET_LINKED_13\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/grep && echo RAM_APPLET_LINKED_14",
+    "expect": "(?m)^RAM_APPLET_LINKED_14\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/gunzip && echo RAM_APPLET_LINKED_15",
+    "expect": "(?m)^RAM_APPLET_LINKED_15\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/gzip && echo RAM_APPLET_LINKED_16",
+    "expect": "(?m)^RAM_APPLET_LINKED_16\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/halt && echo RAM_APPLET_LINKED_17",
+    "expect": "(?m)^RAM_APPLET_LINKED_17\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/head && echo RAM_APPLET_LINKED_18",
+    "expect": "(?m)^RAM_APPLET_LINKED_18\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/hexdump && echo RAM_APPLET_LINKED_19",
+    "expect": "(?m)^RAM_APPLET_LINKED_19\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/insmod && echo RAM_APPLET_LINKED_20",
+    "expect": "(?m)^RAM_APPLET_LINKED_20\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ip && echo RAM_APPLET_LINKED_21",
+    "expect": "(?m)^RAM_APPLET_LINKED_21\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ln && echo RAM_APPLET_LINKED_22",
+    "expect": "(?m)^RAM_APPLET_LINKED_22\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/losetup && echo RAM_APPLET_LINKED_23",
+    "expect": "(?m)^RAM_APPLET_LINKED_23\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ls && echo RAM_APPLET_LINKED_24",
+    "expect": "(?m)^RAM_APPLET_LINKED_24\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/mkdir && echo RAM_APPLET_LINKED_25",
+    "expect": "(?m)^RAM_APPLET_LINKED_25\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/modprobe && echo RAM_APPLET_LINKED_26",
+    "expect": "(?m)^RAM_APPLET_LINKED_26\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/mount && echo RAM_APPLET_LINKED_27",
+    "expect": "(?m)^RAM_APPLET_LINKED_27\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/mv && echo RAM_APPLET_LINKED_28",
+    "expect": "(?m)^RAM_APPLET_LINKED_28\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ping && echo RAM_APPLET_LINKED_29",
+    "expect": "(?m)^RAM_APPLET_LINKED_29\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/poweroff && echo RAM_APPLET_LINKED_30",
+    "expect": "(?m)^RAM_APPLET_LINKED_30\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/printf && echo RAM_APPLET_LINKED_31",
+    "expect": "(?m)^RAM_APPLET_LINKED_31\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/ps && echo RAM_APPLET_LINKED_32",
+    "expect": "(?m)^RAM_APPLET_LINKED_32\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/readlink && echo RAM_APPLET_LINKED_33",
+    "expect": "(?m)^RAM_APPLET_LINKED_33\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/reboot && echo RAM_APPLET_LINKED_34",
+    "expect": "(?m)^RAM_APPLET_LINKED_34\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/rm && echo RAM_APPLET_LINKED_35",
+    "expect": "(?m)^RAM_APPLET_LINKED_35\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/rmmod && echo RAM_APPLET_LINKED_36",
+    "expect": "(?m)^RAM_APPLET_LINKED_36\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/sed && echo RAM_APPLET_LINKED_37",
+    "expect": "(?m)^RAM_APPLET_LINKED_37\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/setsid && echo RAM_APPLET_LINKED_38",
+    "expect": "(?m)^RAM_APPLET_LINKED_38\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/sh && echo RAM_APPLET_LINKED_39",
+    "expect": "(?m)^RAM_APPLET_LINKED_39\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/sha256sum && echo RAM_APPLET_LINKED_40",
+    "expect": "(?m)^RAM_APPLET_LINKED_40\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/sleep && echo RAM_APPLET_LINKED_41",
+    "expect": "(?m)^RAM_APPLET_LINKED_41\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/stat && echo RAM_APPLET_LINKED_42",
+    "expect": "(?m)^RAM_APPLET_LINKED_42\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/sync && echo RAM_APPLET_LINKED_43",
+    "expect": "(?m)^RAM_APPLET_LINKED_43\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/tail && echo RAM_APPLET_LINKED_44",
+    "expect": "(?m)^RAM_APPLET_LINKED_44\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/tar && echo RAM_APPLET_LINKED_45",
+    "expect": "(?m)^RAM_APPLET_LINKED_45\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/test && echo RAM_APPLET_LINKED_46",
+    "expect": "(?m)^RAM_APPLET_LINKED_46\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/touch && echo RAM_APPLET_LINKED_47",
+    "expect": "(?m)^RAM_APPLET_LINKED_47\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/udhcpc && echo RAM_APPLET_LINKED_48",
+    "expect": "(?m)^RAM_APPLET_LINKED_48\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/umount && echo RAM_APPLET_LINKED_49",
+    "expect": "(?m)^RAM_APPLET_LINKED_49\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/uname && echo RAM_APPLET_LINKED_50",
+    "expect": "(?m)^RAM_APPLET_LINKED_50\r?$",
+    "wait": 0.25
+  },
+  {
+    "command": "/bin/busybox ln -s busybox /bin/zcat && echo RAM_APPLET_LINKED_51",
+    "expect": "(?m)^RAM_APPLET_LINKED_51\r?$",
+    "wait": 0.25
+  }
+]

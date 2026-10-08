@@ -1,0 +1,12 @@
+[
+  {
+    "command": "codec",
+    "wait": 5,
+    "expect": "(?m)^SOFTWARE_TEST_PASSED path=/usr/bin/codec-test exit=0\\r?$"
+  },
+  {
+    "command": "pty",
+    "wait": 10,
+    "expect": "(?m)^SOFTWARE_TEST_PASSED path=/usr/bin/pty-test exit=0\\r?$"
+  }
+]

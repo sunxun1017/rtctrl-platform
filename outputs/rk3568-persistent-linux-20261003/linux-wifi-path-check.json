@@ -1,0 +1,7 @@
+[
+  {"command":"ls -l /vendor/etc/firmware/fw_bcm43456c5_ag.bin /vendor/etc/firmware/nvram_ap6256.txt"},
+  {"command":"echo /vendor/etc/firmware > /sys/module/firmware_class/parameters/path"},
+  {"command":"ip link set wlan0 up","wait":8},
+  {"command":"ip link show wlan0"},
+  {"command":"dmesg | grep -E 'Final.*path|dhd_os_get_img|Firmware:|Firmware version|dhd_bus_start|Direct firmware|wl_android_wifi_on.*Failed|Failed to open primary' | tail -n 40","wait":2}
+]

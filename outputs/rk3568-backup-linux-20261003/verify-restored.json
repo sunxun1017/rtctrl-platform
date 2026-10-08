@@ -1,0 +1,11 @@
+[
+  {"command": "su 0 sh -c 'echo 1 > /proc/sys/kernel/printk'"},
+  {"command": "getprop ro.build.version.release", "expect": "(?m)^11\\r?$"},
+  {"command": "getprop sys.boot_completed", "expect": "(?m)^1\\r?$"},
+  {"command": "uname -r", "expect": "4\\.19\\.232"},
+  {"command": "cat /proc/uptime"},
+  {"command": "su 0 sha256sum /dev/block/by-name/boot /dev/block/by-name/uboot /dev/block/by-name/trust /dev/block/by-name/dtbo /dev/block/by-name/vbmeta", "wait": 4},
+  {"command": "cat /sys/class/net/wlan0/mtu", "expect": "1500"},
+  {"command": "getprop init.svc.adbd", "expect": "running"},
+  {"command": "su 0 sh -c 'echo 7 > /proc/sys/kernel/printk; cat /proc/sys/kernel/printk'", "expect": "7\\s+4\\s+1\\s+7"}
+]

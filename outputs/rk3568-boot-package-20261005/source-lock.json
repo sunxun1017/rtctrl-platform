@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "downloaded_sources": [
+    {
+      "file": "sources/mkbootimg.py",
+      "upstream": "AOSP platform/system/tools/mkbootimg",
+      "release": "android-11.0.0_r1",
+      "commit": "99894068024224a62595e051d69e748e2499f52e",
+      "url": "https://android.googlesource.com/platform/system/tools/mkbootimg/+/99894068024224a62595e051d69e748e2499f52e/mkbootimg.py?format=TEXT",
+      "transport": "Gitiles base64 TEXT decoded without modification",
+      "bytes": 13371,
+      "sha256": "5579fb6bcb9e89e790a70fb9ccf3c00cf56e3e46aef74d84fcb0964887e5576e",
+      "license": "Apache-2.0"
+    },
+    {
+      "file": "sources/bootimg.h",
+      "upstream": "AOSP platform/system/tools/mkbootimg",
+      "release": "android-11.0.0_r1",
+      "commit": "99894068024224a62595e051d69e748e2499f52e",
+      "url": "https://android.googlesource.com/platform/system/tools/mkbootimg/+/99894068024224a62595e051d69e748e2499f52e/include/bootimg/bootimg.h?format=TEXT",
+      "transport": "Gitiles base64 TEXT decoded without modification",
+      "bytes": 9444,
+      "sha256": "1726e1d3182b2b415d69635f272b9af0dfc79e87b827e87459b6ef78b5dd7fad",
+      "license": "Apache-2.0"
+    }
+  ],
+  "local_format_evidence": {
+    "file": "third_party/linux-rk3588/scripts/resource_tool.c",
+    "sha256": "d565a15c6c95871b762fc3599ef37bdbc4de63f6190f4f889b25ac335266b9e4",
+    "license": "GPL-2.0-or-later",
+    "use": "RSCE/ENTR format definition only; not proof of the deployed custom U-Boot implementation"
+  },
+  "independent_code_license": "MIT",
+  "original_binary_republication_license": "Unconfirmed; local backup only, not a public redistributable boot package",
+  "tag_resolution": {
+    "file": "sources/android-11.0.0_r1.json",
+    "bytes": 719,
+    "sha256": "9e9df6f8d0d667e1fc4e0dc7b85450121670dd03a828048ddd7b2bc945e6a5ca",
+    "url": "https://android.googlesource.com/platform/system/tools/mkbootimg/+/refs/tags/android-11.0.0_r1?format=JSON",
+    "commit": "99894068024224a62595e051d69e748e2499f52e",
+    "tree": "247426dc0da259914a9ac97474569d2aaeca0afa"
+  },
+  "public_uboot_reference": {
+    "commit": "1c535d65b8509f388d09e49fb6961f49fda35a1d",
+    "is_exact_deployed_smdt_implementation": false,
+    "provenance": {
+      "file": "sources/rockchip-reference-v1/commit.json",
+      "bytes": 5617,
+      "sha256": "b7b451de58626a3ae15d82a367bbb93aae6ca50d8960476dfed10944ffeea6c0"
+    },
+    "files": [
+      {
+        "file": "sources/rockchip-reference-v1/image-android.c",
+        "bytes": 39916,
+        "sha256": "c48d01d9dcd40ca37f3967c9d85f49ac44a4a9f172c3b4246df85f7871f27748",
+        "license": "GPL-2.0-or-later",
+        "url": "https://raw.githubusercontent.com/rockchip-linux/u-boot/1c535d65b8509f388d09e49fb6961f49fda35a1d/common/image-android.c"
+      },
+      {
+        "file": "sources/rockchip-reference-v1/resource_img.c",
+        "bytes": 13459,
+        "sha256": "38f982640de095d8fe6542a4b5c749aff2eb655c1447f00f65a253821c4e4ca3",
+        "license": "GPL-2.0-or-later",
+        "url": "https://raw.githubusercontent.com/rockchip-linux/u-boot/1c535d65b8509f388d09e49fb6961f49fda35a1d/arch/arm/mach-rockchip/resource_img.c"
+      },
+      {
+        "file": "sources/rockchip-reference-v1/boot_rkimg.c",
+        "bytes": 15651,
+        "sha256": "8e2702d4a225ace60239f555ca728c72faa07820c9066c827870088f9cfed455",
+        "license": "GPL-2.0-or-later",
+        "url": "https://raw.githubusercontent.com/rockchip-linux/u-boot/1c535d65b8509f388d09e49fb6961f49fda35a1d/arch/arm/mach-rockchip/boot_rkimg.c"
+      }
+    ]
+  },
+  "license_texts": [
+    {
+      "file": "sources/Apache-2.0.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "sources/GPL-2.txt",
+      "bytes": 18092,
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    }
+  ]
+}

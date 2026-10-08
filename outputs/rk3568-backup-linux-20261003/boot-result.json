@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-03",
+  "kernel": "4.19.232",
+  "board_kernel_boot_tested": true,
+  "standalone_userspace": true,
+  "pid1": "/bin/sh /init",
+  "rootfs": "RAM initramfs with static BusyBox",
+  "persistent_block_filesystems_mounted_in_linux": false,
+  "original_android_restored": true,
+  "original_android_boot_completed": true,
+  "five_startup_partition_hashes_unchanged": true,
+  "flash_performed": false,
+  "saveenv_performed": false,
+  "motor_commands_sent": false,
+  "normal_linux_shutdown_lifecycle_validated": false,
+  "return_method": "SysRq immediate reboot after confirming no persistent block mounts",
+  "printk_restored": [
+    7,
+    4,
+    1,
+    7
+  ],
+  "raw_evidence_sha256": {
+    "ram-load.raw.txt": "8432dda92aaa0d05b11c5f5b75055b8b95fdcaa28a5ce2631faf8acf1276e492",
+    "linux-ram-boot.raw.txt": "bd2e9c4833b047719f085123dfeb75456cb642f2e7d2be24e93fcf699434e72d",
+    "linux-runtime-check.raw.txt": "64dda2d8c11f215e7ff5b12d7c022986ffa3357af0c4bc4762c7db3665850a2d",
+    "android-final-check.raw.txt": "3408b3617c3f1ee64f8c17f76349744b32379cd2215375b79d994f6878e674ae"
+  }
+}

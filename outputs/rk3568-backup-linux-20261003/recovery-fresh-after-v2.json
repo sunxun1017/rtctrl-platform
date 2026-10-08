@@ -1,0 +1,32 @@
+{
+    "timestamp":  "2026-10-05T21:28:54.4957057+08:00",
+    "read_only":  true,
+    "partition_write":  false,
+    "sections":  {
+                     "fresh_android":  {
+                                           "output":  "0\n4.19.232\n11\n1",
+                                           "command":  "id -u; uname -r; getprop ro.build.version.release; getprop sys.boot_completed",
+                                           "exit_code":  0
+                                       },
+                     "bytes_after":  {
+                                         "output":  "100663296",
+                                         "command":  "blockdev --getsize64 /dev/block/by-name/recovery",
+                                         "exit_code":  0
+                                     },
+                     "sha_after":  {
+                                       "output":  "a94f4e7f0180844aa9ec67253276879f7407c9a85d2138c7636d764048890933  /dev/block/by-name/recovery",
+                                       "command":  "sha256sum /dev/block/by-name/recovery",
+                                       "exit_code":  0
+                                   },
+                     "seven_protected_sha_after":  {
+                                                       "output":  "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28  /dev/block/by-name/boot\n4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e  /dev/block/by-name/uboot\nbb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8  /dev/block/by-name/trust\n59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d  /dev/block/by-name/dtbo\n76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752  /dev/block/by-name/vbmeta\n4fcebae566d889072954b2f5b220474fe9accd75bbb48471023f24841b6ed95e  /cache/rtctrl-source-userspace-20261004/rootfs.ext4\n32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3  /cache/rtctrl-network-rootfs-20261004/rootfs.img",
+                                                       "command":  "sha256sum /dev/block/by-name/boot /dev/block/by-name/uboot /dev/block/by-name/trust /dev/block/by-name/dtbo /dev/block/by-name/vbmeta /cache/rtctrl-source-userspace-20261004/rootfs.ext4 /cache/rtctrl-network-rootfs-20261004/rootfs.img",
+                                                       "exit_code":  0
+                                                   },
+                     "battery":  {
+                                     "output":  "Current Battery Service state:\n  AC powered: false\n  USB powered: false\n  Wireless powered: false\n  Max charging current: 0\n  Max charging voltage: 0\n  Charge counter: 0\n  status: 2\n  health: 2\n  present: true\n  level: 44\n  scale: 100\n  voltage: 7408\n  current: -448000\n  temperature: 188\n  technology: ",
+                                     "command":  "dumpsys battery",
+                                     "exit_code":  0
+                                 }
+                 }
+}

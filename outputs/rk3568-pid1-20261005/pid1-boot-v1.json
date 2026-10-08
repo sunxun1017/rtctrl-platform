@@ -1,0 +1,41 @@
+[
+  {
+    "command": "fdt resize 10000"
+  },
+  {
+    "command": "fdt rsvmem print",
+    "expect": "(?m)^\\s*0\\s+000000000a100000\\s+0000000000025000\\r?$[\\s\\S]*^\\s*1\\s+000000000a200000\\s+00000000000c8c20\\r?$"
+  },
+  {
+    "command": "fdt rsvmem delete 1"
+  },
+  {
+    "command": "fdt rsvmem delete 0"
+  },
+  {
+    "command": "setenv kernel_addr_r 400000"
+  },
+  {
+    "command": "setenv initrd_high ffffffffffffffff"
+  },
+  {
+    "command": "setenv fdt_high ffffffffffffffff"
+  },
+  {
+    "command": "setenv bootargs console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=10"
+  },
+  {
+    "command": "fdt set /chosen bootargs \"console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=10\""
+  },
+  {
+    "command": "fdt rsvmem print"
+  },
+  {
+    "command": "fdt print /chosen"
+  },
+  {
+    "command": "booti 400000 4000000:eca1a 3000000",
+    "wait": 40,
+    "expect": "(?m)^LINUX_PID1_ROOT_READY\\r?$"
+  }
+]

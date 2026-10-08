@@ -1,0 +1,11 @@
+[
+  {"command": "echo 1 > /proc/sys/kernel/printk"},
+  {"command": "echo LINUX_CHECK_BEGIN"},
+  {"command": "uname -r", "expect": "4\\.19\\.232"},
+  {"command": "cat /proc/uptime"},
+  {"command": "ls /", "expect": "init"},
+  {"command": "hexdump -C /proc/1/cmdline"},
+  {"command": "cat /proc/mounts"},
+  {"command": "cat /proc/cmdline"},
+  {"command": "echo LINUX_CHECK_END"}
+]

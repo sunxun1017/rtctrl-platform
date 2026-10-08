@@ -1,0 +1,5 @@
+android-baseline-20261003
+linux-persistent-20261003
+b948cf1ecbced740a80aaabb66d6a8eccb505ad3cc92841954e953476411a042  /data/local/tmp/rtctrl-persistent-20261003/readback/var/lib/rtctrl/android-marker
+e9009af8dca75330a83dfe93e18670e9e2d1a269f96ad326a78aff88efd0cd32  /data/local/tmp/rtctrl-persistent-20261003/readback/var/lib/rtctrl/linux-marker
+ANDROID_READBACK_CLEANUP_OK

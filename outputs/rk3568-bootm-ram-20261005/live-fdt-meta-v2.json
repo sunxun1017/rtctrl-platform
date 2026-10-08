@@ -1,0 +1,7 @@
+[
+  {
+    "command": "test ! -e /tmp/bootm-live.dtb && test ! -L /tmp/bootm-live.dtb && cp /sys/firmware/fdt /tmp/bootm-live.dtb && echo BOOTM_LIVE_FDT_META_BEGIN && stat -c \"%s\" /tmp/bootm-live.dtb && sha256sum /tmp/bootm-live.dtb && echo BOOTM_LIVE_FDT_META_END",
+    "wait": 1,
+    "expect": "(?m)^BOOTM_LIVE_FDT_META_END\\r?$"
+  }
+]

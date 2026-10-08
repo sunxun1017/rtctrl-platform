@@ -1,0 +1,126 @@
+{
+  "status": "FROZEN_ORIGINAL_INPUT_REVIEW_PASSED",
+  "checked_receipt_files": 26,
+  "checked": {
+    "source-snapshot/DT-PLAN.md": {
+      "bytes": 1741,
+      "sha256": "6325426b412c1662114656b584369893c2f4a573bf9849655b873e342f4493ef"
+    },
+    "source-snapshot/PLAN.md": {
+      "bytes": 5632,
+      "sha256": "581a0356ba6660cea04fd69b071d832f9e817d890f67253436903371837fd66f"
+    },
+    "source-snapshot/README.md": {
+      "bytes": 2649,
+      "sha256": "b90a86ec1ac9f7e51b3da19ff67e3b320db7b9de93e70a87ac295e277c988f6a"
+    },
+    "source-snapshot/audit-boot.py": {
+      "bytes": 15208,
+      "sha256": "349c032b967c45e502c163428b2105769c35faa5d788784df0b8b598195bb52d"
+    },
+    "source-snapshot/build-roundtrip.py": {
+      "bytes": 8679,
+      "sha256": "b485eaf390799c9af2de2b25e5a79c77db3b368de0e5784c6b08c620492b18fc"
+    },
+    "source-snapshot/crosscheck-dt.py": {
+      "bytes": 2962,
+      "sha256": "10a43b343c315b1be82ef7cd8e7d9eca2021157a9b75e323b0789b6f26ced784"
+    },
+    "source-snapshot/freeze-original.py": {
+      "bytes": 5686,
+      "sha256": "7b411287a53cdddf36f0f167783ea314212dfe9ffd65a6ca4835755c6248ce59"
+    },
+    "source-snapshot/source-lock.json": {
+      "bytes": 3883,
+      "sha256": "cc81a6ef71dd2b62c91a0566eb9a58c8755dbc82722da20dc23adccde540f3e4"
+    },
+    "source-snapshot/sources/Apache-2.0.txt": {
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "source-snapshot/sources/GPL-2.txt": {
+      "bytes": 18092,
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    "source-snapshot/sources/android-11.0.0_r1.json": {
+      "bytes": 719,
+      "sha256": "9e9df6f8d0d667e1fc4e0dc7b85450121670dd03a828048ddd7b2bc945e6a5ca"
+    },
+    "source-snapshot/sources/bootimg.h": {
+      "bytes": 9444,
+      "sha256": "1726e1d3182b2b415d69635f272b9af0dfc79e87b827e87459b6ef78b5dd7fad"
+    },
+    "source-snapshot/sources/mkbootimg.py": {
+      "bytes": 13371,
+      "sha256": "5579fb6bcb9e89e790a70fb9ccf3c00cf56e3e46aef74d84fcb0964887e5576e"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/boot_rkimg.c": {
+      "bytes": 15651,
+      "sha256": "8e2702d4a225ace60239f555ca728c72faa07820c9066c827870088f9cfed455"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/commit.json": {
+      "bytes": 5617,
+      "sha256": "b7b451de58626a3ae15d82a367bbb93aae6ca50d8960476dfed10944ffeea6c0"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/image-android.c": {
+      "bytes": 39916,
+      "sha256": "c48d01d9dcd40ca37f3967c9d85f49ac44a4a9f172c3b4246df85f7871f27748"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/resource_img.c": {
+      "bytes": 13459,
+      "sha256": "38f982640de095d8fe6542a4b5c749aff2eb655c1447f00f65a253821c4e4ca3"
+    },
+    "source-snapshot/test-boot-package.py": {
+      "bytes": 10419,
+      "sha256": "dd162aba1d253d41e3fc1920069135832d12132a45faee0ca06441df591a978d"
+    },
+    "outputs/rk3568-boot-package-20261005/build/roundtrip-v1/manifest.json": {
+      "bytes": 4056,
+      "sha256": "5194619e5e98d6330477503893cbdabb889fef1c52d1e59189e7b8a68d57e9c8"
+    },
+    "outputs/rk3568-boot-package-20261005/build/roundtrip-v1/audit.json": {
+      "bytes": 29180,
+      "sha256": "46ed7f0b07c90a6bb9017e8463908b0326d8ee8033d8bef99aba015bde40ad0b"
+    },
+    "outputs/rk3568-boot-package-20261005/build/independent-original-v1/audit.json": {
+      "bytes": 28294,
+      "sha256": "55b7cd1fbd8ee6d3671a2e9ab61da8530486b9765ca27f7254d9127df2d634f1"
+    },
+    "outputs/rk3568-boot-package-20261005/build/dtc-original-v1/results.json": {
+      "bytes": 7037,
+      "sha256": "5c91440b42bf4f7eef070df9a7dfbd25f5704cec4c1b6d98b2b07ffeabe547be"
+    },
+    "outputs/rk3568-boot-package-20261005/build/red-v1/results.json": {
+      "bytes": 6513,
+      "sha256": "5afc0c1d8d58d76337a5a0a8b40befec72d64f2552c0ab913ad585735d01e476"
+    },
+    "outputs/rk3568-boot-package-20261005/build/audit-green-v1/results.json": {
+      "bytes": 3227,
+      "sha256": "5491636a4489b3d9104c6d073d3bd354ee4cb748dd5f813ab288b8bb180349df"
+    },
+    "outputs/rk3568-boot-package-20261005/build/roundtrip-red-v1/results.json": {
+      "bytes": 3875,
+      "sha256": "af72e4cb046a1ca91caef7210f8c78428d800ec2718ae93db77c23eafd4de10f"
+    },
+    "outputs/rk3568-boot-package-20261005/build/roundtrip-green-v1/results.json": {
+      "bytes": 3619,
+      "sha256": "2b45ffff72c1d8138c5603190c3c17c3653a5ba45885b546150f2cb59b4cb9f0"
+    }
+  },
+  "package": {
+    "bytes": 41943040,
+    "sha256": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "crc32": "6e48ba06"
+  },
+  "byte_identical_to_original_backup": true,
+  "header_addresses_metadata_only": {
+    "kernel": "0x10008000",
+    "ramdisk": "0x11000000",
+    "second": "0x10f00000",
+    "tags": "0x10000100"
+  },
+  "ram_boot_arity": 1,
+  "actual_board_bootm_performed": false,
+  "flash_performed": false,
+  "source_compatibility_claim": "Rockchip public reference is not exact SMDT U-Boot; original package identity only"
+}

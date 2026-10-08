@@ -1,0 +1,76 @@
+uid=0(root) gid=0(root) groups=0(root),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid) context=u:r:su:s0
+4.19.232
+2207.73 7467.66
+60
+total 0
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 backup -> /dev/block/mmcblk2p11
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 baseparameter -> /dev/block/mmcblk2p14
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 boot -> /dev/block/mmcblk2p9
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 cache -> /dev/block/mmcblk2p12
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 dtbo -> /dev/block/mmcblk2p7
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 metadata -> /dev/block/mmcblk2p13
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 misc -> /dev/block/mmcblk2p4
+lrwxrwxrwx 1 root root 18 2017-08-04 17:00 mmcblk2 -> /dev/block/mmcblk2
+lrwxrwxrwx 1 root root 23 2017-08-04 17:00 mmcblk2boot0 -> /dev/block/mmcblk2boot0
+lrwxrwxrwx 1 root root 23 2017-08-04 17:00 mmcblk2boot1 -> /dev/block/mmcblk2boot1
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 oempriv -> /dev/block/mmcblk2p5
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 recovery -> /dev/block/mmcblk2p10
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 security -> /dev/block/mmcblk2p1
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 smdt -> /dev/block/mmcblk2p6
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 super -> /dev/block/mmcblk2p15
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 trust -> /dev/block/mmcblk2p3
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 uboot -> /dev/block/mmcblk2p2
+lrwxrwxrwx 1 root root 21 2017-08-04 17:00 userdata -> /dev/block/mmcblk2p16
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 vbmeta -> /dev/block/mmcblk2p8
+boot 41943040
+recovery 100663296
+uboot 4194304
+trust 4194304
+dtbo 4194304
+vbmeta 1048576
+misc 4194304
+baseparameter 1048576
+security 4194304
+Filesystem            1K-blocks   Used Available Use% Mounted on
+/dev/block/mmcblk2p16  54605532 747628  53857904   2% /mnt/installer/0/emulated/0/Android/obb
+total 72232
+-rw------- 1 root root      379 2017-08-04 18:02 SHA256SUMS
+-rw------- 1 root root 18384591 2017-08-04 18:02 boot-components.tar.gz
+-rw------- 1 root root 41943040 2017-08-04 18:02 boot.img
+-rw------- 1 root root  4194304 2017-08-04 18:02 dtbo.img
+-rw------- 1 root root  4194304 2017-08-04 18:02 trust.img
+-rw------- 1 root root  4194304 2017-08-04 18:02 uboot.img
+-rw------- 1 root root  1048576 2017-08-04 18:02 vbmeta.img
+/sys/block/mmcblk2/size 122126336
+/sys/block/mmcblk2/mmcblk2p1/start 8192
+/sys/block/mmcblk2/mmcblk2p10/start 665600
+/sys/block/mmcblk2/mmcblk2p11/start 862208
+/sys/block/mmcblk2/mmcblk2p12/start 1648640
+/sys/block/mmcblk2/mmcblk2p13/start 2435072
+/sys/block/mmcblk2/mmcblk2p14/start 2467840
+/sys/block/mmcblk2/mmcblk2p15/start 2469888
+/sys/block/mmcblk2/mmcblk2p16/start 8843264
+/sys/block/mmcblk2/mmcblk2p2/start 16384
+/sys/block/mmcblk2/mmcblk2p3/start 24576
+/sys/block/mmcblk2/mmcblk2p4/start 32768
+/sys/block/mmcblk2/mmcblk2p5/start 40960
+/sys/block/mmcblk2/mmcblk2p6/start 565248
+/sys/block/mmcblk2/mmcblk2p7/start 573440
+/sys/block/mmcblk2/mmcblk2p8/start 581632
+/sys/block/mmcblk2/mmcblk2p9/start 583680
+/sys/block/mmcblk2/mmcblk2p1/size 8192
+/sys/block/mmcblk2/mmcblk2p10/size 196608
+/sys/block/mmcblk2/mmcblk2p11/size 786432
+/sys/block/mmcblk2/mmcblk2p12/size 786432
+/sys/block/mmcblk2/mmcblk2p13/size 32768
+/sys/block/mmcblk2/mmcblk2p14/size 2048
+/sys/block/mmcblk2/mmcblk2p15/size 6373376
+/sys/block/mmcblk2/mmcblk2p16/size 113283008
+/sys/block/mmcblk2/mmcblk2p2/size 8192
+/sys/block/mmcblk2/mmcblk2p3/size 8192
+/sys/block/mmcblk2/mmcblk2p4/size 8192
+/sys/block/mmcblk2/mmcblk2p5/size 524288
+/sys/block/mmcblk2/mmcblk2p6/size 8192
+/sys/block/mmcblk2/mmcblk2p7/size 8192
+/sys/block/mmcblk2/mmcblk2p8/size 2048
+/sys/block/mmcblk2/mmcblk2p9/size 81920

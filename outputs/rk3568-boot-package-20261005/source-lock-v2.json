@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "library": "third_party/linux-rk3588/scripts/dtc/libfdt",
+  "license": "GPL-2.0-or-later OR BSD-2-Clause",
+  "selected_license": "BSD-2-Clause",
+  "exact_deployed_uboot_library": false,
+  "sources": {
+    "fdt.c": "a7b656fc98106c11252014dc446b8148115ff69787fc93f1464a211225f597d4",
+    "fdt.h": "0841a268996ad929ee062303409b9f1bd536c1dfce8516fc121bed3331e41f4e",
+    "fdt_addresses.c": "8c9c754345ce105bf55f2597173d55a69a557c3854e0eb7ac6b3a87991d4fd93",
+    "fdt_empty_tree.c": "f3cdbfa1bcc86cc841544fee5a16c2f66a4da86b1065eaadab9700addb858369",
+    "fdt_overlay.c": "c3acd8cb68b8b59792b0677026f961b3e012573952d1190431f9b54d8aeec74a",
+    "fdt_ro.c": "8fbd21bb76940dfe5b32091025172ecbe6105e22f0c63bd400454006f7d39c44",
+    "fdt_rw.c": "7f83386c7e3fb34ab1bb419121036c817079db5eb0943cbfacdc0fe5355fae94",
+    "fdt_strerror.c": "6eccc76d37f8789c6af9a50d6bfc7cbc5c281edc95ee93100294d6ada039d931",
+    "fdt_sw.c": "e9d193f023880f4359c3ed9954d678b51a87b1d66b783318a9d69a8122378122",
+    "fdt_wip.c": "a26966b2d991b432473f5c7f6740a3db97ae51313da0ad9eba56048d56c06c73",
+    "libfdt.h": "6a04993994ee93b823e2995737094d170c1c36d23a9c11cbbeba16cadff44ad6",
+    "libfdt_env.h": "273bb264cacd60bb005cfa558bee084558469b9107eaf40d7e1362571ed1bc94",
+    "libfdt_internal.h": "7c29a6e30115cdd0a30fb4014c7674ead0d4bd39b9989bed46acb4f838bbd4e8"
+  },
+  "original_uart": {"bytes": 162414, "sha256": "7be4f96f90e10f1308ba6ecef8a5346d641d1bfbcf8746fbcdb704a2de9491d1"},
+  "original_dtbo": {"bytes": 4194304, "sha256": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d"},
+  "entry0": {"offset": 64, "bytes": 559, "sha256": "acf746c91caa230f7958ba2df4e6daf325881e7bce855657aa3b535f440dfec3"}
+}

@@ -1,0 +1,45 @@
+{
+    "timestamp":  "2026-10-05T19:49:26.8790378+08:00",
+    "target":  "127.0.0.1:15555",
+    "package_sha256":  "67f351b822887c5e2fae10c099760a126d20daee2e9b2931b945a1176af37dbe",
+    "script_sha256":  "e3fa4e68f51fdff3bec53c05a10f46d25e44889a98a0129a9ff567c083679262",
+    "commands":  [
+                     {
+                         "output":  "",
+                         "arguments":  [
+                                           "shell",
+                                           "su 0 sh -c \u0027test $(id -u) = 0 \u0026\u0026 test $(uname -r) = 4.19.232 \u0026\u0026 test $(getprop sys.boot_completed) = 1 \u0026\u0026 test ! -e /data/local/tmp/rtctrl-bootm-candidate-20261005-v2 \u0026\u0026 test ! -L /data/local/tmp/rtctrl-bootm-candidate-20261005-v2 \u0026\u0026 mkdir -m 700 /data/local/tmp/rtctrl-bootm-candidate-20261005-v2 \u0026\u0026 test $(realpath /data/local/tmp/rtctrl-bootm-candidate-20261005-v2) = /data/local/tmp/rtctrl-bootm-candidate-20261005-v2\u0027"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-boot-package-20261005\\build\\ram-candidate-v2\\boot-padded.img: 1 file pushed, 0 skipped. 10.2 MB/s (41943040 bytes in 3.932s)",
+                         "arguments":  [
+                                           "push",
+                                           "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-boot-package-20261005\\build\\ram-candidate-v2\\boot-padded.img",
+                                           "/data/local/tmp/rtctrl-bootm-candidate-20261005-v2/boot-linux-ram-v2.img"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-bootm-ram-20261005\\prepare-candidate-v2-android.sh: 1 file pushed, 0 skipped. 0.6 MB/s (2012 bytes in 0.003s)",
+                         "arguments":  [
+                                           "push",
+                                           "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-bootm-ram-20261005\\prepare-candidate-v2-android.sh",
+                                           "/data/local/tmp/rtctrl-bootm-candidate-20261005-v2/prepare-candidate-v2-android.sh"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "Filesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 311864     52640  86% /cache\nFilesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 352828     11676  97% /cache\nLINUX_BOOT_V2_40MIB_CACHED_SHA_VERIFIED_RAM_ONLY_NO_FLASH",
+                         "arguments":  [
+                                           "shell",
+                                           "su 0 sh /data/local/tmp/rtctrl-bootm-candidate-20261005-v2/prepare-candidate-v2-android.sh"
+                                       ],
+                         "exit_code":  0
+                     }
+                 ],
+    "flash":  false,
+    "saveenv":  false,
+    "completed":  true
+}

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "accepted": false,
+  "reason": "UART output lost bytes or end markers; neither capture is complete and neither produced a reconstructed FDT",
+  "captures": [
+    {
+      "name": "linux-bootm-live-fdt-read-v3.raw.txt",
+      "bytes": 170017,
+      "sha256": "bd715f5aadd38c472ef590b2a38f38fcfc631beed2192eba6f5b9469f1640cf7"
+    },
+    {
+      "name": "linux-bootm-live-fdt-read-v3-retry1.raw.txt",
+      "bytes": 45333,
+      "sha256": "18b0c8dced7547a0e4ba83510c6c37c987865c9cbd4d373aba2920759ff7d312"
+    }
+  ]
+}

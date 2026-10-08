@@ -1,0 +1,97 @@
+2026-10-02 串口只读核查摘要：COM5 / 1500000 / 8N1 / DTR=false / RTS=false
+以下是板端实际输出的关键段，去掉命令回显和行编辑控制字符；原始数据仅保留本地。
+
+SOURCE 02-sd-host-state.output.txt
+
+NODE /sys/firmware/devicetree/base/dwmmc@fe2b0000
+status=okay
+compatible=rockchip,rk3568-dw-mshc rockchip,rk3288-dw-mshc
+bus-width:  00 00 00 04
+supports-sd: pinctrl-0:  00 00 00 c7 00 00 00 c8 00 00 00 c9 00 00 00 ca
+vmmc-supply:  00 00 00 c6
+vqmmc-supply:  00 00 00 2b
+
+NODE /sys/firmware/devicetree/base/dwmmc@fe300000
+
+NODE /sys/firmware/devicetree/base/dwmmc@fe000000
+status=disabled
+compatible=rockchip,rk3568-dw-mshc rockchip,rk3288-dw-mshc
+bus-width:  00 00 00 04
+non-removable: pinctrl-0:  00 00 00 ab 00 00 00 ac 00 00 00 ad
+
+NODE /sys/firmware/devicetree/base/sdhci@fe310000
+status=okay
+compatible=rockchip,dwcmshc-sdhci snps,dwcmshc-sdhci
+bus-width:  00 00 00 08
+non-removable:
+MMC_HOSTS
+total 0
+lrwxrwxrwx 1 root root 0 2026-10-02 11:00 mmc0 -> ../../devices/platform/fe2b0000.dwmmc/mmc_host/mmc0
+lrwxrwxrwx 1 root root 0 2026-10-02 11:00 mmc1 -> ../../devices/platform/fe2c0000.dwmmc/mmc_host/mmc1
+lrwxrwxrwx 1 root root 0 2026-10-02 11:00 mmc2 -> ../../devices/platform/fe310000.sdhci/mmc_host/mmc2
+
+CARD /sys/bus/mmc/devices/mmc1:0001
+type=SDIO
+
+CARD /sys/bus/mmc/devices/mmc2:0001
+type=MMC
+name=SCA64G
+
+MMC_DMESG
+
+
+
+SOURCE 03-bootloader-strings.output.txt
+/system/bin/strings
+lrwxrwxrwx 1 root root 20 2017-08-04 17:00 /dev/block/by-name/uboot -> /dev/block/mmcblk2p2
+
+UBOOT_RECOGNIZABLE_STRINGS
+U-Boot dtb
+bootcmd=boot_android ${devtype} ${devnum};boot_fit;bootrkp;run distro_bootcmd;
+bootdelay=0
+mmc_boot=if mmc dev ${devnum}; then setenv devtype mmc; run scan_dev_for_boot_part; fi
+boot_targets=mmc1 mmc0 mtd2 mtd1 mtd0 usb0 pxe dhcp
+bootcmd_mmc1=setenv devnum 1; run mmc_boot
+bootcmd_mmc0=setenv devnum 0; run mmc_boot
+distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
+U-Boot 2017.09 (Mar 12 2026 - 16:01:04 +0800)
+Bootdev(%s): %s %s
+U-Boot 2017.09
+U-Boot dtb
+bootcmd=boot_android ${devtype} ${devnum};boot_fit;bootrkp;run distro_bootcmd;
+bootdelay=0
+mmc_boot=if mmc dev ${devnum}; then setenv devtype mmc; run scan_dev_for_boot_part; fi
+boot_targets=mmc1 mmc0 mtd2 mtd1 mtd0 usb0 pxe dhcp
+bootcmd_mmc1=setenv devnum 1; run mmc_boot
+bootcmd_mmc0=setenv devnum 0; run mmc_boot
+distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
+U-Boot 2017.09 (Mar 12 2026 - 16:01:04 +0800)
+Bootdev(%s): %s %s
+U-Boot 2017.09
+
+KERNEL_SD_CONFIG
+CONFIG_MMC=y
+CONFIG_MMC_BLOCK=y
+CONFIG_MMC_SDHCI_OF_DWCMSHC=y
+CONFIG_MMC_DW=y
+CONFIG_MMC_DW_ROCKCHIP=y
+
+
+
+SOURCE 04-sd-boot-policy.output.txt
+preboot=
+rkimg_bootdev=if mmc dev 1 && rkimgtest mmc 1; then setenv devtype mmc; setenv devnum 1; echo Boot from SDcard;elif mmc dev 0; then setenv devtype mmc; setenv devnum 0;elif mtd_blk dev 0; then setenv devtype mtd; setenv devnum 0;elif mtd_blk dev 1; then setenv devtype mtd; setenv devnum 1;elif mtd_blk dev 2; then setenv devtype mtd; setenv devnum 2;elif rknand dev 0; then setenv devtype rknand; setenv devnum 0;elif rksfc dev 0; then setenv devtype spinand; setenv devnum 0;elif rksfc dev 1; then setenv devtype spinor; setenv devnum 1;elsesetenv devtype ramdisk; setenv devnum 0;fi;
+boot_prefixes=/ /boot/
+scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}extlinux/extlinux.conf; then echo Found ${prefix}extlinux/extlinux.conf; run boot_extlinux; echo SCRIPT FAILED: continuing...; fi
+scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAILED: continuing...; fi; done
+scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
+scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfstype; then run scan_dev_for_boot; fi; done
+preboot=
+rkimg_bootdev=if mmc dev 1 && rkimgtest mmc 1; then setenv devtype mmc; setenv devnum 1; echo Boot from SDcard;elif mmc dev 0; then setenv devtype mmc; setenv devnum 0;elif mtd_blk dev 0; then setenv devtype mtd; setenv devnum 0;elif mtd_blk dev 1; then setenv devtype mtd; setenv devnum 1;elif mtd_blk dev 2; then setenv devtype mtd; setenv devnum 2;elif rknand dev 0; then setenv devtype rknand; setenv devnum 0;elif rksfc dev 0; then setenv devtype spinand; setenv devnum 0;elif rksfc dev 1; then setenv devtype spinor; setenv devnum 1;elsesetenv devtype ramdisk; setenv devnum 0;fi;
+boot_prefixes=/ /boot/
+scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}extlinux/extlinux.conf; then echo Found ${prefix}extlinux/extlinux.conf; run boot_extlinux; echo SCRIPT FAILED: continuing...; fi
+scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAILED: continuing...; fi; done
+scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
+scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfstype; then run scan_dev_for_boot; fi; done
+
+

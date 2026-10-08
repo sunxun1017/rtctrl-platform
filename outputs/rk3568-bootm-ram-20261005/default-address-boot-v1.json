@@ -1,0 +1,6 @@
+[
+  {"command":"setenv initrd_high ffffffffffffffff"},
+  {"command":"setenv fdt_high ffffffffffffffff"},
+  {"command":"printenv kernel_addr_r fdt_addr_r ramdisk_addr_r initrd_high fdt_high bootargs","expect":"kernel_addr_r=0x00280000[\\s\\S]*fdt_addr_r=0x0a100000[\\s\\S]*ramdisk_addr_r=0x0a200000[\\s\\S]*initrd_high=ffffffffffffffff[\\s\\S]*fdt_high=ffffffffffffffff"},
+  {"command":"bootm 20000000","wait":40,"expect":"(?m)ANDROID: fdt overlay OK[\\s\\S]*^LINUX_PID1_ROOT_READY\\r?$"}
+]

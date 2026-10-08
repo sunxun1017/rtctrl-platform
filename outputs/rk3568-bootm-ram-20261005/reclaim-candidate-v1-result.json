@@ -1,0 +1,35 @@
+{
+    "timestamp":  "2026-10-05T19:43:09.5051769+08:00",
+    "host_manifest_sha256":  "21f1bb72b5508cdbbf8fabe6b3a141c154ef123106028bd657c70d3e662c89ce",
+    "backup_sha256":  "c55feb66c8acb9e66cc89af7c8a70077419b16a2a32fdaadb74ee068170d4d3e",
+    "script_sha256":  "e375a068e7f5a32979392f8a02223dbca30ceb75824e2c802726376425691cd6",
+    "reclaimed_path":  "/cache/rtctrl-bootm-ram-20261005-v1/boot-linux-ram-v1.img",
+    "reclaimed_bytes":  41943040,
+    "sections":  {
+                     "new_directory":  {
+                                           "output":  "",
+                                           "command":  "test ! -e /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1 \u0026\u0026 test ! -L /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1 \u0026\u0026 mkdir -m 700 /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1 \u0026\u0026 test $(realpath /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1) = /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1",
+                                           "exit_code":  0
+                                       },
+                     "push":  {
+                                  "exit_code":  0,
+                                  "output":  "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-bootm-ram-20261005\\reclaim-candidate-v1-android.sh: 1 file pushed, 0 skipped. 0.9 MB/s (3103 bytes in 0.003s)"
+                              },
+                     "uploaded_sha256":  {
+                                             "output":  "e375a068e7f5a32979392f8a02223dbca30ceb75824e2c802726376425691cd6  /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1/reclaim.sh",
+                                             "command":  "sha256sum /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1/reclaim.sh",
+                                             "exit_code":  0
+                                         },
+                     "check":  {
+                                   "output":  "Filesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 352828     11676  97% /cache\nCANDIDATE_V1_AND_PROTECTED_INPUTS_VERIFIED",
+                                   "command":  "/system/bin/sh /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1/reclaim.sh --check",
+                                   "exit_code":  0
+                               },
+                     "reclaim":  {
+                                     "output":  "Filesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 352828     11676  97% /cache\nCANDIDATE_V1_AND_PROTECTED_INPUTS_VERIFIED\nFilesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 311864     52640  86% /cache\nCANDIDATE_V1_ARCHIVED_CACHE_COPY_RECLAIMED",
+                                     "command":  "/system/bin/sh /data/local/tmp/rtctrl-bootm-reclaim-20261005-v1/reclaim.sh --reclaim",
+                                     "exit_code":  0
+                                 }
+                 },
+    "completed":  true
+}

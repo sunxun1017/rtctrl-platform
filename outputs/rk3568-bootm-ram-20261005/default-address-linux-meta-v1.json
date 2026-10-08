@@ -1,0 +1,7 @@
+[
+  {"command":"uname -r","expect":"(?m)^5\\.10\\.160-rt89-g9f9e9d18574d-dirty\\r?$"},
+  {"command":"cat /proc/cmdline"},
+  {"command":"test ! -e /tmp/default-live.dtb && test ! -L /tmp/default-live.dtb && cp /sys/firmware/fdt /tmp/default-live.dtb && echo DEFAULT_FDT_META_BEGIN && stat -c %s /tmp/default-live.dtb && sha256sum /tmp/default-live.dtb && echo DEFAULT_FDT_META_END","expect":"(?m)^DEFAULT_FDT_META_END\\r?$"},
+  {"command":"echo DEFAULT_CHOSEN_BEGIN && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/chosen/bootargs_ext && echo && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/chosen/linux,initrd-start && echo && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/chosen/linux,initrd-end && echo && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/chosen/phandle && echo && echo DEFAULT_CHOSEN_END","expect":"(?m)^DEFAULT_CHOSEN_END\\r?$"},
+  {"command":"echo DEFAULT_MODES_BEGIN && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/syscon@fdc20000/reboot-mode/mode-normal && echo && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/syscon@fdc20000/reboot-mode/mode-bootloader && echo && hexdump -v -e '1/1 \"%02x\"' /sys/firmware/devicetree/base/syscon@fdc20000/reboot-mode/mode-fastboot && echo && echo DEFAULT_MODES_END","expect":"(?m)^DEFAULT_MODES_END\\r?$"}
+]

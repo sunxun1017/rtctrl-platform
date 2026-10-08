@@ -1,0 +1,330 @@
+{
+  "status": "FROZEN_CANDIDATE_V2_INPUT_REVIEW_PASSED",
+  "receipt_sha256": "5a928d8c2acbe4f71b73e20890750122876804934f3f63dc3b04cd7fdddfcf73",
+  "checked_receipt_files": 63,
+  "checked": {
+    "source-snapshot/DT-PLAN.md": {
+      "bytes": 1741,
+      "sha256": "6325426b412c1662114656b584369893c2f4a573bf9849655b873e342f4493ef",
+      "crc32": "9b6f9a88"
+    },
+    "source-snapshot/PLAN-v2.md": {
+      "bytes": 3243,
+      "sha256": "8a6ad59a8f9d29a8835e31e960c1568df7b700d5ae51251184f0d23b70bfa943",
+      "crc32": "59824b72"
+    },
+    "source-snapshot/PLAN.md": {
+      "bytes": 5959,
+      "sha256": "3c163739e1f3393ec5675b3dcd143280f372f6089a4f8db247ff22168f086764",
+      "crc32": "da853180"
+    },
+    "source-snapshot/README-v2.md": {
+      "bytes": 3430,
+      "sha256": "691aa0375c01c355880d4ec59ab4d8de1c5ac8a83ce1144bb929dcaac3b9ea85",
+      "crc32": "0c1751e6"
+    },
+    "source-snapshot/README.md": {
+      "bytes": 3765,
+      "sha256": "d15ee86452b8b5f67dc55d5b0940199daa7bd0a86cadd2e79117d25ffdb5afb5",
+      "crc32": "be0268b9"
+    },
+    "source-snapshot/audit-boot.py": {
+      "bytes": 15327,
+      "sha256": "4902a1281665d58f7e053838af5547522cc6f227c2be1baf6d260cf2ccd6067d",
+      "crc32": "f86ad591"
+    },
+    "source-snapshot/audit-ram-candidate-v2.py": {
+      "bytes": 5633,
+      "sha256": "be11da755e94bc1cca2ea0461e108ca999f8ae6bb61632832fbbca07c86fc72b",
+      "crc32": "9b007489"
+    },
+    "source-snapshot/audit-ram-candidate.py": {
+      "bytes": 4223,
+      "sha256": "788364f6f709bc1157f68eaaf79f2d0d0df76bc2284a246d058d03e0f6a2a202",
+      "crc32": "f9ed201a"
+    },
+    "source-snapshot/build-libfdt-v2.py": {
+      "bytes": 2658,
+      "sha256": "7b580311c736657104f7bbebe7d0e338142f1b5ea7e0ab3cb7ac0dc08cbf7cf3",
+      "crc32": "6575c9e9"
+    },
+    "source-snapshot/build-ram-candidate-v2.py": {
+      "bytes": 11504,
+      "sha256": "298c0c6620ad0703d5566b233176cd276b0404e589d94152c9ae809ddb7eae1d",
+      "crc32": "8c4041fc"
+    },
+    "source-snapshot/build-ram-candidate.py": {
+      "bytes": 10077,
+      "sha256": "6842d01532d8609a53075dc3e70801b11528dc0dbda375070b495ece1d8aed23",
+      "crc32": "cf43a9f5"
+    },
+    "source-snapshot/build-roundtrip.py": {
+      "bytes": 8679,
+      "sha256": "b485eaf390799c9af2de2b25e5a79c77db3b368de0e5784c6b08c620492b18fc",
+      "crc32": "829917cd"
+    },
+    "source-snapshot/build-uart-shim-v2.py": {
+      "bytes": 4875,
+      "sha256": "3c00f046cb51bf49e83dccb2fa741d6a9d38db163a236b71c4dc653dd226d3ea",
+      "crc32": "e0d77efa"
+    },
+    "source-snapshot/crosscheck-dt.py": {
+      "bytes": 3058,
+      "sha256": "b6bbbe0925c5c2974eb1d4e64c1d84b7b14aaa81f009f68fca35be8ce2942375",
+      "crc32": "e6025824"
+    },
+    "source-snapshot/dt-semantics-v2.py": {
+      "bytes": 5164,
+      "sha256": "b89b3e4dab11281e02ec4a31104907e8b66579ba2e44556c4108d470f468aa56",
+      "crc32": "ecea7dff"
+    },
+    "source-snapshot/freeze-candidate-v2.py": {
+      "bytes": 6515,
+      "sha256": "93be55bbe7d2b0c60de251a76626cff94573593b5155aaa20802970ab952d74d",
+      "crc32": "d839e529"
+    },
+    "source-snapshot/freeze-candidate.py": {
+      "bytes": 4008,
+      "sha256": "b4f312825b67059805b73cc5fae13f9b8cb9d72bf7d2b4254cb86c2003c4398c",
+      "crc32": "e50e6095"
+    },
+    "source-snapshot/freeze-original.py": {
+      "bytes": 5686,
+      "sha256": "7b411287a53cdddf36f0f167783ea314212dfe9ffd65a6ca4835755c6248ce59",
+      "crc32": "d30eed6a"
+    },
+    "source-snapshot/libfdt-v2.py": {
+      "bytes": 5537,
+      "sha256": "9fdba61ae8d7d004ac7f24b7f116f6a314032c01624357f01619f609a5b8a954",
+      "crc32": "92682e9a"
+    },
+    "source-snapshot/source-lock-v2.json": {
+      "bytes": 1704,
+      "sha256": "31664862d9a1bd3dc64ce14f6b5d5f023f4d2efebd5b94ad69ab4e544af5dcbf",
+      "crc32": "cd6c0678"
+    },
+    "source-snapshot/source-lock.json": {
+      "bytes": 3883,
+      "sha256": "cc81a6ef71dd2b62c91a0566eb9a58c8755dbc82722da20dc23adccde540f3e4",
+      "crc32": "ee2c2934"
+    },
+    "source-snapshot/sources/Apache-2.0.txt": {
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "crc32": "86e2b4b4"
+    },
+    "source-snapshot/sources/GPL-2.txt": {
+      "bytes": 18092,
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "crc32": "4e46f4a1"
+    },
+    "source-snapshot/sources/android-11.0.0_r1.json": {
+      "bytes": 719,
+      "sha256": "9e9df6f8d0d667e1fc4e0dc7b85450121670dd03a828048ddd7b2bc945e6a5ca",
+      "crc32": "70d5f306"
+    },
+    "source-snapshot/sources/bootimg.h": {
+      "bytes": 9444,
+      "sha256": "1726e1d3182b2b415d69635f272b9af0dfc79e87b827e87459b6ef78b5dd7fad",
+      "crc32": "41a57db4"
+    },
+    "source-snapshot/sources/mkbootimg.py": {
+      "bytes": 13371,
+      "sha256": "5579fb6bcb9e89e790a70fb9ccf3c00cf56e3e46aef74d84fcb0964887e5576e",
+      "crc32": "fd8c2939"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/boot_rkimg.c": {
+      "bytes": 15651,
+      "sha256": "8e2702d4a225ace60239f555ca728c72faa07820c9066c827870088f9cfed455",
+      "crc32": "5b423106"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/commit.json": {
+      "bytes": 5617,
+      "sha256": "b7b451de58626a3ae15d82a367bbb93aae6ca50d8960476dfed10944ffeea6c0",
+      "crc32": "fc286069"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/image-android.c": {
+      "bytes": 39916,
+      "sha256": "c48d01d9dcd40ca37f3967c9d85f49ac44a4a9f172c3b4246df85f7871f27748",
+      "crc32": "e858ec20"
+    },
+    "source-snapshot/sources/rockchip-reference-v1/resource_img.c": {
+      "bytes": 13459,
+      "sha256": "38f982640de095d8fe6542a4b5c749aff2eb655c1447f00f65a253821c4e4ca3",
+      "crc32": "5385a887"
+    },
+    "source-snapshot/test-boot-package.py": {
+      "bytes": 10419,
+      "sha256": "dd162aba1d253d41e3fc1920069135832d12132a45faee0ca06441df591a978d",
+      "crc32": "34d3bfbb"
+    },
+    "source-snapshot/test-ram-candidate-v2.py": {
+      "bytes": 14752,
+      "sha256": "522005b7b66ec7c4bae02ec4a02de4df4347a839fafcf34ab5fe65d9cb9c6764",
+      "crc32": "89b0d8ee"
+    },
+    "source-snapshot/test-ram-candidate.py": {
+      "bytes": 13026,
+      "sha256": "05d83a8e72627325ea7644ffd87ef3e5980126e0c4ed15064b35865e5cc845ea",
+      "crc32": "4eae459e"
+    },
+    "source-snapshot/test-shim-boundaries-v2.py": {
+      "bytes": 10088,
+      "sha256": "83fe607edb80ac5751000268a522a709cfae5174e5e796be693249d1e60b4252",
+      "crc32": "2cb46619"
+    },
+    "source-snapshot/test-uart-shim-v2.py": {
+      "bytes": 5898,
+      "sha256": "1c16dc45493dbaee4851fe964ff7fe0cb50c5930f723049918a94e3869da99a6",
+      "crc32": "f92074a5"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-red-v2/results.json": {
+      "bytes": 1095,
+      "sha256": "a10a69058784c6ac83dc0373d14f949bd9c9b5b36712bff5b3b8449414f05cbd",
+      "crc32": "7c5f1876"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-green-v2/results.json": {
+      "bytes": 1093,
+      "sha256": "83831ba171092ff7ec21bd9f5305a6125cab80277c3976909a4d57f943e8ba5a",
+      "crc32": "2205ead0"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-final-tests-v2/results.json": {
+      "bytes": 1093,
+      "sha256": "d504e36036f6d4855392bd97ef308961e8938da6803ca11fff2a9eb1c2ac8f3e",
+      "crc32": "40736382"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-boundaries-v2/results.json": {
+      "bytes": 3965,
+      "sha256": "380dad7b5aa0793cb11ed837f5973951b76558cd776bbc0c62a1a0866a5af96b",
+      "crc32": "4789d19f"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-boundaries-final-v2/results.json": {
+      "bytes": 3965,
+      "sha256": "380dad7b5aa0793cb11ed837f5973951b76558cd776bbc0c62a1a0866a5af96b",
+      "crc32": "4789d19f"
+    },
+    "outputs/rk3568-boot-package-20261005/build/candidate-red-v2/results.json": {
+      "bytes": 11123,
+      "sha256": "623f260f2be96423a2d54ffb77324ebc7d782a1193bf69e8c3cabe0a76838fbf",
+      "crc32": "b7c7c1bb"
+    },
+    "outputs/rk3568-boot-package-20261005/build/candidate-green-v2/results.json": {
+      "bytes": 3895,
+      "sha256": "b3e9e6d5e66f364be3c9562797643c9e266a887b50f55d065d61e9a96cae7a42",
+      "crc32": "ccb90e3a"
+    },
+    "outputs/rk3568-boot-package-20261005/build/candidate-final-tests-v2/results.json": {
+      "bytes": 4104,
+      "sha256": "037bea85fc4b7aa678d72e9f44107eeaaaf891e8e4d407f66e90efdd9ca7aa17",
+      "crc32": "72df8596"
+    },
+    "outputs/rk3568-boot-package-20261005/build/candidate-freeze-tests-v2/results.json": {
+      "bytes": 4104,
+      "sha256": "037bea85fc4b7aa678d72e9f44107eeaaaf891e8e4d407f66e90efdd9ca7aa17",
+      "crc32": "72df8596"
+    },
+    "outputs/rk3568-boot-package-20261005/build/dtc-candidate-v2/results.json": {
+      "bytes": 3992,
+      "sha256": "d51f0c1c8da6fe3f1cee1fb02825e927348a79fb300823cf5dc8e42013591283",
+      "crc32": "ff8a4dbe"
+    },
+    "outputs/rk3568-boot-package-20261005/build/ram-candidate-v2/manifest.json": {
+      "bytes": 9404,
+      "sha256": "a7532336f38cb2cd249551647292da0d331f47f7af5222c52e66f10660b6e551",
+      "crc32": "4bb3cc9a"
+    },
+    "outputs/rk3568-boot-package-20261005/build/ram-candidate-v2/audit.json": {
+      "bytes": 23403,
+      "sha256": "153267ca65281f02745e58416faf2602a0b3fd6df6cc7ab20cc457c93e012efa",
+      "crc32": "5e40144d"
+    },
+    "outputs/rk3568-boot-package-20261005/build/uart-shim-v2/manifest.json": {
+      "bytes": 3256,
+      "sha256": "aa51c0ea30f0d2efd44f9d2d69fcab29d646661305390ed81752a031bf1295c6",
+      "crc32": "c9f7edcc"
+    },
+    "outputs/rk3568-boot-package-20261005/build/libfdt-v2/manifest.json": {
+      "bytes": 4131,
+      "sha256": "9404a7d2e7e1070197e06f265b46db753e71586765e2a68f335ad8b6128bbe96",
+      "crc32": "0863b8dc"
+    },
+    "outputs/rk3568-boot-package-20261005/build/independent-candidate-v2/audit.json": {
+      "bytes": 23501,
+      "sha256": "c0d474a5a1bad959ae9ec80fbc916bbf7fc9e29a48e1d37cfcbcbae23daee9e6",
+      "crc32": "b7683cb4"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-boundaries-final-v2/native-overflow.json": {
+      "bytes": 454,
+      "sha256": "27ce9228bcf90f9607cb4b50ea0a593e760742338af948993f7cc4345ec14390",
+      "crc32": "9c5672f4"
+    },
+    "outputs/rk3568-boot-package-20261005/build/shim-boundaries-final-v2/native-partial.json": {
+      "bytes": 453,
+      "sha256": "7c82f1c36341f278ee0144ef891bb17d44bcde04960e71c19339f2eb33506c35",
+      "crc32": "a63156e1"
+    },
+    "package/boot-raw.img": {
+      "bytes": 40478720,
+      "sha256": "0d87968745265130a01b1f673fab9e8eea22a8d1fb60a5ddd854faba943c4fbc",
+      "crc32": "254f352d"
+    },
+    "package/boot-padded.img": {
+      "bytes": 41943040,
+      "sha256": "67f351b822887c5e2fae10c099760a126d20daee2e9b2931b945a1176af37dbe",
+      "crc32": "cab15fb2"
+    },
+    "input/kernel": {
+      "bytes": 34755072,
+      "sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+      "crc32": "c91762d1"
+    },
+    "input/ramdisk": {
+      "bytes": 972203,
+      "sha256": "54db3bb6fa94dd1570a306aa90e3caa6ae5ed7bb6b93d96afcae0c5f8881afef",
+      "crc32": "a1b85ed0"
+    },
+    "input/dtb": {
+      "bytes": 162457,
+      "sha256": "75c43a4b217f10dbbbc8ca953124f33e3e548f8fa9994d3c70cde8743261f582",
+      "crc32": "cca67eaf"
+    },
+    "input/rootfs": {
+      "bytes": 16777216,
+      "sha256": "3a87bd54f44b1e5d20701514c26669d086123e8b2ee8ed9087cc118c12fc679d",
+      "crc32": "dfca5db0"
+    },
+    "old-receipt/original-freeze-v1": {
+      "bytes": 6176,
+      "sha256": "1349c5668bc8b84aa7d74c83a808c216bf16d967ac5ac14ae01f8bb8ac7eb6e9",
+      "crc32": "22ed2481"
+    },
+    "old-receipt/candidate-freeze-v1": {
+      "bytes": 10339,
+      "sha256": "3eea9b3c084fc26115fd57ee7de57c01f6a2a382357627276154672a6708c928",
+      "crc32": "59a499ce"
+    },
+    "original/boot.img": {
+      "bytes": 41943040,
+      "sha256": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "crc32": "6e48ba06"
+    },
+    "original/dtbo.img": {
+      "bytes": 4194304,
+      "sha256": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "crc32": "4fceb2a4"
+    },
+    "applied-audit-only": {
+      "bytes": 162538,
+      "sha256": "aadaba5cd92f3e4850d304fc122f327720bcaa06f715271784532a603150a9f7",
+      "crc32": "d1346b60"
+    }
+  },
+  "package": {
+    "bytes": 41943040,
+    "sha256": "67f351b822887c5e2fae10c099760a126d20daee2e9b2931b945a1176af37dbe",
+    "crc32": "cab15fb2"
+  },
+  "semantic_independent_review_completed": false,
+  "actual_board_bootm_performed": false,
+  "flash_performed": false
+}

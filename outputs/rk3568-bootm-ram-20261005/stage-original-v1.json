@@ -1,0 +1,45 @@
+{
+    "timestamp":  "2026-10-05T19:18:40.5303388+08:00",
+    "target":  "127.0.0.1:15555",
+    "package_sha256":  "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "script_sha256":  "41320b448798dea081d7789750a9989956a9cae7e18991779cae07eda5359e8c",
+    "commands":  [
+                     {
+                         "output":  "",
+                         "arguments":  [
+                                           "shell",
+                                           "su 0 sh -c \u0027set -eu; test $(id -u) = 0; test $(uname -r) = 4.19.232; test $(getprop sys.boot_completed) = 1; test ! -e /data/local/tmp/rtctrl-bootm-original-20261005-v1; test ! -L /data/local/tmp/rtctrl-bootm-original-20261005-v1; mkdir -m 700 /data/local/tmp/rtctrl-bootm-original-20261005-v1; test $(realpath /data/local/tmp/rtctrl-bootm-original-20261005-v1) = /data/local/tmp/rtctrl-bootm-original-20261005-v1\u0027"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-boot-package-20261005\\build\\roundtrip-v1\\boot-padded.img: 1 file pushed, 0 skipped. 6.1 MB/s (41943040 bytes in 6.583s)",
+                         "arguments":  [
+                                           "push",
+                                           "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-boot-package-20261005\\build\\roundtrip-v1\\boot-padded.img",
+                                           "/data/local/tmp/rtctrl-bootm-original-20261005-v1/boot-original.img"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-bootm-ram-20261005\\prepare-original-android.sh: 1 file pushed, 0 skipped. 0.3 MB/s (1291 bytes in 0.004s)",
+                         "arguments":  [
+                                           "push",
+                                           "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-bootm-ram-20261005\\prepare-original-android.sh",
+                                           "/data/local/tmp/rtctrl-bootm-original-20261005-v1/prepare-original-android.sh"
+                                       ],
+                         "exit_code":  0
+                     },
+                     {
+                         "output":  "Filesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 270900     93604  75% /cache\nFilesystem            1K-blocks   Used Available Use% Mounted on\n/dev/block/mmcblk2p12    364504 311864     52640  86% /cache\nORIGINAL_BOOT_40MIB_CACHED_SHA_VERIFIED_NO_FLASH",
+                         "arguments":  [
+                                           "shell",
+                                           "su 0 sh /data/local/tmp/rtctrl-bootm-original-20261005-v1/prepare-original-android.sh"
+                                       ],
+                         "exit_code":  0
+                     }
+                 ],
+    "flash":  false,
+    "saveenv":  false,
+    "completed":  true
+}

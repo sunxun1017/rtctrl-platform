@@ -1,0 +1,5 @@
+[
+  {"command":"printenv bootargs bootargs_ext","wait":1},
+  {"command":"fdt addr a100000"},
+  {"command":"fdt print /chosen","wait":1}
+]

@@ -1,0 +1,15 @@
+[
+  {"command": "fdt resize 10000"},
+  {"command": "fdt rsvmem delete 1"},
+  {"command": "fdt rsvmem delete 0"},
+  {"command": "fdt rm /chosen linux,initrd-start"},
+  {"command": "fdt rm /chosen linux,initrd-end"},
+  {"command": "fdt rm /chosen bootargs_ext"},
+  {"command": "setenv initrd_high ffffffffffffffff"},
+  {"command": "setenv fdt_high ffffffffffffffff"},
+  {"command": "setenv bootargs console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init loglevel=7"},
+  {"command": "fdt set /chosen bootargs \"console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init loglevel=7\""},
+  {"command": "fdt rsvmem print"},
+  {"command": "fdt print /chosen"},
+  {"command": "booti 280000 4000000:822f2 3000000", "wait": 40}
+]

@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "mode": "ORIGINAL_PACKAGE_RAM_BOOTM_ONLY",
+  "checks": [
+    {
+      "name": "fresh RAM bank for package",
+      "passed": true
+    },
+    {
+      "name": "fresh relocation/sp outside package",
+      "passed": true
+    },
+    {
+      "name": "actual complete package load",
+      "passed": true
+    },
+    {
+      "name": "actual filesize exact",
+      "passed": true
+    },
+    {
+      "name": "actual full RAM CRC exact",
+      "passed": true
+    },
+    {
+      "name": "single-address bootm",
+      "passed": false
+    },
+    {
+      "name": "board Android RAM dispatch",
+      "passed": true
+    },
+    {
+      "name": "RAM RSCE location",
+      "passed": true
+    },
+    {
+      "name": "board-selected original resource DT",
+      "passed": true
+    },
+    {
+      "name": "selected DT hash accepted",
+      "passed": true
+    },
+    {
+      "name": "Android package hash accepted",
+      "passed": true
+    },
+    {
+      "name": "actual kernel destination",
+      "passed": true
+    },
+    {
+      "name": "actual ramdisk destination",
+      "passed": true
+    },
+    {
+      "name": "actual FDT destination",
+      "passed": true
+    },
+    {
+      "name": "original Image kernel reached",
+      "passed": true
+    },
+    {
+      "name": "fresh Android kernel",
+      "passed": true
+    },
+    {
+      "name": "fresh Android android",
+      "passed": true
+    },
+    {
+      "name": "fresh Android boot_completed",
+      "passed": true
+    },
+    {
+      "name": "fresh Android root",
+      "passed": true
+    },
+    {
+      "name": "boot full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "uboot full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "trust full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "dtbo full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "vbmeta full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "source_rootfs full SHA unchanged",
+      "passed": true
+    },
+    {
+      "name": "network_rootfs full SHA unchanged",
+      "passed": true
+    }
+  ],
+  "passed": 25,
+  "total": 26,
+  "evidence": {
+    "outputs/rk3568-pid1-20261005/private/uboot-before-original-bootm-v1.raw.txt": {
+      "bytes": 35281,
+      "sha256": "2aca6b2a37cfd28f32f091acd21edaa8d037522d182e9377f812bd1a9fca430d"
+    },
+    "outputs/rk3568-pid1-20261005/private/original-bootm-load-v1.raw.txt": {
+      "bytes": 2069,
+      "sha256": "52773718559059211b90cff5e217792c38ee0ff2a319a4e4fbcde69e25553d5b"
+    },
+    "outputs/rk3568-pid1-20261005/private/original-bootm-loaded-verify-v2.raw.txt": {
+      "bytes": 140,
+      "sha256": "c1e91e86b6009cbcfe7678db05b7c99876119eba4f02cb0f8db1e23d553c213e"
+    },
+    "outputs/rk3568-pid1-20261005/private/original-bootm-v1.raw.txt": {
+      "bytes": 158607,
+      "sha256": "a7400501822bf76d273bc8fc157929fc465d058b60f41c9c1826e7628c1cff64"
+    },
+    "outputs/rk3568-pid1-20261005/private/android-before-original-bootm.json": {
+      "bytes": 7843,
+      "sha256": "80bad2234dd4da072c0fa0fb2b0b71c15f2775b27c24638d1b7785cc4911b58e"
+    },
+    "outputs/rk3568-pid1-20261005/private/android-after-original-bootm.json": {
+      "bytes": 7842,
+      "sha256": "82c6249707ec9c6e2749cedfabcff3ab86077d6e02ffc8eb980d8f9a0b6bfc58"
+    }
+  },
+  "package_interval": [
+    536870912,
+    578813952
+  ],
+  "battery_percent": {
+    "before": 66,
+    "after": 66
+  },
+  "protected_sha256": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752",
+    "source_rootfs": "4fcebae566d889072954b2f5b220474fe9accd75bbb48471023f24841b6ed95e",
+    "network_rootfs": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3"
+  },
+  "header_addresses_used_as_destinations": false,
+  "cli_reachable_conditional_boot_verified": true,
+  "boot_partition_write": false,
+  "saveenv": false,
+  "bare_metal_recovery_verified": false,
+  "usb_recovery_confirmed": false,
+  "linux_candidate_board_tested": false,
+  "load_v1_rejected_reason": "expected filesize without 0x; actual exact 0x2800000 checked by new v2 session before CRC and bootm"
+}

@@ -1,0 +1,29 @@
+{
+    "timestamp":  "2026-10-05T21:16:22.0152286+08:00",
+    "read_only":  true,
+    "partition_write":  false,
+    "copied_bytes":  100663382,
+    "completed":  false,
+    "sections":  {
+                     "fresh_android":  {
+                                           "output":  "0\n4.19.232\n11\n1",
+                                           "command":  "id -u; uname -r; getprop ro.build.version.release; getprop sys.boot_completed",
+                                           "exit_code":  0
+                                       },
+                     "bytes_before":  {
+                                          "output":  "100663296",
+                                          "command":  "blockdev --getsize64 /dev/block/by-name/recovery",
+                                          "exit_code":  0
+                                      },
+                     "sha_before":  {
+                                        "output":  "a94f4e7f0180844aa9ec67253276879f7407c9a85d2138c7636d764048890933  /dev/block/by-name/recovery",
+                                        "command":  "sha256sum /dev/block/by-name/recovery",
+                                        "exit_code":  0
+                                    },
+                     "transfer":  {
+                                      "stderr":  "",
+                                      "arguments":  "-s 127.0.0.1:15555 exec-out /system/bin/dd if=/dev/block/by-name/recovery bs=1048576",
+                                      "exit_code":  0
+                                  }
+                 }
+}

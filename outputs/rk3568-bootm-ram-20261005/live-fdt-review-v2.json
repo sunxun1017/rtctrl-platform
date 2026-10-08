@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "live_sha256": "6109dda4fa7460be615a9df127ca2fc2c420bc3148a15c5514472fb59228587e",
+  "base_sha256": "aadaba5cd92f3e4850d304fc122f327720bcaa06f715271784532a603150a9f7",
+  "parser_sha256": "b89b3e4dab11281e02ec4a31104907e8b66579ba2e44556c4108d470f468aa56",
+  "semantic_review_completed": true,
+  "accepted": false,
+  "node_count": 958,
+  "changed_property_count": 34,
+  "added_nodes": [],
+  "removed_nodes": [],
+  "status_and_power_properties_unchanged": true,
+  "reason": "First overlay was applied to gd FDT, but a second resource load used a different fdt_addr_r. Final kernel FDT lacks bootargs_ext and keeps pre-overlay bootloader/fastboot values.",
+  "review": "display_next_steps independent full-tree and deployed U-Boot branch review; root preserved in BOOT-PACKAGE-REVIEW.md",
+  "private_diff": "../rk3568-pid1-20261005/private/linux-bootm-live-v2-diff.json"
+}

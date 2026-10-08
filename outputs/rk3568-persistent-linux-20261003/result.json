@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-03",
+  "kernel": "4.19.232 original Image and runtime FDT",
+  "pid1": "RAM /bin/sh /init",
+  "persistent_userspace": {
+    "bytes": 67108864,
+    "location": "/cache/rtctrl-linux-20261003/rootfs.ext4",
+    "mode": "child chroot; no switch_root",
+    "roundtrip_marker_hashes": {
+      "android-marker": "b948cf1ecbced740a80aaabb66d6a8eccb505ad3cc92841954e953476411a042",
+      "linux-marker": "e9009af8dca75330a83dfe93e18670e9e2d1a269f96ad326a78aff88efd0cd32"
+    },
+    "android_readback": true
+  },
+  "wifi": {
+    "original_module_loaded": true,
+    "firmware_open_success": true,
+    "firmware_version": "7.45.96.150",
+    "interface_up": true,
+    "router_association_tested": false,
+    "dhcp_tested": false,
+    "normal_module_unload": true
+  },
+  "npu": {
+    "driver": "v0.7.2",
+    "node": "renderD129",
+    "inference_tested": false
+  },
+  "android_libraries": {
+    "elf_objects_inspected": 6,
+    "inspection": "DT_NEEDED plus existing process maps; no dlopen/function test",
+    "glibc_musl_drop_in": false
+  },
+  "storage_cleanup_verified": true,
+  "reboot": "BusyBox reboot -f after sync and storage cleanup; normal kernel restart, no SysRq",
+  "returned_android": {
+    "release": "11",
+    "boot_completed": 1,
+    "startup_partition_sha256": {
+      "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+    },
+    "printk": [
+      7,
+      4,
+      1,
+      7
+    ]
+  },
+  "boot_partition_written": false,
+  "uboot_saveenv": false,
+  "full_distribution_or_power_lifecycle_validated": false,
+  "diagnostic_note": "Cleanup helper's last regex check failed due serial echo interleaving; independent short-command loop check passed before reboot"
+}

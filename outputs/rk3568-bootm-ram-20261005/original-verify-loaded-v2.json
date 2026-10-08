@@ -1,0 +1,4 @@
+[
+  {"command":"printenv filesize","expect":"(?m)^filesize=0x2800000\\r?$"},
+  {"command":"crc32 20000000 2800000","expect":"==> 6e48ba06"}
+]

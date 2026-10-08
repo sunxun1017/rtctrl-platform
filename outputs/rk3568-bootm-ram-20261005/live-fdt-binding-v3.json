@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "trial": 3,
+  "chunk_bytes": 256,
+  "chunks": 641,
+  "evidence": {
+    "linux-bootm-live-fdt-meta-v3.raw.txt": {
+      "bytes": 418,
+      "sha256": "875c8acc015a815318f3fb3d6c693fb21dfade015caa4b1d11db5029ca1565af"
+    },
+    "linux-bootm-live-fdt-read-v3-256.raw.txt": {
+      "bytes": 470068,
+      "sha256": "761d38b6abfa628e84a60bb23d16dc853c46ad1534bdc94721e757e4c7080c1b"
+    },
+    "linux-bootm-live-v3.dtb": {
+      "bytes": 163968,
+      "sha256": "25cc8ad86242311ee6dacd6a4685cda10f2d569f011b292b5ee2cf8f270e2e19"
+    },
+    "linux-bootm-live-v3-diff.json": {
+      "bytes": 5486,
+      "sha256": "e3710dde4cac73c64ed1dd28ee4fa4eda509bca82e7104bef910da47c6369eb0"
+    },
+    "live-fdt-transfer-v3.json": {
+      "bytes": 404,
+      "sha256": "3256aec90f31e575aa233d8bf03b3c9ef3b6296c94f8e1919ce8d114a3184bf4"
+    },
+    "live-fdt-transfer-256.py": {
+      "bytes": 1448,
+      "sha256": "fd162b6743a20a3dfe727125bf5c0d169ab881dba7d855918161bc4d5a08441b"
+    },
+    "live-fdt-transfer.py": {
+      "bytes": 5023,
+      "sha256": "b3d66dd29df18072eba7a059361d6b4362abe68ea990d1a4c70b5799e32280d0"
+    },
+    "compare-live-fdt.py": {
+      "bytes": 2454,
+      "sha256": "c66ce64904c15bc7e8c11d7f5c940083ae2a9c1ebaf30fe920577410bab992e3"
+    }
+  }
+}

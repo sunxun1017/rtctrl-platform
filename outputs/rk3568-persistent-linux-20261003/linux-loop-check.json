@@ -1,0 +1,7 @@
+[
+  {"command":"p=/sys/class/block/loop0/loop/backing_file"},
+  {"command":"test ! -r \"$p\""},
+  {"command":"echo $?","expect":"(?m)^0\r?$"},
+  {"command":"losetup -a"},
+  {"command":"cat /proc/mounts"}
+]

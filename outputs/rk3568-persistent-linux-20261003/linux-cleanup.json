@@ -1,0 +1,13 @@
+[
+  {"command":"ip link set wlan0 down","wait":2},
+  {"command":"rmmod bcmdhd","wait":3},
+  {"command":"test ! -d /sys/module/bcmdhd && echo WIFI_MODULE_REMOVED","expect":"(?m)^WIFI_MODULE_REMOVED\r?$"},
+  {"command":"sha256sum /var/lib/rtctrl/android-marker /var/lib/rtctrl/linux-marker","expect":"e9009af8dca75330a83dfe93e18670e9e2d1a269f96ad326a78aff88efd0cd32"},
+  {"command":"sync"},
+  {"command":"exit","wait":3,"expect":"(?m)^ROOTFS_CLEANUP_OK\r?$"},
+  {"command":"umount /sys/kernel/debug"},
+  {"command":"cat /proc/mounts"},
+  {"command":"losetup -a"},
+  {"command":"if grep -q ' ext4 ' /proc/mounts; then echo STORAGE_STILL_MOUNTED; else echo STORAGE_CLEAN; fi","expect":"(?m)^STORAGE_CLEAN\r?$"},
+  {"command":"if test -r /sys/class/block/loop0/loop/backing_file; then echo LOOP_STILL_BOUND; else echo LOOP_RELEASED; fi","expect":"(?m)^LOOP_RELEASED\r?$"}
+]

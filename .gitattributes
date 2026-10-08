@@ -14,3 +14,6 @@ outputs/rk3568-*/**/*.py -text whitespace=cr-at-eol,-blank-at-eof
 outputs/rk3568-*/**/*.txt -text -whitespace
 outputs/rk3568-power-runtime-20261006/original-dt-fixture.h -text whitespace=cr-at-eol
 outputs/rk3568-audio-runtime-20261005/full-duplex-shared-io-candidate-v1/test-terminal.c -text -whitespace
+
+# Locked small third-party snapshots keep upstream byte identity.
+outputs/rk3568-boot-package-20261005/sources/** -text -whitespace

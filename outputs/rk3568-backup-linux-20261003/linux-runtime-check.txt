@@ -1,0 +1,24 @@
+
+# echo 1 > /proc/sys/kernel/printk
+# echo LINUX_CHECK_BEGIN
+LINUX_CHECK_BEGIN
+# uname -r
+4.19.232
+# cat /proc/uptime
+60.23 228.70
+# ls /
+dev   root  bin   proc  sys   tmp   init
+# hexdump -C /proc/1/cmdline
+00000000  2f 62 69 6e 2f 73 68 00  2f 69 6e 69 74 00        |/bin/sh./init.|
+0000000e
+# cat /proc/mounts
+rootfs / rootfs rw,size=1897340k,nr_inodes=474335 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1897340k,nr_inodes=474335,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# cat /proc/cmdline
+console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init loglevel=7 smdt_hw_id=6 smdt_bom_id=7 cpuid=<redacted> cid=<redacted>
+# echo LINUX_CHECK_END
+LINUX_CHECK_END
+#

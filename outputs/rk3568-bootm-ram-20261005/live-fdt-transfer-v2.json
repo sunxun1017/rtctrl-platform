@@ -1,0 +1,10 @@
+{
+  "bytes": 163968,
+  "sha256": "6109dda4fa7460be615a9df127ca2fc2c420bc3148a15c5514472fb59228587e",
+  "chunks": 161,
+  "chunk_bytes": 1024,
+  "metadata_raw_sha256": "a6dbc60d88950b3609fabe8768f14262b21e85cdb9fed6899ab52bdae61c3370",
+  "read_raw_sha256": "a7311e82e98446e5a5525553cb048cf587c351b4a0d2902aa6ad68727cd70602",
+  "board_sha_matches_reconstruction": true,
+  "semantic_audit_completed": false
+}

@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-03",
+  "startup_backup_complete": true,
+  "whole_emmc_backup": false,
+  "recovery_super_userdata_oempriv_backed_up": false,
+  "boot_test_evidence": "boot-result.json",
+  "artifacts": [
+    {
+      "file": "original/boot.img",
+      "bytes": 41943040,
+      "sha256": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28"
+    },
+    {
+      "file": "original/uboot.img",
+      "bytes": 4194304,
+      "sha256": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e"
+    },
+    {
+      "file": "original/trust.img",
+      "bytes": 4194304,
+      "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"
+    },
+    {
+      "file": "original/dtbo.img",
+      "bytes": 4194304,
+      "sha256": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d"
+    },
+    {
+      "file": "original/vbmeta.img",
+      "bytes": 1048576,
+      "sha256": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+    },
+    {
+      "file": "extra/baseparameter.img",
+      "bytes": 1048576,
+      "sha256": "b3ea054f37f20610cdb9d914287b24107d28ae0ae6e61a0134f462659506cb67"
+    },
+    {
+      "file": "extra/misc.img",
+      "bytes": 4194304,
+      "sha256": "07180514a13a608005a12f037860bdfb2a3f8359e7838c51f030ddf09fd85d84"
+    },
+    {
+      "file": "extra/mmcblk2boot0.img",
+      "bytes": 4194304,
+      "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"
+    },
+    {
+      "file": "extra/mmcblk2boot1.img",
+      "bytes": 4194304,
+      "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"
+    },
+    {
+      "file": "extra/security.img",
+      "bytes": 4194304,
+      "sha256": "08b4e750261f496f17cf1d20a54ff481f2edfb315815b8c0ce21d3094e9a5416"
+    },
+    {
+      "file": "extra/smdt.img",
+      "bytes": 4194304,
+      "sha256": "ca2a28eb7f27e22fd8bca79eff7a3b64f5012aea04f1b1801276b1be93deecf4"
+    },
+    {
+      "file": "extra/gpt-tail.bin",
+      "bytes": 16896,
+      "sha256": "23c3c7ee71b1c03c6982510127c722bacf463e160eef1071b59a8ba976cda99c"
+    },
+    {
+      "file": "extra/loader-head.bin",
+      "bytes": 4194304,
+      "sha256": "45513eae8860c8dba56d72544b3d9fd35bac09683d716f8af561f70d57510a4e"
+    },
+    {
+      "file": "extra/android-running.dtb",
+      "bytes": 151680,
+      "sha256": "f81341ac00389e88a91864dfc251ae0e10217135539a38b4bf434e1ae9ddef52"
+    },
+    {
+      "file": "extra/kernel.config.gz",
+      "bytes": 36644,
+      "sha256": "709d54fd7827fae674a8f03746529150038dff7fc493f558cb1e2fc51cc75fff"
+    }
+  ]
+}
