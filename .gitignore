@@ -14,3 +14,12 @@ compile_commands.json
 # Python bytecode is generated, never source.
 __pycache__/
 *.py[cod]
+
+# RK3568 experiment streams and raw device exports stay local.
+/outputs/rk3568-*/*.stdout
+/outputs/rk3568-*/*.stderr
+/outputs/rk3568-*/**/*.stdout
+/outputs/rk3568-*/**/*.stderr
+/outputs/rk3568-*/**/*.raw.txt
+/outputs/rk3568-*/**/*.raw.bin
+/outputs/rk3568-*/**/private/

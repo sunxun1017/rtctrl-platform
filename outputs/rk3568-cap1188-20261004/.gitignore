@@ -1,0 +1,6 @@
+/private/
+/build/
+__pycache__/
+*.dtb
+*.ko
+cap1188-inspect

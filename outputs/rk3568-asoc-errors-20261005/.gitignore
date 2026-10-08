@@ -1,0 +1,6 @@
+driver-source-*/
+asoc-tests-*/
+prepare-tests-*/
+__pycache__/
+test-asoc-shim.h
+test-asoc-main.c

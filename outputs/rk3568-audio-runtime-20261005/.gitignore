@@ -1,0 +1,8 @@
+/private/
+/build/
+/driver-source-*/
+/driver-modules-*/
+/runtime-tests-*/
+*.o
+*.ko
+/*/*/

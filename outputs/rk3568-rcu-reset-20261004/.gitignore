@@ -1,0 +1,6 @@
+private/
+Image
+*.dtb
+*.cpio.gz
+codec-test
+pty-test

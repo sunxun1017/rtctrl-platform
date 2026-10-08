@@ -1,0 +1,8 @@
+/private/
+/build/
+/__pycache__/
+/*.img
+/*.tar.gz
+/*.cpio.gz
+/*.img.gz
+/*.partial

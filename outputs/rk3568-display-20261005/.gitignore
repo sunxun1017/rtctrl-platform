@@ -1,0 +1,5 @@
+/build/
+/private/
+/panel-source-*/
+/panel-tests-*/
+__pycache__/

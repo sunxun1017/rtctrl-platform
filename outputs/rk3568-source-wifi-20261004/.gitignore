@@ -1,0 +1,11 @@
+/private/
+/build/
+/*.ko
+/*.dtb
+/*.cpio.gz
+/wpa_supplicant
+/wpa_cli
+/transfer-test
+/network-helper
+/firmware/
+/linux-dhcp-transfer.json

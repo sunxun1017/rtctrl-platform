@@ -1,0 +1,11 @@
+*.gz
+*.img
+*.ext4
+*.dtb
+*.ko
+*.so
+*.raw.txt
+busybox/
+private/
+inventory/
+__pycache__/

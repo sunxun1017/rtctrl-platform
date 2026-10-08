@@ -1,0 +1,5 @@
+private/
+*.cpio.gz
+*.tar.gz
+Image
+*.dtb

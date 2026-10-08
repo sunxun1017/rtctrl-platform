@@ -1,0 +1,8 @@
+/private/
+/build/
+/__pycache__/
+/*.dtb
+/*.cpio.gz
+/*.img
+/*.img.gz
+/serial-inspect

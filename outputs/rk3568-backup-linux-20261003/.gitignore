@@ -1,0 +1,11 @@
+*.img
+*.bin
+*.gz
+*.cpio
+*.raw.txt
+*.partial
+private/
+*.dtb
+extra/
+original/
+__pycache__/

@@ -1,0 +1,9 @@
+/private/
+/build/
+/driver-source*/
+/driver-tests*/
+/driver-modules*/
+__pycache__/
+*.ko
+*.dtb
+*.so

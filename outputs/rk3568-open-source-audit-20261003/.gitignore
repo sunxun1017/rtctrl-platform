@@ -1,0 +1,6 @@
+private/
+*.so
+*.apk
+*.jar
+*.aar
+*.raw.txt

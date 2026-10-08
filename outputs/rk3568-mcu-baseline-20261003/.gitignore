@@ -1,0 +1,5 @@
+private/
+*.raw.txt
+*.trace.txt
+*.bin
+*.so

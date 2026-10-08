@@ -1,0 +1,12 @@
+/private/
+/build/
+/driver-source-v*/
+/driver-modules-v*/
+/driver-module-tests-v*/
+/driver-prepare-tests-*/
+/driver-tests-red-*/
+/driver-tests-green-*/
+__pycache__/
+*.dtb
+*.ko
+sensor-inspect
