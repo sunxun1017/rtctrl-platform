@@ -1,0 +1,43 @@
+{
+  "scope": "OPT_IN_TERMINAL_FILE_DRAIN_INCREMENT_OVER_SHARED_IO_V3_NO_BOARD",
+  "base_source_manifest_sha256": "9c279d2b79415fa4f11e163c723542bde9fead432aa56e29358a80140ab06036",
+  "generator_sha256": "243965eff1d65a5dbfc4b780cbd8642b58f36720eba8c3aef3c1d9e244b18df2",
+  "files": {
+    "include/sound/soc-dai.h": {
+      "baseline_sha256": "7fe99b405e1b1d66051e5645c5812d2fbe4452b1cdd13659ad87e357595a2221",
+      "candidate_sha256": "7fe99b405e1b1d66051e5645c5812d2fbe4452b1cdd13659ad87e357595a2221",
+      "bytes": 20735
+    },
+    "include/sound/soc.h": {
+      "baseline_sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b",
+      "candidate_sha256": "3295e7fdadef22c64ca2e30623694fec90faef3d706e69844132cfec47ad76d0",
+      "bytes": 50880
+    },
+    "sound/soc/codecs/rk817_codec.c": {
+      "baseline_sha256": "435199017c0990aae9b4492f5c9abf2ba9f806f93420ee17e24e21260722481d",
+      "candidate_sha256": "7dea894bf067486a5fe0a3a8f1a241bdabebef3327a1bf732044b8bba8f2bcdf",
+      "bytes": 81822
+    },
+    "sound/soc/generic/simple-card-utils.c": {
+      "baseline_sha256": "f52b46f49f019cd84a70243993cea7893c530de060677cc9397120bd029252bf",
+      "candidate_sha256": "f52b46f49f019cd84a70243993cea7893c530de060677cc9397120bd029252bf",
+      "bytes": 17475
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "baseline_sha256": "316821b160f3d01572530124ed5119651faed0969b1aab007e6359ff5311d2b7",
+      "candidate_sha256": "c6c77326a8e1abb11e2262d4e08e3f8d4d667bc3a50ab918733a68a67d23b122",
+      "bytes": 124076
+    },
+    "sound/soc/soc-core.c": {
+      "baseline_sha256": "82b2afb9fb827f7192dc5c5ec160829483c5c0e7ae7bb944a79d9770634a977c",
+      "candidate_sha256": "662098c11fffd17926835c31823294fa8593aabc10e7eb1db4d89058b904232b",
+      "bytes": 82474
+    },
+    "sound/soc/soc-pcm.c": {
+      "baseline_sha256": "5bae1c377b848238b5f75a18fcbb17a924064898cc9638489f866987db252586",
+      "candidate_sha256": "5bae1c377b848238b5f75a18fcbb17a924064898cc9638489f866987db252586",
+      "bytes": 89177
+    }
+  },
+  "patch_sha256": "26146c1038a5a1e98c551caa7164befeb237b026ff1be252c2a44802f9e53298"
+}

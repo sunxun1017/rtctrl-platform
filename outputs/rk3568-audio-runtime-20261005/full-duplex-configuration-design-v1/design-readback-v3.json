@@ -1,0 +1,17 @@
+{
+  "status": "PARENT_SELECTED_CONTRACT_NOT_MODEL_RESULT",
+  "design_sha256": "f7a66bf0f4f4ac59d79e7a990b0074ddf563dcb8bf4e8a157f8d35d375ceaa52",
+  "model_plan_sha256": "1ac71dc0322f918bbab377a2aba5885cdfbf1e98a37d4989e76cbba8707661f2",
+  "manifest_v3_sha256": "5fc9756b7e9dd5f4ae7f7121bb596a54c0560667f44611a1e291798409562f0b",
+  "correction_record_sha256": "04eb95013cec9406ede543cd88686a2b2efcec0ff8f20a3ddd938f616fc09281",
+  "previous_files_preserved": {
+    "DESIGN.md": "44fcd22b971318c04bb2bf1322ab612137ed148f13196a57cbbd89fba2993981",
+    "MODEL-PLAN.md": "c8a0e6d8f1d08273bdc234f8f70e238887d0fdfb007e79d431180e9a9bedcd04",
+    "input-manifest-v2.json": "25776089ba1474de586f155b4cb851bf186f69d7cfcd843bcf125aa289e2c777",
+    "design-readback-v2.json": "e1db3e40894d2335b3a46a42a0b5c6361c2b205d6a6623cd18d57fe7b63f1038"
+  },
+  "model_executed": false,
+  "Kbuild_executed": false,
+  "board_tested": false,
+  "duplex_START_authorized": false
+}

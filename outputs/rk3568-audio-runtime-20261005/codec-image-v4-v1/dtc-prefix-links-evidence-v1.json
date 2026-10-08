@@ -1,0 +1,124 @@
+{
+  "items": {
+    "scripts/dtc/include-prefixes/arc": {
+      "link_text": "../../../arch/arc/boot/dts",
+      "resolved_relative": "arch/arc/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/arm": {
+      "link_text": "../../../arch/arm/boot/dts",
+      "resolved_relative": "arch/arm/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/arm64": {
+      "link_text": "../../../arch/arm64/boot/dts",
+      "resolved_relative": "arch/arm64/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/c6x": {
+      "link_text": "../../../arch/c6x/boot/dts",
+      "resolved_relative": "arch/c6x/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/dt-bindings": {
+      "link_text": "../../../include/dt-bindings",
+      "resolved_relative": "include/dt-bindings",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/h8300": {
+      "link_text": "../../../arch/h8300/boot/dts",
+      "resolved_relative": "arch/h8300/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/microblaze": {
+      "link_text": "../../../arch/microblaze/boot/dts",
+      "resolved_relative": "arch/microblaze/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/mips": {
+      "link_text": "../../../arch/mips/boot/dts",
+      "resolved_relative": "arch/mips/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/nios2": {
+      "link_text": "../../../arch/nios2/boot/dts",
+      "resolved_relative": "arch/nios2/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/openrisc": {
+      "link_text": "../../../arch/openrisc/boot/dts",
+      "resolved_relative": "arch/openrisc/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/powerpc": {
+      "link_text": "../../../arch/powerpc/boot/dts",
+      "resolved_relative": "arch/powerpc/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/sh": {
+      "link_text": "../../../arch/sh/boot/dts",
+      "resolved_relative": "arch/sh/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    },
+    "scripts/dtc/include-prefixes/xtensa": {
+      "link_text": "../../../arch/xtensa/boot/dts",
+      "resolved_relative": "arch/xtensa/boot/dts",
+      "target_kind": "directory",
+      "original_SDK_link_text_equal": true,
+      "Image_entry_matches": true,
+      "inside_source": true,
+      "target_ordinary_directory": true
+    }
+  },
+  "count": 13,
+  "target_contents_not_traversed": true,
+  "module_make_executed": false
+}

@@ -1,0 +1,592 @@
+--- a/sound/soc/rockchip/rockchip_i2s_tdm.c
++++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
+@@ -131,6 +131,11 @@
+ 	bool shared_params_enabled;
+ 	struct snd_soc_dai_params_state shared_params;
+ 	unsigned int shared_dai_fmt, shared_prepared;
++	/* Per-direction C3 reservation; epoch revoke never claims GO borrow drained. */
++	unsigned int starting, starting_valid, quiet_proven;
++	u64 trcm_epoch, trcm_ticket_epoch[2];
++	struct snd_pcm_substream *trcm_ticket[2], *trcm_active[2];
++	bool transport_live;
+ 	bool checked_lifecycle;
+ 	bool configuring;
+ 	bool format_pm_release;
+@@ -220,6 +225,8 @@
+ static int i2s_checked_error_locked(struct rk_i2s_tdm_dev *i2s_tdm, int ret);
+ static int i2s_checked_stop_locked(struct rk_i2s_tdm_dev *i2s_tdm, int stream, bool force);
+ static int i2s_checked_first_error(int first, int next);
++static int i2s_checked_all_stop_locked(struct rk_i2s_tdm_dev *i2s_tdm);
++static int i2s_trcm_joint_locked(struct rk_i2s_tdm_dev *i2s_tdm, int first);
+ static int rockchip_i2s_tdm_pinctrl_select_clk_state(struct device *dev);
+ 
+ static void i2s_checked_failstop(struct rk_i2s_tdm_dev *i2s_tdm,
+@@ -239,7 +246,7 @@
+ 	if (i2s_tdm->runtime_error && !i2s_tdm->shutting_down)
+ 		ret = i2s_tdm->runtime_error;
+ 	else if ((i2s_tdm->configuring && !i2s_tdm->format_pm_release) ||
+-		 i2s_tdm->started || !i2s_tdm->stop_proven)
++		 i2s_tdm->started || i2s_tdm->starting || !i2s_tdm->stop_proven)
+ 		ret = -EBUSY;
+ 	if (!ret) {
+ 		i2s_tdm->power_transition = true;
+@@ -311,9 +318,7 @@
+ 		if (ret)
+ 			goto cache_error;
+ 		spin_lock_irqsave(&i2s_tdm->lock, flags);
+-		ret = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_PLAYBACK, true);
+-		next = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_CAPTURE, true);
+-		ret = i2s_checked_first_error(ret, next);
++		ret = i2s_checked_all_stop_locked(i2s_tdm);
+ 		i2s_tdm->stop_proven = !ret;
+ 		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 		if (ret)
+@@ -329,10 +334,8 @@
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+ 	/* Preserve the initiating errno even if subsequent STOP also fails. */
+ 	i2s_checked_error_locked(i2s_tdm, ret);
+-	next = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_PLAYBACK, true);
+-	proved = !next;
+-	next = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_CAPTURE, true);
+-	proved = proved && !next;
++	next = i2s_checked_all_stop_locked(i2s_tdm);
++	proved = !next && !i2s_tdm->starting;
+ 	i2s_tdm->stop_proven = proved;
+ 	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 	if (proved) {
+@@ -377,11 +380,11 @@
+ 			      const char *operation)
+ {
+ 	unsigned long flags;
+-	int ret, next;
++	int ret;
+ 
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+ 	/* No cross-ALSA ownership exists here; devres cannot destroy open owners. */
+-	ret = i2s_tdm->configuring || i2s_tdm->started ||
++	ret = i2s_tdm->configuring || i2s_tdm->started || i2s_tdm->starting ||
+ 		READ_ONCE(i2s_tdm->substreams[SNDRV_PCM_STREAM_PLAYBACK]) ||
+ 		READ_ONCE(i2s_tdm->substreams[SNDRV_PCM_STREAM_CAPTURE]) ? -EBUSY : 0;
+ 	if (!ret) {
+@@ -404,9 +407,7 @@
+ 		if (ret)
+ 			i2s_checked_failstop(i2s_tdm, operation, ret);
+ 		spin_lock_irqsave(&i2s_tdm->lock, flags);
+-		ret = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_PLAYBACK, true);
+-		next = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_CAPTURE, true);
+-		ret = i2s_checked_first_error(ret, next);
++		ret = i2s_checked_all_stop_locked(i2s_tdm);
+ 		i2s_tdm->stop_proven = !ret;
+ 		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 		if (ret)
+@@ -435,7 +436,7 @@
+ 	i2s_tdm->shutting_down = true;
+ 	i2s_tdm->irq_live = false;
+ 	ret = READ_ONCE(i2s_tdm->substreams[0]) || READ_ONCE(i2s_tdm->substreams[1]) ||
+-		i2s_tdm->started || i2s_tdm->configuring ? -EBUSY : 0;
++		i2s_tdm->started || i2s_tdm->starting || i2s_tdm->configuring ? -EBUSY : 0;
+ 	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 	if (ret)
+ 		i2s_checked_failstop(i2s_tdm, "probe cleanup", ret);
+@@ -535,8 +536,14 @@
+ /* Protected by lock; never cleared by STOP, HW_FREE, close or PM retry. */
+ static int i2s_checked_error_locked(struct rk_i2s_tdm_dev *i2s_tdm, int ret)
+ {
+-	if (ret < 0 && !i2s_tdm->runtime_error)
++	if (ret < 0 && !i2s_tdm->runtime_error) {
+ 		i2s_tdm->runtime_error = ret;
++		if (i2s_tdm->shared_params_enabled) {
++			i2s_tdm->starting_valid = 0;
++			if (i2s_tdm->trcm_epoch != ~(u64)0)
++				i2s_tdm->trcm_epoch++;
++		}
++	}
+ 	return ret;
+ }
+ 
+@@ -546,7 +553,7 @@
+ 		return i2s_tdm->runtime_error;
+ 	if (i2s_tdm->shutting_down)
+ 		return -ESHUTDOWN;
+-	if (i2s_tdm->configuring || i2s_tdm->power_transition || i2s_tdm->started)
++	if (i2s_tdm->configuring || i2s_tdm->power_transition || i2s_tdm->started || i2s_tdm->starting)
+ 		return -EBUSY;
+ 	return 0;
+ }
+@@ -627,6 +634,220 @@
+ 			udelay(1);
+ 		ret = i2s_checked_irq_locked(i2s_tdm, stream, true);
+ 	}
++	return ret;
++}
++
++/* All transport/ticket state below is protected by the CPU lock. */
++static int i2s_trcm_joint_locked(struct rk_i2s_tdm_dev *i2s_tdm, int first)
++{
++	int ret, next;
++
++	if (first < 0)
++		i2s_checked_error_locked(i2s_tdm, first);
++	/* Revoke admission, but an in-flight C3 GO borrow survives until its STOP. */
++	i2s_tdm->starting_valid = 0;
++	ret = i2s_checked_dma_locked(i2s_tdm, SNDRV_PCM_STREAM_PLAYBACK, false);
++	next = i2s_checked_dma_locked(i2s_tdm, SNDRV_PCM_STREAM_CAPTURE, false);
++	ret = i2s_checked_first_error(ret, next);
++	next = regmap_write_bits(i2s_tdm->regmap, I2S_XFER,
++		I2S_XFER_TXS_MASK | I2S_XFER_RXS_MASK,
++		I2S_XFER_TXS_STOP | I2S_XFER_RXS_STOP);
++	ret = i2s_checked_first_error(ret, next);
++	udelay(150);
++	next = i2s_checked_clear_locked(i2s_tdm);
++	ret = i2s_checked_first_error(ret, next);
++	if (!ret) {
++		i2s_tdm->stop_reads++;
++		if ((readl(i2s_tdm->regs + I2S_XFER) & (I2S_XFER_TXS_MASK | I2S_XFER_RXS_MASK)) ||
++		    (readl(i2s_tdm->regs + I2S_DMACR) & (I2S_DMACR_TDE_MASK | I2S_DMACR_RDE_MASK)) ||
++		    (readl(i2s_tdm->regs + I2S_INTCR) & (I2S_INTCR_TXUIE_MASK | I2S_INTCR_RXOIE_MASK)))
++			ret = -EIO;
++	}
++	if (!ret) {
++		i2s_tdm->started = 0;
++		i2s_tdm->trcm_active[0] = i2s_tdm->trcm_active[1] = NULL;
++		i2s_tdm->transport_live = false;
++		i2s_tdm->quiet_proven = BIT(0) | BIT(1);
++	} else {
++		i2s_tdm->quiet_proven = 0;
++	}
++	i2s_tdm->stop_proven = !ret && !i2s_tdm->starting;
++	i2s_checked_error_locked(i2s_tdm, ret);
++	return i2s_checked_first_error(first, ret);
++}
++
++static int i2s_checked_all_stop_locked(struct rk_i2s_tdm_dev *i2s_tdm)
++{
++	int ret, next;
++
++	if (i2s_tdm->shared_params_enabled)
++		return i2s_trcm_joint_locked(i2s_tdm, 0);
++	ret = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_PLAYBACK, true);
++	next = i2s_checked_stop_locked(i2s_tdm, SNDRV_PCM_STREAM_CAPTURE, true);
++	return i2s_checked_first_error(ret, next);
++}
++
++static int i2s_trcm_quiet_locked(struct rk_i2s_tdm_dev *i2s_tdm, int stream)
++{
++	unsigned int dmask = stream == SNDRV_PCM_STREAM_PLAYBACK ?
++		I2S_DMACR_TDE_MASK : I2S_DMACR_RDE_MASK;
++	unsigned int imask = stream == SNDRV_PCM_STREAM_PLAYBACK ?
++		I2S_INTCR_TXUIE_MASK : I2S_INTCR_RXOIE_MASK;
++	int ret = i2s_checked_dma_locked(i2s_tdm, stream, false);
++
++	if (!ret && ((readl(i2s_tdm->regs + I2S_DMACR) & dmask) ||
++		     (readl(i2s_tdm->regs + I2S_INTCR) & imask)))
++		ret = -EIO;
++	if (!ret)
++		i2s_tdm->quiet_proven |= BIT(stream);
++	else
++		i2s_tdm->quiet_proven &= ~BIT(stream);
++	return ret;
++}
++
++static int i2s_trcm_admit_locked(struct rk_i2s_tdm_dev *i2s_tdm,
++			       struct snd_pcm_substream *ss)
++{
++	unsigned int bit;
++	int stream = ss->stream;
++
++	if (stream != SNDRV_PCM_STREAM_PLAYBACK && stream != SNDRV_PCM_STREAM_CAPTURE)
++		return -EINVAL;
++	bit = BIT(stream);
++	if (i2s_tdm->runtime_error)
++		return i2s_tdm->runtime_error;
++	if (i2s_tdm->shutting_down)
++		return -ESHUTDOWN;
++	if (!READ_ONCE(i2s_tdm->ready))
++		return -EAGAIN;
++	if (i2s_tdm->configuring || i2s_tdm->power_transition || i2s_tdm->shared_params.pending ||
++	    ((i2s_tdm->started | i2s_tdm->starting) & bit))
++		return -EBUSY;
++	if (i2s_tdm->substreams[stream] != ss || i2s_tdm->shared_params.owner[stream] != ss ||
++	    !(i2s_tdm->shared_prepared & bit))
++		return -EINVAL;
++	if (!i2s_tdm->transport_live && !i2s_tdm->stop_proven)
++		return -EBUSY;
++	if (!i2s_tdm->trcm_epoch)
++		i2s_tdm->trcm_epoch = 1;
++	i2s_tdm->trcm_ticket[stream] = ss;
++	i2s_tdm->trcm_ticket_epoch[stream] = i2s_tdm->trcm_epoch;
++	i2s_tdm->starting |= bit;
++	i2s_tdm->starting_valid |= bit;
++	i2s_tdm->irq_drained = false;
++	return 0;
++}
++
++static int i2s_trcm_commit_locked(struct rk_i2s_tdm_dev *i2s_tdm,
++				struct snd_pcm_substream *ss)
++{
++	unsigned int bit = BIT(ss->stream);
++	bool first;
++	int ret;
++
++	if (i2s_tdm->runtime_error)
++		return i2s_tdm->runtime_error;
++	if (i2s_tdm->shutting_down)
++		return -ESHUTDOWN;
++	if (!READ_ONCE(i2s_tdm->ready))
++		return -EAGAIN;
++	if (i2s_tdm->configuring || i2s_tdm->power_transition || i2s_tdm->shared_params.pending)
++		return -EBUSY;
++	if (!(i2s_tdm->starting & i2s_tdm->starting_valid & bit) ||
++	    i2s_tdm->trcm_ticket[ss->stream] != ss ||
++	    i2s_tdm->trcm_ticket_epoch[ss->stream] != i2s_tdm->trcm_epoch ||
++	    i2s_tdm->substreams[ss->stream] != ss ||
++	    i2s_tdm->shared_params.owner[ss->stream] != ss ||
++	    !(i2s_tdm->shared_prepared & bit))
++		return -EINVAL;
++	first = !i2s_tdm->transport_live;
++	if (first && !i2s_tdm->stop_proven)
++		return -EBUSY;
++	i2s_tdm->stop_proven = false;
++	i2s_tdm->quiet_proven &= ~bit;
++	/* Own access before the first request write may partly execute. */
++	i2s_tdm->transport_live = true;
++	ret = i2s_checked_dma_locked(i2s_tdm, ss->stream, true);
++	if (!ret && first)
++		ret = regmap_write_bits(i2s_tdm->regmap, I2S_XFER,
++			I2S_XFER_TXS_MASK | I2S_XFER_RXS_MASK,
++			I2S_XFER_TXS_START | I2S_XFER_RXS_START);
++	if (ret) {
++		i2s_trcm_joint_locked(i2s_tdm, ret);
++		return ret;
++	}
++	i2s_tdm->started |= bit;
++	i2s_tdm->trcm_active[ss->stream] = ss;
++	i2s_tdm->starting &= ~bit;
++	i2s_tdm->starting_valid &= ~bit;
++	i2s_tdm->trcm_ticket[ss->stream] = NULL;
++	i2s_tdm->trcm_ticket_epoch[ss->stream] = 0;
++	return 0;
++}
++
++static int i2s_trcm_stop_locked(struct rk_i2s_tdm_dev *i2s_tdm,
++			      struct snd_pcm_substream *ss, bool component)
++{
++	unsigned int bit = BIT(ss->stream);
++	bool ticket = (i2s_tdm->starting & bit) && i2s_tdm->trcm_ticket[ss->stream] == ss;
++	bool active = (i2s_tdm->started & bit) && i2s_tdm->trcm_active[ss->stream] == ss;
++	int ret;
++
++	/* Component rollback owns only its published ticket; failed admission may own nothing. */
++	if (component && !ticket)
++		return 0;
++	if (!ticket && !active)
++		return 0;
++	if (i2s_tdm->substreams[ss->stream] != ss)
++		return -EINVAL;
++	i2s_tdm->starting_valid &= ~bit;
++	ret = i2s_trcm_quiet_locked(i2s_tdm, ss->stream);
++	if (ret)
++		i2s_trcm_joint_locked(i2s_tdm, ret);
++	if (!ret) {
++		i2s_tdm->started &= ~bit;
++		i2s_tdm->trcm_active[ss->stream] = NULL;
++	}
++	if (component && ticket) {
++		/* C3 rollback has returned from its GO callback; same-ss ALSA is serialized. */
++		i2s_tdm->starting &= ~bit;
++		i2s_tdm->trcm_ticket[ss->stream] = NULL;
++		i2s_tdm->trcm_ticket_epoch[ss->stream] = 0;
++	}
++	if (!(i2s_tdm->started | i2s_tdm->starting)) {
++		int next = i2s_trcm_joint_locked(i2s_tdm, 0);
++		ret = i2s_checked_first_error(ret, next);
++	} else {
++		i2s_tdm->stop_proven = false;
++	}
++	return ret;
++}
++
++static int i2s_trcm_trigger(struct rk_i2s_tdm_dev *i2s_tdm,
++			  struct snd_pcm_substream *ss, int cmd)
++{
++	unsigned long flags;
++	int ret;
++
++	if (ss->stream != SNDRV_PCM_STREAM_PLAYBACK && ss->stream != SNDRV_PCM_STREAM_CAPTURE)
++		return -EINVAL;
++	spin_lock_irqsave(&i2s_tdm->lock, flags);
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++	case SNDRV_PCM_TRIGGER_RESUME:
++	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++		ret = i2s_trcm_commit_locked(i2s_tdm, ss);
++		break;
++	case SNDRV_PCM_TRIGGER_STOP:
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++		ret = i2s_trcm_stop_locked(i2s_tdm, ss, false);
++		break;
++	default:
++		ret = -EINVAL;
++		break;
++	}
++	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 	return ret;
+ }
+ 
+@@ -2391,7 +2612,7 @@
+ 	if (ss->stream != 0 && ss->stream != 1)
+ 		return -EINVAL;
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+-	if (i2s_tdm->configuring || p->pending || (i2s_tdm->started & BIT(ss->stream)))
++	if (i2s_tdm->configuring || p->pending || ((i2s_tdm->started | i2s_tdm->starting) & BIT(ss->stream)))
+ 		ret = -EBUSY;
+ 	else if ((p->owner[ss->stream] && p->owner[ss->stream] != ss) ||
+ 		 i2s_tdm->substreams[ss->stream] != ss)
+@@ -2409,7 +2630,7 @@
+ 	if (ss->stream != 0 && ss->stream != 1)
+ 		return -EINVAL;
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+-	if (i2s_tdm->configuring || (i2s_tdm->started & BIT(ss->stream)))
++	if (i2s_tdm->configuring || ((i2s_tdm->started | i2s_tdm->starting) & BIT(ss->stream)))
+ 		ret = -EBUSY;
+ 	else
+ 		ret = snd_soc_dai_params_free_locked(&i2s_tdm->shared_params, dai, ss);
+@@ -2521,6 +2742,10 @@
+ 	if (fmt != (SND_SOC_DAIFMT_CBS_CFS | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_I2S))
+ 		return -EINVAL;
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
++	if (i2s_tdm->starting) {
++		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++		return -EBUSY;
++	}
+ 	if (i2s_tdm->shared_params.pending || i2s_tdm->shared_params.owner[0] ||
+ 	    i2s_tdm->shared_params.owner[1]) {
+ 		ret = i2s_tdm->shared_dai_fmt == fmt ? 0 : -EBUSY;
+@@ -2723,8 +2948,11 @@
+ 	struct rk_i2s_tdm_dev *i2s_tdm = to_info(dai);
+ 	int ret = 0;
+ 
+-	if (i2s_tdm->checked_lifecycle)
++	if (i2s_tdm->checked_lifecycle) {
++		if (i2s_tdm->shared_params_enabled)
++			return i2s_trcm_trigger(i2s_tdm, substream, cmd);
+ 		return i2s_checked_trigger(i2s_tdm, substream->stream, cmd);
++	}
+ 
+ 	switch (cmd) {
+ 	case SNDRV_PCM_TRIGGER_START:
+@@ -3090,18 +3318,42 @@
+ 
+ 	if (!i2s_tdm->checked_lifecycle)
+ 		return 0;
++	if (i2s_tdm->shared_params_enabled) {
++		int stream = substream->stream;
++		if (stream != 0 && stream != 1)
++			return -EINVAL;
++		spin_lock_irqsave(&i2s_tdm->lock, flags);
++		ret = i2s_tdm->runtime_error;
++		if (!ret && i2s_tdm->shutting_down)
++			ret = -ESHUTDOWN;
++		if (!ret && !READ_ONCE(i2s_tdm->ready))
++			ret = -EAGAIN;
++		if (!ret && (i2s_tdm->configuring || i2s_tdm->power_transition ||
++			i2s_tdm->shared_params.pending || i2s_tdm->starting ||
++			(i2s_tdm->started & BIT(stream))))
++			ret = -EBUSY;
++		if (!ret && (i2s_tdm->substreams[stream] != substream ||
++			i2s_tdm->shared_params.owner[stream] != substream))
++			ret = -EINVAL;
++		if (!ret) {
++			if (i2s_tdm->started)
++				ret = i2s_trcm_quiet_locked(i2s_tdm, stream);
++			else
++				ret = i2s_trcm_joint_locked(i2s_tdm, 0);
++			if (ret)
++				i2s_trcm_joint_locked(i2s_tdm, ret);
++		}
++		if (!ret)
++			i2s_tdm->shared_prepared |= BIT(stream);
++		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++		return ret;
++	}
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+ 	ret = i2s_checked_gate_locked(i2s_tdm);
+-	if (!ret && i2s_tdm->shared_params_enabled &&
+-	    ((substream->stream != 0 && substream->stream != 1) ||
+-	     i2s_tdm->shared_params.owner[substream->stream] != substream))
+-		ret = -EINVAL;
+ 	if (!ret && !READ_ONCE(i2s_tdm->ready))
+ 		ret = -EAGAIN;
+ 	if (!ret)
+ 		ret = i2s_checked_stop_locked(i2s_tdm, substream->stream, true);
+-	if (!ret && i2s_tdm->shared_params_enabled)
+-		i2s_tdm->shared_prepared |= BIT(substream->stream);
+ 	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 	return ret;
+ }
+@@ -3116,6 +3368,28 @@
+ 
+ 	if (!i2s_tdm->checked_lifecycle)
+ 		return 0;
++	if (substream->stream != 0 && substream->stream != 1)
++		return -EINVAL;
++	if (i2s_tdm->shared_params_enabled) {
++		spin_lock_irqsave(&i2s_tdm->lock, flags);
++		switch (cmd) {
++		case SNDRV_PCM_TRIGGER_START:
++		case SNDRV_PCM_TRIGGER_RESUME:
++		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++			ret = i2s_trcm_admit_locked(i2s_tdm, substream);
++			break;
++		case SNDRV_PCM_TRIGGER_STOP:
++		case SNDRV_PCM_TRIGGER_SUSPEND:
++		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++			ret = i2s_trcm_stop_locked(i2s_tdm, substream, true);
++			break;
++		default:
++			ret = -EINVAL;
++			break;
++		}
++		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++		return ret;
++	}
+ 	switch (cmd) {
+ 	case SNDRV_PCM_TRIGGER_START:
+ 	case SNDRV_PCM_TRIGGER_RESUME:
+@@ -3130,14 +3404,9 @@
+ 		else if (i2s_tdm->configuring || i2s_tdm->power_transition || (i2s_tdm->started & ~BIT(substream->stream)) ||
+ 			 (!i2s_tdm->started && !i2s_tdm->stop_proven))
+ 			ret = -EBUSY;
+-		else if (i2s_tdm->shared_params_enabled &&
+-			 (i2s_tdm->shared_params.owner[substream->stream] != substream ||
+-			  !(i2s_tdm->shared_prepared & BIT(substream->stream))))
+-			ret = -EINVAL;
+ 		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 		break;
+ 	default:
+-		/* STOP must reach generic DMA cleanup even when CPU is poisoned. */
+ 		break;
+ 	}
+ 	return ret;
+@@ -3185,29 +3454,40 @@
+ 				      struct snd_soc_dai *dai)
+ {
+ 	struct rk_i2s_tdm_dev *i2s_tdm = snd_soc_dai_get_drvdata(dai);
+-
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	if (i2s_tdm->checked_lifecycle) {
+ 		spin_lock_irqsave(&i2s_tdm->lock, flags);
++		if (i2s_tdm->shared_params_enabled) {
++			if ((substream->stream != 0 && substream->stream != 1) ||
++			    i2s_tdm->substreams[substream->stream] != substream) {
++				spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++				return;
++			}
++			/* Legal ALSA close is serialized against its own trigger/GO call. */
++			if (i2s_tdm->starting & BIT(substream->stream)) {
++				spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++				i2s_checked_failstop(i2s_tdm, "close with C3 GO borrow", -EBUSY);
++				return;
++			}
++			ret = i2s_trcm_stop_locked(i2s_tdm, substream, false);
++		} else if (!(i2s_tdm->started & ~BIT(substream->stream))) {
++			ret = i2s_checked_stop_locked(i2s_tdm, substream->stream, true);
++		}
+ 		if (READ_ONCE(i2s_tdm->substreams[substream->stream]) == substream)
+ 			WRITE_ONCE(i2s_tdm->substreams[substream->stream], NULL);
+-		if (!(i2s_tdm->started & ~BIT(substream->stream)))
+-			ret = i2s_checked_stop_locked(i2s_tdm, substream->stream, true);
+ 		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+-		/* Process context, outside stream/I2S locks; covers captured old pointer. */
+ 		if (i2s_tdm->irq > 0)
+ 			synchronize_irq(i2s_tdm->irq);
+ 		spin_lock_irqsave(&i2s_tdm->lock, flags);
+-		if (!READ_ONCE(i2s_tdm->substreams[0]) && !READ_ONCE(i2s_tdm->substreams[1]))
++		if (!READ_ONCE(i2s_tdm->substreams[0]) && !READ_ONCE(i2s_tdm->substreams[1]) && !i2s_tdm->starting)
+ 			i2s_tdm->irq_drained = true;
+ 		spin_unlock_irqrestore(&i2s_tdm->lock, flags);
+ 		if (!ret && i2s_tdm->shared_params_enabled)
+ 			ret = i2s_shared_free(substream, dai);
+ 		if (ret)
+ 			dev_err(i2s_tdm->dev, "CPU shutdown stop unproved: %d\n", ret);
+-		/* Sticky faults retain the device/clocks; checked PM refuses suspension. */
+ 		return;
+ 	}
+ 	i2s_tdm->substreams[substream->stream] = NULL;
+@@ -3223,6 +3503,16 @@
+ 	.set_tdm_slot = rockchip_dai_tdm_slot,
+ 	.trigger = rockchip_i2s_tdm_trigger,
+ };
++
++static void i2s_trcm_async_fault(struct snd_soc_dai *dai, int first_errno)
++{
++	struct rk_i2s_tdm_dev *i2s_tdm = to_info(dai);
++	unsigned long flags;
++
++	spin_lock_irqsave(&i2s_tdm->lock, flags);
++	i2s_trcm_joint_locked(i2s_tdm, first_errno < 0 ? first_errno : -EIO);
++	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++}
+ 
+ static const struct snd_soc_dai_ops rockchip_i2s_tdm_shared_ops = {
+ 	.startup = rockchip_i2s_tdm_startup,
+@@ -3240,6 +3530,7 @@
+ 	.hw_params_reuse = i2s_shared_reuse,
+ 	.hw_params_free_check = i2s_shared_free_check,
+ 	.hw_params_fault = i2s_shared_fault,
++	.pcm_async_fault = i2s_trcm_async_fault,
+ };
+ 
+ static const struct snd_soc_component_driver rockchip_i2s_tdm_component = {
+@@ -3698,6 +3989,38 @@
+ };
+ 
+ 
++static irqreturn_t i2s_trcm_isr(struct rk_i2s_tdm_dev *i2s_tdm)
++{
++	struct snd_pcm_substream *playback = NULL, *capture = NULL;
++	unsigned long flags;
++	unsigned int val = 0, owners;
++	int ret;
++	irqreturn_t result = IRQ_NONE;
++
++	spin_lock_irqsave(&i2s_tdm->lock, flags);
++	if (!i2s_tdm->irq_live || i2s_tdm->shutting_down)
++		goto unlock;
++	ret = regmap_read(i2s_tdm->regmap, I2S_INTSR, &val);
++	if (!ret && !(val & (I2S_INTSR_TXUI_ACT | I2S_INTSR_RXOI_ACT)))
++		goto unlock;
++	/* A status error never interprets val. One direction's error shares transport. */
++	owners = i2s_tdm->started | i2s_tdm->starting;
++	if (owners & BIT(SNDRV_PCM_STREAM_PLAYBACK))
++		playback = READ_ONCE(i2s_tdm->substreams[SNDRV_PCM_STREAM_PLAYBACK]);
++	if (owners & BIT(SNDRV_PCM_STREAM_CAPTURE))
++		capture = READ_ONCE(i2s_tdm->substreams[SNDRV_PCM_STREAM_CAPTURE]);
++	i2s_trcm_joint_locked(i2s_tdm, ret < 0 ? ret : -EPIPE);
++	result = IRQ_HANDLED;
++unlock:
++	spin_unlock_irqrestore(&i2s_tdm->lock, flags);
++	/* The caller's process close synchronize_irq drains both captured borrows. */
++	if (playback)
++		snd_pcm_stop_xrun(playback);
++	if (capture)
++		snd_pcm_stop_xrun(capture);
++	return result;
++}
++
+ static irqreturn_t i2s_checked_isr(struct rk_i2s_tdm_dev *i2s_tdm)
+ {
+ 	struct snd_pcm_substream *playback = NULL, *capture = NULL;
+@@ -3705,6 +4028,9 @@
+ 	unsigned int val = 0;
+ 	int ret;
+ 	irqreturn_t result = IRQ_NONE;
++
++	if (i2s_tdm->shared_params_enabled)
++		return i2s_trcm_isr(i2s_tdm);
+ 
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+ 	if (!i2s_tdm->irq_live || i2s_tdm->shutting_down)

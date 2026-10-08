@@ -1,0 +1,47 @@
+{
+  "inputs": {
+    "frozen_codec": {
+      "source": ".deps/kernel-source/aiot-3568pq-audio-v3/sound/soc/codecs/rk817_codec.c",
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+      "snapshot": "source-v1/rk817_codec.c",
+      "ordinary_file_and_ancestors": true
+    },
+    "frozen_header": {
+      "source": ".deps/kernel-source/aiot-3568pq-audio-v3/sound/soc/codecs/rk817_codec.h",
+      "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449",
+      "snapshot": "source-v1/rk817_codec.h",
+      "ordinary_file_and_ancestors": true
+    },
+    "original_codec": {
+      "source": "third_party/linux-rk3588/sound/soc/codecs/rk817_codec.c",
+      "sha256": "c510119eefe8fd82c1e100fde014d9ce30420aa2df9b1b74cf5e83b9e18ea6f3",
+      "snapshot": "inputs-v1/original-rk817_codec.c",
+      "ordinary_file_and_ancestors": true
+    },
+    "original_header": {
+      "source": "third_party/linux-rk3588/sound/soc/codecs/rk817_codec.h",
+      "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449",
+      "snapshot": "inputs-v1/original-rk817_codec.h",
+      "ordinary_file_and_ancestors": true
+    },
+    "reference_builder_v3": {
+      "source": "outputs/rk3568-audio-runtime-20261005/build-integrated-codec-v3.py",
+      "sha256": "9266fc9c6260d7211abd95148329c1d4ef56407d6090f6f86b74a7c45812ed64",
+      "snapshot": "inputs-v1/reference-builder-v3.py",
+      "ordinary_file_and_ancestors": true
+    },
+    "reference_audit": {
+      "source": "outputs/rk3568-audio-20261005/build-codec.py",
+      "sha256": "33a56678d16f651c40746b2c8e55531166ff7eecd7bd80e4f24bc58a84688fcb",
+      "snapshot": "inputs-v1/reference-audit.py",
+      "ordinary_file_and_ancestors": true
+    }
+  },
+  "original_inputs_unchanged": true,
+  "reference_builder_or_audit_not_used_for_ABI_conclusion": true,
+  "builder_sha256_at_preparation": "ff98124c102abb6603062029c02327fff9257f2a37b2d842d0f08e4cd98e3d83",
+  "Image_v4_completion_not_asserted": true,
+  "module_build_invoked": false,
+  "ABI_verified": false,
+  "board_tested": false
+}

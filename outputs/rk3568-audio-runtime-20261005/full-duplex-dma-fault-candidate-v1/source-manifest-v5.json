@@ -1,0 +1,18 @@
+{
+  "drivers/dma/pl330.c": {
+    "bytes": 121351,
+    "sha256": "b71fd04e0cee0745cc30ea03263e965574ac8ef0a2c29a5dc9eb4a38c5eccd62"
+  },
+  "sound/core/pcm_dmaengine.c": {
+    "bytes": 25146,
+    "sha256": "189e4e4fb59a683ae050e96fbe90f7fc09d5ad7afe755d3eca6623fbb971da77"
+  },
+  "sound/soc/soc-generic-dmaengine-pcm.c": {
+    "bytes": 15228,
+    "sha256": "794bccb85fde6094cbd3b1dcaf8f3d5bce6ae5c4c342047658c2934525b6724c"
+  },
+  "include/sound/dmaengine_pcm.h": {
+    "bytes": 7131,
+    "sha256": "f7fe7ae1130bf04adc7fb92f14cbb75b94aaf08dd3a658da66eb5d3184954fc2"
+  }
+}

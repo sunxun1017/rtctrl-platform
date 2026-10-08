@@ -1,0 +1,45 @@
+{
+  "board_tested": false,
+  "prior_versions": {
+    "v1": {
+      "SHA256SUMS_sha256": "b339c9badf1059cf287f9ac948ad68c596d113270d58e666498eaca6e139d116",
+      "verified_files": 550
+    },
+    "v2": {
+      "SHA256SUMS_sha256": "9bcef4ecf8bb20fc5f4b4badf3a15e74fce343da36ad9c6ffa7b866dbed25330",
+      "verified_files": 1128
+    }
+  },
+  "production_diff": "canonical_device(argv[4], \"fe550000.dma\", dma) -> fe550000.dmac; exactly one byte inserted",
+  "copied_files": {
+    "audio-session-guard.c": {
+      "v2_sha256": "4ee32204493f11d450eeead3cc5492e75fe7d1ea2b0af0281a7340f010d9e999",
+      "v3_initial_sha256": "cfe6f2e51b8d39ae4681f6abc745bcd9870a9abc2cab2543c0eecad4aa6d7230"
+    },
+    "guard-parser.h": {
+      "v2_sha256": "d3de83c789f60fbc9583a4dca306546148cdb16bade26d31a747c8b1b1511f3d",
+      "v3_initial_sha256": "d3de83c789f60fbc9583a4dca306546148cdb16bade26d31a747c8b1b1511f3d"
+    },
+    "model-driver.c": {
+      "v2_sha256": "db415dc22fdb052a118d025339baa9f2c4a881f107e0f75419d9c7ab57267eeb",
+      "v3_initial_sha256": "db415dc22fdb052a118d025339baa9f2c4a881f107e0f75419d9c7ab57267eeb"
+    },
+    "test-models.py": {
+      "v2_sha256": "c6497e93834999cc84d53e38bebebd1e77c9de94c5f652a9069ef80c5fc5fc30",
+      "v3_initial_sha256": "c6497e93834999cc84d53e38bebebd1e77c9de94c5f652a9069ef80c5fc5fc30"
+    },
+    "build-freeze.py": {
+      "v2_sha256": "805b2c3424a71443721105f4de9e8706afce9eaf76c1694d46ab52a5a9a0b864",
+      "v3_initial_sha256": "805b2c3424a71443721105f4de9e8706afce9eaf76c1694d46ab52a5a9a0b864"
+    },
+    "README.md": {
+      "v2_sha256": "c5777fda1ad4224ae3fefff3a04eb4cfa2c6702c841baab2f43aed7563d02971",
+      "v3_initial_sha256": "c5777fda1ad4224ae3fefff3a04eb4cfa2c6702c841baab2f43aed7563d02971"
+    },
+    "PLAN.md": {
+      "v2_sha256": "5d8954e0650ff137d01b2c0d5b49c326f511245239b3fa26eaed26e270ea213b",
+      "v3_initial_sha256": "5d8954e0650ff137d01b2c0d5b49c326f511245239b3fa26eaed26e270ea213b"
+    }
+  },
+  "canonical_red_result_sha256": "d4698a93a28db86529230e8dba50f5b0006d45658ceab3a0e127861aaa972f25"
+}

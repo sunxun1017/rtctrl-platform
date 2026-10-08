@@ -1,0 +1,18 @@
+{
+  "scope": "TERMINAL_PRIVATE_INCREMENT_OVER_SHARED_IO_V3_NO_BOARD",
+  "base_source_manifest_sha256": "9c279d2b79415fa4f11e163c723542bde9fead432aa56e29358a80140ab06036",
+  "generator_sha256": "87ae6fba3a530816f28aa68cc6091cf642e3e9592755d112be55bb3bd2413342",
+  "files": {
+    "sound/soc/codecs/rk817_codec.c": {
+      "baseline_sha256": "435199017c0990aae9b4492f5c9abf2ba9f806f93420ee17e24e21260722481d",
+      "candidate_sha256": "408485f87368603c273b993fceefef446f362c39ce840561234bc1f95eb00049",
+      "bytes": 80225
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "baseline_sha256": "316821b160f3d01572530124ed5119651faed0969b1aab007e6359ff5311d2b7",
+      "candidate_sha256": "c6c77326a8e1abb11e2262d4e08e3f8d4d667bc3a50ab918733a68a67d23b122",
+      "bytes": 124076
+    }
+  },
+  "patch_sha256": "802fba45f14e92add96879ff854b2226b76a438d140ec77e54445bee42592372"
+}

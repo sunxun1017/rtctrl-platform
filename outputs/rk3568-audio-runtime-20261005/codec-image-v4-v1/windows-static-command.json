@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "C:\\Users\\lenovo\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "\\\\wsl.localhost\\Ubuntu-22.04\\home\\sx\\projects\\rtctrl-platform\\outputs\\rk3568-audio-runtime-20261005\\codec-image-v4-v1\\static_check.py"
+  ],
+  "exit": 0,
+  "stdout_sha256": "f4e393ef98cb2a336a15f8352881d9cbe3139e0842c935425d6c5ca64226164b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "module_build_invoked": false
+}

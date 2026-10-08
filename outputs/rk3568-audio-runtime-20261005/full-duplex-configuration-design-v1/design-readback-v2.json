@@ -1,0 +1,15 @@
+{
+  "status": "AUTHORIZED_DESIGN_INFERENCE_CORRECTION_NOT_MODEL_RESULT",
+  "design_sha256": "44fcd22b971318c04bb2bf1322ab612137ed148f13196a57cbbd89fba2993981",
+  "input_manifest_v2_sha256": "25776089ba1474de586f155b4cb851bf186f69d7cfcd843bcf125aa289e2c777",
+  "correction_record_sha256": "8be2652a9ffc8e3ba1816208e6ed9d88492a102a619fbce1c925012959c17f47",
+  "previous_files_preserved": {
+    "DESIGN.md": "ad82e047bd9fe34c7f9940ee0b64e72ee8c0ff0992c25f48ad0334062601c83d",
+    "input-manifest.json": "d00a4bf2c174958ff9271f03f9928095922c4e818bc79d37139081f1b45b7167",
+    "design-readback.json": "166e394a3df648234605bc750e7e6f86651321c82fa03ba100413a49076c762f"
+  },
+  "model_executed": false,
+  "build_executed": false,
+  "board_tested": false,
+  "duplex_START_authorized": false
+}

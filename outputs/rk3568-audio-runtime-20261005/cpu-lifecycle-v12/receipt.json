@@ -1,0 +1,34 @@
+{
+  "version": 12,
+  "source_sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141",
+  "delta_patch_sha256": "64957ca517417c02dbb7c2a52306bb3020f5b2b730cdf636a0f60fbd950a078c",
+  "patch_sha256": "43f5c265d6f813b63a8dc4be68a6dcd1f6ccdbbc82021a7732b24a2fce75ee7c",
+  "object_sha256": "49fbf91a292becad965a14c64146097ca3c532a3b2aa74faa46c65dd41c9225b",
+  "object_bytes": 612504,
+  "modified_functions": [
+    "i2s_checked_runtime_suspend",
+    "i2s_checked_set_fmt"
+  ],
+  "added_private_field": "bool format_pm_release",
+  "other_CPU_code_byte_exact": true,
+  "strict_guard_sysfs_format_unchanged": true,
+  "v11_zero_and_hw_params_byte_exact": true,
+  "input_manifest_sha256": "ecbaef79b14e767af06ca3e15f27dcc85f80758af60a58f6e0b1291c02d19ea7",
+  "model_receipts_sha256": {
+    "format-pm-red-v11-r2": "6c9f7df24a72913d376620c9c7c0ffce666105de2d5cb741f6741bfb98e5ad9f",
+    "format-pm-green-v12-r4": "e56a6faa235a5cc80edbf4ba40ff9efc55aa058902eb66ba4710827bd9012bd8",
+    "shutdown-green-v12": "8c9addb4ccad84ee13a55c20ad8251016ef8d2590d4c95b5ae90efb6124d5756",
+    "params-regression-v12": "1a08ee5a8dadbfbc1a05e8c64e5b03ea5862de94a13ddea32cbfb94f81f95453"
+  },
+  "kbuild_result_sha256": "62c527886d4168d00892bc1b6beb1884421c8c6dded67dc64b8ef6cf0ffc6d8a",
+  "patch_replay_result_sha256": "9e81b10a692c66a721cc7cf23578bde0f7f100727ff06fda6a973ff832b38c3f",
+  "prior_v11_files_verified": 2249,
+  "actual_ABI_files_verified": 2020,
+  "protected_inputs_verified": 10,
+  "board_tested": false,
+  "full_image_built": false,
+  "published": false,
+  "audio_start_allowed": false,
+  "independent_review_completed": false,
+  "scope": "Offline production-function API interleavings, whole production Kbuild object and patch replay; root owns new Image and natural initial-idle board comparison."
+}

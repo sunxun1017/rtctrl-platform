@@ -1,0 +1,13 @@
+{
+  "status": "PREPARATION_FAILED_BEFORE_MODEL_COMPILE",
+  "environment": "Windows Python 3.14 via UNC",
+  "argv": ["C:/Users/lenovo/AppData/Local/Programs/Python/Python314/python.exe", "-B", "outputs/rk3568-audio-runtime-20261005/full-duplex-contract-v1/prepare-model.py"],
+  "exit": 1,
+  "observed_exception": "FileNotFoundError WinError 206: copied nested input path exceeded Windows path length",
+  "tool_output_chunk": "cbd433",
+  "raw_output_saved_in_file": false,
+  "partial_directories_preserved": ["inputs", "model-v1"],
+  "following_preparation": "Linux execution and flat snapshot filename with original path/SHA mapping; model-v2 then preserved compile failures; subsequent versions remain separate",
+  "models_ran": false,
+  "board_tested": false
+}

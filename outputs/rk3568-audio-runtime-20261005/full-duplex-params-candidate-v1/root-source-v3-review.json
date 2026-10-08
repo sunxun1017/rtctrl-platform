@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "CHANGES_REQUIRED_BEFORE_MODEL_ACCEPTANCE_OR_KBUILD",
+  "root_readonly_source_review": true,
+  "inputs": {
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-v3/include/sound/soc-dai.h": {
+      "bytes": 20735,
+      "sha256": "7fe99b405e1b1d66051e5645c5812d2fbe4452b1cdd13659ad87e357595a2221"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-v3/sound/soc/soc-pcm.c": {
+      "bytes": 89140,
+      "sha256": "3b9d94d6da042c380d9f5e759471c24c3e302ffff7cea7836deca136f39d9bdd"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-v3/sound/soc/generic/simple-card-utils.c": {
+      "bytes": 17475,
+      "sha256": "f52b46f49f019cd84a70243993cea7893c530de060677cc9397120bd029252bf"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-v3/sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "bytes": 124061,
+      "sha256": "b85a3fa67d9f871df5cccc1fbfb04a9dda13ec96d3531331e1fc3279e56b6ee0"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-v3/sound/soc/codecs/rk817_codec.c": {
+      "bytes": 54421,
+      "sha256": "63074ec412b8d2f7f167a3a9eba738e1f5e96175fc5c78daef1af27a4f5cc902"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/shared-params-private-v3.patch": {
+      "bytes": 38132,
+      "sha256": "58763fab08931501c13496b4f44b15266bbed32fbd501be90159641d9cb0a8f1"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-params-candidate-v1/source-manifest-v3.json": {
+      "bytes": 12325,
+      "sha256": "d1183d06c2b2a0e0b26b00ddbc25c7a27c6d59c99436002180db9a6498a43baf"
+    }
+  },
+  "accepted_structure": [
+    "explicit per-probe checked ops opt-in and unchanged default empty hooks",
+    "partial hooks/mixed/multi-DAI rejected before shared IO",
+    "CPU begin before codec, component completion before codec/CPU commits",
+    "idle shared tuple reuse skips machine CCF and codec PLL/shared writes",
+    "checked cache owner release distinct from open clock leases"
+  ],
+  "required_changes": [
+    {
+      "id": "R1",
+      "finding": "Repeated commit with same cookie after successful commit currently calls abort and revokes committed owner/cache.",
+      "required": "Only a currently pending matching commit may self-clean; repeated/stale commit must reject without mutation."
+    },
+    {
+      "id": "R2",
+      "finding": "Failed reuse CPU commit clears reservation before core can undo already committed codec, allowing START between endpoints.",
+      "required": "Keep CPU pending/configuring through codec abort until final CPU abort or establish sticky START ban before opening; test actual callback window."
+    },
+    {
+      "id": "R3",
+      "finding": "soc_component_ret macro/private inline exists only in soc-component.c, not the new caller soc-pcm.c translation unit.",
+      "required": "Use a legal local reporting path preserving first errno; single-unit model must not mask cross-TU visibility."
+    },
+    {
+      "id": "R4",
+      "finding": "Real asoc_simple_init_dai sends positive sysclk before owner/pending and default clk_direction is IN. Current setters reject this runtime-initialization path.",
+      "required": "Validate exact fixed positive frequency with legal enum without IO/cache publication; keep strict zero teardown gate and test actual initializer."
+    },
+    {
+      "id": "R5",
+      "finding": "Machine free in params abort currently follows CPU abort; cleanup failure/shared work can occur after CPU START reservation opens.",
+      "required": "CPU abort is last after all cleanup and codec undo, or prior sticky START ban; preserve first errno and actual link callback behavior."
+    }
+  ],
+  "new_model_executed_by_root": false,
+  "Kbuild_executed": false,
+  "board_tested": false,
+  "four_previous_duplex_reds_resolved": false
+}

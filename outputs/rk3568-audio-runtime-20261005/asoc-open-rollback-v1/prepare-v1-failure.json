@@ -1,0 +1,12 @@
+{
+  "status": "PREPARATION_FAILURE_PRESERVED",
+  "versions": ["model-red-v1", "model-green-v1"],
+  "actual_exit": 1,
+  "actual_exception": "ValueError: missing function snd_soc_component_active",
+  "reason": "Existing byte-preserving extractor required return type and function name on one line; production header uses a split return type.",
+  "tool_output_chunks": ["25640a", "44ecbf"],
+  "raw_stdout_stderr_saved": false,
+  "partial_generated_files_preserved": true,
+  "following_version": "v2 preserves the exact split-line production header body; no production behavior changed",
+  "model_compiled_or_executed": false
+}

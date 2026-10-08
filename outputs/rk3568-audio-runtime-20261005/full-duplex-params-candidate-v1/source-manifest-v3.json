@@ -1,0 +1,270 @@
+{
+  "changed_functions": {
+    "include/sound/soc-dai.h:snd_soc_dai_hw_params_any": {
+      "baseline_sha256": null,
+      "bytes": 312,
+      "candidate_sha256": "e81781145354b0bd293e4614cd5e387771c9506dccb82de99a6d3eb5b5928da3"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_hw_params_managed": {
+      "baseline_sha256": null,
+      "bytes": 316,
+      "candidate_sha256": "8071d6bbc3b9c9daf7a6b2fc9ee49c2039973571501f1717b78db6115a9ff22a"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_hw_params_release": {
+      "baseline_sha256": null,
+      "bytes": 235,
+      "candidate_sha256": "049be5ecd542784e3ce2da671da5ccc5c942c8816fc67a48d99bccd87fe44a98"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_hw_params_reuse": {
+      "baseline_sha256": null,
+      "bytes": 239,
+      "candidate_sha256": "ffff3b040484f928ff2ad26b9a6e9b13fc2cf5ee728607d2b43124b0d5da0726"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_params_abort_locked": {
+      "baseline_sha256": null,
+      "bytes": 483,
+      "candidate_sha256": "4041f26631b8bf31c243de34fb97a85953f6930a381f1036ea1eab1e19fffa6a"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_params_begin_locked": {
+      "baseline_sha256": null,
+      "bytes": 845,
+      "candidate_sha256": "717e05f4bab0ffc131b087fa1890519fd9ebf7da3452015e6d7212bcb089382a"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_params_commit_locked": {
+      "baseline_sha256": null,
+      "bytes": 477,
+      "candidate_sha256": "710fcfecc2fa942032f27b90d427f69109b0ad818f3199d021f4779d91443997"
+    },
+    "include/sound/soc-dai.h:snd_soc_dai_params_free_locked": {
+      "baseline_sha256": null,
+      "bytes": 498,
+      "candidate_sha256": "c47cd1dd19d0725e45512e9cbcab22dbe09a3c3cb044f0edf893b974b63bc24e"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_codec_parse_dt_property": {
+      "baseline_sha256": "562090f3798bf6be4af7d18e6f3e4da2cbfd6268c592230de2bad6482ab7438b",
+      "bytes": 2923,
+      "candidate_sha256": "757c93c42474419c8ed491087ffb8ef5108b853c4a793dc119eb4071c9730977"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_platform_probe": {
+      "baseline_sha256": "dc7e6a2660d614bd487db4c9ba1794be4d6d1166e681bf92d613c6a72828d8c9",
+      "bytes": 1918,
+      "candidate_sha256": "b93bd6d630ab8778c607aa458533f1ebcf2a064ff0ede0b2a9448751690e4f57"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_abort": {
+      "baseline_sha256": null,
+      "bytes": 584,
+      "candidate_sha256": "9a8c094a46a5b5566ab75d9826e33610334c254d007b240a7a8fa917b981e29b"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_begin": {
+      "baseline_sha256": null,
+      "bytes": 1006,
+      "candidate_sha256": "31f318a94bf6f34d656c6dcb35ad8c629dfade50dd2ab0103587f2bbcbe3bc18"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_commit": {
+      "baseline_sha256": null,
+      "bytes": 593,
+      "candidate_sha256": "cfa66d5971868eb9d19b328da6f762c34d9eca9b2e833d5afe8b6d7d7a80a394"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_fault": {
+      "baseline_sha256": null,
+      "bytes": 317,
+      "candidate_sha256": "3651fc74b2547593ad7e34441a483c7008476aa5237b9ebf3a318cc77fb14f70"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_free": {
+      "baseline_sha256": null,
+      "bytes": 456,
+      "candidate_sha256": "389b943711687a2b59888de2aad4da4abfbe9f556fc5fc9e628f177062dddfab"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_free_check": {
+      "baseline_sha256": null,
+      "bytes": 576,
+      "candidate_sha256": "760f64f0f98aea2a897c14078be033b11e438bfb6062b605b71a0b902b08cb6f"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_hw_params": {
+      "baseline_sha256": null,
+      "bytes": 969,
+      "candidate_sha256": "f3fd2cecd43e32477c5c7ad6471d1c18f8f102ff6790a137fb6b94296de2fbe7"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_reuse": {
+      "baseline_sha256": null,
+      "bytes": 345,
+      "candidate_sha256": "52323cf4dbf7f142460465776c3e431317df231ba8045e11441b86e9f07c7e21"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_set_fmt": {
+      "baseline_sha256": null,
+      "bytes": 745,
+      "candidate_sha256": "772e30e3ad2ac2863e13b478d95024e7958ae958f531d9aab006d15294e576cf"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_shutdown": {
+      "baseline_sha256": null,
+      "bytes": 941,
+      "candidate_sha256": "38b4fb03f9e0fe399c92b7e0fbd8b1d3063e883d3c7d8adafb09891c3e94ae31"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_startup": {
+      "baseline_sha256": null,
+      "bytes": 562,
+      "candidate_sha256": "5e4097b1d0386a360d38f4ea87ba680d37811dcfb09d3680b3959c284b1bc50d"
+    },
+    "sound/soc/codecs/rk817_codec.c:rk817_shared_sysclk": {
+      "baseline_sha256": null,
+      "bytes": 748,
+      "candidate_sha256": "2b3a708e732a2d6451d1cf86a2455e095415c54bb556190d3e9b92cb900fe4c5"
+    },
+    "sound/soc/generic/simple-card-utils.c:asoc_simple_hw_params": {
+      "baseline_sha256": "84cc4afd3780868f0b1f0666f9fb2ca48807f31e9b344e7d19e04d3f5a5ca38f",
+      "bytes": 1852,
+      "candidate_sha256": "5eb9d72d987a298515b6daf59feb4840822f7df28f9a02bb1fb5ddf433e38c92"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_checked_component_trigger": {
+      "baseline_sha256": "0b99131429751cccec2beceaffb8eeccf9dc276f78787aafb265e12b76f67055",
+      "bytes": 1171,
+      "candidate_sha256": "22e6416e80f14cfbadfaf76a1f0fbf7688f018c50b5b1a86760c077cf3bb6d00"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_checked_prepare": {
+      "baseline_sha256": "80be30c2d2667cddd70ecdb694e9731039b6862a07200155eaf34b275ffa3e24",
+      "bytes": 806,
+      "candidate_sha256": "b4e600babe3415ea1c88f8bc24dc440af24f2e3431ab019437df2e5fdd22dec1"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_checked_start_locked": {
+      "baseline_sha256": "a28d87b933bdde3a33b6f60b57a1622686d05292cba66807300b5af3d98285c7",
+      "bytes": 1191,
+      "candidate_sha256": "080b1d8a0371e52d4ad255843b64a6a06a7435485fc32c8f0403defcfd67e875"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_abort": {
+      "baseline_sha256": null,
+      "bytes": 705,
+      "candidate_sha256": "94e67c530778e7449fd1937f7a7588f25590f875384deb31b903c1fca7f23b45"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_begin": {
+      "baseline_sha256": null,
+      "bytes": 1360,
+      "candidate_sha256": "7c7d2f1f6b440507ddfea1349ce15118ba91bebfc01ae2adc513f01cd6ec1f60"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_commit": {
+      "baseline_sha256": null,
+      "bytes": 1336,
+      "candidate_sha256": "cca4ef9b5d50099e98b028e10c953e5ac9c488eac52045848fe54cddabe11a21"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_fault": {
+      "baseline_sha256": null,
+      "bytes": 310,
+      "candidate_sha256": "96d4d31f83826c4628fd3a251b4e990418c340c3c6d4d9c0908d13a306987abc"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_free": {
+      "baseline_sha256": null,
+      "bytes": 630,
+      "candidate_sha256": "20faa46d4aa66f21c8f84b7c5f05e6b7f5dd3625f773b1d766bf131a2779d088"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_free_check": {
+      "baseline_sha256": null,
+      "bytes": 624,
+      "candidate_sha256": "8557bb27d14b8a225cebfd57067a473c62c56f8dc08605e1aec1cb5457fdfbc3"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_hw_params": {
+      "baseline_sha256": null,
+      "bytes": 2036,
+      "candidate_sha256": "2da079edb507d389825a5666caf8e35197ba9641ca351063ea8aaccaebcf0515"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_reuse": {
+      "baseline_sha256": null,
+      "bytes": 357,
+      "candidate_sha256": "ccc89593db0d624f83f5e1db6acf603f0d524156873365d0327b6434a2a62ced"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_set_fmt": {
+      "baseline_sha256": null,
+      "bytes": 781,
+      "candidate_sha256": "966e63a0610a0b70c49ef4a92386bc8b066cddf53bb14e2d63cc89236037f200"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_sysclk": {
+      "baseline_sha256": null,
+      "bytes": 997,
+      "candidate_sha256": "395c9c0afa5dbabc2c5f18f0a460f30304cbef63b922089746d6d61a3afc59e6"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:i2s_shared_tdm_slot": {
+      "baseline_sha256": null,
+      "bytes": 218,
+      "candidate_sha256": "9813aac739464322dfc830b024e9dc4eeb4223461007001c8f5f1726f9000ce6"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:rockchip_i2s_tdm_probe": {
+      "baseline_sha256": "48bc1b946a4589395995ef292a892202906528bea4d72b4ad520e8bf78e738ee",
+      "bytes": 10794,
+      "candidate_sha256": "bba1b962dec52aeeed80a80fe748189810fe8d0825c73064640c143155020bc1"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c:rockchip_i2s_tdm_shutdown": {
+      "baseline_sha256": "8c961fadc6c00a172922895028f22e205b8e89afc379334b32401361d0d066c5",
+      "bytes": 1244,
+      "candidate_sha256": "b0c9b0a43c5bb033ec16051aead67b85d854ef410c3fe66a36e385852ec13477"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_hw_free": {
+      "baseline_sha256": "54bd205a2f87eab6532a07cc24a78d5195a341d2afcd505eaae59ec549c32f1b",
+      "bytes": 1290,
+      "candidate_sha256": "361f8fdb048afc96a9f1e8a1718a05a1b6787a3d75fb9f5e835e9d012e5e8f31"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_hw_free_transaction": {
+      "baseline_sha256": null,
+      "bytes": 1310,
+      "candidate_sha256": "0df8c3ff64ef16b2e1253b50867594d707f738c8b2d1a07547d41556ffce79a4"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_hw_params": {
+      "baseline_sha256": "7433c84f1a945d67f71ba26ba289e9c055915181b1c7069bd6923ac4f4a0a6cc",
+      "bytes": 3784,
+      "candidate_sha256": "ea2bdaa8248073bb0e5c68f94452959f6a6151d50cb369fd30452a8298d7c094"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_hw_params_transaction": {
+      "baseline_sha256": null,
+      "bytes": 2470,
+      "candidate_sha256": "f7b5eeaadc30df375e209df07196dfabd10d5011b485b2afb0922a53ebdcd64e"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_params_component_free": {
+      "baseline_sha256": null,
+      "bytes": 524,
+      "candidate_sha256": "45475f67f6e93d9227486cf1a527d886116ea30d19b9204546cd9e8652f6e4a9"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_params_fault": {
+      "baseline_sha256": null,
+      "bytes": 278,
+      "candidate_sha256": "607e0bf82dce9242c329eb62b0b48b73c2ffa5c9aa48b3b157a6e76e4884b295"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_params_link_free": {
+      "baseline_sha256": null,
+      "bytes": 241,
+      "candidate_sha256": "5c456d40663bde5d693a7672ae4af51aefe4d2b7f32c0158814c50b64d38d050"
+    },
+    "sound/soc/soc-pcm.c:soc_pcm_params_managed": {
+      "baseline_sha256": null,
+      "bytes": 509,
+      "candidate_sha256": "e59283bb0fbfb3166ee82c654899f04b6f998da5b140b9fd95cebe3de62c4543"
+    }
+  },
+  "files": {
+    "include/sound/soc-dai.h": {
+      "baseline_sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748",
+      "bytes": 20735,
+      "candidate_sha256": "7fe99b405e1b1d66051e5645c5812d2fbe4452b1cdd13659ad87e357595a2221"
+    },
+    "sound/soc/codecs/rk817_codec.c": {
+      "baseline_sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+      "bytes": 54421,
+      "candidate_sha256": "63074ec412b8d2f7f167a3a9eba738e1f5e96175fc5c78daef1af27a4f5cc902"
+    },
+    "sound/soc/generic/simple-card-utils.c": {
+      "baseline_sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73",
+      "bytes": 17475,
+      "candidate_sha256": "f52b46f49f019cd84a70243993cea7893c530de060677cc9397120bd029252bf"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "baseline_sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141",
+      "bytes": 124061,
+      "candidate_sha256": "b85a3fa67d9f871df5cccc1fbfb04a9dda13ec96d3531331e1fc3279e56b6ee0"
+    },
+    "sound/soc/soc-pcm.c": {
+      "baseline_sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37",
+      "bytes": 89140,
+      "candidate_sha256": "3b9d94d6da042c380d9f5e759471c24c3e302ffff7cea7836deca136f39d9bdd"
+    }
+  },
+  "generator_sha256": "bf99eb2afc5a337e4edc91c7a9ee5d1168acac0a9433bfb81993b387986aa526",
+  "input_manifest_sha256": "a85fa0512400453237c119ed815f51026450740fbd31819ef85ba275098cce9b",
+  "patch_sha256": "58763fab08931501c13496b4f44b15266bbed32fbd501be90159641d9cb0a8f1",
+  "scope": "PRIVATE_FIVE_SOURCE_CANDIDATE_NO_BUILD_NO_DT_NO_BOARD"
+}

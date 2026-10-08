@@ -1,0 +1,270 @@
+{
+  "status": "DESIGN_EVIDENCE_READBACK_ONLY_NOT_IMPLEMENTATION_ACCEPTANCE",
+  "ordinary_owned_inventory": {
+    "DESIGN.md": {
+      "bytes": 11863,
+      "mode": 420,
+      "sha256": "ad82e047bd9fe34c7f9940ee0b64e72ee8c0ff0992c25f48ad0334062601c83d"
+    },
+    "MODEL-PLAN.md": {
+      "bytes": 7211,
+      "mode": 420,
+      "sha256": "c8a0e6d8f1d08273bdc234f8f70e238887d0fdfb007e79d431180e9a9bedcd04"
+    },
+    "README.md": {
+      "bytes": 1365,
+      "mode": 420,
+      "sha256": "548e4675668550e0fbf7eb17e61e991f1aca989e5f4da33490bf548a340986bc"
+    },
+    "input-manifest.json": {
+      "bytes": 21638,
+      "mode": 420,
+      "sha256": "d00a4bf2c174958ff9271f03f9928095922c4e818bc79d37139081f1b45b7167"
+    },
+    "inputs-v1/rk817_codec.c": {
+      "bytes": 45269,
+      "mode": 493,
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+    },
+    "inputs-v1/rk817_codec.h": {
+      "bytes": 7223,
+      "mode": 493,
+      "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449"
+    },
+    "inputs-v1/rockchip_i2s_tdm.c": {
+      "bytes": 112836,
+      "mode": 420,
+      "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+    },
+    "inputs-v1/simple-card-utils.c": {
+      "bytes": 16684,
+      "mode": 420,
+      "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+    },
+    "inputs-v1/simple-card.c": {
+      "bytes": 17668,
+      "mode": 420,
+      "sha256": "ce371f0cdec646e63ebcc117bf0dd3da5f5030b83d536253fdebc6b60fdab2c1"
+    },
+    "inputs-v1/simple_card_utils.h": {
+      "bytes": 6738,
+      "mode": 420,
+      "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8"
+    },
+    "inputs-v1/soc-component.c": {
+      "bytes": 25093,
+      "mode": 420,
+      "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+    },
+    "inputs-v1/soc-compress.c": {
+      "bytes": 22685,
+      "mode": 420,
+      "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+    },
+    "inputs-v1/soc-dai.c": {
+      "bytes": 19045,
+      "mode": 420,
+      "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d"
+    },
+    "inputs-v1/soc-dai.h": {
+      "bytes": 16176,
+      "mode": 420,
+      "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748"
+    },
+    "inputs-v1/soc-generic-dmaengine-pcm.c": {
+      "bytes": 14510,
+      "mode": 420,
+      "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06"
+    },
+    "inputs-v1/soc-link.c": {
+      "bytes": 4563,
+      "mode": 420,
+      "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975"
+    },
+    "inputs-v1/soc-pcm.c": {
+      "bytes": 83185,
+      "mode": 420,
+      "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+    },
+    "inputs-v1/soc.h": {
+      "bytes": 50658,
+      "mode": 420,
+      "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b"
+    },
+    "snapshot-inputs.py": {
+      "bytes": 8126,
+      "mode": 420,
+      "sha256": "b1bd2527734c99493400ab5a4d24acd493f68a4fda17c866177277c214bfb597"
+    },
+    "verify-design.py": {
+      "bytes": 3303,
+      "mode": 420,
+      "sha256": "832e77c57197498d060da6829c103981332630fc08304e215eba4a75b0bdc21c"
+    }
+  },
+  "finite_original_inputs": {
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-pcm.c": {
+      "bytes": 83185,
+      "mode": 420,
+      "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-component.c": {
+      "bytes": 25093,
+      "mode": 420,
+      "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-compress.c": {
+      "bytes": 22685,
+      "mode": 420,
+      "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/generic/simple-card-utils.c": {
+      "bytes": 16684,
+      "mode": 420,
+      "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+    },
+    "outputs/rk3568-audio-runtime-20261005/codec-image-v4-v1/source-v1/rk817_codec.c": {
+      "bytes": 45269,
+      "mode": 493,
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/source/sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "bytes": 112836,
+      "mode": 420,
+      "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-dai.c": {
+      "bytes": 19045,
+      "mode": 420,
+      "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-link.c": {
+      "bytes": 4563,
+      "mode": 420,
+      "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/generic/simple-card.c": {
+      "bytes": 17668,
+      "mode": 420,
+      "sha256": "ce371f0cdec646e63ebcc117bf0dd3da5f5030b83d536253fdebc6b60fdab2c1"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-generic-dmaengine-pcm.c": {
+      "bytes": 14510,
+      "mode": 420,
+      "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc.h": {
+      "bytes": 50658,
+      "mode": 420,
+      "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc-dai.h": {
+      "bytes": 16176,
+      "mode": 420,
+      "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/simple_card_utils.h": {
+      "bytes": 6738,
+      "mode": 420,
+      "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/codecs/rk817_codec.h": {
+      "bytes": 7223,
+      "mode": 493,
+      "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/full-duplex-review-v1/README.md": {
+      "bytes": 12134,
+      "mode": 420,
+      "sha256": "944e88e50201a57041a850019f2b9f7d11e60cb26b21ba7e20887e55caede7d7"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/full-duplex-review-v1/input-manifest.json": {
+      "bytes": 28164,
+      "mode": 420,
+      "sha256": "0736b09ca8bbd3f88479b149d906b3d72afbde8ceb82c610f55354bbd23fd922"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-manifest-v1.json": {
+      "bytes": 3254,
+      "mode": 420,
+      "sha256": "9b3925f93a7c87dc43e2d5866e204f5384a43195c32fd083d641a709ee89d7a6"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/input-manifest.json": {
+      "bytes": 9092,
+      "mode": 420,
+      "sha256": "4c043676fe48a47a983375ef392a45a930adcbc9ecdab3c68bd3511215b6630b"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/test-caller-chain.c": {
+      "bytes": 36644,
+      "mode": 420,
+      "sha256": "def57d25793b77117247942c2b5b791220c73a19d681bca0250e9703be558bc1"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/test-params-shim.h": {
+      "bytes": 4302,
+      "mode": 420,
+      "sha256": "37066ffda4da5440c1da2677810101832acc7f02bd76e8a0e95dac4d1bc0cd3e"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/source_utils.py": {
+      "bytes": 1097,
+      "mode": 420,
+      "sha256": "3d5deab6d6eea70d067c9b0b8336d66f39ce1cc0e18a8a7938a4f60d66c43440"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/unit.c": {
+      "bytes": 62366,
+      "mode": 420,
+      "sha256": "c69861420d44103a430e17e9cdfdb779ad0cf9c481c263737001dcf609af79b7"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/run-model.py": {
+      "bytes": 7562,
+      "mode": 420,
+      "sha256": "e7436d6884d8a91201343ecd8b3f9955a27765b5926b4f8c00b1f083434fda20"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/integration-v4/manifest.json": {
+      "bytes": 3258878,
+      "mode": 420,
+      "sha256": "8df525843cac41fd0e272351bc41d0e573c25570cfed7e60f1990b9fe97aa33a"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/integration-v4/integrated-source-inventory.json": {
+      "bytes": 15762758,
+      "mode": 420,
+      "sha256": "bb2fb1a0c548bb2de8e683ebd6540f3cb75ddb5815af3df7cf2f8a1d918d0cd3"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-pcm.c": {
+      "bytes": 83185,
+      "mode": 420,
+      "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-component.c": {
+      "bytes": 25093,
+      "mode": 420,
+      "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-compress.c": {
+      "bytes": 22685,
+      "mode": 420,
+      "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/generic/simple-card-utils.c": {
+      "bytes": 16684,
+      "mode": 420,
+      "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/codecs/rk817_codec.c": {
+      "bytes": 45269,
+      "mode": 493,
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "bytes": 112836,
+      "mode": 420,
+      "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+    }
+  },
+  "ordinary_source_snapshots": 14,
+  "identified_function_bodies_not_executed": 43,
+  "model_executed": false,
+  "build_executed": false,
+  "board_tested": false,
+  "duplex_START_authorized": false,
+  "production_sources_modified": false,
+  "receipt_excluded_from_own_inventory": true
+}

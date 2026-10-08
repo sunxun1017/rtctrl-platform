@@ -1,0 +1,10 @@
+{
+  "scope": "offline_private_ASoC_open_close_PM_candidate",
+  "root_authorized_freeze": true,
+  "independent_readonly_acceptance": true,
+  "root_final_review_sha256": "2cc2ead8e92ed9c2119e30bc518c9f384080627f916f0e8d493b1439ac52f38c",
+  "authorization_source": "parent /root final freeze instruction; root ordinary final review document",
+  "readonly_acceptance_source": "/root/battery_dt_audit_1006 final read-only source/model/object audit; bound in root review",
+  "accepted_for_board": false,
+  "full_duplex_passed": false
+}

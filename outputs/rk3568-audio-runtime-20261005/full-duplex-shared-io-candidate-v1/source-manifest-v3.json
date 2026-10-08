@@ -1,0 +1,23 @@
+{
+  "scope": "PRIVATE_THREE_SOURCE_DELTA_NO_KBUILD_NO_BOARD",
+  "baseline_manifest_sha256": "0949af424212789156adaa8d93559248813c61987dbd62eff9116308ce0f3d17",
+  "generator_sha256": "043d58aa93a58bdbaaeb3fcc8dbbc2f3efe56a3ba9bfb9f1743b33a8f6764dfe",
+  "files": {
+    "sound/soc/codecs/rk817_codec.c": {
+      "baseline_sha256": "27278d28f38222e284b2a66bf2dc5da65b8ad10bcc06b98392da6a3474842cb8",
+      "candidate_sha256": "435199017c0990aae9b4492f5c9abf2ba9f806f93420ee17e24e21260722481d",
+      "bytes": 72875
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "baseline_sha256": "399a672728c41a5ed3900b6186021babaf9a1d3aac4dafbfcd4f72277d5fafe0",
+      "candidate_sha256": "316821b160f3d01572530124ed5119651faed0969b1aab007e6359ff5311d2b7",
+      "bytes": 124080
+    },
+    "sound/soc/soc-core.c": {
+      "baseline_sha256": "c37730184b70b4710dd4dc016cae75e06548a299ec38f904782e3f8ef2e61a6f",
+      "candidate_sha256": "82b2afb9fb827f7192dc5c5ec160829483c5c0e7ae7bb944a79d9770634a977c",
+      "bytes": 80398
+    }
+  },
+  "patch_sha256": "3c49c2ee31c715dae321d9e499977382c40347ec02c2c9d2e848287525a9606a"
+}

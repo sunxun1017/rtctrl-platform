@@ -1,0 +1,13 @@
+{
+  "files": {
+    "audio.dtb": "9cf8cc0189239dab2fda0dae0ac3519c20d5b5802900111587695458dc3ab478",
+    "alsa-inspect": "118cf99482cdd65acdfae8c5e85530a76bf60c90b0b0498e8f285223f862a945",
+    "snd-soc-rk817.ko": "c9f761064980939431901d5da75383d048ff23eb686f3cc236733f658a2add3c",
+    "pcm-config": "ac76da61b1a0f89ee67e8a13c407cec07e90048fbe07904fe4c20271143054fa",
+    "linux-interface.sh": "282fc1c947f641ad4e15caba6f5a2fda60eb724431586734ce3b6d8ba3bf46c6",
+    "linux-return-guard.sh": "513d758b565b0e55f85d716ea840a66c86b05be5479e4c1dc18dad1251e623e4"
+  },
+  "stage_script_sha256": "1e7fea42d98ef6c58c0801076e8f28b8de51a082937b98741ece94eda256cb8a",
+  "transport": "octal printf with readback SHA; host preparation only",
+  "board_tested": false
+}

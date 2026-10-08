@@ -1,0 +1,750 @@
+--- a/sound/soc/codecs/rk817_codec.c
++++ b/sound/soc/codecs/rk817_codec.c
+@@ -74,6 +74,8 @@
+ 	bool shared_params_enabled;
+ 	unsigned int shared_dai_fmt;
+ 	int params_error;
++	/* Actual MCLK references retained after an uncertain checked path write. */
++	bool retained_clock[2];
+ 
+ 	unsigned int clk_capture;
+ 	unsigned int clk_playback;
+@@ -701,15 +703,466 @@
+ 	return 0;
+ }
+ 
++/* Used only by the checked helpers below; every operation preserves errno. */
++#define RK817_SHARED_TRY(call) do { \
++	ret = (call); \
++	if (ret < 0) \
++		return ret; \
++} while (0)
++
++
++static int rk817_shared_power_up(struct snd_soc_component *component, int type)
++{
++	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++	int i, ret;
++
++	DBG("%s : power up %s %s %s\n", __func__,
++	    type & RK817_CODEC_PLAYBACK ? "playback" : "",
++	    type & RK817_CODEC_CAPTURE ? "capture" : "",
++	    type & RK817_CODEC_INCALL ? "incall" : "");
++
++	if (type & RK817_CODEC_PLAYBACK) {
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++					      RK817_CODEC_DTOP_DIGEN_CLKE,
++					      DAC_DIG_CLK_MASK, DAC_DIG_CLK_EN));
++		for (i = 0; i < RK817_CODEC_PLAYBACK_POWER_UP_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						playback_power_up_list[i].reg,
++						playback_power_up_list[i].value));
++		}
++
++		/* configure APLL CFG0/4 */
++		if (rk817->chip_ver <= 0x4) {
++			DBG("%s (%d): 0x4 and previous versions\n",
++			    __func__, __LINE__);
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG0, 0x0c));
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG4, 0x95));
++		} else {
++			DBG("%s: 0x4 version later\n", __func__);
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG0, 0x04));
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG4, 0xa5));
++		}
++		RK817_SHARED_TRY(rk817_restart_dac_digital_clk(component));
++	}
++
++	if (type & RK817_CODEC_CAPTURE) {
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++					      RK817_CODEC_DTOP_DIGEN_CLKE,
++					      ADC_DIG_CLK_MASK,
++					      ADC_DIG_CLK_EN));
++		for (i = 0; i < RK817_CODEC_CAPTURE_POWER_UP_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						capture_power_up_list[i].reg,
++						capture_power_up_list[i].value));
++		}
++
++		/* configure APLL CFG0/4 */
++		if (rk817->chip_ver <= 0x4) {
++			DBG("%s (%d): 0x4 and previous versions\n",
++			    __func__, __LINE__);
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG0, 0x0c));
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG4, 0x95));
++		} else {
++			DBG("%s: 0x4 version later\n", __func__);
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG0, 0x04));
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG4, 0xa5));
++		}
++
++		RK817_SHARED_TRY(rk817_restart_adc_digital_clk(component));
++
++		if (rk817->mic_in_differential)
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      MIC_DIFF_MASK, MIC_DIFF_EN));
++		else
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      MIC_DIFF_MASK,
++						      MIC_DIFF_DIS));
++
++		if (rk817->pdmdata_out_enable)
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_DI2S_CKM,
++						      PDM_EN_MASK,
++						      PDM_EN_ENABLE));
++
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DADC_VOLL,
++					rk817->capture_volume));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DADC_VOLR,
++					rk817->capture_volume));
++	}
++
++	return 0;
++}
++
++static int rk817_shared_power_down(struct snd_soc_component *component, int type)
++{
++	int i, ret;
++
++	DBG("%s : power down %s %s %s\n", __func__,
++	    type & RK817_CODEC_PLAYBACK ? "playback" : "",
++	    type & RK817_CODEC_CAPTURE ? "capture" : "",
++	    type & RK817_CODEC_INCALL ? "incall" : "");
++
++	/* mute output for pop noise */
++	if ((type & RK817_CODEC_PLAYBACK) ||
++	    (type & RK817_CODEC_INCALL)) {
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++					      RK817_CODEC_DDAC_MUTE_MIXCTL,
++					      DACMT_ENABLE, DACMT_ENABLE));
++	}
++
++	if (type & RK817_CODEC_CAPTURE) {
++		for (i = 0; i < RK817_CODEC_CAPTURE_POWER_DOWN_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						capture_power_down_list[i].reg,
++						capture_power_down_list[i].value));
++		}
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component, RK817_CODEC_DTOP_DIGEN_CLKE,
++					      ADC_DIG_CLK_MASK, ADC_DIG_CLK_DIS));
++	}
++
++	if (type & RK817_CODEC_PLAYBACK) {
++		for (i = 0; i < RK817_CODEC_PLAYBACK_POWER_DOWN_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						playback_power_down_list[i].reg,
++						playback_power_down_list[i].value));
++		}
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++					      RK817_CODEC_DTOP_DIGEN_CLKE,
++					      DAC_DIG_CLK_MASK, DAC_DIG_CLK_DIS));
++	}
++
++	if (type == RK817_CODEC_ALL) {
++		for (i = 0; i < RK817_CODEC_PLAYBACK_POWER_DOWN_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						playback_power_down_list[i].reg,
++						playback_power_down_list[i].value));
++		}
++		for (i = 0; i < RK817_CODEC_CAPTURE_POWER_DOWN_LIST_LEN; i++) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						capture_power_down_list[i].reg,
++						capture_power_down_list[i].value));
++		}
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DTOP_DIGEN_CLKE, 0x00));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_APLL_CFG5, 0x01));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AREF_RTCFG1, 0x06));
++	}
++
++	return 0;
++}
++
++static int rk817_shared_playback_apply(struct snd_soc_component *component,
++					long pre_path, long target_path)
++{
++	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	switch (target_path) {
++	case OFF:
++		if (pre_path != OFF && (pre_path != HP_PATH &&
++			pre_path != HP_NO_MIC && pre_path != RING_HP &&
++			pre_path != RING_HP_NO_MIC)) {
++			RK817_SHARED_TRY(rk817_shared_power_down(component, RK817_CODEC_PLAYBACK));
++			if (rk817->capture_path == 0)
++				RK817_SHARED_TRY(rk817_shared_power_down(component, RK817_CODEC_ALL));
++		}
++		break;
++	case RCV:
++	case SPK_PATH:
++	case RING_SPK:
++		if (pre_path == OFF)
++			RK817_SHARED_TRY(rk817_shared_power_up(component, RK817_CODEC_PLAYBACK));
++		if (rk817->out_l2spk_r2hp) {
++			/* for costdown: ldac -> ClassD rdac -> Hp */
++			/* HP_CP_EN , CP 2.3V */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CP,
++						0x11));
++			/* power on HP two stage opamp ,HP amplitude 0db */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CFG0,
++						0x80));
++			/* power on dac ibias/l/r */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_ADAC_CFG1,
++						PWD_DACBIAS_ON | PWD_DACD_ON |
++						PWD_DACL_ON | PWD_DACR_ON));
++			/* CLASS D mode */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DDAC_MUTE_MIXCTL,
++						0x18));
++			/* CLASS D enable */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG1,
++						0xa5));
++			/* restart CLASS D, OCPP/N */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG2,
++						0xf7));
++		} else if (!rk817->use_ext_amplifier) {
++			/* power on dac ibias/l/r */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_ADAC_CFG1,
++						PWD_DACBIAS_ON | PWD_DACD_ON |
++						PWD_DACL_DOWN | PWD_DACR_DOWN));
++			/* CLASS D mode */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DDAC_MUTE_MIXCTL,
++						0x10));
++			/* CLASS D enable */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG1,
++						0xa5));
++			/* restart CLASS D, OCPP/N */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG2,
++						0xf7));
++		} else {
++			/* HP_CP_EN , CP 2.3V */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CP,
++						0x11));
++			/* power on HP two stage opamp ,HP amplitude 0db */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CFG0,
++						0x80));
++			/* power on dac ibias/l/r */
++			RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_ADAC_CFG1,
++						PWD_DACBIAS_ON | PWD_DACD_DOWN |
++						PWD_DACL_ON | PWD_DACR_ON));
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_DDAC_MUTE_MIXCTL,
++						      DACMT_ENABLE, DACMT_DISABLE));
++		}
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLL,
++					rk817->spk_volume));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLR,
++					rk817->spk_volume));
++		break;
++	case HP_PATH:
++	case HP_NO_MIC:
++	case RING_HP:
++	case RING_HP_NO_MIC:
++		if (pre_path == OFF)
++			RK817_SHARED_TRY(rk817_shared_power_up(component, RK817_CODEC_PLAYBACK));
++		/* HP_CP_EN , CP 2.3V */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CP, 0x11));
++		/* power on HP two stage opamp ,HP amplitude 0db */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CFG0, 0x80));
++		/* power on dac ibias/l/r */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_ADAC_CFG1,
++					PWD_DACBIAS_ON | PWD_DACD_DOWN |
++					PWD_DACL_ON | PWD_DACR_ON));
++		RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++					      RK817_CODEC_DDAC_MUTE_MIXCTL,
++					      DACMT_ENABLE, DACMT_DISABLE));
++
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLL,
++					rk817->hp_volume));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLR,
++					rk817->hp_volume));
++		break;
++	case BT:
++		break;
++	case SPK_HP:
++	case RING_SPK_HP:
++		if (pre_path == OFF)
++			RK817_SHARED_TRY(rk817_shared_power_up(component, RK817_CODEC_PLAYBACK));
++
++		/* HP_CP_EN , CP 2.3V  */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CP, 0x11));
++		/* power on HP two stage opamp ,HP amplitude 0db */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_AHP_CFG0, 0x80));
++
++		/* power on dac ibias/l/r */
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_ADAC_CFG1,
++					PWD_DACBIAS_ON | PWD_DACD_ON |
++					PWD_DACL_ON | PWD_DACR_ON));
++
++		if (!rk817->use_ext_amplifier) {
++			/* CLASS D mode */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DDAC_MUTE_MIXCTL,
++						0x10));
++			/* CLASS D enable */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG1,
++						0xa5));
++			/* restart CLASS D, OCPP/N */
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_ACLASSD_CFG2,
++						0xf7));
++		}
++
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLL,
++					rk817->hp_volume));
++		RK817_SHARED_TRY(snd_soc_component_write(component, RK817_CODEC_DDAC_VOLR,
++					rk817->hp_volume));
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int rk817_shared_capture_apply(struct snd_soc_component *component,
++					long pre_path, long target_path)
++{
++	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	switch (target_path) {
++	case MIC_OFF:
++		if (pre_path != MIC_OFF) {
++			RK817_SHARED_TRY(rk817_shared_power_down(component, RK817_CODEC_CAPTURE));
++			if (rk817->playback_path == OFF)
++				RK817_SHARED_TRY(rk817_shared_power_down(component, RK817_CODEC_ALL));
++		}
++		break;
++	case MAIN_MIC:
++		if (pre_path == MIC_OFF)
++			RK817_SHARED_TRY(rk817_shared_power_up(component, RK817_CODEC_CAPTURE));
++
++		if (rk817->adc_for_loopback) {
++			/* don't need to gain when adc use for loopback */
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      0xf,
++						      0x0));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DMIC_PGA_GAIN,
++						0x66));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLL,
++						0x00));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLR,
++						0x00));
++			break;
++		}
++		if (!rk817->mic_in_differential) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLR,
++						0xff));
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AADC_CFG0,
++						      ADC_R_PWD_MASK,
++						      ADC_R_PWD_EN));
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      PWD_PGA_R_MASK,
++						      PWD_PGA_R_EN));
++		}
++		break;
++	case HANDS_FREE_MIC:
++		if (pre_path == MIC_OFF)
++			RK817_SHARED_TRY(rk817_shared_power_up(component, RK817_CODEC_CAPTURE));
++
++		if (rk817->adc_for_loopback) {
++			/* don't need to gain when adc use for loopback */
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      0xf,
++						      0x0));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DMIC_PGA_GAIN,
++						0x66));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLL,
++						0x00));
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLR,
++						0x00));
++			break;
++		}
++		if (!rk817->mic_in_differential) {
++			RK817_SHARED_TRY(snd_soc_component_write(component,
++						RK817_CODEC_DADC_VOLL,
++						0xff));
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AADC_CFG0,
++						      ADC_L_PWD_MASK,
++						      ADC_L_PWD_EN));
++			RK817_SHARED_TRY(snd_soc_component_update_bits(component,
++						      RK817_CODEC_AMIC_CFG0,
++						      PWD_PGA_L_MASK,
++						      PWD_PGA_L_EN));
++		}
++		break;
++	case BT_SCO_MIC:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++#undef RK817_SHARED_TRY
++
++/* Caller owns params_lock; successful path state is published after all I/O. */
++static int rk817_shared_path_config(struct snd_soc_component *component,
++				   int stream, long target_path)
++{
++	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++	struct snd_soc_dai_params_state *p = &rk817->shared_params;
++	long *path = stream ? &rk817->capture_path : &rk817->playback_path;
++	unsigned int *lease = stream ? &rk817->clk_capture : &rk817->clk_playback;
++	bool new_clock = false;
++	int ret;
++
++	if (target_path < 0 || target_path > (stream ? BT_SCO_MIC : RING_SPK_HP))
++		return -EINVAL;
++	/* A same-value observation is not a recovery or an I/O operation. */
++	if (*path == target_path)
++		return 0;
++	if (p->pending || p->owner[0] || p->owner[1])
++		return -EBUSY;
++	if (rk817->params_error)
++		return rk817->params_error;
++
++	if (target_path && !*lease) {
++		mutex_lock(&rk817->clk_lock);
++		ret = clk_prepare_enable(rk817->mclk);
++		mutex_unlock(&rk817->clk_lock);
++		if (ret < 0)
++			return ret;
++		new_clock = true;
++	}
++	if (stream)
++		ret = rk817_shared_capture_apply(component, *path, target_path);
++	else
++		ret = rk817_shared_playback_apply(component, *path, target_path);
++	if (ret < 0) {
++		/* A partial codec write does not establish a reversible physical state. */
++		if (new_clock)
++			rk817->retained_clock[stream] = true;
++		if (!rk817->params_error)
++			rk817->params_error = ret;
++		return ret;
++	}
++
++	mutex_lock(&rk817->clk_lock);
++	if (!target_path && *lease)
++		clk_disable_unprepare(rk817->mclk);
++	*lease = target_path ? 1 : 0;
++	*path = target_path;
++	mutex_unlock(&rk817->clk_lock);
++	return 0;
++}
++
+ static int rk817_playback_path_get(struct snd_kcontrol *kcontrol,
+ 				   struct snd_ctl_elem_value *ucontrol)
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
+ 
++	if (rk817->shared_params_enabled)
++		mutex_lock(&rk817->params_lock);
++
++
+ 	DBG("%s : playback_path %ld\n", __func__, rk817->playback_path);
+ 
+ 	ucontrol->value.integer.value[0] = rk817->playback_path;
++
++	if (rk817->shared_params_enabled)
++		mutex_unlock(&rk817->params_lock);
+ 
+ 	return 0;
+ }
+@@ -719,6 +1172,16 @@
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++
++	if (rk817->shared_params_enabled) {
++		long value = ucontrol->value.integer.value[0];
++		int ret;
++
++		mutex_lock(&rk817->params_lock);
++		ret = rk817_shared_path_config(component, 0, value);
++		mutex_unlock(&rk817->params_lock);
++		return ret;
++	}
+ 
+ 	if (rk817->playback_path == ucontrol->value.integer.value[0]) {
+ 		DBG("%s : playback_path is not changed!\n",
+@@ -847,11 +1310,18 @@
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
+ 
++	if (rk817->shared_params_enabled)
++		mutex_lock(&rk817->params_lock);
++
++
+ 	DBG("%s : capture_path %ld\n", __func__,
+ 	    rk817->capture_path);
+ 
+ 	ucontrol->value.integer.value[0] = rk817->capture_path;
+ 
++	if (rk817->shared_params_enabled)
++		mutex_unlock(&rk817->params_lock);
++
+ 	return 0;
+ }
+ 
+@@ -860,6 +1330,16 @@
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++
++	if (rk817->shared_params_enabled) {
++		long value = ucontrol->value.integer.value[0];
++		int ret;
++
++		mutex_lock(&rk817->params_lock);
++		ret = rk817_shared_path_config(component, 1, value);
++		mutex_unlock(&rk817->params_lock);
++		return ret;
++	}
+ 
+ 	if (rk817->capture_path == ucontrol->value.integer.value[0]) {
+ 		DBG("%s : capture_path is not changed!\n",
+@@ -877,9 +1357,16 @@
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
+ 
++	if (rk817->shared_params_enabled)
++		mutex_lock(&rk817->params_lock);
++
++
+ 	DBG("%s : resume_path %d\n", __func__, rk817->resume_path);
+ 
+ 	ucontrol->value.integer.value[0] = rk817->resume_path;
++
++	if (rk817->shared_params_enabled)
++		mutex_unlock(&rk817->params_lock);
+ 
+ 	return 0;
+ }
+@@ -889,6 +1376,28 @@
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(component);
++
++	if (rk817->shared_params_enabled) {
++		long value = ucontrol->value.integer.value[0];
++		int ret;
++
++		mutex_lock(&rk817->params_lock);
++		if (value < 0 || value > 1)
++			ret = -EINVAL;
++		else if (rk817->resume_path == value)
++			ret = 0;
++		else if (rk817->shared_params.pending || rk817->shared_params.owner[0] ||
++			 rk817->shared_params.owner[1])
++			ret = -EBUSY;
++		else if (rk817->params_error)
++			ret = rk817->params_error;
++		else {
++			rk817->resume_path = value;
++			ret = 0;
++		}
++		mutex_unlock(&rk817->params_lock);
++		return ret;
++	}
+ 
+ 	rk817->resume_path = ucontrol->value.integer.value[0];
+ 
+@@ -1443,8 +1952,10 @@
+ 		return -EINVAL;
+ 	mutex_lock(&rk817->params_lock);
+ 	ret = rk817->params_error;
+-	if (!ret && (p->pending || p->owner[0] || p->owner[1]))
+-		ret = rk817->shared_dai_fmt == fmt ? 0 : -EBUSY;
++	if (!ret && rk817->shared_dai_fmt == fmt)
++		ret = 0;
++	else if (!ret && (p->pending || p->owner[0] || p->owner[1]))
++		ret = -EBUSY;
+ 	else if (!ret) {
+ 		ret = rk817_set_dai_fmt(dai, fmt);
+ 		if (!ret)
+@@ -1456,32 +1967,72 @@
+ 	return ret;
+ }
+ 
++/* mute_stream has no substream argument; use the independently held open slot. */
++static int rk817_shared_mute(struct snd_soc_dai *dai, int mute, int stream)
++{
++	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(dai->component);
++	struct snd_soc_dai_params_state *p = &rk817->shared_params;
++	int ret;
++
++	if (dai->id != RK817_HIFI || (stream != 0 && stream != 1))
++		return -EINVAL;
++	mutex_lock(&rk817->params_lock);
++	if (!rk817->shared_open[stream])
++		ret = -EINVAL;
++	else if (p->pending)
++		ret = -EBUSY;
++	else if (!mute && (rk817->params_error || rk817->mute_io_error))
++		ret = rk817->params_error ? rk817->params_error : rk817->mute_io_error;
++	else if (!mute && p->owner[stream] != rk817->shared_open[stream])
++		ret = -EINVAL;
++	else {
++		/* Post-HW_FREE mute still owns the open, even after its params owner left. */
++		ret = rk817_digital_mute(dai, mute, stream);
++		if (ret < 0 && !rk817->params_error)
++			rk817->params_error = ret;
++	}
++	mutex_unlock(&rk817->params_lock);
++	return ret;
++}
++
++static int rk817_shared_capture_shutdown(struct snd_soc_component *component)
++{
++	int first, ret;
++
++	first = snd_soc_component_update_bits(component, RK817_CODEC_DTOP_DIGEN_CLKE,
++					      I2STX_CKE_EN, I2STX_CKE_EN);
++	usleep_range(1000, 1100);
++	/* Try to clear this direction's bit even if the first update failed. */
++	ret = snd_soc_component_update_bits(component, RK817_CODEC_DTOP_DIGEN_CLKE,
++					    I2STX_CKE_EN, I2STX_CKE_DIS);
++	return first < 0 ? first : (ret < 0 ? ret : 0);
++}
++
+ static void rk817_shared_shutdown(struct snd_pcm_substream *ss, struct snd_soc_dai *dai)
+ {
+ 	struct rk817_codec_priv *rk817 = snd_soc_component_get_drvdata(dai->component);
+-	bool peer;
+ 	int ret;
+ 
+-	/* Startup failure on checked voice must never pulse the hifi clock. */
+-	if (dai->id != RK817_HIFI)
++	if (dai->id != RK817_HIFI || (ss->stream != 0 && ss->stream != 1))
+ 		return;
+ 	mutex_lock(&rk817->params_lock);
+-	if ((ss->stream != 0 && ss->stream != 1) || rk817->shared_open[ss->stream] != ss) {
+-		mutex_unlock(&rk817->params_lock);
+-		return; /* Failed startup/idempotent close owns no open lease. */
+-	}
+-	mutex_unlock(&rk817->params_lock);
+-	ret = rk817_shared_free(ss, dai);
+-	if (ret) {
+-		rk817_shared_fault(dai, ret);
+-		return;
+-	}
+-	mutex_lock(&rk817->params_lock);
++	if (rk817->shared_open[ss->stream] != ss)
++		goto out; /* Failed startup or a repeated close owns no open slot. */
++	ret = snd_soc_dai_params_free_locked(&rk817->shared_params, dai, ss);
++	if (ret < 0) {
++		if (!rk817->params_error)
++			rk817->params_error = ret;
++		goto out;
++	}
++	if (ss->stream == SNDRV_PCM_STREAM_CAPTURE) {
++		/* Masked ADC output pulse does not alter a peer's DAC/PLL/rate bits. */
++		ret = rk817_shared_capture_shutdown(dai->component);
++		if (ret < 0 && !rk817->params_error)
++			rk817->params_error = ret;
++	}
+ 	rk817->shared_open[ss->stream] = NULL;
+-	peer = rk817->shared_open[0] || rk817->shared_open[1] ||
+-		rk817->shared_params.owner[0] || rk817->shared_params.owner[1];
+-	if (!peer)
+-		rk817_codec_shutdown(ss, dai);
++out:
++	/* This void callback records first errno but cannot return it to close(). */
+ 	mutex_unlock(&rk817->params_lock);
+ }
+ 
+@@ -1491,7 +2042,7 @@
+ 	.hw_free = rk817_shared_free,
+ 	.set_fmt = rk817_shared_set_fmt,
+ 	.set_sysclk = rk817_shared_sysclk,
+-	.mute_stream = rk817_digital_mute,
++	.mute_stream = rk817_shared_mute,
+ 	.shutdown = rk817_shared_shutdown,
+ 	.hw_params_begin = rk817_shared_begin,
+ 	.hw_params_commit = rk817_shared_commit,
+--- a/sound/soc/rockchip/rockchip_i2s_tdm.c
++++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
+@@ -236,7 +236,11 @@
+ 	int ret = 0;
+ 
+ 	spin_lock_irqsave(&i2s_tdm->lock, flags);
+-	if (i2s_tdm->runtime_error && !i2s_tdm->shutting_down)
++	if (i2s_tdm->shared_params_enabled &&
++	    (i2s_tdm->shared_params.pending || i2s_tdm->shared_params.owner[0] ||
++	     i2s_tdm->shared_params.owner[1]))
++		ret = -EBUSY;
++	else if (i2s_tdm->runtime_error && !i2s_tdm->shutting_down)
+ 		ret = i2s_tdm->runtime_error;
+ 	else if ((i2s_tdm->configuring && !i2s_tdm->format_pm_release) ||
+ 		 i2s_tdm->started || !i2s_tdm->stop_proven)
+--- a/sound/soc/soc-core.c
++++ b/sound/soc/soc-core.c
+@@ -520,6 +520,22 @@
+ 		flush_delayed_work(&rtd->delayed_work);
+ }
+ 
++/* Finite checked profile has no system low-power contract, including partial ops. */
++static bool snd_soc_card_shared_params_any(struct snd_soc_card *card)
++{
++	struct snd_soc_pcm_runtime *rtd;
++	struct snd_soc_dai *dai;
++	int i;
++
++	for_each_card_rtds(card, rtd) {
++		for_each_rtd_dais(rtd, i, dai) {
++			if (snd_soc_dai_hw_params_any(dai))
++				return true;
++		}
++	}
++	return false;
++}
++
+ #ifdef CONFIG_PM_SLEEP
+ /* powers down audio subsystem for suspend */
+ int snd_soc_suspend(struct device *dev)
+@@ -533,6 +549,9 @@
+ 	/* If the card is not initialized yet there is nothing to do */
+ 	if (!card->instantiated)
+ 		return 0;
++	/* Reject before wait/D3hot/mute, or before poweroff flush/DAPM side effects. */
++	if (snd_soc_card_shared_params_any(card))
++		return -EOPNOTSUPP;
+ 
+ 	/*
+ 	 * Due to the resume being scheduled into a workqueue we could
+@@ -2008,6 +2027,9 @@
+ 
+ 	if (!card->instantiated)
+ 		return 0;
++	/* Reject before wait/D3hot/mute, or before poweroff flush/DAPM side effects. */
++	if (snd_soc_card_shared_params_any(card))
++		return -EOPNOTSUPP;
+ 
+ 	/*
+ 	 * Flush out pmdown_time work - we actually do want to run it

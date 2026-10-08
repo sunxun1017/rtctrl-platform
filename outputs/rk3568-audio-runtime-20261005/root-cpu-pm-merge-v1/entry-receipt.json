@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/root-cpu-pm-merge-v1/run-model.py",
+    "--model",
+    "model-v10",
+    "--manifest-sha256",
+    "0c2310b1855504f5ca2b9f64ba3a38a44ba994c134d9e45137287ab1ac36e8b6",
+    "--attempt",
+    "merged1"
+  ],
+  "exit": 1,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "5a96638d0eacf21ecf80b2e86c6a990cc7fa53b791521c6cf748882e8df6e0f1",
+  "only_CPU_runtime_suspend_body_changed_in_model": true
+}

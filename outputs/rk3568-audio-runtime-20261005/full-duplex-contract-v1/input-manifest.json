@@ -1,0 +1,463 @@
+{
+  "schema": "rk3568-full-duplex-baseline-input-v1",
+  "CPU_sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141",
+  "input_files": {
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/source/sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141",
+      "size": 112836,
+      "snapshot": "inputs-v4/1d321a7c99e3-rockchip_i2s_tdm.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v2/sound/soc/generic/simple-card-utils.c": {
+      "sha256": "b734a34021704bd526e223661098ad8bf90dcdd12501210002b001ea6452c2fb",
+      "size": 16576,
+      "snapshot": "inputs-v4/5d8938f4cbb0-simple-card-utils.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/codecs/rk817_codec.c": {
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+      "size": 45269,
+      "snapshot": "inputs-v4/530725d05b59-rk817_codec.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/soc-dai.c": {
+      "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d",
+      "size": 19045,
+      "snapshot": "inputs-v4/73457e07496e-soc-dai.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/soc-component.c": {
+      "sha256": "583837f5eacd28fd03ddb7e59add2c1c202d37a1bf98107ceb2dfecf0feda5a3",
+      "size": 24909,
+      "snapshot": "inputs-v4/dfbf30439d3d-soc-component.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/soc-pcm.c": {
+      "sha256": "ab086f6fb20cf7a5e50d2a854674067cf18cc40b2809fc9c11f42b750917a83e",
+      "size": 82262,
+      "snapshot": "inputs-v4/a0a9c3c7b4c5-soc-pcm.c",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/sound/soc/soc-link.c": {
+      "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975",
+      "size": 4563,
+      "snapshot": "inputs-v4/17d16b1eecd2-soc-link.c",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/full-duplex-review-v1/input-manifest.json": {
+      "sha256": "0736b09ca8bbd3f88479b149d906b3d72afbde8ceb82c610f55354bbd23fd922",
+      "size": 28164,
+      "snapshot": "inputs-v4/6f96e120cf11-input-manifest.json",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/source_utils.py": {
+      "sha256": "3d5deab6d6eea70d067c9b0b8336d66f39ce1cc0e18a8a7938a4f60d66c43440",
+      "size": 1097,
+      "snapshot": "inputs-v4/3138c3a3f7e4-source_utils.py",
+      "ordinary": true,
+      "review_sha_checked": true
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/sound/soc/soc-compress.c": {
+      "sha256": "9e1b4b23224b0add6cb6874f7cb1ae762c2aa9d51f5d4bf48478b5796126581f",
+      "size": 22694,
+      "snapshot": "inputs-v4/ebb4eb68d9ab-soc-compress.c",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/include/linux/pm_runtime.h": {
+      "sha256": "f93c91cc70973ebca55a4c07e3e3df8acd7f0df062c138a4007085cbe2eb4000",
+      "size": 18600,
+      "snapshot": "inputs-v4/e071b7e54360-pm_runtime.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/drivers/base/power/runtime.c": {
+      "sha256": "868e4a64c90772b42ebf9da6dae64e5451465b6b7ac4a6e0aacab7c6ccf1ad53",
+      "size": 52789,
+      "snapshot": "inputs-v4/e77e4d4687c5-runtime.c",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/include/sound/soc-component.h": {
+      "sha256": "bb05f0372e41aefe70890baada89179f0ba3cb5e7d0f1e603fef7a921004ab25",
+      "size": 17725,
+      "snapshot": "inputs-v4/f4129014e724-soc-component.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/outputs/rk3568-i2s-lifecycle-20261005/test-params-shim.h": {
+      "sha256": "9b7e15253c9b9b7c7110073c76365b88f88fe5e04f1f489a1b47fcb79aafdb3e",
+      "size": 3982,
+      "snapshot": "inputs-v4/7731fe3521ae-test-params-shim.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/uapi/sound/asound.h": {
+      "sha256": "138cb9e8de8df6cdf2abb05806d7f61078fb7ea44063e5914bea277ef55a0447",
+      "size": 50717,
+      "snapshot": "inputs-v4/3a3d73e11838-asound.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/sound/soc/rockchip/rockchip_i2s_tdm.h": {
+      "sha256": "10bc2d447e65496abb1e37deeafd676ae501b7b9565f96ec037e82c4ec42a2cb",
+      "size": 14795,
+      "snapshot": "inputs-v4/dadcc3646534-rockchip_i2s_tdm.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/sound/pcm.h": {
+      "sha256": "269a4163d108f4b0f4aaedc66f43b60895b02ae4bb4ed7b07c9f5f54723ca234",
+      "size": 53669,
+      "snapshot": "inputs-v4/b30ee0aadb13-pcm.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/sound/pcm_params.h": {
+      "sha256": "f7406c2ecb4cd9e570577786c4395c31dfc6fca2609793585c738379770006ea",
+      "size": 8864,
+      "snapshot": "inputs-v4/2f55aa3b0ed2-pcm_params.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/sound/soc-dai.h": {
+      "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748",
+      "size": 16176,
+      "snapshot": "inputs-v4/ba5b06334bf7-soc-dai.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/sound/dmaengine_pcm.h": {
+      "sha256": "aa15d399fdd514cb44d42e97f4c5918d5f986c5411814ced6ebf7056af0fc9d0",
+      "size": 6911,
+      "snapshot": "inputs-v4/0c415b4c0150-dmaengine_pcm.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/uapi/sound/asoc.h": {
+      "sha256": "3d9ea1de2073b95d464c3fca7747ca551ef476481e48de158813783dc0861334",
+      "size": 22162,
+      "snapshot": "inputs-v4/1d04a2257761-asoc.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/inputs/outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v11/inputs/.deps/kernel-source/aiot-3568pq-audio-v1/include/sound/simple_card_utils.h": {
+      "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8",
+      "size": 6738,
+      "snapshot": "inputs-v4/37c4f360d2da-simple_card_utils.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/include/sound/soc.h": {
+      "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b",
+      "size": 50658,
+      "snapshot": "inputs-v4/7d5002e4b321-soc.h",
+      "ordinary": true,
+      "review_sha_checked": false
+    }
+  },
+  "production_functions": {
+    "cpu:i2s_checked_first_error": {
+      "sha256": "6b6f3a86688ef522180afdd273154910581a05aba98419a308760942214b482d",
+      "source_group": "cpu",
+      "line": 552
+    },
+    "cpu:i2s_checked_error_locked": {
+      "sha256": "1b540f7848a58ee55e99093559ded5583e8b9647cd996178c54a42facef4297a",
+      "source_group": "cpu",
+      "line": 533
+    },
+    "cpu:i2s_checked_gate_locked": {
+      "sha256": "3439c2db2a23fb53fe5bf0389cf31a04d57580eab947524c87c7b93ae6fce988",
+      "source_group": "cpu",
+      "line": 540
+    },
+    "cpu:i2s_checked_params_dirty": {
+      "sha256": "997c125b2168cffe57e07b7bd025fefdc5bbdcc4534d7d505bd47a478f230cc8",
+      "source_group": "cpu",
+      "line": 2220
+    },
+    "cpu:i2s_checked_params_trcm": {
+      "sha256": "06b6fd758cf1ba4565e04e17c4a88549e7ef9e9650d8b3ac36db7d435df8373a",
+      "source_group": "cpu",
+      "line": 2247
+    },
+    "cpu:i2s_checked_set_fmt": {
+      "sha256": "b90f9c28989624dcfab1954602283c625e7ddf7786dba33f6690445cbbec4b79",
+      "source_group": "cpu",
+      "line": 1478
+    },
+    "cpu:to_info": {
+      "sha256": "46c57abf774a90414f04dfa6862b0c0113098a0513282ebaa96008c687c0fb40",
+      "source_group": "cpu",
+      "line": 730
+    },
+    "cpu:rockchip_i2s_tdm_mclk_reparent": {
+      "sha256": "0f795e235a868f3e0dd59b43886837bb008119c30f3dc79d12d241db991164f3",
+      "source_group": "cpu",
+      "line": 1842
+    },
+    "cpu:rockchip_i2s_tdm_set_mclk": {
+      "sha256": "d90406155e2920255863306e716ad2127fed2976fceb43f7b6cb9577448ad5fe",
+      "source_group": "cpu",
+      "line": 1877
+    },
+    "cpu:rockchip_i2s_tdm_params_channels": {
+      "sha256": "7f83b111df0d64b6810be880eb669b7ce002c8947bb00999993d657fa209855f",
+      "source_group": "cpu",
+      "line": 2134
+    },
+    "cpu:i2s_checked_hw_params": {
+      "sha256": "a254ad080c93831abb3c5113cd1fd6712eb77187b275b7bc00ffc5e271dd185d",
+      "source_group": "cpu",
+      "line": 2270
+    },
+    "cpu:is_params_dirty": {
+      "sha256": "7d2f09bfd0a930633aa0957d3b52edc3025d979760fdd7bfb570e4175d7416cf",
+      "source_group": "cpu",
+      "line": 2018
+    },
+    "cpu:rockchip_i2s_tdm_params_trcm": {
+      "sha256": "34f927dc6cb43aed159519673bf4933c4d5f3f1d2d0f74e9947d88f71b009280",
+      "source_group": "cpu",
+      "line": 2050
+    },
+    "cpu:rockchip_i2s_tdm_set_fmt": {
+      "sha256": "ca98318ed14a3df5077f0ba03909b49d9ac31e79a7d60e0f1a6c62601a591221",
+      "source_group": "cpu",
+      "line": 1547
+    },
+    "cpu:rockchip_i2s_tdm_hw_params": {
+      "sha256": "433e866991c88443339a60d39fee30f8b85ce6db17fb28c7ab561ca3ec8e9d91",
+      "source_group": "cpu",
+      "line": 2364
+    },
+    "cpu:rockchip_i2s_tdm_set_sysclk": {
+      "sha256": "ec9cb230ee44d15034ee27892067c0c61384977692d4a99119103b52f322cc51",
+      "source_group": "cpu",
+      "line": 2472
+    },
+    "cpu:rockchip_dai_tdm_slot": {
+      "sha256": "7442f544fea5d3d809960d869e10d1b236d9d2cf5799590a463a7775de068bb3",
+      "source_group": "cpu",
+      "line": 2782
+    },
+    "cpu:i2s_checked_irq_locked": {
+      "sha256": "2d212f0a987ea89183d4e0e09a08682262d4ff5f7e826909e65ffb2aee579056",
+      "source_group": "cpu",
+      "line": 578
+    },
+    "cpu:i2s_checked_dma_locked": {
+      "sha256": "8cc40867fb14928e6a530d77d799c556aa78b72b8b562d41c596c6856a21c2d3",
+      "source_group": "cpu",
+      "line": 605
+    },
+    "cpu:i2s_checked_clear_locked": {
+      "sha256": "1b3f341d12fdde180b17be72379832fad143fc8bec82af746b5f27006166c826",
+      "source_group": "cpu",
+      "line": 557
+    },
+    "cpu:i2s_checked_stop_locked": {
+      "sha256": "b7e117d155224b7ee084a481b4b67c4c664b069d7f7c104c825e08f453e23777",
+      "source_group": "cpu",
+      "line": 630
+    },
+    "cpu:i2s_checked_start_locked": {
+      "sha256": "a28d87b933bdde3a33b6f60b57a1622686d05292cba66807300b5af3d98285c7",
+      "source_group": "cpu",
+      "line": 669
+    },
+    "cpu:i2s_checked_trigger": {
+      "sha256": "a409b939fdb9c204a01279520b1b87bc799226dbef22311e5dfa0d466a926810",
+      "source_group": "cpu",
+      "line": 703
+    },
+    "cpu:rockchip_i2s_tdm_trigger": {
+      "sha256": "d68c62a54e88dec40e895df2e7df2ec69088bcb1ae57364986e517fbdb2a588b",
+      "source_group": "cpu",
+      "line": 2444
+    },
+    "cpu:i2s_checked_component_trigger": {
+      "sha256": "0b99131429751cccec2beceaffb8eeccf9dc276f78787aafb265e12b76f67055",
+      "source_group": "cpu",
+      "line": 2827
+    },
+    "cpu:rockchip_i2s_tdm_startup": {
+      "sha256": "50cddbaf32dbfc03b3fb23b7dd247e6ed639780ff2e489d174a758c15d2c4c7a",
+      "source_group": "cpu",
+      "line": 2860
+    },
+    "cpu:rockchip_i2s_tdm_shutdown": {
+      "sha256": "8c961fadc6c00a172922895028f22e205b8e89afc379334b32401361d0d066c5",
+      "source_group": "cpu",
+      "line": 2898
+    },
+    "cpu:i2s_checked_prepare": {
+      "sha256": "80be30c2d2667cddd70ecdb694e9731039b6862a07200155eaf34b275ffa3e24",
+      "source_group": "cpu",
+      "line": 2808
+    },
+    "codec:rk817_set_dai_sysclk": {
+      "sha256": "b810ba25a755c7565ae3b993fbf78c51da72a5559e1e63c5b38e9a7a9cfe88bc",
+      "source_group": "codec",
+      "line": 903
+    },
+    "dai:_soc_dai_ret": {
+      "sha256": "1660abf0ed7d96efe2824fdc75115e3a47dc30275a077ea3416fabfcd4fd1b9b",
+      "source_group": "dai",
+      "line": 14
+    },
+    "dai:snd_soc_dai_set_sysclk": {
+      "sha256": "48daa0e016d277c7a8e750bc2ed6a55fe321eee7f2c598388110970d190fd457",
+      "source_group": "dai",
+      "line": 52
+    },
+    "dai:snd_soc_dai_startup": {
+      "sha256": "6bfea0b7f40ef6031d44efa4de5e3159d0092307657635cbb8a2d98105dec8fc",
+      "source_group": "dai",
+      "line": 350
+    },
+    "dai:snd_soc_dai_shutdown": {
+      "sha256": "a31ac04e2178890572dd21d03ab94d6a6a73df8badd12d4fc3c817f96f9fa544",
+      "source_group": "dai",
+      "line": 366
+    },
+    "dai:snd_soc_pcm_dai_trigger": {
+      "sha256": "1b421a2b6a7bc6d295f3a706339cea63ebb2ae44ad2441a0c966d5c4304218c1",
+      "source_group": "dai",
+      "line": 556
+    },
+    "dai:snd_soc_dai_action": {
+      "sha256": "0d0ba2e45f7ecae9b9ac86d3ac3543ad6d1dbc0da2ba3133b17d48b1872cd1d1",
+      "source_group": "dai",
+      "line": 455
+    },
+    "dai:snd_soc_dai_active": {
+      "sha256": "7928eaaadbd634b83253c35f28f1aea2430c0834380d178c85eeb564553b95bd",
+      "source_group": "dai",
+      "line": 466
+    },
+    "component:_soc_component_ret": {
+      "sha256": "1de5c9452dd610b900ec9b3754652d947c6dd23fe455df13a8ef13c7305f8d6d",
+      "source_group": "component",
+      "line": 16
+    },
+    "component:snd_soc_pcm_component_trigger": {
+      "sha256": "4f02c7977ab3997254b765cb6dee1e7456c695e7e706408d9b59eace812629ee",
+      "source_group": "component",
+      "line": 814
+    },
+    "component:snd_soc_pcm_component_pm_runtime_get": {
+      "sha256": "860699d406f20fb574511f1d2f939f660eba01a54c26a5a6e5749eaf77b43a09",
+      "source_group": "component",
+      "line": 853
+    },
+    "component:snd_soc_pcm_component_pm_runtime_put": {
+      "sha256": "6b8df3ec3cd1ba134690f89116dcb690fc5af022cdb62b0249339a8b5eed34f3",
+      "source_group": "component",
+      "line": 872
+    },
+    "simple:asoc_simple_clk_enable": {
+      "sha256": "d9e4da98b2b14c4240fc3223c63fc04f783e5aacb53c79d83c28afaa534d22c9",
+      "source_group": "simple",
+      "line": 146
+    },
+    "simple:asoc_simple_clk_disable": {
+      "sha256": "b987d690684c32c70f56f74c1de304b17c6982ec5451dddf8e502451af62038c",
+      "source_group": "simple",
+      "line": 154
+    },
+    "simple:asoc_simple_startup": {
+      "sha256": "0f072d569c6d892d0dc969dff2d03464eac6c5de7d60140161a27f8cbb6b4249",
+      "source_group": "simple",
+      "line": 194
+    },
+    "simple:asoc_simple_shutdown": {
+      "sha256": "02e38f06e3f98a281d6e39dfda1f94dcecbefdc5eda36da0502fdd29865995d1",
+      "source_group": "simple",
+      "line": 213
+    },
+    "simple:asoc_simple_set_clk_rate": {
+      "sha256": "fe673b48b55924b39205504cbad4d9f18b8261902cfbd58bb4d514e01dd258d3",
+      "source_group": "simple",
+      "line": 233
+    },
+    "simple:asoc_simple_hw_params": {
+      "sha256": "84cc4afd3780868f0b1f0666f9fb2ca48807f31e9b344e7d19e04d3f5a5ca38f",
+      "source_group": "simple",
+      "line": 248
+    },
+    "link:_soc_link_ret": {
+      "sha256": "48b2d2502ca9f8ad50a9ee51e506d15a0b4f6f76be1f1e77091cc0be864b9ecc",
+      "source_group": "link",
+      "line": 12
+    },
+    "link:snd_soc_link_startup": {
+      "sha256": "42de07f63e7cd574bb33e5d78b073177191991218ccd1dd77ea6df9c3b16deaf",
+      "source_group": "link",
+      "line": 68
+    },
+    "link:snd_soc_link_shutdown": {
+      "sha256": "7a6d1be772e1058fcb21ac97405cde100790c5c2230221acf4b04b0a14da6cc5",
+      "source_group": "link",
+      "line": 84
+    },
+    "link:snd_soc_link_trigger": {
+      "sha256": "2bf5c96ef0c14d643e62b2d0088c080b7f6f5816b2bd45fac8059b4bae30c398",
+      "source_group": "link",
+      "line": 134
+    },
+    "pcm:soc_pcm_clean": {
+      "sha256": "f23b405bf682fa3543f16ba56f5e8d8949bde3d3827550592eaec3553701d4c0",
+      "source_group": "pcm",
+      "line": 647
+    },
+    "pcm:soc_pcm_open": {
+      "sha256": "8f91de42a2349e14bd2e3aabb0bb3673df70532071f3385ca3dacfbee896fbc7",
+      "source_group": "pcm",
+      "line": 695
+    },
+    "pcm:soc_pcm_trigger": {
+      "sha256": "d9db8390eabc7afbfa24bd65b5e0a014f4d7f07b4852148549f4d759aa585b2e",
+      "source_group": "pcm",
+      "line": 1064
+    },
+    "pcm:snd_soc_runtime_action": {
+      "sha256": "385a5225dd039a8ebd931aa21cead67681997001074560c277ae7f83f3d4645e",
+      "source_group": "pcm",
+      "line": 220
+    },
+    "pcm:soc_pcm_apply_symmetry": {
+      "sha256": "bf8784fe431940efc05004afc3ab412565eef152cd85420c4ce60c8085f15b93",
+      "source_group": "pcm",
+      "line": 305
+    },
+    "soc-header:snd_soc_runtime_activate": {
+      "sha256": "2a0ec68a5454d62c1e92ac36576be1e0e661c09c697093316cb07c0aeeb353ab",
+      "source_group": "soc-header",
+      "line": 465
+    },
+    "soc-header:snd_soc_runtime_deactivate": {
+      "sha256": "e53a3d5001ff693bdc7f13bd7ccb87833d876bcf3e1fda6c2a9dc67d48df34d1",
+      "source_group": "soc-header",
+      "line": 470
+    }
+  },
+  "generated_unit_sha256": "56e1ba98f4c41052bedf9e8aad9461e430bba90f3d5700c6766181cc27062c34",
+  "review_only_no_production_changes": true,
+  "board_tested": false,
+  "model_boundaries": [
+    "regmap/CCF/PM/ALSA constraints and activation",
+    "platform DMA trigger/open/close is an explicit API side-effect model",
+    "codec trigger injection is a model; only sysclk setter is production",
+    "not full soc_pcm_hw_params, DAPM, PL330 or kernel ABI"
+  ]
+}

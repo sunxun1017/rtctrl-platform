@@ -1,0 +1,7 @@
+--- a/include/sound/soc-dai.h
++++ b/include/sound/soc-dai.h
+@@ -307,1 +307,4 @@
+ 	void (*hw_params_fault)(struct snd_soc_dai *, int first_errno);
++	/* CPU-only atomic fault admission: no sleeping or codec callbacks. */
++	void (*pcm_async_fault)(struct snd_soc_dai *, int first_errno);
++

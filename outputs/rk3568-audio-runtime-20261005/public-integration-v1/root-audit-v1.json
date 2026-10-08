@@ -1,0 +1,15 @@
+{
+  "root_audit_passed": true,
+  "root_auditor_sha256": "e17733902adbf8579d7c1a23c67302195cd7b5285869583d3d8ef7a572b7a3dc",
+  "seal_receipt_sha256": "242c34350e8d995e98213561423cd4fc99a49cf1bf8f4cfb226f4a50dc20096f",
+  "ordinary_frozen_files_verified": 197,
+  "sum_rows_verified": 198,
+  "ordinary_external_inputs_verified": 42,
+  "fresh_direct_stripped_object_bytes_equal": true,
+  "public_patches_match_seal": true,
+  "reported_full_source_replay_and_built_in_Kbuild_receipts_checked": true,
+  "full_89423_source_replay_or_Kbuild_rerun_by_this_auditor": false,
+  "new_Image_built": false,
+  "board_or_network_operated": false,
+  "scope": "Read current ordinary evidence, complete SHA inventories, reported build receipts and exact stripped object bytes; no repeated build or hardware test."
+}

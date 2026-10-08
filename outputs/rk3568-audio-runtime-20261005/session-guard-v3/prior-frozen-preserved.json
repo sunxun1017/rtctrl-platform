@@ -1,0 +1,10 @@
+{
+  "v1": {
+    "verified_files": 550,
+    "SHA256SUMS_sha256": "b339c9badf1059cf287f9ac948ad68c596d113270d58e666498eaca6e139d116"
+  },
+  "v2": {
+    "verified_files": 1128,
+    "SHA256SUMS_sha256": "9bcef4ecf8bb20fc5f4b4badf3a15e74fce343da36ad9c6ffa7b866dbed25330"
+  }
+}

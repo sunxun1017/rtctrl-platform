@@ -1,0 +1,30 @@
+{
+  "drivers/dma/pl330.c": {
+    "bytes": 118866,
+    "sha256": "ac40d2e3c41116667f2ef147b1f644c9782d26cd8f1597628afa67bd50f93b16"
+  },
+  "sound/core/pcm_dmaengine.c": {
+    "bytes": 21048,
+    "sha256": "bd59d7377ec377f4c671cf0fa11331ba6795113d88c42b91c35be614085392ac"
+  },
+  "sound/soc/soc-generic-dmaengine-pcm.c": {
+    "bytes": 14510,
+    "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06"
+  },
+  "include/sound/dmaengine_pcm.h": {
+    "bytes": 6911,
+    "sha256": "aa15d399fdd514cb44d42e97f4c5918d5f986c5411814ced6ebf7056af0fc9d0"
+  },
+  "drivers/dma/dmaengine.h": {
+    "bytes": 5350,
+    "sha256": "09d1c31b6a025adc25a6529854642689ab4302ae19007923f9cfa68f7733ec28"
+  },
+  "include/linux/dmaengine.h": {
+    "bytes": 55857,
+    "sha256": "655ac566d6bcb49c1cfb0d6db52af174dfc49e6ba887a23d4b89cbed6c339133"
+  },
+  "sound/core/pcm_memory.c": {
+    "bytes": 19229,
+    "sha256": "cb883d943072d36c8b3d7f881f89b641c683597412014fcb7fe391f30cf0d4f4"
+  }
+}

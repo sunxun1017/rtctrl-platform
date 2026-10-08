@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "git",
+    "apply",
+    "--unsafe-paths",
+    "--directory=/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/patch-check-v2",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/dma-fault-private-v5.patch"
+  ],
+  "exit": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

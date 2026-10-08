@@ -1,0 +1,124 @@
+{
+  "source_version": "source-v5",
+  "source_manifest_sha256": "1399d32a1083722b26b2f9b5bf1822972743f75c957c64e00865bd78cea1923a",
+  "patch_sha256": "e7c75ca910fcf6df346985db76dfcc1d89c2209b0049fab97002b352a6511887",
+  "runner_sha256": "e0373098db910c9850ed08848dde5f3016ad3acd46026916aecb260bf8e9655b",
+  "sources": {
+    "drivers/dma/pl330.c": {
+      "bytes": 121351,
+      "sha256": "b71fd04e0cee0745cc30ea03263e965574ac8ef0a2c29a5dc9eb4a38c5eccd62"
+    },
+    "sound/core/pcm_dmaengine.c": {
+      "bytes": 25146,
+      "sha256": "189e4e4fb59a683ae050e96fbe90f7fc09d5ad7afe755d3eca6623fbb971da77"
+    },
+    "sound/soc/soc-generic-dmaengine-pcm.c": {
+      "bytes": 15228,
+      "sha256": "794bccb85fde6094cbd3b1dcaf8f3d5bce6ae5c4c342047658c2934525b6724c"
+    },
+    "include/sound/dmaengine_pcm.h": {
+      "bytes": 7131,
+      "sha256": "f7fe7ae1130bf04adc7fb92f14cbb75b94aaf08dd3a658da66eb5d3184954fc2"
+    }
+  },
+  "actual_model_receipts": {
+    "runs-red-v6": {
+      "sha256": "17ebff4396eb854c72e00790f6342faca7081a8a13cb68ea5ce8df0bed4bc9dc",
+      "observations": 37,
+      "passed": 9,
+      "complete_stdout_sha256": "aa0b10e727655d4ced4add7cac346a901a669c80433788db8b3b5edb7ac20010"
+    },
+    "runs-sync-red-v1": {
+      "sha256": "9cba7e65cc08aba09aa0b3ee001d28839d2fc8b9427057d399f6862618b336e0",
+      "observations": 37,
+      "passed": 36,
+      "complete_stdout_sha256": "14dc5a4fad9b82a2339ef1d7961b6f6125025edcafa38f198efebd4735e5ae7c"
+    },
+    "runs-green-v6": {
+      "sha256": "fafa20608617a7bb59fa73e39540f0e1089484cbaffd6697b9277becad7aea02",
+      "observations": 37,
+      "passed": 37,
+      "complete_stdout_sha256": "ed2a3401a104095af09043d34e123b877f8c3474416b2dc56cb06f639ae0a673"
+    }
+  },
+  "ordered_observations": [
+    "first-controller-errno",
+    "two-stream-xrun-no-peer-period",
+    "two-pcm-exact-first-errno",
+    "cpu-admission-before-xrun",
+    "callbacks-drained",
+    "capture-both-before-joint-stop",
+    "captured-callback-not-new-epoch",
+    "cutoff-first-skip-old-channel",
+    "error-result-no-pos-no-period",
+    "missing-provider-errno-fallback",
+    "healthy-period-original-path",
+    "pointer-error-xrun-sentinel",
+    "no-residue-error-xrun-sentinel",
+    "healthy-own-stop-peer-running",
+    "two-separate-quarantines",
+    "two-allocation-accounting",
+    "prepared-no-descriptor-exact-probe",
+    "prepared-probe-no-recursive-xrun",
+    "go-error-exact-sticky",
+    "go-before-commit-ticket-invalidated",
+    "status-new-fault-after-go-probe",
+    "pointer-status-new-exact-fault",
+    "prepare-null-exact-no-go",
+    "submit-error-exact-no-go",
+    "prepared-start-cache-fault-no-go",
+    "prepare-quiesce-no-desc-closes-cpu",
+    "borrow-first-close-sync-waits",
+    "borrow-drain-after-callback",
+    "generic-real-rtd-single-cpu-sink",
+    "generic-multi-cpu-no-binding",
+    "generic-null-hook-no-binding",
+    "hook-on-unchecked-provider-rejects",
+    "real-dotask-pm-error-still-fanout",
+    "real-dotask-preserves-new-queued-work",
+    "same-epoch-not-notified-twice",
+    "prepare-new-fault-during-sync-notifies-cpu",
+    "sync-new-fault-still-quarantines"
+  ],
+  "model_boundaries": [
+    "MMIO/PM/ALSA state/CPU fault hook are API leaves",
+    "PL330 terminate_channel leaf supplies existing cutoff+epoch behaviour; full real sync/drain body executed",
+    "generic PCM open/close and runtime hw-constraint leaves are API fixtures; actual generic binding bodies executed",
+    "quarantine real metadata transfer executed; model cleanup explicitly represents later power-cycle, not driver recovery",
+    "body identities are not instrumentation coverage or kernel ABI proof"
+  ],
+  "patch_commands": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "--unsafe-paths",
+        "--directory=/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/patch-check-v1",
+        "/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/dma-fault-private-v5.patch"
+      ],
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--unsafe-paths",
+        "--directory=/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/patch-check-v1",
+        "/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/dma-fault-private-v5.patch"
+      ],
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "patch_result_equals_candidate": true,
+  "header_base_sha256": "7fe99b405e1b1d66051e5645c5812d2fbe4452b1cdd13659ad87e357595a2221",
+  "header_hook_patch_sha256": "9b80e38849b79335a78ca465f5599a10e610dfc46f277a30163ab63a0d258c36",
+  "Kbuild_executed": false,
+  "board_tested": false,
+  "duplex_START_authorized": false,
+  "actual_SDK_modified": false
+}

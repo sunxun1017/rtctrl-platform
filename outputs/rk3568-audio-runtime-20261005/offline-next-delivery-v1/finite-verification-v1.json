@@ -1,0 +1,39 @@
+[
+  {
+    "label": "dt-contract-green-v1",
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/test-offline-dt.py",
+      "--candidate",
+      "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/dt-v1/audio-shared-params-ram-shim.dtb"
+    ],
+    "exit": 0,
+    "stdout_sha256": "12348ffc0e62d9fdcbe90ab6204e3cb81342b9309f8804d4e06e652badc6fdc8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "format-green-v1",
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/test-offline-format.py"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b8d6655731a8d4f1f14eb1547da643cbee39f7f208f7a2e8d01b9eccb6f28fc2"
+  },
+  {
+    "label": "readback-v1",
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/readback-offline.py",
+      "--out",
+      "readback-v1.json"
+    ],
+    "exit": 0,
+    "stdout_sha256": "3bc83e99df7aa6b039a4cce1b82820d48289e0f8f8cc1feac7da1cb681f51b6e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

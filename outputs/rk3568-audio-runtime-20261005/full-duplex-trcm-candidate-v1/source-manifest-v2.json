@@ -1,0 +1,106 @@
+{
+  "Kbuild_executed": false,
+  "baseline_CPU_sha256": "399a672728c41a5ed3900b6186021babaf9a1d3aac4dafbfcd4f72277d5fafe0",
+  "board_tested": false,
+  "changed_bodies": {
+    "i2s_checked_all_stop_locked": {
+      "previous_sha256": null,
+      "sha256": "9607a693e4b94c0f612bafe41a4c4d67d08083a6ed47bf562e5902ae4b792ed9"
+    },
+    "i2s_checked_component_trigger": {
+      "previous_sha256": "22e6416e80f14cfbadfaf76a1f0fbf7688f018c50b5b1a86760c077cf3bb6d00",
+      "sha256": "1f4fe3b4f423ad29b19ef5d2979d781601a5528c0976bf6258f7695bf1396b30"
+    },
+    "i2s_checked_error_locked": {
+      "previous_sha256": "1b540f7848a58ee55e99093559ded5583e8b9647cd996178c54a42facef4297a",
+      "sha256": "47d3db67ea53f1b76246ba245c3b0049690d11124b9061acc0bff95bb1351d9f"
+    },
+    "i2s_checked_gate_locked": {
+      "previous_sha256": "3439c2db2a23fb53fe5bf0389cf31a04d57580eab947524c87c7b93ae6fce988",
+      "sha256": "b3eae70768fdd0f35b767dfcb8b5da912c8515ba06fc811d7d1adc4f88acb383"
+    },
+    "i2s_checked_isr": {
+      "previous_sha256": "30659ef75c8e3bd6c4ba182e01a0c3a8d1989712a5b8a12c4d9832549466d3a0",
+      "sha256": "abdef2b41163e5c74147c161243ef316d431329676ff45b42e4549ae72bdc17a"
+    },
+    "i2s_checked_prepare": {
+      "previous_sha256": "b4e600babe3415ea1c88f8bc24dc440af24f2e3431ab019437df2e5fdd22dec1",
+      "sha256": "32c433acc338621fe8a987579eb0e6a79ff8ed0325aa5a3f2f41161ab93786c6"
+    },
+    "i2s_checked_probe_clock_release": {
+      "previous_sha256": "d9f3746b93928182b858f1be44a2fdb1fa399c627e1ea29488a8abed4b1d5554",
+      "sha256": "800a3c6d9813e3f23cf118e85cad526682dcdfa39caf3e8ca21413716b5dc65b"
+    },
+    "i2s_checked_quiesce": {
+      "previous_sha256": "e1ed1b951f0ec5e298db814ab415d56322927ef20f3154a9828f397ee75d4f9b",
+      "sha256": "a8b263f8c99eec5d1ea99f25e58d4ada601200a1e41f5df4c0739746636fd2de"
+    },
+    "i2s_checked_runtime_resume": {
+      "previous_sha256": "3f7e338fc75068b7d236a6b09f32d0a760a7fc1c452391a8ca96ea6e13455788",
+      "sha256": "df49f7b0ca46b77275e01f68221faf99315c85a457b71e9ea79addc7c65741bb"
+    },
+    "i2s_checked_runtime_suspend": {
+      "previous_sha256": "4a42bd7aee36b642e9367f713b56b4d98a6a46af29c1c385696bd59ea1684720",
+      "sha256": "a18b92e1c3c2a4969d7300c0c1bf24ddaf0e5ab967b860504bc2545d7a99455d"
+    },
+    "i2s_shared_free": {
+      "previous_sha256": "20faa46d4aa66f21c8f84b7c5f05e6b7f5dd3625f773b1d766bf131a2779d088",
+      "sha256": "ef7f2646be83998b7d43f94cdcace6972b56acb811a24acfab0f9ee5a95c056b"
+    },
+    "i2s_shared_free_check": {
+      "previous_sha256": "8557bb27d14b8a225cebfd57067a473c62c56f8dc08605e1aec1cb5457fdfbc3",
+      "sha256": "0f7792ef263dca5d2ce27d1933da0b4048d041cfe0f17cbc0026bb2f9d4e313e"
+    },
+    "i2s_shared_set_fmt": {
+      "previous_sha256": "966e63a0610a0b70c49ef4a92386bc8b066cddf53bb14e2d63cc89236037f200",
+      "sha256": "5818278d67cf35f13cef130a83d66116ccb1a73fa0d5bbce166a86ea6f36bd8d"
+    },
+    "i2s_trcm_admit_locked": {
+      "previous_sha256": null,
+      "sha256": "10fef46595615d05510e4eae8c1859520f756464a9bb322a91d845d01f351760"
+    },
+    "i2s_trcm_async_fault": {
+      "previous_sha256": null,
+      "sha256": "2bd29f6b48fa368c30c702c50bb00904d86817fc040e978cde501b3d371e8350"
+    },
+    "i2s_trcm_commit_locked": {
+      "previous_sha256": null,
+      "sha256": "7d4c47a30ed4b469ff7af5c33e1622d4f9f19322fcc9203cf49d8a54128a1331"
+    },
+    "i2s_trcm_isr": {
+      "previous_sha256": null,
+      "sha256": "6b4a72c6a9364e96ab160c6e1d4c7f5af26c02a7f39a87d6e1a65885e8d70047"
+    },
+    "i2s_trcm_joint_locked": {
+      "previous_sha256": null,
+      "sha256": "a7b98c638e1c0575730878e433d48abc5af6b1d4f45e52c959481d243e32466e"
+    },
+    "i2s_trcm_quiet_locked": {
+      "previous_sha256": null,
+      "sha256": "72b8b7f0a9504dbab49367c9ed9cec2ebf06eb181451935dff151cc20411e1b2"
+    },
+    "i2s_trcm_stop_locked": {
+      "previous_sha256": null,
+      "sha256": "9620d7d62ba31e50e9bb85ee8d0a560f1b59d41ee29ad64492c89a0dd7fb66d7"
+    },
+    "i2s_trcm_trigger": {
+      "previous_sha256": null,
+      "sha256": "2630619f6b33bc43cbdc381a3f2be8f8292d2aad89713ad5845d8481c63daaa4"
+    },
+    "rockchip_i2s_tdm_shutdown": {
+      "previous_sha256": "b0c9b0a43c5bb033ec16051aead67b85d854ef410c3fe66a36e385852ec13477",
+      "sha256": "f76d68e3b9a35c3cab03dbac58d65be83f0f9bfe7578d21822976d8a3d8bb686"
+    },
+    "rockchip_i2s_tdm_trigger": {
+      "previous_sha256": "d68c62a54e88dec40e895df2e7df2ec69088bcb1ae57364986e517fbdb2a588b",
+      "sha256": "5122d268cc67a99c1402194f8f89fa8d41088eb0a7c3e1e9f68a8d01303a99cc"
+    }
+  },
+  "duplex_START_authorized": false,
+  "header_product_compiled": false,
+  "new_optional_ops_header_required": "void (*pcm_async_fault)(struct snd_soc_dai *, int)",
+  "patch_sha256": "cda62ad35e0ac115415b666fb56fbdda5a959704d199d130fc241b049888c956",
+  "scope": "PRIVATE_CPU_ONLY_NOT_IMAGE_OR_BOARD",
+  "source_path": "source-v2/sound/soc/rockchip/rockchip_i2s_tdm.c",
+  "source_sha256": "13ccb46411a068470cdc33bd67799c2fef91ea4534ae52ed4630735dc4a83055"
+}

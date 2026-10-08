@@ -1,0 +1,11 @@
+{
+  "phase": "READONLY_IDENTITY_CHECK_NO_COMPILER_OR_MODEL",
+  "recording": "Observed original tool outputs, not direct stderr capture",
+  "attempts": [
+    {"model": "model-v3", "manifest_argument": "baad", "exit": 1, "error": "Reviewed manifest SHA differs", "cause": "Author passed wrong precheck argument; corrected to actual SHA"},
+    {"model": "model-v3", "manifest_argument": "33a0c97d8488fe38fbcc8d1eb82eb9edb8367db5f6acb34af40f02027237a7df", "exit": 1, "error": "Real body absent/duplicate: sound/soc/soc-pcm.c:soc_pcm_hw_free", "cause": "Preparer computed replacement actual-params text but omitted writing that file"}
+  ],
+  "compiler_executed": false,
+  "model_executed": false,
+  "partial_versions_preserved": ["model-v1", "model-v2", "model-v3"]
+}

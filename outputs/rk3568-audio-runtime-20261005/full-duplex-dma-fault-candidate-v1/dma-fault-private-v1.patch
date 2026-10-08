@@ -1,0 +1,337 @@
+--- a/drivers/dma/pl330.c
++++ b/drivers/dma/pl330.c
+@@ -465,6 +465,8 @@
+ 	bool active;
+ 	/* Lifecycle fields protected by lock; producers/runners are waitable. */
+ 	u64 epoch;
++	u64 fault_notified_epoch;
++	bool fault_notified;
+ 	bool quiescing;
+ 	bool runner_active;
+ 	bool rerun;
+@@ -1879,8 +1881,14 @@
+ static void pl330_error_locked(struct pl330_dmac *pl330, int error)
+ {
+ 	pl330->stop_proven = false;
+-	if (!pl330->lifecycle_error)
++	if (!pl330->lifecycle_error) {
+ 		pl330->lifecycle_error = error;
++		/* tasks is initialized before state becomes INIT. No PM/MMIO here. */
++		if (pl330->state == INIT || pl330->state == DYING) {
++			pl330->fault_tasklet_queued = true;
++			tasklet_schedule(&pl330->tasks);
++		}
++	}
+ }
+ 
+ static void pl330_pm_error_locked(struct pl330_dmac *pl330, int error)
+@@ -1981,6 +1989,68 @@
+ 	pl330_desc_put(desc);
+ }
+ 
++/* PL330 has at most eight physical channel threads (CR0.num_chan is 3 bits). */
++#define PL330_MAX_FAULT_CALLBACKS 8
++
++struct pl330_fault_callback {
++	struct dma_pl330_desc *desc;
++	struct dmaengine_desc_callback callback;
++};
++
++/* Both pch and controller locks held; no callback is invoked here. */
++static bool pl330_fault_capture_locked(struct dma_pl330_chan *pch,
++				      struct pl330_fault_callback *borrow)
++{
++	struct dma_pl330_desc *desc;
++	struct list_head *head;
++	int i;
++
++	if (!pch->dmac->lifecycle_error || pch->quiescing || !pch->thread ||
++	    (pch->fault_notified && pch->fault_notified_epoch == pch->epoch))
++		return false;
++	for (i = 0; i < 2; i++) {
++		head = i ? &pch->submitted_list : &pch->work_list;
++		list_for_each_entry(desc, head, node) {
++			if (desc->owner_pch != pch || desc->owner_epoch != pch->epoch ||
++			    !desc->txd.callback_result)
++				continue;
++			borrow->desc = pl330_desc_get(desc);
++			if (!borrow->desc)
++				continue;
++			dmaengine_desc_get_callback(&desc->txd, &borrow->callback);
++			pch->fault_notified = true;
++			pch->fault_notified_epoch = pch->epoch;
++			return true;
++		}
++	}
++	return false;
++}
++
++static void pl330_fault_notify(struct pl330_dmac *pl330)
++{
++	struct pl330_fault_callback borrowed[PL330_MAX_FAULT_CALLBACKS];
++	struct dmaengine_result result = { .result = DMA_TRANS_ABORTED, .residue = 0 };
++	struct dma_pl330_chan *pch;
++	unsigned long flags;
++	unsigned int i, count = 0;
++
++	/* Capture every borrower before the first sink can jointly STOP peers. */
++	for (i = 0; i < pl330->num_peripherals && count < ARRAY_SIZE(borrowed); i++) {
++		pch = &pl330->peripherals[i];
++		spin_lock_irqsave(&pch->lock, flags);
++		spin_lock(&pl330->lock);
++		if (pl330_fault_capture_locked(pch, &borrowed[count]))
++			count++;
++		spin_unlock(&pl330->lock);
++		spin_unlock_irqrestore(&pch->lock, flags);
++	}
++	for (i = 0; i < count; i++) {
++		/* Do not read descriptor fields after cutoff; use the borrowed snapshot. */
++		dmaengine_desc_callback_invoke(&borrowed[i].callback, &result);
++		pl330_desc_put(borrowed[i].desc);
++	}
++}
++
+ static void pl330_dotask(struct tasklet_struct *t)
+ {
+ 	struct pl330_dmac *pl330 = from_tasklet(pl330, t, tasks);
+@@ -1988,6 +2058,8 @@
+ 	int i;
+ 	atomic_inc(&pl330->producers);
+ 
++	/* PM failure/removal/reset early exits must not suppress borrowed faults. */
++	pl330_fault_notify(pl330);
+ 	spin_lock_irqsave(&pl330->lock, flags);
+ 	pl330->fault_tasklet_queued = false;
+ 	if (pl330->pm_failed || pl330->removing || pl330->system_suspended) {
+--- a/sound/core/pcm_dmaengine.c
++++ b/sound/core/pcm_dmaengine.c
+@@ -30,6 +30,8 @@
+ 	unsigned int pos;
+ 	bool checked, exposed, quiescing, closing, go_failed;
+ 	int first_error;
++	void (*error_sink)(struct snd_pcm_substream *, int, void *);
++	void *error_sink_arg;
+ 	spinlock_t lifecycle_lock;
+ 	atomic_t operations;
+ 	wait_queue_head_t drain_wait;
+@@ -269,6 +271,87 @@
+ 	snd_pcm_period_elapsed(substream);
+ }
+ 
++/* Called from atomic contexts. The binding is immutable from open to drain. */
++static void dmaengine_pcm_notify_fault(struct snd_pcm_substream *substream,
++				      int error, bool stop_xrun)
++{
++	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
++	void (*sink)(struct snd_pcm_substream *, int, void *);
++	void *sink_arg;
++	unsigned long flags;
++
++	if (!prtd || !prtd->checked)
++		return;
++	error = dmaengine_pcm_error(prtd, error < 0 ? error : -EIO);
++	spin_lock_irqsave(&prtd->lifecycle_lock, flags);
++	sink = prtd->error_sink;
++	sink_arg = prtd->error_sink_arg;
++	spin_unlock_irqrestore(&prtd->lifecycle_lock, flags);
++	/* CPU admission/ticket failure precedes the ALSA state action. */
++	if (sink)
++		sink(substream, error, sink_arg);
++	/* Synchronous trigger/pointer callers may already own the stream lock. */
++	if (stop_xrun)
++		snd_pcm_stop_xrun(substream);
++}
++
++static int dmaengine_pcm_check_fault(struct snd_pcm_substream *substream)
++{
++	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
++	int error;
++
++	if (!prtd || !prtd->checked)
++		return 0;
++	/* This accessor is cached, IRQ-safe and does not acquire PM or perform I/O. */
++	error = dmaengine_check_open(prtd->dma_chan);
++	if (error < 0) {
++		dmaengine_pcm_notify_fault(substream, error, false);
++		return dmaengine_pcm_error(prtd, error);
++	}
++	return dmaengine_pcm_error(prtd, 0);
++}
++
++static void dmaengine_pcm_dma_complete_result(void *arg,
++					    const struct dmaengine_result *result)
++{
++	struct snd_pcm_substream *substream = arg;
++	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
++	int error;
++
++	if (!prtd || !prtd->checked)
++		return;
++	error = dmaengine_check_open(prtd->dma_chan);
++	if (error < 0 || (result && result->result != DMA_TRANS_NOERROR)) {
++		/* Preserve exact controller errno before the result-only -EIO fallback. */
++		dmaengine_pcm_notify_fault(substream, error < 0 ? error : -EIO, true);
++		return;
++	}
++	if (dmaengine_pcm_error(prtd, 0))
++		return;
++	dmaengine_pcm_dma_complete(arg);
++}
++
++int snd_dmaengine_pcm_set_error_sink(struct snd_pcm_substream *substream,
++		void (*sink)(struct snd_pcm_substream *, int, void *), void *arg)
++{
++	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
++	unsigned long flags;
++	int ret = 0;
++
++	if (!prtd || !prtd->checked)
++		return sink ? -EOPNOTSUPP : 0;
++	spin_lock_irqsave(&prtd->lifecycle_lock, flags);
++	if (prtd->exposed || prtd->closing || prtd->quiescing || prtd->error_sink)
++		ret = -EBUSY;
++	else {
++		prtd->error_sink = sink;
++		prtd->error_sink_arg = arg;
++	}
++	spin_unlock_irqrestore(&prtd->lifecycle_lock, flags);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(snd_dmaengine_pcm_set_error_sink);
++
+ static int dmaengine_pcm_prepare_and_submit(struct snd_pcm_substream *substream)
+ {
+ 	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
+@@ -279,6 +362,9 @@
+ 	int ret;
+ 
+ 	prtd->cookie = 0;
++	ret = dmaengine_pcm_check_fault(substream);
++	if (ret)
++		return ret;
+ 	if (prtd->checked) {
+ 		ret = snd_pcm_dma_quarantine_check(substream, chan->device->dev);
+ 		if (ret)
+@@ -298,7 +384,10 @@
+ 	if (!desc)
+ 		return -ENOMEM;
+ 
+-	desc->callback = dmaengine_pcm_dma_complete;
++	if (prtd->checked)
++		desc->callback_result = dmaengine_pcm_dma_complete_result;
++	else
++		desc->callback = dmaengine_pcm_dma_complete;
+ 	desc->callback_param = substream;
+ 	prtd->cookie = dmaengine_submit(desc);
+ 	ret = dma_submit_error(prtd->cookie);
+@@ -346,6 +435,11 @@
+ 	}
+ 	stopping = cmd == SNDRV_PCM_TRIGGER_STOP ||
+ 		(cmd == SNDRV_PCM_TRIGGER_SUSPEND && !(runtime->info & SNDRV_PCM_INFO_PAUSE));
++	if (!stopping) {
++		ret = dmaengine_pcm_check_fault(substream);
++		if (ret)
++			return ret;
++	}
+ 	ret = dmaengine_pcm_operation_begin(prtd, cmd, stopping);
+ 	if (ret)
+ 		return ret;
+@@ -354,13 +448,20 @@
+ 		ret = dmaengine_pcm_prepare_and_submit(substream);
+ 		if (ret)
+ 			break;
++		ret = dmaengine_pcm_check_fault(substream);
++		if (ret)
++			break;
+ 		dma_async_issue_pending(prtd->dma_chan);
++		ret = dmaengine_pcm_check_fault(substream);
++		if (ret)
++			break;
+ 		if (prtd->checked && dmaengine_tx_status(prtd->dma_chan, prtd->cookie, NULL) == DMA_ERROR) {
+ 			spin_lock_irqsave(&prtd->lifecycle_lock, flags);
+ 			prtd->go_failed = true;
+ 			spin_unlock_irqrestore(&prtd->lifecycle_lock, flags);
++			dmaengine_pcm_notify_fault(substream, -EIO, false);
+ 			dmaengine_pcm_operation_end(prtd);
+-			return -EIO;
++			return dmaengine_pcm_error(prtd, -EIO);
+ 		}
+ 		break;
+ 	case SNDRV_PCM_TRIGGER_RESUME:
+@@ -405,6 +506,8 @@
+ snd_pcm_uframes_t snd_dmaengine_pcm_pointer_no_residue(struct snd_pcm_substream *substream)
+ {
+ 	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
++	if (dmaengine_pcm_check_fault(substream))
++		return SNDRV_PCM_POS_XRUN;
+ 	return bytes_to_frames(substream->runtime, prtd->pos);
+ }
+ EXPORT_SYMBOL_GPL(snd_dmaengine_pcm_pointer_no_residue);
+@@ -424,7 +527,12 @@
+ 	unsigned int buf_size;
+ 	unsigned int pos = 0;
+ 
+-	dmaengine_tx_status(prtd->dma_chan, prtd->cookie, &state);
++	if (dmaengine_pcm_check_fault(substream))
++		return SNDRV_PCM_POS_XRUN;
++	if (dmaengine_tx_status(prtd->dma_chan, prtd->cookie, &state) == DMA_ERROR && prtd->checked) {
++		dmaengine_pcm_notify_fault(substream, -EIO, false);
++		return SNDRV_PCM_POS_XRUN;
++	}
+ 	buf_size = snd_pcm_lib_buffer_bytes(substream);
+ 	if (state.residue > 0 && state.residue <= buf_size)
+ 		pos = buf_size - state.residue;
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -154,6 +154,15 @@
+ 	return snd_soc_set_runtime_hwparams(substream, &hw);
+ }
+ 
++static void dmaengine_pcm_cpu_fault(struct snd_pcm_substream *substream,
++				   int first_error, void *arg)
++{
++	struct snd_soc_dai *cpu_dai = arg;
++
++	/* CPU-only optional contract: atomic, no codec callbacks or sleeping. */
++	cpu_dai->driver->ops->pcm_async_fault(cpu_dai, first_error);
++}
++
+ static int dmaengine_pcm_open(struct snd_soc_component *component,
+ 			      struct snd_pcm_substream *substream)
+ {
+@@ -165,7 +174,22 @@
+ 	if (ret)
+ 		return ret;
+ 
+-	return snd_dmaengine_pcm_open(substream, chan);
++	ret = snd_dmaengine_pcm_open(substream, chan);
++	if (!ret) {
++		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++		struct snd_soc_dai *cpu_dai;
++
++		if (rtd->num_cpus == 1) {
++			cpu_dai = asoc_rtd_to_cpu(rtd, 0);
++			if (cpu_dai->driver->ops && cpu_dai->driver->ops->pcm_async_fault) {
++				ret = snd_dmaengine_pcm_set_error_sink(substream,
++							    dmaengine_pcm_cpu_fault, cpu_dai);
++				if (ret)
++					snd_dmaengine_pcm_close(substream);
++			}
++		}
++	}
++	return ret;
+ }
+ 
+ static int dmaengine_pcm_close(struct snd_soc_component *component,
+--- a/include/sound/dmaengine_pcm.h
++++ b/include/sound/dmaengine_pcm.h
+@@ -35,6 +35,9 @@
+ 	struct dma_chan *chan);
+ int snd_dmaengine_pcm_close(struct snd_pcm_substream *substream);
+ int snd_dmaengine_pcm_quiesce(struct snd_pcm_substream *substream);
++/* Open-only binding; atomic sink invoked outside DMA/PCM lifecycle locks. */
++int snd_dmaengine_pcm_set_error_sink(struct snd_pcm_substream *substream,
++	void (*sink)(struct snd_pcm_substream *, int, void *), void *arg);
+ 
+ int snd_dmaengine_pcm_open_request_chan(struct snd_pcm_substream *substream,
+ 	dma_filter_fn filter_fn, void *filter_data);

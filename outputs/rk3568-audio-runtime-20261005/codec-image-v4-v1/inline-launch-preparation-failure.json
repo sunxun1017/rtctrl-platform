@@ -1,0 +1,10 @@
+{
+  "tool_chunk": "bc0568",
+  "exit": 1,
+  "stage": "Windows outer record wrapper Python parse before execution",
+  "error": "SyntaxError: trailing backslash in raw cwd string",
+  "WSL_invoked": false,
+  "module_builder_invoked": false,
+  "module_Kbuild_started": false,
+  "evidence": "Actual tool-captured traceback; moved outer launcher into a normal saved Python file"
+}

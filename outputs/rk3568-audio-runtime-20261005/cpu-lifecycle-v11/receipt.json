@@ -1,0 +1,31 @@
+{
+  "version": 11,
+  "source_sha256": "87779ff23367aaaac07e8c980ee98dbdf59a93318e3a2782c52bdb011eb4417c",
+  "delta_patch_sha256": "dd31e7208c71bdc7dac8b41c8d82f9e2702f77c743a80214044d8b28e5422437",
+  "patch_sha256": "eeb28a66d7ab91c516bc8c68747604d31bfe1d3830cedcc4c7b822c8e9ebcc78",
+  "object_sha256": "d59be6cc24f638e164d86fdc215e94e508dd656e734ef2a419ebc845287f2ac1",
+  "object_bytes": 611320,
+  "modified_functions": [
+    "rockchip_i2s_tdm_set_sysclk",
+    "i2s_checked_hw_params"
+  ],
+  "other_CPU_code_byte_exact": true,
+  "legacy_sysclk_branch_byte_exact": true,
+  "input_manifest_sha256": "c782f94517d45f172818dee9f275b8a5af2477c77858056fbd810a91fd165f75",
+  "model_receipts_sha256": {
+    "shutdown-red-v10": "2ab4ded5421598898219d746ad8db2542b68a17ab1c4489455229640860f9769",
+    "shutdown-green-v11": "08a3d216af2d1d4df3926b31fd733aa08e20f32db4a9223988f3dd39e647a54a",
+    "params-regression-v11": "3db167d9263222d501443aac4dab2a5ad09a17d524a4ec897414634b4deaa60d"
+  },
+  "kbuild_result_sha256": "d1b1fddef8faaa22c85997e11f56c919722fd4b03c6e682e699300d6024cbd7a",
+  "patch_replay_result_sha256": "f1e75c28810724efbb0d785a88ca92ab8b5d7cbb973c85f6fc42e75f891f425f",
+  "protected_old_inputs_verified": 12,
+  "old_actual_ABI_files_verified": 2110,
+  "board_tested": false,
+  "full_image_built": false,
+  "published": false,
+  "audio_start_allowed": false,
+  "permits_reboot": false,
+  "independent_review_completed": false,
+  "scope": "Offline actual function/caller models, exact whole production Kbuild object and patch replay; root alone integrates a future Image and does board comparison"
+}

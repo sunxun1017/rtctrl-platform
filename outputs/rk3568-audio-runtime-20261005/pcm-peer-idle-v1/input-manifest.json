@@ -1,0 +1,14 @@
+{
+  "external_inputs_sha256": {
+    ".deps/kernel/aiot-3568pq-audio-v3/.config": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+    "docs/superpowers/specs/2026-10-06-rk3568-pcm-peer-idle-design.md": "9a96fd6c2ccb3d270dc30f1d665f797bbf8f5adf4648fb672eb9c40b9c294e0e",
+    "outputs/rk3568-audio-runtime-20261005/build-pcm-config.py": "64b58ff761446d22de31a1336012be116148d3b9e402c57ee90ad5b44f3fbeef",
+    "outputs/rk3568-audio-runtime-20261005/build/pcm-production-v1/manifest.json": "c927cd41b9b68bcdaa7e7b8847d025b249e1695004291bf2dd945f8fef2411e0",
+    "outputs/rk3568-audio-runtime-20261005/build/pcm-production-v1/pcm-config": "ac76da61b1a0f89ee67e8a13c407cec07e90048fbe07904fe4c20271143054fa",
+    "outputs/rk3568-audio-runtime-20261005/pcm-config.c": "bf3c513fc98474c55346c77277e347c2bc0e194480c76c1fd6d1d2d9fbb98b2a",
+    "outputs/rk3568-audio-runtime-20261005/test-pcm-config.py": "d6197455cc167a3cd0548431a3328a012d77b52b18c844817370dcfe4d845501",
+    "third_party/linux-rk3588/include/uapi/sound/asound.h": "138cb9e8de8df6cdf2abb05806d7f61078fb7ea44063e5914bea277ef55a0447"
+  },
+  "parameters_header_is_exact_pcm_config_prefix": true,
+  "parameters_header_sha256": "26ae04bc98a5e466bc24a18ab76b5841c9c52a0e265d5610cdedc2d4011536f9"
+}

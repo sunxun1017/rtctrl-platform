@@ -1,0 +1,52 @@
+ALSA_CARD card=1 id=rockchiprk809co controls=14
+ALSA_CONTROL numid=12 name=Playback Path items=11 value=0 label=OFF
+ALSA_CONTROL numid=13 name=Capture MIC Path items=4 value=0 label=MIC OFF
+ALSA_CONTROL numid=14 name=Resume Path items=2 value=0 label=OFF
+ALSA_CODEC_INTERFACE_VERIFIED
+PCM_INFO card=1 device=0 subdevice=0 stream=playback id=fe410000.i2s-rk817-hifi rk817-hifi-0 name=fe410000.i2s-rk817-hifi rk817-hifi-0
+PCM_CAP_MASK param=0 bits=00000009,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_MASK param=1 bits=00000444,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_MASK param=2 bits=00000001,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_INTERVAL param=8 min=16 max=32 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=9 min=32 max=256 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=10 min=2 max=8 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=11 min=8000 max=96000 openmin=0 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=12 min=83 max=8192000 openmin=1 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=13 min=8 max=65536 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=14 min=256 max=1900800 openmin=0 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=15 min=2 max=16384 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=16 min=166 max=16384000 openmin=1 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=17 min=16 max=131072 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=18 min=256 max=524288 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=19 min=0 max=4294967295 openmin=0 openmax=0 integer=0 empty=0
+PCM_CONFIG format=S16_LE access=RW_INTERLEAVED rate=48000 channels=2 period_size=256 periods=4 buffer_size=1024
+PCM_STATE configured=SETUP appl_ptr=0 hw_ptr=0
+PCM_STATE freed=OPEN
+PCM_CONFIGURATION_VERIFIED_NO_START
+PCM_CONFIGURATION_VERIFIED_NO_START
+PCM_INFO card=1 device=0 subdevice=0 stream=capture id=fe410000.i2s-rk817-hifi rk817-hifi-0 name=fe410000.i2s-rk817-hifi rk817-hifi-0
+PCM_CAP_MASK param=0 bits=00000009,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_MASK param=1 bits=00000444,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_MASK param=2 bits=00000001,00000000,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+PCM_CAP_INTERVAL param=8 min=16 max=32 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=9 min=32 max=256 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=10 min=2 max=8 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=11 min=8000 max=96000 openmin=0 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=12 min=83 max=8192000 openmin=1 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=13 min=8 max=65536 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=14 min=256 max=1900800 openmin=0 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=15 min=2 max=16384 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=16 min=166 max=16384000 openmin=1 openmax=0 integer=0 empty=0
+PCM_CAP_INTERVAL param=17 min=16 max=131072 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=18 min=256 max=524288 openmin=0 openmax=0 integer=1 empty=0
+PCM_CAP_INTERVAL param=19 min=0 max=4294967295 openmin=0 openmax=0 integer=0 empty=0
+PCM_CONFIG format=S16_LE access=RW_INTERLEAVED rate=48000 channels=2 period_size=256 periods=4 buffer_size=1024
+PCM_STATE configured=SETUP appl_ptr=0 hw_ptr=0
+PCM_STATE freed=OPEN
+PCM_CONFIGURATION_VERIFIED_NO_START
+PCM_CONFIGURATION_VERIFIED_NO_START
+ALSA_CARD card=1 id=rockchiprk809co controls=14
+ALSA_CONTROL numid=12 name=Playback Path items=11 value=0 label=OFF
+ALSA_CONTROL numid=13 name=Capture MIC Path items=4 value=0 label=MIC OFF
+ALSA_CONTROL numid=14 name=Resume Path items=2 value=0 label=OFF
+ALSA_CODEC_INTERFACE_VERIFIED

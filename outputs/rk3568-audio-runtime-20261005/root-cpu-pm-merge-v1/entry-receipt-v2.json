@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-audio-runtime-20261005/root-cpu-pm-merge-v1/run-model.py",
+    "--model",
+    "model-v20",
+    "--manifest-sha256",
+    "0c2310b1855504f5ca2b9f64ba3a38a44ba994c134d9e45137287ab1ac36e8b6",
+    "--attempt",
+    "merged2"
+  ],
+  "exit": 0,
+  "model_bytes_and_bodies_unchanged": true,
+  "only_version_directory_argument_corrected": true
+}

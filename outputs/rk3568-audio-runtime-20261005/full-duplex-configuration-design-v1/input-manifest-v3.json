@@ -1,0 +1,619 @@
+{
+  "status": "DESIGN_SOURCE_IDENTITIES_ONLY_NOT_MODEL_OR_BUILD",
+  "inputs": {
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-pcm.c": {
+      "bytes": 83185,
+      "mode": 420,
+      "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37",
+      "snapshot": "inputs-v1/soc-pcm.c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-component.c": {
+      "bytes": 25093,
+      "mode": 420,
+      "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c",
+      "snapshot": "inputs-v1/soc-component.c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/soc-compress.c": {
+      "bytes": 22685,
+      "mode": 420,
+      "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8",
+      "snapshot": "inputs-v1/soc-compress.c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-v1/sound/soc/generic/simple-card-utils.c": {
+      "bytes": 16684,
+      "mode": 420,
+      "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73",
+      "snapshot": "inputs-v1/simple-card-utils.c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/codec-image-v4-v1/source-v1/rk817_codec.c": {
+      "bytes": 45269,
+      "mode": 493,
+      "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+      "snapshot": "inputs-v1/rk817_codec.c"
+    },
+    "outputs/rk3568-audio-runtime-20261005/cpu-lifecycle-v12/source/sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "bytes": 112836,
+      "mode": 420,
+      "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141",
+      "snapshot": "inputs-v1/rockchip_i2s_tdm.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-dai.c": {
+      "bytes": 19045,
+      "mode": 420,
+      "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d",
+      "snapshot": "inputs-v1/soc-dai.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-link.c": {
+      "bytes": 4563,
+      "mode": 420,
+      "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975",
+      "snapshot": "inputs-v1/soc-link.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/generic/simple-card.c": {
+      "bytes": 17668,
+      "mode": 420,
+      "sha256": "ce371f0cdec646e63ebcc117bf0dd3da5f5030b83d536253fdebc6b60fdab2c1",
+      "snapshot": "inputs-v1/simple-card.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-generic-dmaengine-pcm.c": {
+      "bytes": 14510,
+      "mode": 420,
+      "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06",
+      "snapshot": "inputs-v1/soc-generic-dmaengine-pcm.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc.h": {
+      "bytes": 50658,
+      "mode": 420,
+      "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b",
+      "snapshot": "inputs-v1/soc.h"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc-dai.h": {
+      "bytes": 16176,
+      "mode": 420,
+      "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748",
+      "snapshot": "inputs-v1/soc-dai.h"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/simple_card_utils.h": {
+      "bytes": 6738,
+      "mode": 420,
+      "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8",
+      "snapshot": "inputs-v1/simple_card_utils.h"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/codecs/rk817_codec.h": {
+      "bytes": 7223,
+      "mode": 493,
+      "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449",
+      "snapshot": "inputs-v1/rk817_codec.h"
+    }
+  },
+  "source_to_Image_inventory": {
+    "sound/soc/soc-pcm.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-pcm.c",
+      "ordinary": {
+        "bytes": 83185,
+        "mode": 420,
+        "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+      },
+      "Image_inventory_entry": {
+        "bytes": 83185,
+        "mode": "100644",
+        "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+      },
+      "snapshot_sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37"
+    },
+    "sound/soc/soc-component.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-component.c",
+      "ordinary": {
+        "bytes": 25093,
+        "mode": 420,
+        "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+      },
+      "Image_inventory_entry": {
+        "bytes": 25093,
+        "mode": "100644",
+        "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+      },
+      "snapshot_sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c"
+    },
+    "sound/soc/soc-compress.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-compress.c",
+      "ordinary": {
+        "bytes": 22685,
+        "mode": 420,
+        "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+      },
+      "Image_inventory_entry": {
+        "bytes": 22685,
+        "mode": "100644",
+        "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+      },
+      "snapshot_sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8"
+    },
+    "sound/soc/generic/simple-card-utils.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/generic/simple-card-utils.c",
+      "ordinary": {
+        "bytes": 16684,
+        "mode": 420,
+        "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+      },
+      "Image_inventory_entry": {
+        "bytes": 16684,
+        "mode": "100644",
+        "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+      },
+      "snapshot_sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73"
+    },
+    "sound/soc/codecs/rk817_codec.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/codecs/rk817_codec.c",
+      "ordinary": {
+        "bytes": 45269,
+        "mode": 493,
+        "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+      },
+      "Image_inventory_entry": {
+        "bytes": 45269,
+        "mode": "100755",
+        "sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+      },
+      "snapshot_sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64"
+    },
+    "sound/soc/rockchip/rockchip_i2s_tdm.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/rockchip/rockchip_i2s_tdm.c",
+      "ordinary": {
+        "bytes": 112836,
+        "mode": 420,
+        "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+      },
+      "Image_inventory_entry": {
+        "bytes": 112836,
+        "mode": "100644",
+        "sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+      },
+      "snapshot_sha256": "7b56bad38b5824b6fdbfb30c735f79f6134f3dd67c87975144598fb31a553141"
+    },
+    "sound/soc/soc-dai.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-dai.c",
+      "ordinary": {
+        "bytes": 19045,
+        "mode": 420,
+        "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d"
+      },
+      "Image_inventory_entry": {
+        "bytes": 19045,
+        "mode": "100644",
+        "sha256": "fc15c8017a52c71c4f25172c5078a35e387d785268e81eb39c6ead1b83a0497d"
+      }
+    },
+    "sound/soc/soc-link.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-link.c",
+      "ordinary": {
+        "bytes": 4563,
+        "mode": 420,
+        "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975"
+      },
+      "Image_inventory_entry": {
+        "bytes": 4563,
+        "mode": "100644",
+        "sha256": "ec988c4631def10982d83561bddace0bfed47e39c875ecb9032fb8db1100c975"
+      }
+    },
+    "sound/soc/generic/simple-card.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/generic/simple-card.c",
+      "ordinary": {
+        "bytes": 17668,
+        "mode": 420,
+        "sha256": "ce371f0cdec646e63ebcc117bf0dd3da5f5030b83d536253fdebc6b60fdab2c1"
+      },
+      "Image_inventory_entry": {
+        "bytes": 17668,
+        "mode": "100644",
+        "sha256": "ce371f0cdec646e63ebcc117bf0dd3da5f5030b83d536253fdebc6b60fdab2c1"
+      }
+    },
+    "sound/soc/soc-generic-dmaengine-pcm.c": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/soc-generic-dmaengine-pcm.c",
+      "ordinary": {
+        "bytes": 14510,
+        "mode": 420,
+        "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06"
+      },
+      "Image_inventory_entry": {
+        "bytes": 14510,
+        "mode": "100644",
+        "sha256": "df8c10db5d4b62fc15ed921f1e05411aee033bdff56e81749560db8b2a224d06"
+      }
+    },
+    "include/sound/soc.h": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc.h",
+      "ordinary": {
+        "bytes": 50658,
+        "mode": 420,
+        "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b"
+      },
+      "Image_inventory_entry": {
+        "bytes": 50658,
+        "mode": "100644",
+        "sha256": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b"
+      }
+    },
+    "include/sound/soc-dai.h": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/soc-dai.h",
+      "ordinary": {
+        "bytes": 16176,
+        "mode": 420,
+        "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748"
+      },
+      "Image_inventory_entry": {
+        "bytes": 16176,
+        "mode": "100644",
+        "sha256": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748"
+      }
+    },
+    "include/sound/simple_card_utils.h": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/include/sound/simple_card_utils.h",
+      "ordinary": {
+        "bytes": 6738,
+        "mode": 420,
+        "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8"
+      },
+      "Image_inventory_entry": {
+        "bytes": 6738,
+        "mode": "100644",
+        "sha256": "dfa44dc62098ea442cb1991726fc6492172f94368aaada011a20675e704c92f8"
+      }
+    },
+    "sound/soc/codecs/rk817_codec.h": {
+      "actual_SOURCE": ".deps/kernel-source/aiot-3568pq-audio-v4/sound/soc/codecs/rk817_codec.h",
+      "ordinary": {
+        "bytes": 7223,
+        "mode": 493,
+        "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449"
+      },
+      "Image_inventory_entry": {
+        "bytes": 7223,
+        "mode": "100755",
+        "sha256": "370f2c9451d0e871b627c7b9a9b90cc24e486c49cebe29c068d5b692f7802449"
+      }
+    }
+  },
+  "functions": {
+    "soc-pcm.c": {
+      "soc_pcm_params_symmetry": {
+        "line": 362,
+        "bytes": 1670,
+        "sha256": "fc33379466cf14160404da96a08c7290095786b5c82233775de8d44cf12e8b7a"
+      },
+      "soc_pcm_codec_params_fixup": {
+        "line": 893,
+        "bytes": 297,
+        "sha256": "f337b7c59bbe5bdf9be280460c5403fc1f0a33fdeb8a769c2dbea177bdc6567e"
+      },
+      "soc_pcm_hw_params": {
+        "line": 909,
+        "bytes": 3593,
+        "sha256": "7433c84f1a945d67f71ba26ba289e9c055915181b1c7069bd6923ac4f4a0a6cc"
+      },
+      "soc_pcm_hw_free": {
+        "line": 1038,
+        "bytes": 1104,
+        "sha256": "54bd205a2f87eab6532a07cc24a78d5195a341d2afcd505eaae59ec549c32f1b"
+      },
+      "soc_pcm_clean_locked": {
+        "line": 647,
+        "bytes": 554,
+        "sha256": "1287d6ae4a4ecb3d7b1d43c594d31a5d3f50c15003e6f2dfb5700ecd04c48c22"
+      },
+      "soc_pcm_clean_post_unlock": {
+        "line": 665,
+        "bytes": 504,
+        "sha256": "9f150954e6b19398296a8ee454b5e212562eafceed53b686ef07d64190455682"
+      },
+      "soc_pcm_open": {
+        "line": 705,
+        "bytes": 3007,
+        "sha256": "c53dc3a0aa86f116d487c6d5fbd04a10e7f44e5680cb084da2fc8302220565fa"
+      },
+      "soc_pcm_prepare": {
+        "line": 834,
+        "bytes": 1485,
+        "sha256": "28a109fba7a7a9bf6a59e15dcd25858d7c12c74fd7f3f24055a47b8c7b1efae1"
+      }
+    },
+    "soc-component.c": {
+      "snd_soc_pcm_component_hw_params": {
+        "line": 772,
+        "bytes": 569,
+        "sha256": "980cff1d299f372d74c6d96c95b0dd4f0a264ef83b5e59bf474173c4c713af5e"
+      },
+      "snd_soc_pcm_component_hw_free": {
+        "line": 795,
+        "bytes": 474,
+        "sha256": "3b89c16bb907c1a202c6728aa81abd6452e1a042e58ec7edebb779473236b747"
+      },
+      "snd_soc_pcm_component_pm_runtime_get": {
+        "line": 853,
+        "bytes": 703,
+        "sha256": "7d10c64d139d42804a9b9d6af097465c9b86ec8eb5f0772bd589341a91e7ec98"
+      },
+      "snd_soc_pcm_component_pm_runtime_put": {
+        "line": 877,
+        "bytes": 406,
+        "sha256": "7f2cd07d8be315e60c26e2af618248c4375c4b44073da06848c08843e3308cc6"
+      }
+    },
+    "soc-compress.c": {},
+    "simple-card-utils.c": {
+      "asoc_simple_hw_params": {
+        "line": 250,
+        "bytes": 1061,
+        "sha256": "84cc4afd3780868f0b1f0666f9fb2ca48807f31e9b344e7d19e04d3f5a5ca38f"
+      },
+      "asoc_simple_set_clk_rate": {
+        "line": 235,
+        "bytes": 272,
+        "sha256": "fe673b48b55924b39205504cbad4d9f18b8261902cfbd58bb4d514e01dd258d3"
+      },
+      "asoc_simple_startup": {
+        "line": 194,
+        "bytes": 490,
+        "sha256": "0f072d569c6d892d0dc969dff2d03464eac6c5de7d60140161a27f8cbb6b4249"
+      },
+      "asoc_simple_shutdown": {
+        "line": 213,
+        "bytes": 755,
+        "sha256": "dc81002f90e0a725c05f634b6b665ab9ebc256a8dd718064fb6322fde9d84dde"
+      }
+    },
+    "rk817_codec.c": {
+      "rk817_set_dai_sysclk": {
+        "line": 903,
+        "bytes": 351,
+        "sha256": "b810ba25a755c7565ae3b993fbf78c51da72a5559e1e63c5b38e9a7a9cfe88bc"
+      },
+      "rk817_hw_params": {
+        "line": 942,
+        "bytes": 2989,
+        "sha256": "4ec0c59db21ec4ae6f184a17b8445f75681b20e36f719dc58683eb9357076346"
+      },
+      "rk817_restart_dac_digital_clk_and_apll": {
+        "line": 212,
+        "bytes": 1133,
+        "sha256": "205da199f41983aa0002a3a6c1fa2d20b356ae6fc7b61faa8525191e8318b466"
+      },
+      "rk817_restart_adc_digital_clk_and_apll": {
+        "line": 267,
+        "bytes": 817,
+        "sha256": "283a520e014b1525482804bf485188f109e614f0a254d61eb69b416a048c46a1"
+      },
+      "rk817_codec_shutdown": {
+        "line": 1212,
+        "bytes": 635,
+        "sha256": "c788c08a8fa13615a523ce6f1817e24d1fd62650ee6cb95beaa0abfb2a173f18"
+      },
+      "rk817_set_dai_fmt": {
+        "line": 916,
+        "bytes": 687,
+        "sha256": "dd96661f8530e6c09260e66ece496c3ef48e944cba0f85e450ce619cf8c41379"
+      },
+      "rk817_codec_power_up": {
+        "line": 371,
+        "bytes": 2754,
+        "sha256": "f403da614625928f2336f4619f682ad398131c253753552812b5b9d610e7e21d"
+      },
+      "rk817_codec_power_down": {
+        "line": 455,
+        "bytes": 1863,
+        "sha256": "a547cda2374f0b907e87ed0d665a2a210b7ee4741305ddb127f58d3381b15864"
+      },
+      "rk817_playback_path_put": {
+        "line": 711,
+        "bytes": 521,
+        "sha256": "ae3b1e76e1b133a77b623ae45d7c3e41253d7ee3798209609e424f1399f74db1"
+      },
+      "rk817_capture_path_put": {
+        "line": 852,
+        "bytes": 514,
+        "sha256": "e34476f5467ce92d00fa66168bef4c6256d2455406c0c6ebc7918da37b59adfb"
+      },
+      "rk817_suspend": {
+        "line": 1281,
+        "bytes": 129,
+        "sha256": "a9e54a38593a0041f2f05f7bf709089e22e0023d5a6bef4d9a54cf783d1f2d6a"
+      },
+      "rk817_resume": {
+        "line": 1287,
+        "bytes": 392,
+        "sha256": "7a542f9f662785b28852e16d413e98879536aae456491c53824f89787a430d0b"
+      }
+    },
+    "rockchip_i2s_tdm.c": {
+      "i2s_checked_hw_params": {
+        "line": 2270,
+        "bytes": 2963,
+        "sha256": "a254ad080c93831abb3c5113cd1fd6712eb77187b275b7bc00ffc5e271dd185d"
+      },
+      "i2s_checked_params_dirty": {
+        "line": 2220,
+        "bytes": 800,
+        "sha256": "997c125b2168cffe57e07b7bd025fefdc5bbdcc4534d7d505bd47a478f230cc8"
+      },
+      "i2s_checked_params_trcm": {
+        "line": 2247,
+        "bytes": 731,
+        "sha256": "06b6fd758cf1ba4565e04e17c4a88549e7ef9e9650d8b3ac36db7d435df8373a"
+      },
+      "rockchip_i2s_tdm_set_mclk": {
+        "line": 1877,
+        "bytes": 1052,
+        "sha256": "d90406155e2920255863306e716ad2127fed2976fceb43f7b6cb9577448ad5fe"
+      },
+      "rockchip_i2s_tdm_set_sysclk": {
+        "line": 2472,
+        "bytes": 1284,
+        "sha256": "ec9cb230ee44d15034ee27892067c0c61384977692d4a99119103b52f322cc51"
+      },
+      "i2s_checked_gate_locked": {
+        "line": 540,
+        "bytes": 286,
+        "sha256": "3439c2db2a23fb53fe5bf0389cf31a04d57580eab947524c87c7b93ae6fce988"
+      }
+    },
+    "soc-dai.c": {
+      "snd_soc_dai_hw_params": {
+        "line": 323,
+        "bytes": 512,
+        "sha256": "14762dc7be29551abf261b7b55b5afc8fc20973f11fb516fd973a6c3d91a19f9"
+      },
+      "snd_soc_dai_hw_free": {
+        "line": 342,
+        "bytes": 196,
+        "sha256": "f7744869f97e90ba699b4f268a9c934c365153ef1916b703d524f76c63127dd2"
+      },
+      "snd_soc_dai_set_sysclk": {
+        "line": 52,
+        "bytes": 357,
+        "sha256": "48daa0e016d277c7a8e750bc2ed6a55fe321eee7f2c598388110970d190fd457"
+      },
+      "snd_soc_dai_active": {
+        "line": 466,
+        "bytes": 173,
+        "sha256": "7928eaaadbd634b83253c35f28f1aea2430c0834380d178c85eeb564553b95bd"
+      }
+    },
+    "soc-link.c": {
+      "snd_soc_link_hw_params": {
+        "line": 112,
+        "bytes": 345,
+        "sha256": "9d9d1ba029b09c8daa9052fcc3911c749867c61479e97e9e2d1f810a4f63010e"
+      },
+      "snd_soc_link_hw_free": {
+        "line": 125,
+        "bytes": 239,
+        "sha256": "ff207d897228b35e4b99943bb837c4536c8267ca1847614d63207366a784ab82"
+      },
+      "snd_soc_link_be_hw_params_fixup": {
+        "line": 57,
+        "bytes": 258,
+        "sha256": "af99270ced9da5c38aa7df706078aa2f180c2496384aa27c668972e62f19f67d"
+      }
+    },
+    "simple-card.c": {},
+    "soc-generic-dmaengine-pcm.c": {
+      "dmaengine_pcm_hw_params": {
+        "line": 76,
+        "bytes": 897,
+        "sha256": "55d2b38cadf0f95ac4d2e5b343651854274fdff37f8809d5c0e44802124ba1c7"
+      },
+      "snd_dmaengine_pcm_prepare_slave_config": {
+        "line": 50,
+        "bytes": 671,
+        "sha256": "1f39a736762656f39f85d5d05c3482e8afda3ccb9a1061d4aba3dd53bce7eafe"
+      }
+    },
+    "soc.h": {},
+    "soc-dai.h": {},
+    "simple_card_utils.h": {},
+    "rk817_codec.h": {}
+  },
+  "reference_inputs_not_copied": {
+    "outputs/rk3568-audio-runtime-20261005/build/full-duplex-review-v1/README.md": {
+      "bytes": 12134,
+      "mode": 420,
+      "sha256": "944e88e50201a57041a850019f2b9f7d11e60cb26b21ba7e20887e55caede7d7"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/full-duplex-review-v1/input-manifest.json": {
+      "bytes": 28164,
+      "mode": 420,
+      "sha256": "0736b09ca8bbd3f88479b149d906b3d72afbde8ceb82c610f55354bbd23fd922"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/source-manifest-v1.json": {
+      "bytes": 3254,
+      "mode": 420,
+      "sha256": "9b3925f93a7c87dc43e2d5866e204f5384a43195c32fd083d641a709ee89d7a6"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/input-manifest.json": {
+      "bytes": 9092,
+      "mode": 420,
+      "sha256": "4c043676fe48a47a983375ef392a45a930adcbc9ecdab3c68bd3511215b6630b"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/test-caller-chain.c": {
+      "bytes": 36644,
+      "mode": 420,
+      "sha256": "def57d25793b77117247942c2b5b791220c73a19d681bca0250e9703be558bc1"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/test-params-shim.h": {
+      "bytes": 4302,
+      "mode": 420,
+      "sha256": "37066ffda4da5440c1da2677810101832acc7f02bd76e8a0e95dac4d1bc0cd3e"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/source_utils.py": {
+      "bytes": 1097,
+      "mode": 420,
+      "sha256": "3d5deab6d6eea70d067c9b0b8336d66f39ce1cc0e18a8a7938a4f60d66c43440"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/model-green-v2/unit.c": {
+      "bytes": 62366,
+      "mode": 420,
+      "sha256": "c69861420d44103a430e17e9cdfdb779ad0cf9c481c263737001dcf609af79b7"
+    },
+    "outputs/rk3568-audio-runtime-20261005/asoc-open-rollback-v1/run-model.py": {
+      "bytes": 7562,
+      "mode": 420,
+      "sha256": "e7436d6884d8a91201343ecd8b3f9955a27765b5926b4f8c00b1f083434fda20"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/integration-v4/manifest.json": {
+      "bytes": 3258878,
+      "mode": 420,
+      "sha256": "8df525843cac41fd0e272351bc41d0e573c25570cfed7e60f1990b9fe97aa33a"
+    },
+    "outputs/rk3568-audio-runtime-20261005/build/integration-v4/integrated-source-inventory.json": {
+      "bytes": 15762758,
+      "mode": 420,
+      "sha256": "bb2fb1a0c548bb2de8e683ebd6540f3cb75ddb5815af3df7cf2f8a1d918d0cd3"
+    }
+  },
+  "function_body_identity_only_not_executed": true,
+  "model_executed": false,
+  "build_executed": false,
+  "board_tested": false,
+  "duplex_START_authorized": false,
+  "tool_sha256": "b1bd2527734c99493400ab5a4d24acd493f68a4fda17c866177277c214bfb597",
+  "design_correction": {
+    "previous_files_sha256": {
+      "DESIGN.md": "ad82e047bd9fe34c7f9940ee0b64e72ee8c0ff0992c25f48ad0334062601c83d",
+      "input-manifest.json": "d00a4bf2c174958ff9271f03f9928095922c4e818bc79d37139081f1b45b7167",
+      "design-readback.json": "166e394a3df648234605bc750e7e6f86651321c82fa03ba100413a49076c762f"
+    },
+    "corrected_design_sha256": "44fcd22b971318c04bb2bf1322ab612137ed148f13196a57cbbd89fba2993981",
+    "source_manifest_v1_sha256": "d00a4bf2c174958ff9271f03f9928095922c4e818bc79d37139081f1b45b7167",
+    "reason": "Actual machine CPU set_sysclk started gate precedes codec hw_params; healthy and post-error paths must differ",
+    "source_functions": [
+      "asoc_simple_hw_params",
+      "rockchip_i2s_tdm_set_sysclk",
+      "soc_pcm_params_symmetry",
+      "soc_pcm_hw_params"
+    ],
+    "source_body_identities_unchanged": true,
+    "model_executed": false,
+    "production_modified": false
+  },
+  "errno_and_START_correction": {
+    "previous_files_sha256": {
+      "DESIGN.md": "44fcd22b971318c04bb2bf1322ab612137ed148f13196a57cbbd89fba2993981",
+      "MODEL-PLAN.md": "c8a0e6d8f1d08273bdc234f8f70e238887d0fdfb007e79d431180e9a9bedcd04",
+      "input-manifest-v2.json": "25776089ba1474de586f155b4cb851bf186f69d7cfcd843bcf125aa289e2c777",
+      "design-readback-v2.json": "e1db3e40894d2335b3a46a42a0b5c6361c2b205d6a6623cd18d57fe7b63f1038"
+    },
+    "corrected_design_sha256": "f7a66bf0f4f4ac59d79e7a990b0074ddf563dcb8bf4e8a157f8d35d375ceaa52",
+    "corrected_model_plan_sha256": "1ac71dc0322f918bbab377a2aba5885cdfbf1e98a37d4989e76cbba8707661f2",
+    "errno_precedence": [
+      "existing_symmetry_EINVAL",
+      "finite_profile_EINVAL",
+      "otherwise_valid_running_EBUSY_before_shared_write"
+    ],
+    "START_chain": "actual soc_pcm_trigger components/DMA then DAIs, actual C3 local-prefix rollback; API model is not PL330",
+    "source_body_identities_unchanged": true,
+    "model_executed": false,
+    "production_modified": false
+  }
+}

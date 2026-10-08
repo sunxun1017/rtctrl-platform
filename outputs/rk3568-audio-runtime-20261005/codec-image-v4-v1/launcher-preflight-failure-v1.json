@@ -1,0 +1,12 @@
+{
+  "actual_launcher_exit": 1,
+  "launcher": "wsl.exe -d Ubuntu-22.04 --cd /home/sx/projects/rtctrl-platform --exec /usr/bin/python3 -B (preflight capture wrapper)",
+  "tool_session": 80479,
+  "tool_final_chunk": "152297",
+  "reported_error": "Wsl/Service/0x8007274c",
+  "Linux_preflight_started": false,
+  "module_build_invoked": false,
+  "Image_or_ABI_success_claimed": false,
+  "raw_output_provenance": "tool-captured launcher output only; no Python preflight stdout/stderr files were generated",
+  "services_TUN_or_network_modified": false
+}

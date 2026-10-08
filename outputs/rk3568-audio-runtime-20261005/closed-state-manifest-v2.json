@@ -1,0 +1,9 @@
+{
+  "script_sha256": {
+    "verify-clock-profile.sh": "3cf5bb6c7259463128a50170060ae8e90a9497df1863fcc984d9cfd1926f0e8a",
+    "verify-closed-state.sh": "534b3611f6b6cff22ede4eb050676610086d78c5898edfd2ec310ee3152eeeec"
+  },
+  "exact_busybox_transfer_round_trip": true,
+  "board_tested": false,
+  "pcm_operations_repeated": false
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/pcm/linux-interface.sh",
+    "wait": 18,
+    "expect": "(?m)^PCM_CONFIGURATION_COMPLETE_NO_PREPARE_NO_START_NO_AUDIO_FRAMES\\r?$"
+  }
+]

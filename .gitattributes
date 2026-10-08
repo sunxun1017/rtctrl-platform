@@ -17,3 +17,7 @@ outputs/rk3568-audio-runtime-20261005/full-duplex-shared-io-candidate-v1/test-te
 
 # Locked small third-party snapshots keep upstream byte identity.
 outputs/rk3568-boot-package-20261005/sources/** -text -whitespace
+
+# These inputs retain literal unified-diff context and a sealed header footer.
+outputs/rk3568-audio-runtime-20261005/full-duplex-dma-fault-candidate-v1/prepare-review.py -whitespace
+outputs/rk3568-audio-runtime-20261005/pcm-peer-idle-v1/parameters.h whitespace=-blank-at-eof

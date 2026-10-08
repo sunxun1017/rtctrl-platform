@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "outputs/rk3568-audio-runtime-20261005/offline-next-delivery-v1/offline-next.py",
+    "package",
+    "--out",
+    "package-v1"
+  ],
+  "exit": 0,
+  "builder_sha256": "34ab777a357f534119dc3585a2adfab7499d8cb277f8c9b834e3f9d86a02c99a",
+  "board_tested": false
+}

@@ -1,0 +1,70 @@
+{
+  "scope": "owned_offline_tools_results_and_exact_package_receipt_with_external_root_source_acceptance",
+  "files": {
+    "offline-next.py": {
+      "bytes": 31911,
+      "sha256": "34ab777a357f534119dc3585a2adfab7499d8cb277f8c9b834e3f9d86a02c99a"
+    },
+    "offline-next-dt-v1.py": {
+      "bytes": 13052,
+      "sha256": "38f0004ab5e27331ae3d9c58ce6830f4a286a6636520450421ddccd10714329f"
+    },
+    "test-offline-dt.py": {
+      "bytes": 1464,
+      "sha256": "f718ad4861a20490341fb7876ea88fbca96254864b22bd8d23c904b8420a2b59"
+    },
+    "test-offline-inputs.py": {
+      "bytes": 3365,
+      "sha256": "ac671aa39d530ea1743e7cad2ecc07c1d832d418488d2029e4c82a783311989a"
+    },
+    "test-offline-format.py": {
+      "bytes": 4578,
+      "sha256": "9b906ee93942a47a94877193916d2e019f4c6dbb4546d962a48b87d9fa35df1d"
+    },
+    "readback-offline.py": {
+      "bytes": 4897,
+      "sha256": "3365d6281342dc296fb5110143af9225b2587ab7c83e32e480215848a9307fa2"
+    },
+    "package-build-v1.json": {
+      "bytes": 311,
+      "sha256": "d05398a15fa76518858ce589571c428ceccb0bd0f5330dec926503d31af509cd"
+    },
+    "input-gate-green-v1.json": {
+      "bytes": 12,
+      "sha256": "5bc232b82de377a5655a39a2af9d7ae0fc868de5b9df957e18905cb914606c88"
+    },
+    "finite-verification-v1.json": {
+      "bytes": 1328,
+      "sha256": "aed97e615b3f98dda3fdb792a0dfc0a766f716ae15b68cff82c99c19a9b7815c"
+    },
+    "readback-v1.json": {
+      "bytes": 1034,
+      "sha256": "83117da25738e70b4d6853a4202feef906cd5cfb975690ca54d76d580f8bc29b"
+    },
+    "dt-v1/receipt.json": {
+      "bytes": 4380,
+      "sha256": "85468ceeae2b8af76cff93bd5ff3c8af10592a25b037c76281bd7ae7ffb3077c"
+    },
+    "package-v1/manifest.json": {
+      "bytes": 15514,
+      "sha256": "64e6648b37e9f095d92d1f59c0b87858c64d865265bc77680ff9bcc3b5d5ab84"
+    },
+    "package-v1/receipt.json": {
+      "bytes": 7413,
+      "sha256": "fd77c5aaa2e0933f12381ea4c23bb6cb1536850410f8815403671b436f3d1f1d"
+    },
+    "README.md": {
+      "bytes": 4665,
+      "sha256": "22cb04e77273da82b0bd2f93cba3a7385829d3b504d7e534c62651acb34c2298"
+    }
+  },
+  "root_final_software_receipt": {
+    "path": "outputs/rk3568-audio-runtime-20261005/build/root-audio-integration-v5/final-software-v1/receipt.json",
+    "bytes": 4279,
+    "sha256": "06f4a1bcc80694893462c3326c9c4bbcc40b5725ede56006306b7b21dce9f0f3"
+  },
+  "offline_bundle_ready_for_root_package_review": true,
+  "board_tested": false,
+  "START_authorized": false,
+  "formal_flash_ready": false
+}

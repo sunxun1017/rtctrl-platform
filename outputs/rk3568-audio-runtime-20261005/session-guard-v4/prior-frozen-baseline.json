@@ -1,0 +1,29 @@
+{
+  "board_tested": false,
+  "prior_versions": {
+    "v1": {
+      "SHA256SUMS_sha256": "b339c9badf1059cf287f9ac948ad68c596d113270d58e666498eaca6e139d116",
+      "verified_files": 550
+    },
+    "v2": {
+      "SHA256SUMS_sha256": "9bcef4ecf8bb20fc5f4b4badf3a15e74fce343da36ad9c6ffa7b866dbed25330",
+      "verified_files": 1128
+    },
+    "v3": {
+      "SHA256SUMS_sha256": "3d48a493ad8935d2f8af729d8e236e5dde77aae03a070297fdc4dab827ccf445",
+      "verified_files": 664
+    }
+  },
+  "copied_files": {
+    "audio-session-guard.c": "cfe6f2e51b8d39ae4681f6abc745bcd9870a9abc2cab2543c0eecad4aa6d7230",
+    "guard-parser.h": "d3de83c789f60fbc9583a4dca306546148cdb16bade26d31a747c8b1b1511f3d",
+    "model-driver.c": "db415dc22fdb052a118d025339baa9f2c4a881f107e0f75419d9c7ab57267eeb",
+    "test-models.py": "c6497e93834999cc84d53e38bebebd1e77c9de94c5f652a9069ef80c5fc5fc30",
+    "build-freeze.py": "27fe861c15487783008d11dcfc5d0dc0258b85a30d8e6952d87d94099dfd9ed4",
+    "README.md": "4693157bc8001ca50655c20dc92938e80fc83ee608f1684ba0d0d2a64c3c512e",
+    "PLAN.md": "9611c088f9051842086e9f05bce49fb4bcfb0f72d9a65e23ecd2a72d10e698bd",
+    "canonical-device-model.c": "e01ca6d7291ffb490e967847b7cec1abf2860d46d0f71af7a54951d785e27e44",
+    "test-canonical-device.py": "78fc240625eafafad0ea6dd3f7333ca9b0b4671137bbeca8f3a2e609dd9fb518"
+  },
+  "clock_stage_red_result_sha256": "a7ca37c0a96049d0fddd8c49d9bd6cc6f43fe1dfbde08c7e136969260709ebed"
+}

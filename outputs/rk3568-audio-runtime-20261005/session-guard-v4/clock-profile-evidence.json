@@ -1,0 +1,30 @@
+{
+  "root_reported_board_observation": true,
+  "subagent_board_access": false,
+  "raw_path": "outputs/rk3568-pid1-20261005/private/audio-clock-parents-20261006-v1.raw.txt",
+  "raw_sha256": "723c42f1583904a3d24f84a2f310ce0079eb29896479cef46efa0e52627dea45",
+  "codec_source_sha256": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+  "provider_source_sha256": "563ffe996cfee4103d018b46393a09298fd181291ce512da078bb68ec96869e1",
+  "ccf_source_sha256": "c1b5d1d3bb98bc37a45ed1259acaf805fab2d9ed60a75d31b49e5f4b3a258117",
+  "codec_clock_provider": "cru",
+  "codec_clock_id": 419,
+  "codec_component_probe_holds_one_reference_until_component_remove": true,
+  "codec_clock_counts_are_total_ccf_counts_not_per_consumer": true,
+  "fixed_tx_cached_parents": {
+    "clk_i2s1_8ch_tx_src": "gpll",
+    "clk_i2s1_8ch_tx_frac": "clk_i2s1_8ch_tx_src",
+    "clk_i2s1_8ch_tx": "clk_i2s1_8ch_tx_frac",
+    "mclk_i2s1_8ch_tx": "clk_i2s1_8ch_tx",
+    "i2s1_mclkout_tx": "mclk_i2s1_8ch_tx",
+    "i2s1_mclkout": "i2s1_mclkout_tx"
+  },
+  "shared_gpll_reference_count_constrained": false,
+  "inactive_rx_ioe_parent_constrained": false,
+  "stages": {
+    "bound": "TX six enable/prepare=1 protect=0; HCLK=1; other nine=0",
+    "card-unbound": "TX six=0; HCLK=1; other nine=0",
+    "cpu-unbound": "All sixteen=0"
+  },
+  "gate_does_not_prove_per_consumer_clock_ownership": true,
+  "classification_depends_on_exact_codec_source_module_dt_and_single_thread_native_domain": true
+}

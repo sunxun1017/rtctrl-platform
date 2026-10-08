@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "root_readonly_result_review_completed": true,
+  "scope": "actual full three-environment compiler/execution transcripts and existing ordered assertion/case evidence; no runner reexecution",
+  "bindings": [
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/receipt.json",
+      "bytes": 228201,
+      "sha256": "669a8d1575f8290862dd599802e722bca43978e543a6e2b9883c82e6536a75bf"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/execution-readback-v3/receipt.json",
+      "bytes": 20090,
+      "sha256": "533d0b71fe4b4801c0d376bcb178993bdb28503dfc167e90b647995f5e778f9a"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/run-model-r2.py",
+      "bytes": 13037,
+      "sha256": "847337b64763b629432c9c58fbb4d2540ca9fe9b4923be9a5339a9d771ed9b82"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/model-v2/input-manifest.json",
+      "bytes": 25371,
+      "sha256": "3c17ce462a8e5b64bf0214e7348f2a5189a32c7de12ae815ecd1a120d9a2b362"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/receipt.json",
+      "bytes": 228201,
+      "sha256": "669a8d1575f8290862dd599802e722bca43978e543a6e2b9883c82e6536a75bf"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev1/receipt.json",
+      "bytes": 7093,
+      "sha256": "5416c7ef6d23874d151fe3f7f14adbc13627a69177ae552f5bdb260e0127e3f2"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-compile.command.json",
+      "bytes": 697,
+      "sha256": "dc3a83f783a6467ed785d8dd85af2b28d7642617cf92b7186bfbe14421d177ec"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-execute.command.json",
+      "bytes": 350,
+      "sha256": "c899bad91a7b1f71a0e6eaf7522f9a5e943d556d0cbac4128ba56f7556bb7808"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-execute.stdout",
+      "bytes": 42924,
+      "sha256": "01c864176cea42a906aea09ae4efb291b5f4a440bae18391903e92c5ae51a227"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/host-execute.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-compile.command.json",
+      "bytes": 806,
+      "sha256": "1fa5939475ae9474fb99f2ce863f7ef498f979e470efd33f18f1dc53d9c006b8"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-execute.command.json",
+      "bytes": 356,
+      "sha256": "5d08d056f3a976d167e045dbdfc265435f84aa57ecae42fa7a26f1166ea4d376"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-execute.stdout",
+      "bytes": 42924,
+      "sha256": "01c864176cea42a906aea09ae4efb291b5f4a440bae18391903e92c5ae51a227"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/asan-ubsan-execute.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-compile.command.json",
+      "bytes": 738,
+      "sha256": "d7e0d08bd150b757cadba7b1e2964d20d95243889216dd7c88d05ea52a46a307"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-execute.command.json",
+      "bytes": 448,
+      "sha256": "2396783a3a3e9cad4f0f4b5b2058647c50ed014155ed6ed01dadcff390d2ab7e"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-execute.stdout",
+      "bytes": 42924,
+      "sha256": "01c864176cea42a906aea09ae4efb291b5f4a440bae18391903e92c5ae51a227"
+    },
+    {
+      "path": "outputs/rk3568-audio-runtime-20261005/full-duplex-params-baseline-v1/runs-baselinev2/aarch64-qemu-execute.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "compile_exit_each": 0,
+  "model_exit_each": 1,
+  "three_stdout_bytes_equal": true,
+  "stdout_sha256": "01c864176cea42a906aea09ae4efb291b5f4a440bae18391903e92c5ae51a227",
+  "ordered_business_reds": [
+    "peer_0_CPU_error_preserves_configured_DAI_rate",
+    "peer_0_component_error_preserves_configured_DAI_rate",
+    "two_HW_FREE_then_close_first_0_clears_configuration_cache",
+    "running_peer_0_after_component_error_rejects_before_shared_mutation",
+    "peer_1_CPU_error_preserves_configured_DAI_rate",
+    "peer_1_component_error_preserves_configured_DAI_rate",
+    "two_HW_FREE_then_close_first_1_clears_configuration_cache",
+    "running_peer_1_after_component_error_rejects_before_shared_mutation"
+  ],
+  "boundary_observations": 76,
+  "ordered_event_case_groups": [
+    "idle_first_0",
+    "idle_second_1",
+    "peer_0_CPU_error_preserves_configured_DAI_rate",
+    "peer_0_component_error_preserves_configured_DAI_rate",
+    "two_HW_FREE_then_close_first_0_clears_configuration_cache",
+    "single_START_peer_0_after_error_0",
+    "healthy_running_peer_0_same_rate",
+    "refused_second_START_peer_0",
+    "single_START_peer_0_after_error_1",
+    "running_peer_0_after_component_error_rejects_before_shared_mutation",
+    "single_START_CPU_API_error_0",
+    "idle_first_1",
+    "idle_second_0",
+    "peer_1_CPU_error_preserves_configured_DAI_rate",
+    "peer_1_component_error_preserves_configured_DAI_rate",
+    "two_HW_FREE_then_close_first_1_clears_configuration_cache",
+    "single_START_peer_1_after_error_0",
+    "healthy_running_peer_1_same_rate",
+    "refused_second_START_peer_1",
+    "single_START_peer_1_after_error_1",
+    "running_peer_1_after_component_error_rejects_before_shared_mutation",
+    "single_START_CPU_API_error_1"
+  ],
+  "healthy_symmetry_EINVAL_preserved": true,
+  "two_HW_FREE_while_both_open_observed": true,
+  "actual_C3_START_prefix_failure_rollback_observed": true,
+  "available_functions_not_execution_coverage": true,
+  "current_SOURCE_reinventory_performed": false,
+  "new_candidate_tested": false,
+  "four_prior_duplex_reds_resolved": false,
+  "board_tested": false
+}

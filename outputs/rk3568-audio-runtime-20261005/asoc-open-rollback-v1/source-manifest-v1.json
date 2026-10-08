@@ -1,0 +1,65 @@
+{
+  "schema": "rk3568-asoc-open-rollback-source-v1",
+  "files": {
+    "sound/soc/soc-pcm.c": {
+      "sha256": "9ba2247294f745488133b3d0b307686249b4c2cd23045ea1bfba517dd57aed37",
+      "original_sha256": "ab086f6fb20cf7a5e50d2a854674067cf18cc40b2809fc9c11f42b750917a83e"
+    },
+    "sound/soc/soc-component.c": {
+      "sha256": "ea81b958a6cdf035a29de112e07f15f55f774d4f67a02b68ca1eae6c0ce5d85c",
+      "original_sha256": "583837f5eacd28fd03ddb7e59add2c1c202d37a1bf98107ceb2dfecf0feda5a3"
+    },
+    "sound/soc/soc-compress.c": {
+      "sha256": "d9a1b4de08206c232ccfef37a85a25f65053ebb7a7b2bbcd36cff2c22a918bc8",
+      "original_sha256": "9e1b4b23224b0add6cb6874f7cb1ae762c2aa9d51f5d4bf48478b5796126581f"
+    },
+    "sound/soc/generic/simple-card-utils.c": {
+      "sha256": "4b2094f708f5bec2b73938ec217eedae67f5df962ee0847bee8f2c29eddbcd73",
+      "original_sha256": "b734a34021704bd526e223661098ad8bf90dcdd12501210002b001ea6452c2fb"
+    }
+  },
+  "inputs": {
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/soc-pcm.c": {
+      "sha256": "ab086f6fb20cf7a5e50d2a854674067cf18cc40b2809fc9c11f42b750917a83e",
+      "snapshot": "inputs-v1/soc-pcm.c"
+    },
+    "outputs/rk3568-dma-lifecycle-20261005/C3-review-v2/full-replay/sound/soc/soc-component.c": {
+      "sha256": "583837f5eacd28fd03ddb7e59add2c1c202d37a1bf98107ceb2dfecf0feda5a3",
+      "snapshot": "inputs-v1/soc-component.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v3/sound/soc/soc-compress.c": {
+      "sha256": "9e1b4b23224b0add6cb6874f7cb1ae762c2aa9d51f5d4bf48478b5796126581f",
+      "snapshot": "inputs-v1/soc-compress.c"
+    },
+    ".deps/kernel-source/aiot-3568pq-audio-v2/sound/soc/generic/simple-card-utils.c": {
+      "sha256": "b734a34021704bd526e223661098ad8bf90dcdd12501210002b001ea6452c2fb",
+      "snapshot": "inputs-v1/simple-card-utils.c"
+    },
+    "docs/superpowers/specs/2026-10-06-rk3568-asoc-open-rollback-design.md": {
+      "sha256": "edc843d071f400f56a9d478424823c2124b10ecb1691e554ff3fb9384cb4dbb6",
+      "snapshot": "inputs-v1/approved-design.md"
+    },
+    "docs/superpowers/plans/2026-10-06-rk3568-asoc-open-rollback.md": {
+      "sha256": "3ff2a3639efe37142500e4daff9149a0135fa544da71c5f6d0b685b004a35f97",
+      "snapshot": "inputs-v1/approved-plan.md"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-contract-v1/sealed-v1/receipt.json": {
+      "sha256": "0aad711c7127a4467b0d2818e9414c6f577dbf9130672350d449ccf1f1abbd49",
+      "snapshot": "inputs-v1/baseline-seal.json"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-contract-v1/model-v5/input-manifest.json": {
+      "sha256": "abfa327867d421e13b39bb7d2f71e25f519f3652cbd0af39b427af577b80c954",
+      "snapshot": "inputs-v1/baseline-model-input.json"
+    },
+    "outputs/rk3568-audio-runtime-20261005/full-duplex-contract-v1/model-v5/source_utils.py": {
+      "sha256": "3d5deab6d6eea70d067c9b0b8336d66f39ce1cc0e18a8a7938a4f60d66c43440",
+      "snapshot": "inputs-v1/source_utils.py"
+    }
+  },
+  "patch_sha256": "179cf3c1bc7d37124e1d7aae792cbe105bb2f6a2ab726077ed7c6fb577dce7f7",
+  "headers_struct_ABI_changed": false,
+  "CPU_v12_modified": false,
+  "START_gates_modified": false,
+  "board_tested": false,
+  "public_patch_published": false
+}

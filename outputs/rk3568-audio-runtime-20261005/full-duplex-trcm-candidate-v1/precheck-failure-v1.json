@@ -1,0 +1,8 @@
+{
+  "scope": "TOOL_OBSERVED_READONLY_PRECHECK_FAILURE_NOT_DIRECT_STREAM_CAPTURE",
+  "argv": ["/usr/bin/python3", "-B", "run-model.py", "--model", "model-v3", "--manifest-sha256", "2e73fbb5898079c61e0190e70ecfb029d314727d69fba9c4ccb2e8ac8bd109ca", "--attempt", "precheck3", "--check"],
+  "exit": 1,
+  "error": "ValueError: Fixed 72 observation schedule differs 85",
+  "compiler_executed": false,
+  "correction": "run-model-v2.py pins actual literal schedule85; original runner/model bytes preserved"
+}

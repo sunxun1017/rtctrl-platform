@@ -1,0 +1,22 @@
+{
+  "scope": "actual_integration_v4_codec_offline_build_and_import_closure",
+  "root_authorized_freeze": true,
+  "independent_readonly_actual_acceptance": true,
+  "independent_readonly_freeze_schema_acceptance": true,
+  "build_manifest_sha256": "32241d1dfe9f2cbf17bae023065d87ee436173ba319a9f40b81ad5c7b1eb8e3c",
+  "module_sha256": "aa594a46d660c929cdae71f81024659cf9f4beca032baf9a193ad6ded3476171",
+  "builder_sha256": "ac8e0fabbb5ee9dee12b136e576560c98e2efe9484727db1227338507a5c1fee",
+  "freeze_tool_sha256": "a1199570fe51b9f72b7323d5c53ecbd8a2a0c3d8d521e8776c04020ffe2c1095",
+  "parent_final_review_sha256": "797e51e4f62190dc9c389d4a1624293c705b8c2bf78b5166fe0c01ddd55354db",
+  "root_fresh_audit_receipt_sha256": "bfbba6268dc8934a3b59585983c554f076cc7252dd5d62566fbc9216a148a518",
+  "readonly_reviewer": "/root/battery_dt_audit_1006",
+  "root": "/root",
+  "archive_kind": "Complete owned ordinary-file inventory/SUM fingerprint; not an additional full-byte archive",
+  "generated_inventory_was_signed_at_Image_compile_time": false,
+  "CRC_runtime_enforcement_claimed": false,
+  "board_tested": false,
+  "START_authorized": false,
+  "unload_safe": false,
+  "accepted_for_board": false,
+  "full_duplex_passed": false
+}

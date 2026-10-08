@@ -1,0 +1,9 @@
+{
+  "scope": "POST_RUN_AUDIT_SCRIPT_FAILURE_NOT_SOURCE_OR_MODEL_COMPILE",
+  "command": "python3 audit-terminal-v5.py",
+  "exit": 1,
+  "error": "KeyError: host-no-pm-sleep",
+  "cause": "audit looked for no-PM branch in runs; actual runner stores no_pm_sleep_branch",
+  "compiler_executed": false,
+  "source_modified": false
+}

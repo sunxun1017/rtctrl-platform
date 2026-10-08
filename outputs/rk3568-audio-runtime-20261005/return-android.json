@@ -1,0 +1,15 @@
+[
+  {
+    "command": "sh /tmp/pcm/linux-return-guard.sh",
+    "wait": 3,
+    "expect": "(?m)^PCM_RAM_ONLY_RESET_READY\\r?$"
+  },
+  {
+    "command": "dmesg",
+    "wait": 2
+  },
+  {
+    "command": "echo b > /proc/sysrq-trigger",
+    "wait": 40
+  }
+]

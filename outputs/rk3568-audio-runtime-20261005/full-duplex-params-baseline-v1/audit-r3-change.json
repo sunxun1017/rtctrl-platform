@@ -1,0 +1,11 @@
+{
+  "original_audit_sha256": "85b8a2e570d5aa25f783a877e93e93eeb7416dae0c9e4a05d52f5958a43a0958",
+  "new_audit_sha256": "febc1027703c92fa37ef677ad1ffbed46956ae1becead6f45be95d0c716c694c",
+  "changes": {
+    "output = HERE / 'execution-readback-v2'": "output = HERE / 'execution-readback-v3'",
+    "if '-Wextra' in flags or '-Werror' in flags:": "if '-Wextra' in flags or '-Wsign-compare' in flags:",
+    "Prior actual integration-v4 PCM compile command did not enable -Wextra or global -Werror; harness-only -Wno-sign-compare retains other strict checks.": "Prior actual integration-v4 C PCM command contains global -Werror but enables neither -Wextra nor -Wsign-compare. Harness -Wextra exposed this comparison; harness-only -Wno-sign-compare retains other strict checks."
+  },
+  "old_failed_evidence": "a37f2288b6e699a9326cce8c2bfd25311a0900d761dcb95e6e63f3a3e603f632",
+  "source_model_runner_and_C_execution_unchanged": true
+}

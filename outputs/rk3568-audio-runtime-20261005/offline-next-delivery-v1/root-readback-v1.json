@@ -1,0 +1,32 @@
+{
+  "scope": "finite_complete_offline_bundle_readback_no_board_or_global_source_reaudit",
+  "receipt": {
+    "bytes": 7413,
+    "sha256": "fd77c5aaa2e0933f12381ea4c23bb6cb1536850410f8815403671b436f3d1f1d",
+    "crc32": "991dd399"
+  },
+  "complete_files_verified_excluding_receipt": 36,
+  "all_full_bytes_sha_crc_match": true,
+  "fresh_format_and_real_overlay_equal_saved": true,
+  "raw": {
+    "bytes": 40482816,
+    "sha256": "d294173a44addf281ac23c47e440800fa0706aa0752f5ff44159b1670fd3db35",
+    "crc32": "1f454d9d"
+  },
+  "padded": {
+    "bytes": 41943040,
+    "sha256": "90e663bc12d33026764bf7b95ac6beede816801c6f7c2fb537615f28059dc0b1",
+    "crc32": "4427a536"
+  },
+  "runtime_files": 5,
+  "new_DT": {
+    "bytes": 163263,
+    "sha256": "85f09184db921d6cf4fe7fac9f209bcd69236085af391a263c830a87ce70449a",
+    "crc32": "f6aeb0f8"
+  },
+  "rootfs_and_initramfs_identical_prior": true,
+  "source_independent_review_is_root_responsibility": true,
+  "board_tested": false,
+  "START_authorized": false,
+  "formal_flash_ready": false
+}

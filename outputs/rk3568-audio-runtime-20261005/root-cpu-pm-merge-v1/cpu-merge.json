@@ -1,0 +1,6 @@
+{
+  "scope": "actual_CPU_v3_plus_reviewed_PM_owner_gate",
+  "source_path": ".deps/kernel-source/aiot-3568pq-audio-v5/sound/soc/rockchip/rockchip_i2s_tdm.c",
+  "source_sha256": "b987171f222e3644a2df9a95499ee55d2bccd54770d6f5a4dd89f7f944aabe25",
+  "parent_CPU_manifest_sha256": "1de4056f3e4dc5aa43c51730cbb6250ab0c42ad828e01065bdbd5521fe1e7ede"
+}

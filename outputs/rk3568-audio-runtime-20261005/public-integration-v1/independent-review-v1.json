@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-06",
+  "independent_reviewer": "/root/battery_dt_audit_1006",
+  "root_recording_tool_sha256": "0bfd8004645bf607a6c630dc9a241037b1e448cc84c1d59bb21dd533d65fc283",
+  "accepted": true,
+  "blocking_findings": [],
+  "inputs_rechecked_by_recording_tool": {
+    "sealed-evidence-v1/receipt.json": {
+      "bytes": 4352,
+      "sha256": "242c34350e8d995e98213561423cd4fc99a49cf1bf8f4cfb226f4a50dc20096f"
+    },
+    "root-audit-v1.py": {
+      "bytes": 4041,
+      "sha256": "e17733902adbf8579d7c1a23c67302195cd7b5285869583d3d8ef7a572b7a3dc"
+    },
+    "verification-v1/receipt.json": {
+      "bytes": 10437,
+      "sha256": "8ea1b85795dd79ff13248d7d2f230eddef8c088ee77b06629eaae61ceac04bf6"
+    },
+    "root-audit-v1.json": {
+      "bytes": 795,
+      "sha256": "f16f697a0dc20f87e3c596942a422c1bde5c5a7fbe6f45c451eca7f3da38157c"
+    }
+  },
+  "independent_read_only_checks": {
+    "ordinary_frozen_files": 197,
+    "SUM_rows": 198,
+    "external_references": 42,
+    "actual_ABI_files": 2020,
+    "old_v11_v12_addendum_files": [
+      2251,
+      2289,
+      128
+    ],
+    "SDK_clean_and_pinned_commit_verified": true,
+    "two_public_diff_suffixes_exact_frozen_deltas": true,
+    "all_28_check_apply_exit_codes_zero": true,
+    "complete_tracked_source_inventory_rows_examined": 89423,
+    "recorded_complete_inventory_comparison_and_23_changes_verified": true,
+    "actual_builtin_argv_and_CC_source_not_MODULE_verified": true,
+    "all_15_alloc_sections_and_text_equal": true,
+    "objdump_equal_after_filename_banner_only": true,
+    "GNU_strip_debug_whole_objects_equal": true,
+    "only_debug_line_str_and_two_debug_relocations_differ_unstripped": true,
+    "old_obj_m_difference_and_first_PATH_failure_kept": true
+  },
+  "scope": "Public patch identity, recorded full source replay, actual-target single built-in object and closed SHA evidence set.",
+  "source_replay_or_Kbuild_rerun_by_reviewer": false,
+  "new_Image_built": false,
+  "behavior_models_rerun": false,
+  "hardware_operated": false,
+  "full_duplex_validated": false,
+  "formal_flash_validated": false
+}
