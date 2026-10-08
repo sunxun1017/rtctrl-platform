@@ -1,0 +1,1014 @@
+{
+  "total": 224,
+  "passed": 224,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/arch/arm64/include/asm/cache.h",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/gpu/drm/panel/panel-simple.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/accel/mxc6655xa.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/sensor-dev.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/sensor-i2c.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/mfd/rk808.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/kernel/printk/printk.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/soc/codecs/rk817_codec.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0010-asoc-prepare-free-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/0010-asoc-prepare-free-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-prepare.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-functions.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0001-arm64-cache-kasan-include.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0001-arm64-cache-kasan-include.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0002-rk817-feedback-diagnostic.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0002-rk817-feedback-diagnostic.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0003-printk-rcu-flush-context.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0003-printk-rcu-flush-context.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0004-bcmdhd-out-of-tree-include.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0004-bcmdhd-out-of-tree-include.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0005-sensor-error-propagation.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0005-sensor-error-propagation.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0006-rk817-codec-error-propagation.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0006-rk817-codec-error-propagation.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0007-rk817-pcm-configuration-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0007-rk817-pcm-configuration-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0008-panel-simple-init-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0008-panel-simple-init-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0009-rk817-mute-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0009-rk817-mute-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0010-asoc-prepare-free-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound platforms/rk3568/boards/aiot-3568pq/patches/0010-asoc-prepare-free-errors.patch",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "red binds original source sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "red binds original source sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/soc/soc-dai.c",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes sound/soc/soc-dai.c red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/soc-dai.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/soc-dai.h red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/pcm.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/pcm.h red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/soc.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/soc.h red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_substream_chip red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt for_each_pcm_streams red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt asoc_substream_to_rtd red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt for_each_rtd_dais red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_get_pcm_stream red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_stream_active red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_stream_linked red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_running red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_playback_avail red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_playback_data red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt _soc_dai_ret red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_digital_mute red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_pcm_dai_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_active red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_stream_valid red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_hw_free red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt soc_pcm_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt soc_pcm_hw_free red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_ops_ioctl red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_set_state red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_sync_stop red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt do_hw_free red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_hw_free red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_trigger_tstamp red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_group red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_single red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_nonatomic red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_pre_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_undo_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_post_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops snd_pcm_action_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_start red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_reset red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_pre_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_post_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops snd_pcm_action_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_prepare red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-shim.h",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-shim.h",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-main.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-main.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-functions.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-functions.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/extracted.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/real-functions.c",
+      "passed": true
+    },
+    {
+      "name": "unit includes sealed harness only red-v3",
+      "passed": true
+    },
+    {
+      "name": "run counts host red-v3",
+      "passed": true
+    },
+    {
+      "name": "compile success host red-v3",
+      "passed": true
+    },
+    {
+      "name": "execution status host red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-host",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.stderr",
+      "passed": true
+    },
+    {
+      "name": "run counts host-sanitized red-v3",
+      "passed": true
+    },
+    {
+      "name": "compile success host-sanitized red-v3",
+      "passed": true
+    },
+    {
+      "name": "execution status host-sanitized red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-host-sanitized",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.stderr",
+      "passed": true
+    },
+    {
+      "name": "run counts aarch64 red-v3",
+      "passed": true
+    },
+    {
+      "name": "compile success aarch64 red-v3",
+      "passed": true
+    },
+    {
+      "name": "execution status aarch64 red-v3",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-aarch64",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "green binds final source sound/soc/soc-pcm.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "green binds final source sound/core/pcm_native.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/soc/soc-dai.c",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes sound/soc/soc-dai.c green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/soc-dai.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/soc-dai.h green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/pcm.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/pcm.h green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/soc.h",
+      "passed": true
+    },
+    {
+      "name": "helper locked bytes include/sound/soc.h green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_substream_chip green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt for_each_pcm_streams green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt asoc_substream_to_rtd green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt for_each_rtd_dais green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_get_pcm_stream green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_stream_active green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_stream_linked green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_running green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_playback_avail green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_playback_data green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt _soc_dai_ret green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_digital_mute green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_pcm_dai_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_active green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_stream_valid green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_soc_dai_hw_free green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt soc_pcm_has_mute green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt soc_pcm_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt soc_pcm_hw_free green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_ops_ioctl green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_set_state green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_sync_stop green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt do_hw_free green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_hw_free green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_trigger_tstamp green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_group green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_single green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_action_nonatomic green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_pre_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_undo_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_post_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops snd_pcm_action_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_start green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_reset green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_pre_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_do_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_post_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt action_ops snd_pcm_action_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "verbatim excerpt snd_pcm_prepare green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-shim.h",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-shim.h",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-main.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-main.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-functions.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-asoc-functions.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/extracted.c",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/real-functions.c",
+      "passed": true
+    },
+    {
+      "name": "unit includes sealed harness only green-v2",
+      "passed": true
+    },
+    {
+      "name": "run counts host green-v2",
+      "passed": true
+    },
+    {
+      "name": "compile success host green-v2",
+      "passed": true
+    },
+    {
+      "name": "execution status host green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-host",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.stderr",
+      "passed": true
+    },
+    {
+      "name": "run counts host-sanitized green-v2",
+      "passed": true
+    },
+    {
+      "name": "compile success host-sanitized green-v2",
+      "passed": true
+    },
+    {
+      "name": "execution status host-sanitized green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-host-sanitized",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.stderr",
+      "passed": true
+    },
+    {
+      "name": "run counts aarch64 green-v2",
+      "passed": true
+    },
+    {
+      "name": "compile success aarch64 green-v2",
+      "passed": true
+    },
+    {
+      "name": "execution status aarch64 green-v2",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-aarch64",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.elf.txt",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64-compile.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64-compile.stderr",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.stdout",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.stderr",
+      "passed": true
+    },
+    {
+      "name": "generator preflight 36/36",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/test-driver-prepare.py",
+      "passed": true
+    },
+    {
+      "name": "hash bound outputs/rk3568-asoc-errors-20261005/driver-prepare.py",
+      "passed": true
+    },
+    {
+      "name": "all generated/harness paths ignored",
+      "passed": true
+    },
+    {
+      "name": "original tree clean",
+      "passed": true
+    },
+    {
+      "name": "original commit locked",
+      "passed": true
+    }
+  ],
+  "files_sha256": {
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/sound/soc/soc-pcm.c": "0da4f2816f293dc782fa83260f9d59735553064836fc333edc8c70556361d1b0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/soc/soc-pcm.c": "0da4f2816f293dc782fa83260f9d59735553064836fc333edc8c70556361d1b0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/sound/core/pcm_native.c": "bc34db0aabe8b523172403a4095afeac5544434e15a05884ca99f6b77d48c47d",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/core/pcm_native.c": "bc34db0aabe8b523172403a4095afeac5544434e15a05884ca99f6b77d48c47d",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/arch/arm64/include/asm/cache.h": "918c8ff20005ae6f666a9d6bcc1cdf17c71d946a0d9e3e389a9f72e244aeeacc",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/gpu/drm/panel/panel-simple.c": "894f460c36d0da16104fdadccb56d03fc2df51462241fb93dc2bf254ca759ab5",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/accel/mxc6655xa.c": "30e51b7e778f0f8750708a22db5428101bb47b58aeefd60ca205304da24e1d3d",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/sensor-dev.c": "e16ad49119e955947e4ec41f9b2ca3d0b742fa87723f5d4ff894dcbeb2f4d848",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/input/sensors/sensor-i2c.c": "2cb66ecbee8b4f8a3d1b53b3acfd5f375512f171f3239193ebe76e18902af9e0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/mfd/rk808.c": "753e6282f474e833d0327e7e715b323a9682f7ff341355ca78f04959cc5f8586",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile": "2594bc413b5fef8be6ede288d30934774a0b558896daa7ea40f660bcb64de378",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/kernel/printk/printk.c": "2f2a3005827c128e3db587c9d3643e16b4cdce000a20ad21aaa57b68a7381624",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/replay/sound/soc/codecs/rk817_codec.c": "72e59ced7af3bc570bafb516459c55a073f80613fb0a9ff1b6192cfa3f7cbc64",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0010-asoc-prepare-free-errors.patch": "c3bd1bd7e8fd581e21a962993519f934ceb78a7efe61d77da846972e93b73f2b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/0010-asoc-prepare-free-errors.patch": "c3bd1bd7e8fd581e21a962993519f934ceb78a7efe61d77da846972e93b73f2b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-prepare.py": "ac354872110588b30ddedec27f488306281d13b337ffbb9ff293f24b5f8c27dc",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-asoc-functions.py": "6b6aa9319a8e0eb846fca1b37461dbc0bbbf5813ff28660c732cac56b21d32f7",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0003-printk-rcu-flush-context.patch": "b8ca5eb49e55dbc2cfdff55ab407d021d7cd8c094fd77372018bc859d9b712de",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0003-printk-rcu-flush-context.patch": "b8ca5eb49e55dbc2cfdff55ab407d021d7cd8c094fd77372018bc859d9b712de",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0004-bcmdhd-out-of-tree-include.patch": "401657aecfad52d63bdf462c25f0deeed34ad23ee4da6dfd0d347b9e35338c1c",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0004-bcmdhd-out-of-tree-include.patch": "401657aecfad52d63bdf462c25f0deeed34ad23ee4da6dfd0d347b9e35338c1c",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0005-sensor-error-propagation.patch": "cff9f21c036173bc4465cf51ee414e77fc2456e8e0c15d84f0e74d414a64d184",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0005-sensor-error-propagation.patch": "cff9f21c036173bc4465cf51ee414e77fc2456e8e0c15d84f0e74d414a64d184",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0006-rk817-codec-error-propagation.patch": "f501e5642d363b0c10431de053c19d8c1ae16060ddb35838d520de0f0d84bd81",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0006-rk817-codec-error-propagation.patch": "f501e5642d363b0c10431de053c19d8c1ae16060ddb35838d520de0f0d84bd81",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0007-rk817-pcm-configuration-errors.patch": "f74325e1a3df4eef99fbc7f47cbb0045e1d9b38b07745f30463fee811c57b80e",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0007-rk817-pcm-configuration-errors.patch": "f74325e1a3df4eef99fbc7f47cbb0045e1d9b38b07745f30463fee811c57b80e",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0008-panel-simple-init-errors.patch": "d49469f53a3e7c310a1aec39baa9b0d86c5f48f2ae58d0d085d32b972f3df10f",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0008-panel-simple-init-errors.patch": "d49469f53a3e7c310a1aec39baa9b0d86c5f48f2ae58d0d085d32b972f3df10f",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0009-rk817-mute-errors.patch": "4d7cb506387fea2d336cbb75fe81679ad72cb3121016ea2af949e176fbdfeb5c",
+    "/home/sx/projects/rtctrl-platform/platforms/rk3568/boards/aiot-3568pq/patches/0009-rk817-mute-errors.patch": "4d7cb506387fea2d336cbb75fe81679ad72cb3121016ea2af949e176fbdfeb5c",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/patch-inputs/0010-asoc-prepare-free-errors.patch": "c3bd1bd7e8fd581e21a962993519f934ceb78a7efe61d77da846972e93b73f2b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/result.json": "0b281f6d6f02959300a6471dfac129bddda591ea7ea50868e3a47e2ef9de1192",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/soc/soc-pcm.c": "1b64190aa7421d2195f174f2c5a6607cc72d868a56c5431591abbdb8619b3bfc",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/core/pcm_native.c": "dc1e6ac01a8532afce0155eaaf2cda1d65aa95c5414210fb54bb03c2577bd608",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/sound/soc/soc-dai.c": "9eba43e9d0d25684862f801eb8f90aa31ff1bbfaa31b9d5eebd07e2fdfc029b7",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/soc-dai.h": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/pcm.h": "e0ea584336124438ee87a7a82469b0913aa563b43eb18a82be659bba3d0ddd17",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/source-inputs/include/sound/soc.h": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-shim.h": "3fca7c2c4ca5c6f53e96d67d2c1cae5824b0d55910b92c949eacd86d8025b6d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-asoc-shim.h": "3fca7c2c4ca5c6f53e96d67d2c1cae5824b0d55910b92c949eacd86d8025b6d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-main.c": "5dc44604183237f18e3094b28324517c79911521ef5ffe2990bacbf1169d7e22",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-asoc-main.c": "5dc44604183237f18e3094b28324517c79911521ef5ffe2990bacbf1169d7e22",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/test-asoc-functions.py": "6b6aa9319a8e0eb846fca1b37461dbc0bbbf5813ff28660c732cac56b21d32f7",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/extracted.c": "c7866abfbe070e385432f808c157b20cdb5610117d5dc683bc724dd79be0977f",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/real-functions.c": "60249f910282b3a1d5610a47035b11d9fb6b7a2a4963695199e8e02119b29a36",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-host": "065c94f81c4f9a66c343bf3bd6d50647d827fe8609a5ff0608d11016ea2c2e79",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.elf.txt": "2eaf8d541c52ba05cab08cbcddffd610abe3114cee721c4a147cfff2488a991e",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.stdout": "aaa6a80984f4097fae0b4d22b4dce8c397ee8c9e77e8ef6579fdedb5347e9eb0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host.stderr": "5676aa3bcc5e474885c9d2cf5e0c1f26596bf19e0034f7982a44d861c1efa9d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-host-sanitized": "05c9436dee2a69b894545aa6a5a4c19bb1590b345e0b5ad74f28f8dca0c1f0d1",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.elf.txt": "0583b0e94b7cbc0b6159b9495c3bd259661ab89f1179b87731470218e9a939c8",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.stdout": "aaa6a80984f4097fae0b4d22b4dce8c397ee8c9e77e8ef6579fdedb5347e9eb0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/host-sanitized.stderr": "5676aa3bcc5e474885c9d2cf5e0c1f26596bf19e0034f7982a44d861c1efa9d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/asoc-aarch64": "3aca466e45d6a98ed73cfbe8f8e3a87e279c6bf2917059d1e3617277f3b12212",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.elf.txt": "d812e466bbf70d2da83b9c1f4959dccf1ef701659f143c96b6f14789a502e320",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.stdout": "aaa6a80984f4097fae0b4d22b4dce8c397ee8c9e77e8ef6579fdedb5347e9eb0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-red-v3/aarch64.stderr": "5676aa3bcc5e474885c9d2cf5e0c1f26596bf19e0034f7982a44d861c1efa9d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/result.json": "e1b75ddb773cdca2faed28d9873672e726beb2c828d475658265155f8d4f3bf4",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/soc/soc-pcm.c": "0da4f2816f293dc782fa83260f9d59735553064836fc333edc8c70556361d1b0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/core/pcm_native.c": "bc34db0aabe8b523172403a4095afeac5544434e15a05884ca99f6b77d48c47d",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/sound/soc/soc-dai.c": "9eba43e9d0d25684862f801eb8f90aa31ff1bbfaa31b9d5eebd07e2fdfc029b7",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/soc-dai.h": "03c5171491ed638d413b22ba05a58fe0ec08d48f53bead29c92d36c3595ad748",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/pcm.h": "e0ea584336124438ee87a7a82469b0913aa563b43eb18a82be659bba3d0ddd17",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/source-inputs/include/sound/soc.h": "429c4b4f43373f31486813c33fcbc8beb1b626a5d9e276c8d856bd902c301d4b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-shim.h": "3fca7c2c4ca5c6f53e96d67d2c1cae5824b0d55910b92c949eacd86d8025b6d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-main.c": "5dc44604183237f18e3094b28324517c79911521ef5ffe2990bacbf1169d7e22",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-functions.py": "6b6aa9319a8e0eb846fca1b37461dbc0bbbf5813ff28660c732cac56b21d32f7",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/extracted.c": "1479c95be32270243681c1909236339b232b49524a611f66aa22e838bf52a0d0",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/real-functions.c": "a0c48985a1012d5a13fbc164ffe1cdf97f07bc71e8771b08dd45bd97f9ca880d",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-host": "1ac8db09a95551cab919d9a628f116e27042ef93e87359b890c17156979e98c1",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.elf.txt": "17ebfc74ca09e3f5a7eac2d3a0f892bd68d222a30f2987e7d7123c89a5a1bb70",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.stdout": "9fc5b5dd359a7b1b741a2bf393c5c9f6316444de26cf8fad0f8477737715390b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-host-sanitized": "c22d82dff19d3588b1273a49f8436e5893107eb0f268574dc9c106cb9f3c55c6",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.elf.txt": "988945793cc6fc2e9516cce54e72e478f05e2f0c29cf13514a772a77e748f68a",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.stdout": "9fc5b5dd359a7b1b741a2bf393c5c9f6316444de26cf8fad0f8477737715390b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/host-sanitized.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/asoc-aarch64": "84e08113cf04c86faed76b0b4e20062c7ca79024da6b40dd8dd1a656d78d7c31",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.elf.txt": "dc73e3bb57f415ca377f6c1859f3f52d5494011fc0609a826aa455070c043b10",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64-compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64-compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.stdout": "9fc5b5dd359a7b1b741a2bf393c5c9f6316444de26cf8fad0f8477737715390b",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/aarch64.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-driver-prepare.py": "9c88a2d91d3cd9b3dc70360d1deb0d0da15ea7cd2b4d61236425bb747c6f8381",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/manifest.json": "af187eb8da2b890742244582410febf85cc5bec0e2c2e310849f63f11393957e",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/prepare-tests-v1/result.json": "0aee1e6a20dd46a23680201cdf81e0ff24b1f24956a33256d556d5c92955bfdf",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/PLAN.md": "6dc81b1ce735df9b3eb8f207fd2a39481076ea01dd4a50f20c72525cba426b38",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/RESULTS.md": "899f79722818b774a09ec36194975c8f205b8a28135458cfef185f026e2941b5",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/.gitignore": "3d4aeaeb2bc2ee11756870d8ab4650702cc3e135a28251d8edff7109f8f80301",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/verify-evidence.py": "bdb7b03f14d1f799c642ded649795d2415b62877f130da29cd041d746b48cfac"
+  },
+  "git_check_ignore_stdout": "outputs/rk3568-asoc-errors-20261005/.gitignore:1:driver-source-*/\t/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/driver-source-v2/sound/soc/soc-pcm.c\noutputs/rk3568-asoc-errors-20261005/.gitignore:2:asoc-tests-*/\t/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/asoc-tests-green-v2/test-asoc-main.c\noutputs/rk3568-asoc-errors-20261005/.gitignore:6:test-asoc-main.c\t/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-asoc-main.c\noutputs/rk3568-asoc-errors-20261005/.gitignore:5:test-asoc-shim.h\t/home/sx/projects/rtctrl-platform/outputs/rk3568-asoc-errors-20261005/test-asoc-shim.h\n",
+  "original_tree_clean": true,
+  "board_tested": false,
+  "production_build_completed": false
+}

@@ -1,0 +1,23 @@
+{
+  "expected_exact_argv": [
+    [
+      "/usr/bin/python3",
+      "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/test-pl330-c3-probe.py",
+      "--source-dir",
+      "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/driver-source-c3-v7",
+      "--label",
+      "green-v2"
+    ],
+    [
+      "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/pl330-c3-probe-tests-green-v2/pl330-host"
+    ],
+    [
+      "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/pl330-c3-probe-tests-green-v2/pl330-host-sanitized"
+    ],
+    [
+      "/home/sx/projects/rtctrl-platform/.deps/qemu-user/root/usr/bin/qemu-aarch64-static",
+      "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/pl330-c3-probe-tests-green-v2/pl330-aarch64"
+    ]
+  ],
+  "terminated": []
+}

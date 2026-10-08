@@ -1,0 +1,16 @@
+{
+  "existing_source_sha256": "bf3c513fc98474c55346c77277e347c2bc0e194480c76c1fd6d1d2d9fbb98b2a",
+  "copied_functions_sha256": {
+    "text_valid": "dec02c046d5e0e0cb8777ed8a8728b1f3b4fd9368be5970c6d14978b141bc980",
+    "pcm_info_valid": "c021c8cc151f03ed13ae29ce9ed9a63ee4387ecca73923324477da1bfd1394a2",
+    "params_any": "17c0bdba5e93eda2bf48d081f6399a4bd2d1b3616787d454fcb04110bd7dda9f",
+    "params_exact": "783a95a4c5323c70151c734149ead05346f48f1c45c49688a243a64c07089ad3",
+    "interval_contains": "68b04818358563aac5f4a1e6ad969d497e4b8d707f0d684a02f59b4be9d9f695",
+    "caps_valid": "d064df3b8dcc70dc18259a336b993a30fcbb3538024e02db9fc155fd56da3f6c",
+    "caps_allow_exact": "6342d2cfdc4c130ccbf818e92d86e3733281066107011f85b3f282652d480dfa",
+    "exact_valid": "ae9e725dac392a1361d7da1792aab14e0ab2047e4940fca3444757e7dc178dc5"
+  },
+  "source_sha256": "044b43f79ecf538301b1e128fc00ee6882901a84e75be18d5ea9637e91f547b2",
+  "raw_kernel_uapi_sha256": "138cb9e8de8df6cdf2abb05806d7f61078fb7ea44063e5914bea277ef55a0447",
+  "final_source_reproduction_verified": true
+}

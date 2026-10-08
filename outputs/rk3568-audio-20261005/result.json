@@ -1,0 +1,160 @@
+{
+  "status": "RK809_ALSA_INTERFACE_VERIFIED_IN_RAM_RETURNED_TO_ANDROID",
+  "date": "2026-10-05",
+  "kernel_release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+  "initramfs_sha256": "f0965ceed549acab8d5bd87df8bb831bb06a95d08b5b7bf3c5582045933323ee",
+  "tested_runtime_sha256": {
+    "audio.dtb": "9cf8cc0189239dab2fda0dae0ac3519c20d5b5802900111587695458dc3ab478",
+    "snd-soc-rk817.ko": "52bf198a33ce42e11f52fdf5cd6bd9be6648dc58f04d3e48810bb4e15ac579f7",
+    "alsa-inspect": "118cf99482cdd65acdfae8c5e85530a76bf60c90b0b0498e8f285223f862a945",
+    "linux-interface.sh": "b0d08151d14ccc8c6a7c6595f3ef77dfe7aeb377ad741e564b81039c43cbbbe3",
+    "linux-return-guard.sh": "251fca33cf1b291a6a0e7ac880c6899b39150ef6b9a819fd57b02535533b0f55"
+  },
+  "codec_patch_sha256": "f501e5642d363b0c10431de053c19d8c1ae16060ddb35838d520de0f0d84bd81",
+  "dtb": {
+    "bytes": 163161,
+    "crc32": "c69f4dbf",
+    "checks": 177,
+    "faults_rejected": 23,
+    "property_changes": 29,
+    "old_phandles_retained": 760,
+    "new_dtc_warnings": 0
+  },
+  "codec": {
+    "module_bytes": 515240,
+    "module_imports_from_exact_image": 32,
+    "real_function_host_cases": 73,
+    "real_function_qemu_cases": 73,
+    "regmap_ownership": "borrow original PMIC map; never allocate/free",
+    "chip_name_log": "0x80",
+    "chip_version_log": "0x95",
+    "fresh_bus_identity_proven": false,
+    "module_refcount_before_reset": 1
+  },
+  "alsa": {
+    "card_number_this_boot": 1,
+    "card_id": "rockchiprk809co",
+    "controls_listed": 14,
+    "controls_inspected": [
+      {
+        "numid": 12,
+        "name": "Playback Path",
+        "items": 11,
+        "value": 0,
+        "label": "OFF"
+      },
+      {
+        "numid": 13,
+        "name": "Capture MIC Path",
+        "items": 4,
+        "value": 0,
+        "label": "MIC OFF"
+      },
+      {
+        "numid": 14,
+        "name": "Resume Path",
+        "items": 2,
+        "value": 0,
+        "label": "OFF"
+      }
+    ],
+    "playback_endpoint": "pcmC1D0p",
+    "capture_endpoint": "pcmC1D0c",
+    "interface_verified": true,
+    "helper_host_cases": 114,
+    "helper_qemu_cases": 114,
+    "helper_default_alarm_seconds": 5,
+    "pcm_opened": false,
+    "controls_written": false,
+    "unknown_controls_list_only": true,
+    "cached_OFF_is_not_electrical_acceptance": true
+  },
+  "runtime": {
+    "pin_groups": {
+      "34": "mclk",
+      "35": "sclktx",
+      "37": "lrcktx",
+      "39": "sdo0",
+      "43": "sdi0"
+    },
+    "mclk_kernel_rate_hz": 12288000,
+    "gpio148_kernel_state": "out hi ACTIVE LOW; consumer spk-ctl",
+    "physical_voltage_measured": false,
+    "uart0_tx_rx": [
+      0,
+      0
+    ],
+    "stage_fixtures": 18,
+    "reset_guard_fixtures": 31,
+    "only_five_ram_pseudo_mounts_at_reset": true,
+    "loop_network_audio_fd_residuals_rejected_by_guard": true,
+    "module_retained_until_reset": true,
+    "module_unload_tested": false,
+    "sysrq_reset_seconds": 147.271085,
+    "WARNING_BUG_Call_trace_in_source_return_capture": false,
+    "codec_DMA_mask_notice_seen": true,
+    "DMA_mask_notice_source": "OF platform configuration supplies missing pointer; codec uses no DMA API",
+    "PCM_DMA_verified": false
+  },
+  "returned_android": {
+    "kernel": "4.19.232",
+    "release": 11,
+    "root": true,
+    "boot_completed": true,
+    "battery_before_percent": 12,
+    "battery_after_percent": 7,
+    "after_timestamp": "2026-10-05T16:01:32.6196611+08:00",
+    "battery_final_percent": 5,
+    "final_timestamp": "2026-10-05T16:09:45.6174037+08:00"
+  },
+  "persistent_integrity": {
+    "seven_before_after_full_SHA_equal": true,
+    "sha256": {
+      "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752",
+      "source_rootfs": "4fcebae566d889072954b2f5b220474fe9accd75bbb48471023f24841b6ed95e",
+      "network_rootfs": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3"
+    },
+    "full_emmc_diff": false,
+    "bare_metal_restore_tested": false
+  },
+  "boundaries": {
+    "headphones_or_speakers_connected": false,
+    "motor_connected": false,
+    "motor_or_MCU_commands": false,
+    "saveenv": false,
+    "startup_partition_write": false,
+    "switch_root": false,
+    "normal_poweroff_verified": false,
+    "factory_custom_so_required_for_this_interface_test": false,
+    "all_factory_audio_behavior_replaced": false
+  },
+  "evidence_sha256": {
+    "load-ram.raw.txt": "97044807afd4f6c5bb9d9ffd2219550b9f21bf6727369ad4cf9484d1b5d89d21",
+    "boot-ram.raw.txt": "ef6e228d2c0c4a77635059c5fa8be2f16281c40ee89003794dc10fbea6ab0806",
+    "linux-stage.raw.txt": "32185fbec12858bec06726191aa37c6c770eec52117e62b8da69dcf74d134812",
+    "linux-interface.raw.txt": "95e41ac33e0bbcb8303115443d884bc6cdf526d45bd8927ec1f117f72504ef00",
+    "return-android.raw.txt": "d86854e80875a85c6a4a12cb51ea89440074e68c062fa4557fecf35d059e270a",
+    "android-boot-inputs.txt": "f09401bbf446124b4cfa0dd1aeeda7e4c660ba6fc55c3116ed5076b1a26142d0",
+    "android-before-v2.json": "c1f5f9c2ae1d4ad555f20d400e04ef737b2d26d004bf7b672b2b58fb4c8a1b5c",
+    "android-after.json": "2b0aa558511216bf251a8d359c53cb2483fe9a9e4290785508185ab22a363ebc",
+    "android-final-state.json": "38425f6ab709dea201e50ab0b588a39a23fd028d72d98d153cd611c3dbdf3659",
+    "android-helper.json": "63f1e707d6fedd1436836df844cdc161ba64e5979e217a13c068f31ca4b429d4"
+  },
+  "host_result_sha256": "e4d18799f9718abf3e93d05a38346ecbda32de73f3a307e5cebfa199375c5fe4",
+  "recorder_sha256": "e9956d5d4a8b1bd0d9be1a74105c448e530c5bc60f4b4b04fef83b98661a6c40",
+  "limitations": [
+    "No PCM stream, sound quality, channel mapping or amp electrical acceptance",
+    "Runtime path/mute/hw_params/suspend/resume errors and full removal concurrency remain unaudited/unfixed",
+    "Probe writes GPIO/clock/reset/configuration despite metadata-only userspace",
+    "Early proc cards read raced registration; later helper/sysfs/PCM identify card 1",
+    "Android helper rejected cached path metadata with generic rc2; failing branch not proven",
+    "Build manifests are immutable pre-board records; board acceptance is in this result",
+    "Other peripheral identity gaps and motor feedback/stop/enable/watchdog remain"
+  ]
+}

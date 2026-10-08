@@ -1,0 +1,235 @@
+{
+  "v6": {
+    "source_hashes_match": true,
+    "patch_hash_matches": true,
+    "generator_hashes_match": {
+      "driver-prepare-c3-probe.py": true,
+      "pl330_probe_changes.py": false,
+      "source_utils.py": true
+    },
+    "pl330_del_index": 57073,
+    "block_definition_index": 58067,
+    "failstop_prototype_index": 69041
+  },
+  "v7": {
+    "source_hashes_match": true,
+    "patch_hash_matches": true,
+    "generator_hashes_match": {
+      "driver-prepare-c3-probe.py": true,
+      "pl330_probe_changes.py": true,
+      "source_utils.py": true
+    },
+    "pl330_del_index": 57250,
+    "block_definition_index": 14846,
+    "failstop_prototype_index": 14931
+  },
+  "v6_v7_source_equal": false,
+  "v7_matches_current_generator": true,
+  "v6_v7_diff": "--- v6\n+++ v7\n@@ -618,6 +618,14 @@\n {\n \treturn thrd->req[0].desc != NULL && thrd->req[1].desc != NULL;\n }\n+\n+struct pl330_desc_block {\n+\tstruct list_head node;\n+\tstruct dma_pl330_desc *descs;\n+};\n+\n+static void __noreturn pl330_failstop(struct pl330_dmac *pl330,\n+\t\t\t\t\t const char *reason);\n \n static inline bool is_manager(struct pl330_thread *thrd)\n {\n@@ -2484,11 +2492,6 @@\n /* forward declaration */\n static struct amba_driver pl330_driver;\n \n-struct pl330_desc_block {\n-\tstruct list_head node;\n-\tstruct dma_pl330_desc *descs;\n-};\n-\n static inline struct dma_pl330_chan *\n to_pchan(struct dma_chan *ch)\n {\n",
+  "production_v8_errors": [
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2459:17: error: implicit declaration of function 'pl330_failstop'; did you mean 'pl330_wait_state'? [-Werror=implicit-function-declaration]",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/kernel.h:869:58: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/compiler_types.h:135:41: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/kernel.h:869:58: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/compiler_types.h:135:41: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:715:64: error: left-hand operand of comma expression has no effect [-Werror=unused-value]",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:619:14: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/kernel.h:869:58: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/list.h:555:25: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/include/linux/compiler_types.h:135:41: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2476:32: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2477:28: error: invalid use of undefined type 'struct pl330_desc_block'",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2895:24: error: conflicting types for 'pl330_failstop'; have 'void(struct pl330_dmac *, const char *)' [-Werror]",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2895:24: error: static declaration of 'pl330_failstop' follows non-static declaration",
+    "/home/sx/projects/rtctrl-platform/outputs/rk3568-dma-lifecycle-20261005/production-v8/source/drivers/dma/pl330.c:2459:17: note: previous implicit declaration of 'pl330_failstop' with type 'void(struct pl330_dmac *, const char *)'"
+  ],
+  "latest_tests": {
+    "dma-pcm-probe-tests-green-v1": {
+      "host": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      }
+    },
+    "pl330-probe-tests-green-v1": {
+      "host": {
+        "total": 12,
+        "passed": 12,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 12,
+        "passed": 12,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 12,
+        "passed": 12,
+        "failed": 0
+      }
+    },
+    "pl330-c3-hw-tests-green-v1": {
+      "host": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      }
+    },
+    "dma-admission-tests-green-v4": {
+      "host": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      }
+    },
+    "pcm-tests-memory-green-v1": {
+      "host": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      }
+    },
+    "trigger-cpu-tests-green-v5": {
+      "host": {
+        "total": 47,
+        "passed": 47,
+        "failed": 0
+      },
+      "host-sanitized": {
+        "total": 47,
+        "passed": 47,
+        "failed": 0
+      },
+      "aarch64": {
+        "total": 47,
+        "passed": 47,
+        "failed": 0
+      }
+    }
+  },
+  "root_git_status": [
+    " M .agents/PROJECT_MEMORY.md",
+    " M .agents/skills/rtctrl-dev/SKILL.md",
+    " M .agents/skills/rtctrl-dev/references/lessons.md",
+    " M apps/face_recognition/main.cpp",
+    " M apps/face_recognition/pipeline.cpp",
+    " M apps/face_recognition/pipeline.hpp",
+    " M apps/face_recognition/video_main.cpp",
+    " M platforms/rk3568/boards/aiot-3568pq/POWER-LIFECYCLE.md",
+    " M platforms/rk3568/boards/aiot-3568pq/RECONSTRUCTION.md",
+    " M platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-firstboot.dts",
+    " M platforms/rk3568/boards/aiot-3568pq/build-firstboot.py",
+    " M platforms/rk3568/boards/aiot-3568pq/firstboot.cfg",
+    " M platforms/rk3568/boards/aiot-3568pq/test-firstboot-audit.py",
+    " M platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py",
+    "?? outputs/rk3568-accelerometer-20261004/",
+    "?? outputs/rk3568-asoc-errors-20261005/",
+    "?? outputs/rk3568-audio-20261005/",
+    "?? outputs/rk3568-audio-mute-20261005/",
+    "?? outputs/rk3568-audio-package-20261005/",
+    "?? outputs/rk3568-audio-runtime-20261005/",
+    "?? outputs/rk3568-audio-transfer-20261005/",
+    "?? outputs/rk3568-backup-linux-20261003/",
+    "?? outputs/rk3568-boot-package-20261005/",
+    "?? outputs/rk3568-bootm-ram-20261005/",
+    "?? outputs/rk3568-cache-reuse-20261005/",
+    "?? outputs/rk3568-cap1188-20261004/",
+    "?? outputs/rk3568-display-20261005/",
+    "?? outputs/rk3568-dma-lifecycle-20261005/",
+    "?? outputs/rk3568-formal-dtb-20261005/",
+    "?? outputs/rk3568-i2s-lifecycle-20261005/",
+    "?? outputs/rk3568-mcu-baseline-20261003/",
+    "?? outputs/rk3568-motor-alignment-20261004/",
+    "?? outputs/rk3568-network-20261003/",
+    "?? outputs/rk3568-network-rootfs-20261004/",
+    "?? outputs/rk3568-normal-reboot-20261005/",
+    "?? outputs/rk3568-open-source-audit-20261003/",
+    "?? outputs/rk3568-persistent-linux-20261003/",
+    "?? outputs/rk3568-pid1-20261005/",
+    "?? outputs/rk3568-rcu-reset-20261004/",
+    "?? outputs/rk3568-rng-network-20261004/",
+    "?? outputs/rk3568-sdboot-assessment-20261002/",
+    "?? outputs/rk3568-source-kernel-20261003/",
+    "?? outputs/rk3568-source-kernel-20261004/",
+    "?? outputs/rk3568-source-userspace-20261004/",
+    "?? outputs/rk3568-source-wifi-20261004/",
+    "?? outputs/rk3568-wsl-launch-20261005/",
+    "?? platforms/rk3568/boards/aiot-3568pq/MCU-INTERFACE.md",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-accelerometer.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-audio.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-cap1188-spi.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-display.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-uart.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-wifi-rng.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-wifi.dts",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0002-rk817-feedback-diagnostic.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0003-printk-rcu-flush-context.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0004-bcmdhd-out-of-tree-include.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0005-sensor-error-propagation.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0006-rk817-codec-error-propagation.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0007-rk817-pcm-configuration-errors.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0008-panel-simple-init-errors.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0009-rk817-mute-errors.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/patches/0010-asoc-prepare-free-errors.patch",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-accelerometer-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-audio-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-cap1188-spi-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-display-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-uart-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-wifi-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/test-wifi-rng-audit.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-accelerometer.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-audio.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-cap1188-spi.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-display.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-uart.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-wifi-rng.py",
+    "?? platforms/rk3568/boards/aiot-3568pq/verify-wifi.py",
+    "?? pm"
+  ]
+}

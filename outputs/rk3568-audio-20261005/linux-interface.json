@@ -1,0 +1,7 @@
+[
+  {
+    "command": "sh /tmp/audio/linux-interface.sh",
+    "wait": 12,
+    "expect": "(?m)^AUDIO_METADATA_COMPLETE_NO_PCM_OPEN_NO_CONTROL_WRITE\\r?$"
+  }
+]

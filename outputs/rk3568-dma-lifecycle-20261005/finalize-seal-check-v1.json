@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "receipt_sha256": "97011370d4a66b385ab3855fa9cf2f2cf4c857728a1f969902f5e8dd9b10e975",
+  "sealed_files_verified": 883,
+  "tests_per_environment": 183,
+  "counts": {
+    "pl330-c3-order2-tests-green-v2": 67,
+    "pl330-c3-hw-tests-green-v3": 17,
+    "pl330-debugfs-tests-green-v6": 2,
+    "dma-admission-tests-green-v6": 9,
+    "trigger-cpu-open-tests-green-v1": 47,
+    "dma-pcm-open-tests-green-v1": 21,
+    "core-lifecycle-tests-green-v4": 6,
+    "pl330-ready2-tests-green-v2": 14
+  },
+  "objects_verified": 12,
+  "actual_object_commands_verified": 12,
+  "published": false,
+  "deployable": false,
+  "board_tested": false,
+  "image_built": false
+}

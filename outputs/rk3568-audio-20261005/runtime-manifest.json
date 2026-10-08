@@ -1,0 +1,14 @@
+{
+  "files": {
+    "audio.dtb": "9cf8cc0189239dab2fda0dae0ac3519c20d5b5802900111587695458dc3ab478",
+    "snd-soc-rk817.ko": "52bf198a33ce42e11f52fdf5cd6bd9be6648dc58f04d3e48810bb4e15ac579f7",
+    "alsa-inspect": "118cf99482cdd65acdfae8c5e85530a76bf60c90b0b0498e8f285223f862a945",
+    "linux-interface.sh": "b0d08151d14ccc8c6a7c6595f3ef77dfe7aeb377ad741e564b81039c43cbbbe3",
+    "linux-return-guard.sh": "251fca33cf1b291a6a0e7ac880c6899b39150ef6b9a819fd57b02535533b0f55"
+  },
+  "stage_script_sha256": "43b28306d0887f87dbd0fc1e4e84032de578726f577b64335746a4711f216df6",
+  "transport": "octal shell printf; readback SHA before execution",
+  "dtb_bytes": 163161,
+  "dtb_crc32": "c69f4dbf",
+  "board_tested": false
+}
