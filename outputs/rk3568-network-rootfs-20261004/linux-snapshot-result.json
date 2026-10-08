@@ -1,0 +1,8 @@
+{
+  "file": "rootfs-after-linux.img.gz",
+  "archive_bytes": 5272650,
+  "archive_sha256": "c8dfa07da4ea351d3c4b3190ce225988b65f26a938090abd8534b783d5d1d8b8",
+  "image_bytes": 67108864,
+  "image_sha256": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3",
+  "decompressed_image_verified": true
+}

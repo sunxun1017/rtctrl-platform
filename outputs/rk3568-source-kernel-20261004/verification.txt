@@ -1,0 +1,69 @@
+2026-10-04 verification; local checks do not replace runtime board evidence.
+
+$ python3 outputs/rk3568-source-kernel-20261004/record-results.py
+PASS: 5.10.160-rt89-g9f9e9d18574d-dirty; RAM mounts; runtime reservations; Android return; 5 partition hashes
+Final state: serial released; Android booted; network ADB not reachable
+
+$ python3 platforms/rk3568/boards/aiot-3568pq/test-firstboot-audit.py outputs/rk3568-source-kernel-20261004/private/dtb/rk3568-aiot-3568pq-firstboot.dtb -v
+test_actuator_uart_regression (__main__.AuditFaults) ... ok
+test_android_partition_bootargs (__main__.AuditFaults) ... ok
+test_camera_probe_regression (__main__.AuditFaults) ... ok
+test_emmc_high_speed_regression (__main__.AuditFaults) ... ok
+test_high_remap_without_no_map (__main__.AuditFaults) ... ok
+test_high_remap_wrong_size (__main__.AuditFaults) ... ok
+test_loader_logo_not_reserved (__main__.AuditFaults) ... ok
+test_loader_lut_not_reserved (__main__.AuditFaults) ... ok
+test_missing_memory_reservations (__main__.AuditFaults) ... ok
+test_real_compiled_candidate (__main__.AuditFaults) ... ok
+test_wrong_io_voltage_domain (__main__.AuditFaults) ... ok
+test_wrong_regulator_voltage (__main__.AuditFaults) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.008s
+
+OK
+
+$ python3 platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py outputs/rk3568-boot-preparation-20260928/rk3568-aiot-3568pq-firstboot.dtb
+Traceback (most recent call last):
+  File "<repo>/platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py", line 133, in <module>
+    print(json.dumps(audit(*read_dtb(options.dtb)), indent=2))
+  File "<repo>/platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py", line 117, in audit
+    check('high remap no-map retained', tree.get(buffer + '/no-map') == b'')
+  File "<repo>/platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py", line 66, in check
+    raise ValueError(name)
+ValueError: high remap no-map retained
+PASS: old DTB rejected for missing no-map (expected failure).
+
+$ python3 outputs/rk3568-backup-linux-20261003/verify-backup.py
+{
+  "verified_artifacts": 15,
+  "boot_layout": {
+    "header_version": 2,
+    "page_size": 2048,
+    "kernel_file_bytes": 33046536,
+    "kernel_memory_span": 34066432,
+    "text_offset": 524288,
+    "image_flags": 10,
+    "kernel_sha256": "54e75d6dbb03ab96ea938eb940fe64cab91f3f81a3e43a9e98d763980dd7779d",
+    "kernel_crc32": "28e3a67c",
+    "android_header_addresses_are_not_the_loading_plan": true,
+    "dtb_bytes": 151680,
+    "dtb_crc32": "60dbf153",
+    "initrd_bytes": 533234,
+    "initrd_crc32": "b9718d95"
+  }
+}
+
+$ sh -n outputs/rk3568-source-kernel-20261004/prepare-android.sh
+
+$ git diff --check
+
+$ git check-ignore outputs/rk3568-source-kernel-20261004/private/boot-ram.raw.txt outputs/rk3568-source-kernel-20261003/private/preflight.raw.txt
+outputs/rk3568-source-kernel-20261004/private/boot-ram.raw.txt
+outputs/rk3568-source-kernel-20261003/private/preflight.raw.txt
+PASS: 3 Python sources compile.
+PASS: all public result/serial-step JSON parses.
+PASS: DTB 53 static checks, 0 new board DTC warnings, source hashes match.
+PASS: 99 local Markdown targets exist.
+PASS: new public files contain no observed CPU/eMMC identifiers, live board IP or MAC.
+No unrelated C++ application tests; this change is BSP DTB/audit plus board evidence.

@@ -1,0 +1,18 @@
+{
+  "initramfs.cpio.gz": {
+    "bytes": 3716653,
+    "sha256": "61f44b9a46f0b15b2947fedf5de67f95914520a6f20c15701057f85957343f49"
+  },
+  "helper-overlay-final.cpio.gz": {
+    "bytes": 297734,
+    "sha256": "66c736904a2517597e67df4a28fd47e7807588a5c9418c3b1e663d87e8242df5"
+  },
+  "initramfs-v5.cpio.gz": {
+    "bytes": 4014387,
+    "sha256": "1fad91e3926db3ee58088be4e27271e6ed56d3763bd49dd152f52e09c3873c7d"
+  },
+  "network-helper": {
+    "bytes": 652080,
+    "sha256": "b713e277bfcd25384975acb31253254b93bdad4a70e529b403368f6dbb4dc6f6"
+  }
+}

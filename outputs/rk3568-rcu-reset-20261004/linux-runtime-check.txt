@@ -1,0 +1,62 @@
+
+# uname -r
+5.10.160-rt89-g9f9e9d18574d-dirty
+# hexdump -C /proc/1/cmdline
+00000000  2f 62 69 6e 2f 73 68 00  2f 69 6e 69 74 00        |/bin/sh./init.|
+0000000e
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856244k,nr_inodes=464061 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856244k,nr_inodes=464061,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# cat /sys/class/block/mmcblk0p12/uevent /sys/class/block/mmcblk0p12/size
+MAJOR=179
+MINOR=12
+DEVNAME=mmcblk0p12
+DEVTYPE=partition
+PARTN=12
+PARTNAME=cache
+786432
+# ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver /sys/bus/platform/drivers/rockchip-thermal
+lrwxrwxrwx    1         0 Oct  4 10:28 /sys/bus/i2c/devices/0-0020/driver -> ../../../../../bus/i2c/drivers/rk808
+lrwxrwxrwx    1         0 Oct  4 10:28 /sys/bus/i2c/devices/0-001c/driver -> ../../../../../bus/i2c/drivers/fan53555-regulator
+
+/sys/bus/platform/drivers/rockchip-thermal:
+--w-------    1      4096 Oct  4 10:28 unbind
+lrwxrwxrwx    1         0 Oct  4 10:28 fe710000.tsadc -> ../../../../devices/platform/fe710000.tsadc
+--w-------    1      4096 Oct  4 10:28 bind
+--w-------    1      4096 Oct  4 10:28 uevent
+# cat /sys/class/thermal/thermal_zone*/temp
+43125
+43125
+# mount -t ext4 -o ro,noload /dev/mmcblk0p12 /mnt/cache
+[   56.339937] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856244k,nr_inodes=464061 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856244k,nr_inodes=464061,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+/dev/mmcblk0p12 /mnt/cache ext4 ro,relatime,norecovery 0 0
+# sh /mnt/cache/rtctrl-rcu-reset-20261004/test-source-programs.sh
+codec-test: OK
+pty-test: OK
+test-source-programs.sh: OK
+RCU_RESET_SOURCE_PROGRAMS_BEGIN
+PatchX codec: vectors, fragmentation, corruption, bounds and byte transport passed
+PatchX POSIX PTY: idle, exact TX, fragmented RX, corruption, reopen and hangup passed
+RCU_RESET_SOURCE_PROGRAMS_PASSED
+# umount /mnt/cache
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856244k,nr_inodes=464061 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856244k,nr_inodes=464061,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# losetup -a
+# cat /proc/uptime
+68.76 273.82
+# echo RCU_RESET_RUNTIME_CHECK_DONE
+RCU_RESET_RUNTIME_CHECK_DONE
+#

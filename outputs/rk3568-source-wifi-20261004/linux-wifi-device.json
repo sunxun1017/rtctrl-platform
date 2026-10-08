@@ -1,0 +1,56 @@
+[
+  {
+    "command": "uname -r",
+    "expect": "5.10.160-rt89-g9f9e9d18574d-dirty"
+  },
+  {
+    "command": "sha256sum /bin/network-helper",
+    "expect": "b713e277bfcd25384975acb31253254b93bdad4a70e529b403368f6dbb4dc6f6"
+  },
+  {
+    "command": "cat /proc/mounts",
+    "wait": 1
+  },
+  {
+    "command": "ls /sys/bus/sdio/devices",
+    "wait": 1
+  },
+  {
+    "expect": "SDIO_ID=02D0:A9BF",
+    "wait": 1,
+    "command": "cat /sys/bus/sdio/devices/*/uevent"
+  },
+  {
+    "command": "printf /lib/firmware > /sys/module/firmware_class/parameters/path",
+    "wait": 1
+  },
+  {
+    "command": "insmod /lib/modules/bcmdhd.ko firmware_path=/fw_bcm43456c5_ag.bin nvram_path=/nvram_ap6256.txt",
+    "wait": 10
+  },
+  {
+    "command": "ip link set wlan0 up",
+    "wait": 6
+  },
+  {
+    "command": "ls /sys/class/net",
+    "expect": "wlan0"
+  },
+  {
+    "command": "cat /sys/bus/sdio/devices/*/uevent",
+    "expect": "DRIVER=bcmsdh_sdmmc"
+  },
+  {
+    "command": "dmesg | tail -n 100",
+    "wait": 2
+  },
+  {
+    "command": "sha256sum /lib/modules/bcmdhd.ko /lib/firmware/fw_bcm43456c5_ag.bin /lib/firmware/nvram_ap6256.txt",
+    "wait": 1
+  },
+  {
+    "command": "wpa_supplicant -v",
+    "expect": "v2.11"
+  }
+]
+

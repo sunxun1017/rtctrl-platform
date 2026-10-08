@@ -1,0 +1,22 @@
+[
+  {
+    "expect": "/bin/busybox",
+    "command": "ls -l /proc/1/exe"
+  },
+  {
+    "expect": "rootfs",
+    "command": "cat /proc/mounts"
+  },
+  {
+    "command": "cat /proc/uptime"
+  },
+  {
+    "command": "cat /proc/modules"
+  },
+  {
+    "command": "cat /sys/class/thermal/thermal_zone0/temp"
+  },
+  {
+    "command": "dmesg | tail -n 45"
+  }
+]

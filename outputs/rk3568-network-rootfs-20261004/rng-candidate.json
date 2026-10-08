@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "variant": "wifi-rng",
+  "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "kernel_image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+  "kernel_config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+  "baseline_dtb_sha256": "3341cf513036528aaa0abd3b6c1fd0bc55cdb1dafe8b667c8431c03ae3b7d383",
+  "dtb": "rk3568-aiot-3568pq-wifi-rng.dtb",
+  "dtb_bytes": 162418,
+  "dtb_sha256": "ab0893cea485cb9972d93dfb3eaa61ec955cbf4314a3f0f39c43b418249e8035",
+  "sources": {
+    "platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-wifi-rng.dts": "39ac7c3f2729ba5bd6f17b489bad010dea4c7f50b63b68a020ae88ed806cae76",
+    "platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-wifi.dts": "c23d65fe068874ccd698f868f3af9f1cccaeeb5a30bffad7cad5b2ec59d252f2",
+    "platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-firstboot.dts": "8097dc836b066ef67f388a8548db1e63b4fc685c415e1a88f7de8631f5d8221d",
+    "platforms/rk3568/boards/aiot-3568pq/bsp/rk3568-aiot-3568pq-power.dtsi": "025d4d17a10c1b02e6fdd615d192dcf8fa7650e9f5becae35f9b1370aab7429c",
+    "platforms/rk3568/boards/aiot-3568pq/verify-wifi-rng.py": "a39fb1937dfa522e16787b8a9dc87e76ecc80e7666ee257b8ff5e82043cde072",
+    "platforms/rk3568/boards/aiot-3568pq/test-wifi-rng-audit.py": "a3ece03a3c00f48fdc76ef9c6d0289eef22fe43f6577108a0ba241906be82f00",
+    "platforms/rk3568/boards/aiot-3568pq/verify-wifi.py": "3681748f6044c3f6d22f7b4ee140dc6d9cb189d4a8401302f0957dd161fdba83",
+    "platforms/rk3568/boards/aiot-3568pq/verify-firstboot.py": "76d4ceb5990979fcc41d84e945cddc2a4443017033827018648e03d669799d1e",
+    "third_party/linux-rk3588/arch/arm64/boot/dts/rockchip/rk3568.dtsi": "035b2a90b51dddf7af645c07f4a24dfcebe0fd1a313f3111c9e211983320a28e",
+    "third_party/linux-rk3588/include/dt-bindings/clock/rk3568-cru.h": "8b1560d1389ff26e468e97d8fb3219cec1a82296e491c8c3d02ffda9915291a6",
+    ".deps/kernel/aiot-3568pq-rcu-reset/.config": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+    ".deps/kernel/aiot-3568pq-rcu-reset/scripts/dtc/dtc": "3be6ad1bcef2e36b35624e9f2cd6c13957949e08818868ad04ad070b4fd9e896",
+    "outputs/rk3568-network-rootfs-20261004/build-rng.py": "edbd41d4b3d97e98db9ad3925cc9462aa8746bde5f9a0118844f7b4fde4b913b"
+  },
+  "property_changes": [
+    "/rng@fe388000/status"
+  ],
+  "reservation_changes": [],
+  "checks_passed": 104,
+  "real_dtb_faults_rejected": 11,
+  "new_dtc_warnings": [],
+  "dtc_version": "Version: DTC 1.6.0-g183df9e9",
+  "image_built": false,
+  "module_built": false,
+  "board_boot_tested": false,
+  "rng_driver_binding_tested": false,
+  "entropy_initialized_tested": false,
+  "wifi_reassociation_or_radio_fix_proven": false,
+  "deployable": false
+}

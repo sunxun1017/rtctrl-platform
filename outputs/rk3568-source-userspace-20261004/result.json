@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-04",
+  "board_kernel_boot_tested": true,
+  "deployable": false,
+  "kernel": {
+    "kernel_release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+    "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+    "artifacts": [
+      {
+        "file": "Image",
+        "bytes": 34755072,
+        "sha256": "b230838582b655f7786564ff21670ab1cd29172488df9c367a77d7005708c260",
+        "crc32": "af51b7df",
+        "load_address": "0x400000"
+      },
+      {
+        "file": "firstboot.dtb",
+        "bytes": 161378,
+        "sha256": "20c8f026b71fe4e8a8752a9407087eb05b4e4819b3fa7e2f4845be17727d8c15",
+        "crc32": "8df189f6",
+        "load_address": "0x3000000"
+      },
+      {
+        "file": "initramfs.cpio.gz",
+        "bytes": 621515,
+        "sha256": "7e5c405148ee46e44d845d0c123d469c4d848fbe928f6ed3e448cfed98d57e5c",
+        "crc32": "a445b434",
+        "load_address": "0x4000000"
+      }
+    ],
+    "text_offset": 0,
+    "image_memory_bytes": 35389440,
+    "image_flags": 10,
+    "kernel_config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+    "patches": {
+      "0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+      "0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b"
+    },
+    "board_tested": false,
+    "deployable": false
+  },
+  "userspace_inputs": {
+    "busybox_sha256": "5c2f1c653fdfe92d21c5baa68a64a460dd9aff3b8947d526048314700e1d5844",
+    "source_programs": [
+      {
+        "name": "codec-test",
+        "cmake_target": "rtctrl_patchx_codec_test",
+        "bytes": 2136440,
+        "sha256": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c",
+        "hardware_uart_opened": false
+      },
+      {
+        "name": "pty-test",
+        "cmake_target": "rtctrl_patchx_pty_test",
+        "bytes": 2134160,
+        "sha256": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda",
+        "hardware_uart_opened": false
+      }
+    ],
+    "vendor_modules_or_libraries_included": false,
+    "image_formatted_on_android": "new 64MiB ordinary file only",
+    "artifacts": [
+      {
+        "file": "initramfs.cpio.gz",
+        "bytes": 621515,
+        "sha256": "7e5c405148ee46e44d845d0c123d469c4d848fbe928f6ed3e448cfed98d57e5c",
+        "crc32": "a445b434"
+      },
+      {
+        "file": "rootfs.tar.gz",
+        "bytes": 2114047,
+        "sha256": "81c751c33fb79be0d1e94be770dce155dfd3f380f0cacfe4afaa5778d8be7243",
+        "crc32": "8d7b88ef"
+      }
+    ]
+  },
+  "pid1_policy": "RAM /bin/sh /init; persistent rootfs used only by short-lived chroot",
+  "ordinary_ext4_file_bytes": 67108864,
+  "physical_partition_formatted": false,
+  "android_source_programs_passed": true,
+  "source_linux_programs_passed": true,
+  "same_program_bytes_on_android_and_linux": true,
+  "linux_readonly_cache_loop_ext4_noload_phase_passed": true,
+  "linux_readwrite_cache_and_loop_phase_passed": true,
+  "marker_sha256": {
+    "android-marker": "2169a6a96b955d7a08d52a726e205a5a5770b8305ad16cebf42926f21778432b",
+    "linux-marker": "dd92ca2bc8b6dd597c466ad138adc7fa05b37602ed41eccb41abd01211857e99"
+  },
+  "android_marker_roundtrip_passed": true,
+  "linux_marker_persisted_and_read_back_on_android": true,
+  "test_mounts_and_loops_released_before_reset": true,
+  "normal_shutdown_lifecycle_validated": false,
+  "sysrq_reset_rcu_warning_observed": true,
+  "sysrq_warning_path": "__handle_sysrq / emergency_restart / kmsg_dump / pr_flush / msleep / RCU context-switch warning",
+  "warning_free": false,
+  "long_term_stability_tested": false,
+  "realtime_latency_tested": false,
+  "scmi_17_22_and_rga_warnings_in_startup_capture": false,
+  "mfd_missing_of_node_warnings_remain": true,
+  "pmic_feedback_policy_changed": false,
+  "physical_rail_voltage_measured": false,
+  "original_android_restored": true,
+  "original_android_kernel": "4.19.232",
+  "original_android_boot_completed": true,
+  "startup_partition_sha256": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+  },
+  "five_startup_partition_hashes_unchanged": true,
+  "flash_performed": false,
+  "saveenv_performed": false,
+  "kernel_addr_r_set_in_ram": "0x00400000",
+  "manufacturer_userspace_runtime_included": false,
+  "original_4_19_modules_included": false,
+  "physical_uart_or_mcu_control_tested": false,
+  "motor_commands_sent": false,
+  "network_adb_root_verified_before_and_after_test": true,
+  "network_adb_intermittent": true,
+  "final_network_adb_root_available": false,
+  "final_adbd_running": true,
+  "serial_port_released": true,
+  "printk_readback": [
+    7,
+    4,
+    1,
+    7
+  ],
+  "raw_evidence_sha256": {
+    "kernel-build.log": "64ccded744389d886b7242f41b362051470a99e5a15fa414c2bd37ea93c124be",
+    "android-rootfs-preparation.txt": "50c564775e185646af9dcd5f61ca037490bbdf2f62f70a248dd1e40fd9f459c4",
+    "android-boot-staging.txt": "bf2ddc0d29d8dabfe7a9ddfcb6d6e23c23345467c0188216843afbeb26bf7160",
+    "load-ram.raw.txt": "ea4c257f9a777532c442eaf9267d9f5ae551e5053d863be7ee31d7ac1fdaceca",
+    "boot-ram.raw.txt": "56d273a233e1065132d0a9e4a9e18e52e1bc2b2d678a0af65d3a7758accbf202",
+    "linux-check.raw.txt": "edd1ebbad1899b9f18f891c4e490429f0beb5a1eae6d766a0707dd8d2b52483d",
+    "return-android.raw.txt": "76348e882d42eede3a761074db74083bdc53a722499b83a3cac72a1d4b3bc01e",
+    "android-readback.txt": "3edaa967718f885bbc17570f964db7df5009cb644fa34f4f422b351d4f6d7204",
+    "startup-before.txt": "f9d0ff0485a5a7a795ccfb96ef2e069a239d431b9c3002321c63839c15cf4971",
+    "startup-after.txt": "f9d0ff0485a5a7a795ccfb96ef2e069a239d431b9c3002321c63839c15cf4971",
+    "android-final.raw.txt": "d470077b5a21db4d609532dbc8c7ea80bc8b9d5a864def75c07e0744f0a3c921"
+  }
+}

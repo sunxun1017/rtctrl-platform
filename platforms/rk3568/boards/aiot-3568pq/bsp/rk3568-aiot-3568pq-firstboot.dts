@@ -24,6 +24,14 @@
               <0x1 0xf0000000 0x0 0x10000000>;
     };
 
+    reserved-memory {
+        /* The original high remap is a protected buffer, not usable CPU RAM. */
+        buffer@1f0000000 {
+            reg = <0x1 0xf0000000 0x0 0x10000000>;
+            no-map;
+        };
+    };
+
     aliases {
         mmc0 = &sdhci;
     };
@@ -46,6 +54,17 @@
         pinctrl-0 = <&uart2m0_xfer>;
         status = "okay";
     };
+};
+
+/* Preserve the current loader's allocations even with display disabled.
+ * U-Boot fixups and the runtime FDT must still be checked before/after boot.
+ */
+&drm_logo {
+    reg = <0x0 0xedf00000 0x0 0x002f7b00>;
+};
+
+&drm_cubic_lut {
+    reg = <0x0 0xeff00000 0x0 0x00008000>;
 };
 
 &sdhci {

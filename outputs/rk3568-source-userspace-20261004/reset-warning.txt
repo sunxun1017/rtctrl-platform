@@ -1,0 +1,16 @@
+[  121.508407] sysrq: Resetting
+[  121.508439] WARNING: CPU: 1 PID: 171 at kernel/rcu/tree_plugin.h:297 rcu_note_context_switch+0x7c/0x5ac
+[  121.508479] pc : rcu_note_context_switch+0x7c/0x5ac
+[  121.508484] lr : rcu_note_context_switch+0x3c/0x5ac
+[  121.508569] Call trace:
+[  121.508571]  rcu_note_context_switch+0x7c/0x5ac
+[  121.508576]  __schedule+0xe4/0x8b0
+[  121.508584]  schedule+0x64/0x11c
+[  121.508589]  schedule_timeout+0xac/0x1e0
+[  121.508593]  msleep+0x30/0x40
+[  121.508599]  pr_flush+0x1b0/0x1f0
+[  121.508606]  kmsg_dump+0x154/0x1e0
+[  121.508612]  emergency_restart+0x18/0x30
+[  121.508618]  sysrq_handle_reboot+0x2c/0x4c
+[  121.508624]  __handle_sysrq+0x90/0x1a0
+[  121.508629]  write_sysrq_trigger+0x94/0xd0

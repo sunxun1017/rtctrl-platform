@@ -1,0 +1,9 @@
+{
+  "module_sha256": "cbf55f844b59a57fb4ff67c1754df09dcee716a6385dbb463cce1ae846e4d956",
+  "undefined_symbols": 284,
+  "missing_exports": [],
+  "vermagic": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+  "same_config": true,
+  "board_loaded": false
+}

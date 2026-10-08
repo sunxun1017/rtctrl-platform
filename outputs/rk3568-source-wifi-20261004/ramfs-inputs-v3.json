@@ -1,0 +1,16 @@
+{
+  "sources_and_binaries": {
+    "outputs/rk3568-source-wifi-20261004/prepare-initramfs.py": "77c555191fdbe89c204683d725a2cb68722edde059689bf17e9b7893d84467f0",
+    "outputs/rk3568-source-wifi-20261004/network-helper.c": "15bd48479bf5122e07c09d42d8a34edb9056f335e6f84610f3365c0f5cc09a86",
+    "outputs/rk3568-source-wifi-20261004/dhcp-script.sh": "e3c6457b79689144b7dd662ff399c8e13688d87a26f48112f99d8177a58ed336",
+    "outputs/rk3568-source-userspace-20261004/ram-init.sh": "8899fa13bc3d612fae0a9003f5b44d2e92566e8ad278fd2e090939b1b3ac7b78",
+    "outputs/rk3568-source-wifi-20261004/bcmdhd.ko": "cbf55f844b59a57fb4ff67c1754df09dcee716a6385dbb463cce1ae846e4d956",
+    "outputs/rk3568-source-wifi-20261004/wpa_supplicant": "81ce62f07e3c73e91e160714ac262593460d342161d1cbec04bcded38e9cce8d",
+    "outputs/rk3568-source-wifi-20261004/wpa_cli": "6c9de62c15b0fd6e7130811dbde5a5780bfd8064c1bd9ae195a59e0ac95d2c90",
+    "outputs/rk3568-source-wifi-20261004/network-helper": "c55c3e835894f13f9d5f9427d0f0df28738b25cd832880f83ec6de0280cc65eb"
+  },
+  "firmware_sha256": {
+    "fw_bcm43456c5_ag.bin": "06d3bebe4b193b5db97b7f99bde94e2e85ca95dc35677079ecf86f8f9b0eb734",
+    "nvram_ap6256.txt": "c36643f35c32b9248bbb34870a3ab152237907713e999533592acd925dd04410"
+  }
+}

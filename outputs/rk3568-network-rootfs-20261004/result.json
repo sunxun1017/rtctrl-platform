@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "status": "SOURCE_ROOTFS_CROSS_KERNEL_PASSED",
+  "host": {
+    "filesystem_bytes": 67108864,
+    "paths": 104,
+    "allocated_bytes": 22982656,
+    "readonly_e2fsck_passed": true,
+    "qemu_checked": true,
+    "boundary_tests": 21,
+    "runtime_cleanup_tests": 7
+  },
+  "android_control": {
+    "network_transfer": {
+      "bytes": 65536,
+      "upload_sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+      "download_sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+      "roundtrip_passed": true
+    },
+    "same_source_programs_passed": true,
+    "ram_tmp_and_image_unchanged_passed": true
+  },
+  "linux": {
+    "kernel": {
+      "release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+      "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+      "image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+      "config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912"
+    },
+    "pid1_remained_in_ram": true,
+    "chroot_payload_codec_pty_and_wpa_versions_passed": true,
+    "android_marker_read": true,
+    "linux_marker_write_and_read": true,
+    "cache_first_readonly_then_independent_rw": true,
+    "all_test_mounts_loops_and_devpts_released": true,
+    "physical_wifi_started_this_phase": false,
+    "previous_linux_tcp_failure_resolved": false,
+    "crng_not_ready_during_wpa_version_check": true,
+    "authentication_attempted_this_phase": false,
+    "normal_reboot_poweroff_tested": false,
+    "sysrq_ram_guard_and_return_passed": true,
+    "source_linux_reset_warning_captured": false
+  },
+  "returned_android": {
+    "release": "11",
+    "kernel": "4.19.232",
+    "boot_completed": true,
+    "root": true,
+    "linux_marker_readonly_readback": true,
+    "startup_partition_sha256": {
+      "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+      "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+      "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+      "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+    },
+    "all_five_startup_partitions_unchanged": true,
+    "printk": [
+      7,
+      4,
+      1,
+      7
+    ],
+    "kptr_restrict": 2
+  },
+  "snapshots": {
+    "after_android": {
+      "file": "rootfs-after-android.img.gz",
+      "archive_bytes": 5272566,
+      "archive_sha256": "a017be2478b88214c1d10d79e0d5450d33ed6b51fb3d3c52e4602b402e8ff4a7",
+      "image_bytes": 67108864,
+      "image_sha256": "a67752f777c7c25b8f7aca570dfada72c68b1ef39c295f6bd8ccd207e11523fc",
+      "decompressed_image_verified": true
+    },
+    "after_linux": {
+      "file": "rootfs-after-linux.img.gz",
+      "archive_bytes": 5272650,
+      "archive_sha256": "c8dfa07da4ea351d3c4b3190ce225988b65f26a938090abd8534b783d5d1d8b8",
+      "image_bytes": 67108864,
+      "image_sha256": "32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3",
+      "decompressed_image_verified": true
+    }
+  },
+  "runtime_scripts": {
+    "linux_rootfs_check_sha256": "6152f5666bbd87d9d597a5409107a06c15c548ed401de36babbdec07febe633b",
+    "rootfs_check_sha256": "c9e7a6981bad88108f1a3b52566c02dee2d90689cf844ff6eae9dbb60e2784e4"
+  },
+  "last_observed_power": {
+    "battery_level_percent": 3,
+    "ac_powered": false,
+    "usb_powered": false,
+    "threshold_3_percent_user_reminded": true,
+    "board_operations_stopped_for_battery_change": true,
+    "reminder_paused_after_delivery": true,
+    "historical_snapshot_not_live_state": true
+  },
+  "private_evidence_sha256": {
+    "android-network-baseline.txt": "bce60e67af8e0dee10afe341407639fc14cdd9a824b257bb898fd00ffe2d7a91",
+    "android-rootfs-check.txt": "f066d311c492858abffad6b44bbd9c0819fbd5c6496302919817c45193845778",
+    "android-staged-inputs.txt": "64ddf4e64a951e5e9955ff8911cfd7e073d7760e89b038f71677c83a951f944a",
+    "linux-rootfs-check.raw.txt": "49950a7c5c2bff5a3cb1fb56c0ac426b8f2ecaf11b52248246d6096c415ea15e",
+    "linux-runtime-check.raw.txt": "d1a663309638f9f874c90424d76dfc07381fc6371c05eed9ebe0ca88e9920256",
+    "return-android.raw.txt": "27a8b48e3b549e622ad9d1a23525492e7eb5453cff32c5b147642ebbe137ac53",
+    "android-final-readback.txt": "07045bb36ef089e83e2fc095cafbd4cdd7f4588b1b3636743e24305fa6f8c99c",
+    "android-snapshot.txt": "5699285c6b95b78bc90fa0434c66ab0db77ca4f7b69efc988220d9a526dd8222",
+    "linux-snapshot.txt": "aa418558f43bec65c7398298e8c9b8e74cba5937560653f239d25f9d81cc5716",
+    "android-current-battery.txt": "defba059bf04056f9cbb067bf2cf1b739b69a057bc2dd9552d0a49c541d2fb3b"
+  },
+  "backup_scope": {
+    "original_startup_artifacts_verified": 15,
+    "whole_emmc_backed_up": false,
+    "bare_metal_restore_tested": false
+  },
+  "boundaries": {
+    "switch_root": false,
+    "autostart": false,
+    "startup_partition_writes": false,
+    "saveenv": false,
+    "mcu_or_motor_commands": false,
+    "manufacturer_android_so_in_image": false,
+    "firmware_binaries_remain": true,
+    "firmware_redistribution_permission_verified": false,
+    "git_commit_or_push": false
+  }
+}

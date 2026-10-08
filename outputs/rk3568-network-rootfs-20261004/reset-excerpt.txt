@@ -1,0 +1,19 @@
+
+# uname -r
+5.10.160-rt89-g9f9e9d18574d-dirty
+# if grep -vE '^[^ ]+ [^ ]+ (rootfs|devtmpfs|proc|sysfs|tmpfs) ' /proc/mounts
+then
+    ech> o UNEX> PECTED_FILESYSTEM_PRESENT
+e> lse
+   >  echo RAM_ONLY_STATE_CONFIRMED
+f> i
+RAM_ONLY_STATE_CONFIRMED
+# if test -z "$(losetup -a)"
+then
+> >     echo NO_LOOP_REMAINS
+else
+  > >   echo LOOP_STILL_ATTACHED
+fi>
+NO_LOOP_REMAINS
+# echo b > /proc/sysrq-trigger
+[  103.129735] sysrq: Resetting

@@ -1,0 +1,35 @@
+{
+  "busybox_sha256": "5c2f1c653fdfe92d21c5baa68a64a460dd9aff3b8947d526048314700e1d5844",
+  "source_programs": [
+    {
+      "name": "codec-test",
+      "cmake_target": "rtctrl_patchx_codec_test",
+      "bytes": 2136440,
+      "sha256": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c",
+      "hardware_uart_opened": false
+    },
+    {
+      "name": "pty-test",
+      "cmake_target": "rtctrl_patchx_pty_test",
+      "bytes": 2134160,
+      "sha256": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda",
+      "hardware_uart_opened": false
+    }
+  ],
+  "vendor_modules_or_libraries_included": false,
+  "image_formatted_on_android": "new 64MiB ordinary file only",
+  "artifacts": [
+    {
+      "file": "initramfs.cpio.gz",
+      "bytes": 621515,
+      "sha256": "7e5c405148ee46e44d845d0c123d469c4d848fbe928f6ed3e448cfed98d57e5c",
+      "crc32": "a445b434"
+    },
+    {
+      "file": "rootfs.tar.gz",
+      "bytes": 2114047,
+      "sha256": "81c751c33fb79be0d1e94be770dce155dfd3f380f0cacfe4afaa5778d8be7243",
+      "crc32": "8d7b88ef"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+[
+  {"command":"ls -l /sys/bus/platform/drivers/rockchip-iodomain","expect":"io-domains"},
+  {"command":"cat /sys/class/thermal/thermal_zone*/temp"},
+  {"command":"cat /proc/uptime"},
+  {"command":"cat /proc/mounts"},
+  {"command":"if grep -vE '^[^ ]+ [^ ]+ (rootfs|devtmpfs|proc|sysfs|tmpfs) ' /proc/mounts\nthen\n    echo UNEXPECTED_FILESYSTEM_PRESENT\nelse\n    echo RAM_ONLY_STATE_CONFIRMED\nfi","expect":"(?m)^RAM_ONLY_STATE_CONFIRMED\\r?$"}
+]

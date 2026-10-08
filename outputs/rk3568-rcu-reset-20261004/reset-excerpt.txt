@@ -1,0 +1,5 @@
+RAM_ONLY_STATE_CONFIRMED
+NO_LOOP_REMAINS
+[   83.931926] sysrq: Resetting
+U-Boot 2017.09 (Mar 12 2026 - 16:01:04 +0800)
+[    0.000000] Linux version 4.19.232 (<builder>) (gcc version 6.3.1 20170404 (Linaro GCC 6.3-2017.05), GNU ld (Linaro_Binutils-2017.05) 2.27.0.20161019) #49 SMP PREEMPT Thu Mar 12 15:55:49 CST 2026

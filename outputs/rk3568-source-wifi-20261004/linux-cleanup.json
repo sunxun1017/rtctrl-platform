@@ -1,0 +1,59 @@
+[
+  {
+    "wait": 2,
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 terminate",
+    "expect": "(?m)^OK\\r?$"
+  },
+  {
+    "wait": 1,
+    "command": "rm -f /tmp/wpa.conf"
+  },
+  {
+    "wait": 1,
+    "command": "ip addr flush dev wlan0"
+  },
+  {
+    "wait": 1,
+    "command": "ip link set wlan0 down"
+  },
+  {
+    "wait": 6,
+    "command": "rmmod bcmdhd"
+  },
+  {
+    "wait": 1,
+    "command": "cat /proc/modules"
+  },
+  {
+    "expect": "(?m)^RAM_CREDENTIAL_REMOVED\\r?$",
+    "command": "test ! -e /tmp/wpa.conf && echo RAM_CREDENTIAL_REMOVED"
+  },
+  {
+    "wait": 1,
+    "command": "ls /sys/class/net"
+  },
+  {
+    "wait": 1,
+    "command": "ps"
+  },
+  {
+    "wait": 1,
+    "command": "cat /proc/mounts"
+  },
+  {
+    "wait": 2,
+    "command": "dmesg | tail -n 80"
+  },
+  {
+    "expect": "(?m)^WIFI_MODULE_UNLOADED\\r?$",
+    "command": "if grep -q '^bcmdhd ' /proc/modules\nthen\n    echo WIFI_MODULE_STILL_LOADED\nelse\n    echo WIFI_MODULE_UNLOADED\nfi"
+  },
+  {
+    "expect": "(?m)^WIFI_TEST_PROCESSES_EXITED\\r?$",
+    "command": "if ps | grep -E '[w]pa_supplicant|[n]etwork-helper'\nthen\n    echo WIFI_TEST_PROCESS_REMAINS\nelse\n    echo WIFI_TEST_PROCESSES_EXITED\nfi"
+  },
+  {
+    "expect": "(?m)^WIFI_INTERFACE_REMOVED\\r?$",
+    "command": "if test -e /sys/class/net/wlan0\nthen\n    echo WIFI_INTERFACE_REMAINS\nelse\n    echo WIFI_INTERFACE_REMOVED\nfi"
+  }
+]

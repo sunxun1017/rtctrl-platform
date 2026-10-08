@@ -1,0 +1,7 @@
+[
+  {
+    "wait": 15,
+    "expect": "(?m)^LINUX_NETWORK_ROOTFS_CHECK_COMPLETE\\r?$",
+    "command": "(\n    set -eu\n    test \"$(uname -r)\" = 5.10.160-rt89-g9f9e9d18574d-dirty\n    test -z \"$(losetup -a)\"\n    test \"$(cat /sys/class/block/mmcblk0p12/size)\" = 786432\n    grep -qx PARTNAME=cache /sys/class/block/mmcblk0p12/uevent\n    test -z \"$(ls -A /mnt/cache)\"\n    attached=0\n    cleanup_copy() {\n        if [ \"$attached\" = 1 ]; then\n            umount /mnt/cache || return 1\n            attached=0\n        fi\n    }\n    trap cleanup_copy EXIT\n    mount -t ext4 -o ro,noload /dev/mmcblk0p12 /mnt/cache\n    attached=1\n    test ! -e /tmp/rootfs-check.sh\n    test ! -e /tmp/linux-rootfs-check.sh\n    cp /mnt/cache/rtctrl-network-rootfs-20261004/rootfs-check.sh /tmp/rootfs-check.sh\n    cp /mnt/cache/rtctrl-network-rootfs-20261004/linux-rootfs-check.sh /tmp/linux-rootfs-check.sh\n    printf '%s  %s\\n' c9e7a6981bad88108f1a3b52566c02dee2d90689cf844ff6eae9dbb60e2784e4 /tmp/rootfs-check.sh | sha256sum -c -\n    printf '%s  %s\\n' 6152f5666bbd87d9d597a5409107a06c15c548ed401de36babbdec07febe633b /tmp/linux-rootfs-check.sh | sha256sum -c -\n    cleanup_copy\n    trap - EXIT\n    sh /tmp/linux-rootfs-check.sh a67752f777c7c25b8f7aca570dfada72c68b1ef39c295f6bd8ccd207e11523fc\n)"
+  }
+]

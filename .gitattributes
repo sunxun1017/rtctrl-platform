@@ -4,3 +4,13 @@
 *.hpp text eol=lf
 *.cmake text eol=lf
 *.toml text eol=lf
+
+# Unified diffs preserve upstream context whitespace and are audited as patches.
+*.patch -whitespace
+
+# Experiment receipts and frozen harness inputs retain their original bytes.
+outputs/rk3568-*/**/*.json -text whitespace=cr-at-eol,-blank-at-eof
+outputs/rk3568-*/**/*.py -text whitespace=cr-at-eol,-blank-at-eof
+outputs/rk3568-*/**/*.txt -text -whitespace
+outputs/rk3568-power-runtime-20261006/original-dt-fixture.h -text whitespace=cr-at-eol
+outputs/rk3568-audio-runtime-20261005/full-duplex-shared-io-candidate-v1/test-terminal.c -text -whitespace

@@ -1,0 +1,5 @@
+[
+  {"command":"uname -r","expect":"5.10.160-rt89-g9f9e9d18574d-dirty"},
+  {"command":"if grep -vE '^[^ ]+ [^ ]+ (rootfs|devtmpfs|proc|sysfs|tmpfs) ' /proc/mounts\nthen\n    echo UNEXPECTED_FILESYSTEM_PRESENT\nelse\n    echo RAM_ONLY_STATE_CONFIRMED\nfi","expect":"(?m)^RAM_ONLY_STATE_CONFIRMED\\r?$"},
+  {"command":"echo b > /proc/sysrq-trigger","wait":40}
+]

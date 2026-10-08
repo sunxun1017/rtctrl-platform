@@ -1,0 +1,11 @@
+[
+  {
+    "expect": "(?m)^WIFI_DEVICE_READY_FOR_AUTHENTICATION\\r?$",
+    "command": "sh /tmp/linux-network-start-v2.sh pm0",
+    "wait": 10
+  },
+  {
+    "expect": "dhd_conf_read_pm_params : PM = 0",
+    "command": "dmesg | grep -E \"(conf_path|config.txt.*open success|PM =|setting failed)\""
+  }
+]

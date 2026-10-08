@@ -1,0 +1,20 @@
+Source Linux: 5.10.160-rt89-g9f9e9d18574d-dirty
+SDIO_ID=02D0:A9BF; DRIVER=bcmsdh_sdmmc; actual clock=148500000 Hz
+Firmware=7.45.96.150; wpa_supplicant=v2.11
+Initial WPA2-PSK/CCMP: wpa_state=COMPLETED
+DHCP_IPV4_CONFIGURED; IPv4/default route/DNS address configured
+Gateway ICMP: alive reply observed
+Windows TCP roundtrip: NOT PASSED; peer ARP unresolved
+Later reconnection: ASSOCIATED then connection failure/disconnect, RSSI -87/-86 dBm; cause unconfirmed
+RAM_CREDENTIAL_REMOVED
+WIFI_MODULE_UNLOADED
+WIFI_TEST_PROCESSES_EXITED
+WIFI_INTERFACE_REMOVED
+RAM_ONLY_STATE_CONFIRMED
+NO_LOOP_REMAINS
+sysrq: Resetting (one source-Linux reset at uptime 945.701856 s)
+Android 11 / 4.19.232 / boot_completed=1 / uid=0(root)
+Startup SHA-256 unchanged: boot, uboot, trust, dtbo, vbmeta
+printk=7/4/1/7; kptr_restrict=2; final battery=22%, AC/USB powered=false
+Final Android ADB root: verified at this check; not a stability guarantee
+NETWORK_HELPER_QEMU_TESTS_PASSED; DT checks=90; rejected faults=12

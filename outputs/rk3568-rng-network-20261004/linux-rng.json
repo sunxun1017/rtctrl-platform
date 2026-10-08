@@ -1,0 +1,15 @@
+[
+  {
+    "wait": 4,
+    "command": "sh -c '#!/bin/sh\n# Copy checks into RAM from read-only cache, then release the block mount.\nset -eu\ntest \"$(uname -r)\" = 5.10.160-rt89-g9f9e9d18574d-dirty\ntest \"$(cat /sys/class/block/mmcblk0p12/size)\" = 786432\ngrep -qx PARTNAME=cache /sys/class/block/mmcblk0p12/uevent\ntest -z \"$(losetup -a)\"\ntest -z \"$(grep '\\'' /mnt/cache '\\'' /proc/mounts || true)\"\nowned=0\nrelease_cache() {\n    if [ \"$owned\" = 1 ]; then\n        cd / || return 1\n        umount /mnt/cache\n    fi\n}\ntrap release_cache EXIT\ntrap '\\''exit 1'\\'' HUP INT TERM\nmount -t ext4 -o ro,noload /dev/mmcblk0p12 /mnt/cache\nowned=1\ncd /mnt/cache/rtctrl-rng-network-20261004\nsha256sum -c upload.sha256\nfor file in entropy-check linux-rng-check.sh linux-network-start.sh linux-wpa-start.sh linux-network-cleanup.sh upload.sha256; do\n    test ! -e \"/tmp/$file\"\n    test ! -L \"/tmp/$file\"\n    cp \"$file\" \"/tmp/$file\"\ndone\nchmod 700 /tmp/entropy-check\ncd /tmp\nsha256sum entropy-check linux-rng-check.sh linux-network-start.sh linux-wpa-start.sh linux-network-cleanup.sh\numount /mnt/cache\nowned=0\ntrap - EXIT\ntrap - HUP INT TERM\ntest -z \"$(grep '\\'' /mnt/cache '\\'' /proc/mounts || true)\"\necho RNG_CHECK_INPUTS_IN_RAM_CACHE_RELEASED\n'",
+    "expect": "(?m)^RNG_CHECK_INPUTS_IN_RAM_CACHE_RELEASED\\r?$"
+  },
+  {
+    "wait": 3,
+    "command": "sh /tmp/linux-rng-check.sh",
+    "expect": "(?m)^RNG_DRIVER_AND_CRNG_CHECK_COMPLETE\\r?$"
+  },
+  {
+    "command": "cat /proc/uptime; dmesg | grep -E \"(crng|random:|rng|WARNING|BUG:|Call trace)\""
+  }
+]

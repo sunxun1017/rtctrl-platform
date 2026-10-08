@@ -1,0 +1,11 @@
+[    0.000000] Linux version 5.10.160-rt89-g9f9e9d18574d-dirty (<builder>) (aarch64-linux-gnu-gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP PREEMPT_RT Sun Oct 4 17:55:31 CST 2026
+[    0.126079] fiq_debugger fiq_debugger.0: IRQ fiq not found
+[    0.126675] fiq_debugger fiq_debugger.0: IRQ wakeup not found
+[    0.127222] fiq_debugger_probe: could not install nmi irq handler
+[    0.850751] rk808 0-0020: dcdc3 feedback policy: external (fb-inner-reg-idxs unavailable: -22)
+[    0.871403] rk817-battery: Failed to locate of_node [id: -1]
+[    0.871590] rk817-charger: Failed to locate of_node [id: -1]
+[    0.883201] rk817-codec: Failed to locate of_node [id: -1]
+[    0.950518] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[    0.950530] cfg80211: failed to load regulatory.db
+[    0.977362] Run /init as init process

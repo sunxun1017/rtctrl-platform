@@ -1,0 +1,833 @@
+{
+  "schema": 1,
+  "phase": "source-network-rootfs",
+  "image": {
+    "file": "rootfs.img",
+    "bytes": 67108864,
+    "sha256": "fb998ec342e19d28df0dc7ba1f24171c4f9cb651b4a1150045ed5d3c3c6ba757"
+  },
+  "kernel": {
+    "release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+    "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+    "image_sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+    "config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912"
+  },
+  "entries": {
+    "/": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/lost+found": {
+      "type": "directory",
+      "mode": 448,
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/dev": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/dev/pts": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/etc": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/etc/rtctrl": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/lib": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/lib/firmware": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/lib/modules": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/lib/modules/5.10.160-rt89-g9f9e9d18574d-dirty": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/mnt": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/proc": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/sys": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/tmp": {
+      "type": "directory",
+      "mode": 1023,
+      "uid": 0,
+      "gid": 0
+    },
+    "/usr": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/usr/bin": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/usr/share": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/usr/share/licenses": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/var": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/var/lib": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/var/lib/rtctrl": {
+      "type": "directory",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/busybox": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 1202816,
+      "sha256": "5c2f1c653fdfe92d21c5baa68a64a460dd9aff3b8947d526048314700e1d5844"
+    },
+    "/usr/bin/wpa_supplicant": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 1691288,
+      "sha256": "81ce62f07e3c73e91e160714ac262593460d342161d1cbec04bcded38e9cce8d"
+    },
+    "/usr/bin/wpa_cli": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 737000,
+      "sha256": "6c9de62c15b0fd6e7130811dbde5a5780bfd8064c1bd9ae195a59e0ac95d2c90"
+    },
+    "/usr/bin/network-helper": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 652080,
+      "sha256": "b713e277bfcd25384975acb31253254b93bdad4a70e529b403368f6dbb4dc6f6"
+    },
+    "/usr/bin/codec-test": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 2136440,
+      "sha256": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c"
+    },
+    "/usr/bin/pty-test": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 2134160,
+      "sha256": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda"
+    },
+    "/lib/modules/5.10.160-rt89-g9f9e9d18574d-dirty/bcmdhd.ko": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 5169288,
+      "sha256": "cbf55f844b59a57fb4ff67c1754df09dcee716a6385dbb463cce1ae846e4d956"
+    },
+    "/usr/bin/check-base.sh": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 311,
+      "sha256": "c67757f6c876fbfedfc75da5a782c9feca4ce9a4c743463c13e50a323e5898f8"
+    },
+    "/usr/bin/start-wifi.sh": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 346,
+      "sha256": "83bd0f9405915b603de29ab7ce44f2f013e7bd7a82e942127c0a79e8a8bde9c8"
+    },
+    "/etc/udhcpc.sh": {
+      "type": "file",
+      "mode": 493,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 721,
+      "sha256": "e3c6457b79689144b7dd662ff399c8e13688d87a26f48112f99d8177a58ed336"
+    },
+    "/usr/share/licenses/BusyBox": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 18348,
+      "sha256": "bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548"
+    },
+    "/usr/share/licenses/wpa_supplicant": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 965,
+      "sha256": "a87ac4e333d0f120408a9d814e40c3672cd27f365af89b4f2f6631f7a9338953"
+    },
+    "/usr/share/licenses/libnl": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 26530,
+      "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+    },
+    "/usr/share/licenses/rtctrl-platform": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 1065,
+      "sha256": "faefc9f083d422813e3c58b539fde1d04c21541e4f842a83dae4a7acc6133b8e"
+    },
+    "/usr/share/licenses/Linux": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 496,
+      "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0"
+    },
+    "/usr/share/licenses/GPL-2.0": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 18729,
+      "sha256": "f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79"
+    },
+    "/usr/share/licenses/Linux-syscall-note": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 1258,
+      "sha256": "8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f"
+    },
+    "/lib/firmware/fw_bcm43456c5_ag.bin": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 611103,
+      "sha256": "06d3bebe4b193b5db97b7f99bde94e2e85ca95dc35677079ecf86f8f9b0eb734"
+    },
+    "/lib/firmware/nvram_ap6256.txt": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 2874,
+      "sha256": "c36643f35c32b9248bbb34870a3ab152237907713e999533592acd925dd04410"
+    },
+    "/etc/rtctrl/runtime-requirements.txt": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 545,
+      "sha256": "770a8b69e192d7d5c2d5172e4a7447ffb52747108504237d0e3fab3ae414ee26"
+    },
+    "/etc/rtctrl/source-tests.sha256": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 170,
+      "sha256": "8ec151d02682ecb5f2bd4161da7f848be2e5156a811d4c07f73ef7ce1bab0d61"
+    },
+    "/usr/share/licenses/firmware-status.txt": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 231,
+      "sha256": "408fc569cbd050aefd3f17b5ee1d4359b2e082999654dfb4848e32dc4b48097f"
+    },
+    "/usr/share/licenses/bcmdhd-source-header": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 2245,
+      "sha256": "6db1221cfa859fcbeace9c05a19416863b82956d8211bd9560cc5fec28e5768c"
+    },
+    "/etc/rtctrl/payload.sha256": {
+      "type": "file",
+      "mode": 420,
+      "uid": 0,
+      "gid": 0,
+      "bytes": 2186,
+      "sha256": "0e6e933f64d54755357da15b2089163eadfe6b5e66e61edfc2cd828d152d920f"
+    },
+    "/etc/resolv.conf": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "/tmp/resolv.conf",
+      "uid": 0,
+      "gid": 0
+    },
+    "/run": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "tmp/run",
+      "uid": 0,
+      "gid": 0
+    },
+    "/var/run": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "../run",
+      "uid": 0,
+      "gid": 0
+    },
+    "/var/log": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "../tmp/log",
+      "uid": 0,
+      "gid": 0
+    },
+    "/var/tmp": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "../tmp",
+      "uid": 0,
+      "gid": 0
+    },
+    "/lib/modules/bcmdhd.ko": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "5.10.160-rt89-g9f9e9d18574d-dirty/bcmdhd.ko",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/[": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/[[": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ash": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/cat": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/chmod": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/chown": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/chroot": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/cp": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/cpio": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/cttyhack": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/dd": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/df": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/dmesg": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/echo": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/grep": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/gunzip": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/gzip": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/halt": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/head": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/hexdump": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/insmod": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ip": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ln": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/losetup": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ls": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/mkdir": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/modprobe": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/mount": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/mv": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ping": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/poweroff": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/printf": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/ps": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/readlink": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/reboot": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/rm": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/rmmod": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/sed": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/setsid": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/sh": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/sha256sum": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/sleep": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/stat": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/sync": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/tail": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/tar": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/test": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/touch": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/udhcpc": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/umount": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/uname": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    },
+    "/bin/zcat": {
+      "type": "symlink",
+      "mode": 511,
+      "target": "busybox",
+      "uid": 0,
+      "gid": 0
+    }
+  },
+  "inputs": {
+    "outputs/rk3568-persistent-linux-20261003/busybox/busybox-1.36.1/busybox": "5c2f1c653fdfe92d21c5baa68a64a460dd9aff3b8947d526048314700e1d5844",
+    "outputs/rk3568-source-wifi-20261004/wpa_supplicant": "81ce62f07e3c73e91e160714ac262593460d342161d1cbec04bcded38e9cce8d",
+    "outputs/rk3568-source-wifi-20261004/wpa_cli": "6c9de62c15b0fd6e7130811dbde5a5780bfd8064c1bd9ae195a59e0ac95d2c90",
+    "outputs/rk3568-source-wifi-20261004/network-helper": "b713e277bfcd25384975acb31253254b93bdad4a70e529b403368f6dbb4dc6f6",
+    "outputs/rk3568-mcu-baseline-20261003/private/source-tests/rtctrl_patchx_codec_test": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c",
+    "outputs/rk3568-mcu-baseline-20261003/private/source-tests/rtctrl_patchx_pty_test": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda",
+    "outputs/rk3568-source-wifi-20261004/bcmdhd.ko": "cbf55f844b59a57fb4ff67c1754df09dcee716a6385dbb463cce1ae846e4d956",
+    "outputs/rk3568-source-userspace-20261004/check-base.sh": "c67757f6c876fbfedfc75da5a782c9feca4ce9a4c743463c13e50a323e5898f8",
+    "outputs/rk3568-source-wifi-20261004/start-wifi.sh": "83bd0f9405915b603de29ab7ce44f2f013e7bd7a82e942127c0a79e8a8bde9c8",
+    "outputs/rk3568-source-wifi-20261004/dhcp-script.sh": "e3c6457b79689144b7dd662ff399c8e13688d87a26f48112f99d8177a58ed336",
+    "outputs/rk3568-persistent-linux-20261003/busybox-LICENSE": "bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548",
+    "outputs/rk3568-source-wifi-20261004/wpa-LICENSE": "a87ac4e333d0f120408a9d814e40c3672cd27f365af89b4f2f6631f7a9338953",
+    "outputs/rk3568-source-wifi-20261004/libnl-LICENSE": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+    "LICENSE": "faefc9f083d422813e3c58b539fde1d04c21541e4f842a83dae4a7acc6133b8e",
+    "third_party/linux-rk3588/COPYING": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0",
+    "third_party/linux-rk3588/LICENSES/preferred/GPL-2.0": "f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79",
+    "third_party/linux-rk3588/LICENSES/exceptions/Linux-syscall-note": "8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f",
+    "outputs/rk3568-persistent-linux-20261003/wifi-original.tar.gz": "a5955a470a2e2dc904aea5876ab51c4e77181d4337cac4d26781274f3a6e8340",
+    "third_party/linux-rk3588/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/dhd_linux.c": "89db54f1646daa76c11c9028ec8a5023bf549f80596a0453c1175d22a9a111a0"
+  },
+  "sources": {
+    "LICENSE": "faefc9f083d422813e3c58b539fde1d04c21541e4f842a83dae4a7acc6133b8e",
+    "CMakeLists.txt": "8619702b59800bb31db278b5e30d67a333c2c007ea12600a624c06a129d947b9",
+    "cmake/toolchains/linux-cross.cmake": "ae2b621a817c205eb49ac08a7197a16f0b5f26844ad5eb12a14fe922681b8031",
+    "outputs/rk3568-persistent-linux-20261003/build-busybox.sh": "5811fb2e732b81b9c7e417eb7ea43f9bceed65d5cf990ded0375b377c9cc2408",
+    "outputs/rk3568-persistent-linux-20261003/busybox.config": "6cb6e35779c81d7758a5597795edef8e3d2b8a01de00e88d3c7f043b8a5b30be",
+    "outputs/rk3568-persistent-linux-20261003/busybox-applets.txt": "6e2d74e972829be2fcacb329bcddd2b5d026a138a76031ae1ad9e5b3dd96eedf",
+    "outputs/rk3568-source-userspace-20261004/build-userspace.py": "ae6f2a82bdce67a509d938ed5fdd805d403ec8ea4f6809b0e50a1d0527d66903",
+    "outputs/rk3568-mcu-baseline-20261003/build-source-tests.sh": "c2cedfc4a8e6650a51774eed23d3f62ca94f45329c3449727285a247e57fa6f7",
+    "outputs/rk3568-source-wifi-20261004/build-module.sh": "164ebf954a17bf0200248f62c2452f15c243da130665769a7c62a4286ce70c31",
+    "outputs/rk3568-source-wifi-20261004/build-network-tools.sh": "8f9d79704a3797d3a4746162435d88587d83cbe3122abc6ff6caaa1ccbb3968e",
+    "outputs/rk3568-source-wifi-20261004/build-helper.sh": "d34aaa7e0d754362e1e44780a0a296b13e08013c26b2d4c5a25df6600ace3aa8",
+    "outputs/rk3568-source-wifi-20261004/network-helper.c": "8a8bfa224f8b0aa07537214e365afc7ecdf3deced5497aae5a5a085e76ed70ce",
+    "outputs/rk3568-source-wifi-20261004/test-network-helper.py": "0fa5e6f3ba7aa4b9cf8950d3b306e97e5024e3cfd86c22dec1bf520e6b7b856a",
+    "outputs/rk3568-source-wifi-20261004/wpa-build.config": "0c8f7159d9190518db9c7c0eefebe95020f9883d9045ec37af746bc2906bdd9f",
+    "outputs/rk3568-source-wifi-20261004/verify-module.py": "556cef1c3b29eec44403a2d3fa8850b8ea8c01edcb2b909314be5abebde896b2",
+    ".deps/kernel/aiot-3568pq-rcu-reset/vmlinux.symvers": "460aa3201dcc2c3486bfbb07e0fd36e810123314f004be236031cb569c7785d2",
+    ".deps/busybox-firstboot/busybox-1.36.1.tar.bz2": "b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314",
+    ".deps/wifi-source/wpa_supplicant-2.11.proxy.tar.gz": "912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a",
+    ".deps/wifi-source/libnl-3.11.0.proxy.tar.gz": "2a56e1edefa3e68a7c00879496736fdbf62fc94ed3232c0baba127ecfa76874d",
+    "adapters/actuator/patchx/CMakeLists.txt": "6ee2246b86e37a37b4ae274ed72e317d1953f3a8269134c3b8afdaaf8a597d6c",
+    "adapters/actuator/patchx/README.md": "796da96300b3e3ef84e44eb2b9c428b46d67193e2f85a210a84c60dc5627da76",
+    "adapters/actuator/patchx/include/rtctrl/adapters/patchx/patchx_codec.hpp": "85ac85de4256376da8d12124f7dcb41d6f926074468545883ee1c0064a330aba",
+    "adapters/actuator/patchx/src/patchx_codec.cpp": "c1ae722776442351ca120e127b50d4e3757d5b13e9c819080bb35ac2c0b6d17a",
+    "adapters/actuator/patchx/tests/CMakeLists.txt": "e3a1e747201b31d49f229d855fc890b2cb159689c295b9d6f5024a792ec02e19",
+    "adapters/actuator/patchx/tests/test_patchx_codec.cpp": "64b9de6a0170dabeb31b765c02d935b5044cce070e2b7dc4cc46d1e1df83d2db",
+    "adapters/actuator/patchx/tests/test_patchx_pty.cpp": "df075b5ca315877c4ce01fb44bc1f4344a8adc48a32a11287e1a8426ca9e1365",
+    "adapters/transport/serial/CMakeLists.txt": "a8fad69513db99eb7acf75f78a7c3418937639e9b5bbd75e959ccb349f5e0d91",
+    "adapters/transport/serial/include/rtctrl/adapters/serial/posix_serial_transport.hpp": "42a3bf22e7080687c3bd1c925f8f7dee474656dc3ec4dbb830e5d456551d253b",
+    "adapters/transport/serial/src/posix_serial_transport.cpp": "cd9c5e80ea5b530710da6f7bea1bb6df3353115a5c2806daab9e64cc8814d980",
+    "platforms/rk3568/boards/aiot-3568pq/firstboot.cfg": "1e53735cc792705c9442809f11437385963b46dfaf311b30c7eeb7d729d74061",
+    "platforms/rk3568/boards/aiot-3568pq/patches/0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+    "platforms/rk3568/boards/aiot-3568pq/patches/0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b",
+    "platforms/rk3568/boards/aiot-3568pq/patches/0003-printk-rcu-flush-context.patch": "b8ca5eb49e55dbc2cfdff55ab407d021d7cd8c094fd77372018bc859d9b712de",
+    "platforms/rk3568/boards/aiot-3568pq/patches/0004-bcmdhd-out-of-tree-include.patch": "401657aecfad52d63bdf462c25f0deeed34ad23ee4da6dfd0d347b9e35338c1c",
+    "outputs/rk3568-network-rootfs-20261004/build-rootfs.py": "d47b3114ee3f77d833f979da571f333f08929286e0c55361da053bc5f0dfee42",
+    "outputs/rk3568-network-rootfs-20261004/verify-rootfs.py": "bb679cfcd4c89546e11116479f138864d9aca5eec1b7fb75c06e58ecee0fee2a",
+    "outputs/rk3568-network-rootfs-20261004/test-rootfs.py": "448238657b9f027d75fcf3188794cee7b7fbe223bda382dfec8177f6fe447949"
+  },
+  "binary_dependencies": {
+    "fw_bcm43456c5_ag.bin": {
+      "sha256": "06d3bebe4b193b5db97b7f99bde94e2e85ca95dc35677079ecf86f8f9b0eb734",
+      "role": "firmware_or_nvram_binary",
+      "corresponding_source_obtained": false,
+      "redistribution_permission_verified": false,
+      "distribution_scope": "private_local_testing_only"
+    },
+    "nvram_ap6256.txt": {
+      "sha256": "c36643f35c32b9248bbb34870a3ab152237907713e999533592acd925dd04410",
+      "role": "firmware_or_nvram_binary",
+      "corresponding_source_obtained": false,
+      "redistribution_permission_verified": false,
+      "distribution_scope": "private_local_testing_only"
+    }
+  },
+  "policy": {
+    "pid1_in_image": false,
+    "autostart": false,
+    "switch_root_tested": false,
+    "credentials_in_image": false,
+    "tmp_must_be_bound_to_ram": true,
+    "manufacturer_android_libraries_included": false,
+    "physical_mcu_tool_included": false,
+    "board_tested": false
+  }
+}

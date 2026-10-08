@@ -1,0 +1,16 @@
+[
+  {"command":"uname -r","expect":"5.10.160-rt89-g9f9e9d18574d-dirty"},
+  {"command":"hexdump -C /proc/1/cmdline"},
+  {"command":"cat /proc/mounts"},
+  {"command":"cat /sys/class/block/mmcblk0p12/uevent /sys/class/block/mmcblk0p12/size","expect":"PARTNAME=cache"},
+  {"command":"ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver /sys/bus/platform/drivers/rockchip-thermal"},
+  {"command":"cat /sys/class/thermal/thermal_zone*/temp"},
+  {"command":"mount -t ext4 -o ro,noload /dev/mmcblk0p12 /mnt/cache","wait":2},
+  {"command":"cat /proc/mounts","expect":"/mnt/cache ext4 ro,"},
+  {"command":"sh /mnt/cache/rtctrl-rcu-reset-20261004/test-source-programs.sh","wait":6,"expect":"(?m)^RCU_RESET_SOURCE_PROGRAMS_PASSED\\r?$"},
+  {"command":"umount /mnt/cache"},
+  {"command":"cat /proc/mounts"},
+  {"command":"losetup -a"},
+  {"command":"cat /proc/uptime"},
+  {"command":"echo RCU_RESET_RUNTIME_CHECK_DONE","expect":"(?m)^RCU_RESET_RUNTIME_CHECK_DONE\\r?$"}
+]

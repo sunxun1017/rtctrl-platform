@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--dtc', required=True)
     parser.add_argument('--cpp', default='gcc')
+    parser.add_argument('--variant', choices=['firstboot', 'wifi'], default='firstboot')
     args = parser.parse_args()
     board = Path(__file__).resolve().parent
     source = args.kernel.resolve(strict=True)
@@ -52,13 +53,14 @@ def main():
     include = source/'arch/arm64/boot/dts/rockchip'
     preprocess = [cpp, '-E', '-P', '-nostdinc', '-undef', '-D__DTS__', '-x', 'assembler-with-cpp',
                   '-I', str(include), '-I', str(source/'include')]
-    dts = board/'bsp/rk3568-aiot-3568pq-firstboot.dts'
-    dtb = output/'rk3568-aiot-3568pq-firstboot.dtb'
+    dts = board/f'bsp/rk3568-aiot-3568pq-{args.variant}.dts'
+    dtb = output/f'rk3568-aiot-3568pq-{args.variant}.dtb'
     run(preprocess + [str(dts)], 'firstboot.pp.dts', 'preprocess.log')
     run([dtc, '-@', '-I', 'dts', '-O', 'dtb', '-o', str(dtb), str(output/'firstboot.pp.dts')],
         'compile.stdout', 'dtc.log')
     run([dtc, '-I', 'dtb', '-O', 'dts', str(dtb)], 'firstboot.compiled.dts', 'decompile.log')
-    run([sys.executable, str(board/'verify-firstboot.py'), str(dtb)], 'audit.json', 'audit.log')
+    auditor = board/f'verify-{args.variant}.py'
+    run([sys.executable, str(auditor), str(dtb)], 'audit.json', 'audit.log')
 
     # SoC include references the board-owned vdd_logic label even while the
     # video decoder is disabled. Supply a label-only stub for this warning
@@ -79,13 +81,14 @@ def main():
     def digest(path):
         return hashlib.sha256(path.read_bytes()).hexdigest()
 
-    manifest = {'schema': 1, 'kernel_commit': commit, 'deployable': False, 'board_boot_tested': False,
+    manifest = {'schema': 1, 'variant': args.variant, 'kernel_commit': commit, 'deployable': False, 'board_boot_tested': False,
                 'image_built': False, 'modules_built': False, 'dtb': dtb.name,
                 'dtb_sha256': digest(dtb), 'new_board_warnings': new_warnings,
                 'dtc_version': subprocess.check_output([dtc, '--version'], text=True).strip(),
-                'sources': {p.name: digest(p) for p in [dts, board/'bsp/rk3568-aiot-3568pq-power.dtsi',
+                'sources': {p.name: digest(p) for p in [dts, board/'bsp/rk3568-aiot-3568pq-firstboot.dts',
+                                                       board/'bsp/rk3568-aiot-3568pq-power.dtsi',
                                                        board/'firstboot.cfg', board/'firstboot-candidate.json',
-                                                       board/'verify-firstboot.py', Path(__file__)]}}
+                                                       board/'verify-firstboot.py', auditor, Path(__file__)]}}
     (output/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
     print(f'DTB compiled and audited; non-deployable manifest: {output / "manifest.json"}')
 

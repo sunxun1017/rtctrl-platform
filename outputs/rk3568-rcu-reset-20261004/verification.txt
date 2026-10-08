@@ -1,0 +1,35 @@
+2026-10-04 final host verification
+Board claims come from validated retained captures, not these host checks.
+
+PASS: new Image loaded by CRC; source programs; RO/noload cleanup; SysRq return without RCU warning; 5 partition hashes; final Android/ADB root
+PASS: 4 unused drivers disabled, 15 required built-ins retained
+test_actuator_uart_regression (__main__.AuditFaults) ... ok
+test_android_partition_bootargs (__main__.AuditFaults) ... ok
+test_camera_probe_regression (__main__.AuditFaults) ... ok
+test_emmc_high_speed_regression (__main__.AuditFaults) ... ok
+test_high_remap_without_no_map (__main__.AuditFaults) ... ok
+test_high_remap_wrong_size (__main__.AuditFaults) ... ok
+test_loader_logo_not_reserved (__main__.AuditFaults) ... ok
+test_loader_lut_not_reserved (__main__.AuditFaults) ... ok
+test_missing_memory_reservations (__main__.AuditFaults) ... ok
+test_real_compiled_candidate (__main__.AuditFaults) ... ok
+test_wrong_io_voltage_domain (__main__.AuditFaults) ... ok
+test_wrong_regulator_voltage (__main__.AuditFaults) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.009s
+
+OK
+RED: original real pr_flush failed on voluntary sleep inside RCU (expected failure).
+PASS: real pr_flush/pr_msleep RCU and nested RCU, normal progress/timeout, atomic/softirq/early, zero timeout and inactive console
+PASS: missing/invalid/inner/external properties; register branch unchanged; invalid data not logged
+PASS: failed middle reversal does not stop other cleanup; completed patches are not retried; remaining patch restores after conflict repair
+PASS: shell/Python syntax, JSON, clean kernel checkout, git diff --check and ignored private/binary files.
+PASS: actual resolved configuration and unchanged DTB/initramfs equality; new Image build completed and inputs/captures hash-checked.
+PASS: touched documentation links and no captured device identifiers/MAC/LAN addresses in public run files.
+
+Board scope: one SysRq emergency reset without captured RCU warning, RAM PID1, readonly cache source tests and complete cleanup.
+Not tested: normal reboot/poweroff lifecycle, physical UART/MCU/motor, NPU/audio/video, long-term Wi-Fi/RT stability, board sleep-branch instrumentation.
+Independent read-only review passed: three-patch cleanup failure/retry behavior, 14 raw hashes,
+mount/loop guards, five partition hashes, Android/ADB root and bounded one-reset reporting.
+No required corrections found.

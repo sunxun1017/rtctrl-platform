@@ -1,0 +1,24 @@
+[
+  {
+    "expect": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+    "command": "sha256sum /tmp/rtctrl-rng-network-20261004/transfer.bin"
+  },
+  {
+    "expect": "(?m)^TRANSFER_ROUNDTRIP_COMPLETE\\r?$",
+    "command": "cat /tmp/rtctrl-rng-network-20261004/server.log"
+  },
+  {
+    "expect": "(?m)^freq=5220\\r?$",
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 status"
+  },
+  {
+    "command": "cat /proc/net/arp"
+  },
+  {
+    "command": "cat /proc/uptime"
+  },
+  {
+    "expect": "(?m)^RNG_DRIVER_AND_CRNG_CHECK_COMPLETE\\r?$",
+    "command": "sh /tmp/linux-rng-check.sh"
+  }
+]

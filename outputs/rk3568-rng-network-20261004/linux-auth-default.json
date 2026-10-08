@@ -1,0 +1,19 @@
+[
+  {
+    "wait": 15,
+    "expect": "(?m)^WPA_STARTED_AFTER_CRNG_READY\\r?$",
+    "command": "sh /tmp/linux-wpa-start.sh"
+  },
+  {
+    "wait": 1,
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 status"
+  },
+  {
+    "wait": 1,
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 signal_poll"
+  },
+  {
+    "wait": 1,
+    "command": "tail -n 25 /tmp/rtctrl-rng-network-20261004/wpa.log"
+  }
+]

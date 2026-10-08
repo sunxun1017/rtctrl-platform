@@ -1,0 +1,26 @@
+[
+  {
+    "command": "if test ! -e /lib/firmware/config.txt &&\n    test ! -e /lib/firmware/rtctrl-pm0.txt\nthen\n    echo TEST_PM_CONFIGURATION_RELEASED\nelse\n    echo TEST_PM_CONFIGURATION_REMAINS\nfi",
+    "expect": "(?m)^TEST_PM_CONFIGURATION_RELEASED\\r?$"
+  },
+  {
+    "expect": "(?m)^NETWORK_RESOURCES_RELEASED\\r?$",
+    "command": "if test ! -e /tmp/wpa.conf &&\n    test ! -e /sys/class/net/wlan0 &&\n    test -z \"$(grep '^bcmdhd ' /proc/modules || true)\" &&\n    test -z \"$(ps | grep -E '[w]pa_supplicant|[n]etwork-helper' || true)\"\nthen\n    echo NETWORK_RESOURCES_RELEASED\nelse\n    echo NETWORK_RESOURCES_STILL_PRESENT\nfi"
+  },
+  {
+    "command": "uname -r",
+    "expect": "5.10.160-rt89-g9f9e9d18574d-dirty"
+  },
+  {
+    "command": "if grep -vE '^[^ ]+ [^ ]+ (rootfs|devtmpfs|proc|sysfs|tmpfs) ' /proc/mounts\nthen\n    echo UNEXPECTED_FILESYSTEM_PRESENT\nelse\n    echo RAM_ONLY_STATE_CONFIRMED\nfi",
+    "expect": "(?m)^RAM_ONLY_STATE_CONFIRMED\\r?$"
+  },
+  {
+    "command": "if test -z \"$(losetup -a)\"\nthen\n    echo NO_LOOP_REMAINS\nelse\n    echo LOOP_STILL_ATTACHED\nfi",
+    "expect": "(?m)^NO_LOOP_REMAINS\\r?$"
+  },
+  {
+    "command": "echo b > /proc/sysrq-trigger",
+    "wait": 40
+  }
+]

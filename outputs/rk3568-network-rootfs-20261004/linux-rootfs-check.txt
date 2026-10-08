@@ -1,0 +1,59 @@
+[   51.139760] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+/tmp/rootfs-check.sh: OK
+/tmp/linux-rootfs-check.sh: OK
+[   51.203146] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+/mnt/cache/rtctrl-network-rootfs-20261004/rootfs.img: OK
+[   52.723537] EXT4-fs (loop0): mounted filesystem without journal. Opts: noload
+/bin/busybox: OK
+/etc/rtctrl/runtime-requirements.txt: OK
+/etc/rtctrl/source-tests.sha256: OK
+/etc/udhcpc.sh: OK
+/lib/firmware/fw_bcm43456c5_ag.bin: OK
+/lib/firmware/nvram_ap6256.txt: OK
+/lib/modules/5.10.160-rt89-g9f9e9d18574d-dirty/bcmdhd.ko: OK
+/usr/bin/check-base.sh: OK
+/usr/bin/codec-test: OK
+/usr/bin/network-helper: OK
+/usr/bin/pty-test: OK
+/usr/bin/start-wifi.sh: OK
+/usr/bin/wpa_cli: OK
+/usr/bin/wpa_supplicant: OK
+/usr/share/licenses/BusyBox: OK
+/usr/share/licenses/GPL-2.0: OK
+/usr/share/licenses/Linux: OK
+/usr/share/licenses/Linux-syscall-note: OK
+/usr/share/licenses/bcmdhd-source-header: OK
+/usr/share/licenses/firmware-status.txt: OK
+/usr/share/licenses/libnl: OK
+/usr/share/licenses/rtctrl-platform: OK
+/usr/share/licenses/wpa_supplicant: OK
+/usr/bin/codec-test: OK
+/usr/bin/pty-test: OK
+ROOTFS_SOURCE_TEST_BEGIN
+PatchX codec: vectors, fragmentation, corruption, bounds and byte transport passed
+PatchX POSIX PTY: idle, exact TX, fragmented RX, corruption, reopen and hangup passed
+ROOTFS_SOURCE_TEST_PASSED
+wpa_supplicant v2.11
+Copyright (c) 2003-2024, Jouni Malinen <j@w1.fi> and contributors
+[   53.175929] random: wpa_supplicant: uninitialized urandom read (4096 bytes read)
+wpa_cli v2.11
+Copyright (c) 2004-2024, Jouni Malinen <j@w1.fi> and contributors
+[   53.178692] random: wpa_cli: uninitialized urandom read (4096 bytes read)
+163cb7e3d3aff8dfe8125fdc7b001698effcd4b08335787f930b5f918f43d3b8  /mnt/root/var/lib/rtctrl/android-marker
+ROOTFS_MOUNTS_RELEASED
+/mnt/cache/rtctrl-network-rootfs-20261004/rootfs.img: OK
+ROOTFS_READONLY_AND_RAM_TMP_PASSED
+ROOTFS_READ_CHECK_COMPLETE
+[   54.771932] EXT4-fs (mmcblk0p12): mounted filesystem with ordered data mode. Opts: (null)
+[   54.771969] ext4 filesystem being mounted at /mnt/cache supports timestamps until 2038 (0x7fffffff)
+/mnt/cache/rtctrl-network-rootfs-20261004/rootfs.img: OK
+[   56.296370] EXT4-fs (loop0): mounted filesystem with ordered data mode. Opts: (null)
+b540f482c1978f79511eb4022ca51a16f20fd1cda1b9ba4b1efe9e6b91aaf505  /mnt/root/var/lib/rtctrl/linux-marker
+ROOTFS_MOUNTS_RELEASED
+[   56.410137] EXT4-fs (loop0): mounted filesystem without journal. Opts: noload
+b540f482c1978f79511eb4022ca51a16f20fd1cda1b9ba4b1efe9e6b91aaf505  /mnt/root/var/lib/rtctrl/linux-marker
+ROOTFS_MOUNTS_RELEASED
+ROOTFS_SOURCE_CHECK_COMPLETE
+32273043cbc6656612dbf8a2e31866b27080ef26b8ee44b1ad83f91ae6c330a3  /mnt/cache/rtctrl-network-rootfs-20261004/rootfs.img
+LINUX_NETWORK_ROOTFS_CHECK_COMPLETE
+#

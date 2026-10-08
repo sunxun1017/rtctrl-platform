@@ -1,0 +1,11 @@
+[
+  {
+    "expect": "(?m)^WIFI_DEVICE_READY_FOR_AUTHENTICATION\\r?$",
+    "wait": 10,
+    "command": "sh /tmp/linux-network-start.sh default"
+  },
+  {
+    "command": "cat /proc/uptime",
+    "wait": 1
+  }
+]

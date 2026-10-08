@@ -1,0 +1,18 @@
+[
+  {
+    "wait": 1,
+    "command": "sed -i '/^update_config=/d' /tmp/wpa.conf"
+  },
+  {
+    "wait": 15,
+    "command": "wpa_supplicant -i wlan0 -D nl80211 -c /tmp/wpa.conf > /tmp/wpa.log 2>&1 &"
+  },
+  {
+    "wait": 1,
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 status"
+  },
+  {
+    "wait": 1,
+    "command": "tail -n 40 /tmp/wpa.log"
+  }
+]

@@ -113,6 +113,16 @@ def audit(tree, reservations):
     check('initramfs only bootargs', 'rdinit=/init' in args and 'androidboot' not in args and 'root=' not in args)
     check('captured RAM holes retained', cells('/memory@200000/reg') == [0, 0x200000, 0, 0x8200000, 0, 0x9400000, 0, 0xe6c00000, 1, 0xf0000000, 0, 0x10000000])
     check('captured FDT reservations retained', reservations == [[0xa100000, 0x25000], [0xa200000, 0xc8c20]])
+    buffer = '/reserved-memory/buffer@1f0000000'
+    check('high remap no-map retained', tree.get(buffer + '/no-map') == b'')
+    check('high remap reservation retained',
+          tree.get(buffer + '/reg') == struct.pack('>4I', 1, 0xf0000000, 0, 0x10000000))
+    check('loader logo reservation retained',
+          tree.get('/reserved-memory/drm-logo@00000000/reg') ==
+          struct.pack('>4I', 0, 0xedf00000, 0, 0x2f7b00))
+    check('loader LUT reservation retained',
+          tree.get('/reserved-memory/drm-cubic-lut@00000000/reg') ==
+          struct.pack('>4I', 0, 0xeff00000, 0, 0x8000))
     return {'checks_passed': len(checks), 'checks': checks, 'board_boot_tested': False, 'deployable': False}
 
 

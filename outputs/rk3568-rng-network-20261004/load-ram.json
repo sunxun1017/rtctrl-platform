@@ -1,0 +1,39 @@
+[
+  {
+    "command": "ext4load mmc 0:c 400000 /rtctrl-source-wifi-20261004/Image",
+    "wait": 4,
+    "expect": "34755072 bytes read"
+  },
+  {
+    "command": "crc32 400000 2125200",
+    "expect": "==> c91762d1"
+  },
+  {
+    "command": "ext4load mmc 0:c 3000000 /rtctrl-rng-network-20261004/wifi-rng.dtb",
+    "wait": 4,
+    "expect": "162418 bytes read"
+  },
+  {
+    "command": "crc32 3000000 27a72",
+    "expect": "==> e58748ee"
+  },
+  {
+    "command": "ext4load mmc 0:c 4000000 /rtctrl-source-wifi-20261004/initramfs-v5.cpio.gz",
+    "wait": 4,
+    "expect": "4014387 bytes read"
+  },
+  {
+    "command": "crc32 4000000 3d4133",
+    "expect": "==> 816d3445"
+  },
+  {
+    "command": "fdt addr 3000000"
+  },
+  {
+    "command": "fdt rsvmem print"
+  },
+  {
+    "command": "fdt print /reserved-memory",
+    "expect": "no-map"
+  }
+]

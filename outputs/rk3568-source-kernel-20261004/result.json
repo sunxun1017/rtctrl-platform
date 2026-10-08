@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-04",
+  "board_boot_tested": true,
+  "deployable": false,
+  "kernel_release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "kernel_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "kernel_patch": "platforms/rk3568/boards/aiot-3568pq/patches/0001-arm64-cache-kasan-include.patch",
+  "kernel_patch_sha256": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+  "kernel_config_sha256": "5991ffb855f078dbb0013dc93c9b33deeb08eec6425c0c14e2d984403606fa1f",
+  "kernel_image_rebuilt_this_run": false,
+  "dtb_rebuilt_this_run": true,
+  "dtb_sources": {
+    "rk3568-aiot-3568pq-firstboot.dts": "8097dc836b066ef67f388a8548db1e63b4fc685c415e1a88f7de8631f5d8221d",
+    "rk3568-aiot-3568pq-power.dtsi": "025d4d17a10c1b02e6fdd615d192dcf8fa7650e9f5becae35f9b1370aab7429c",
+    "firstboot.cfg": "03ee610e8733f5ac273bf3dd20e7429dae55f1810125a527a236d0bb8b76f28b",
+    "firstboot-candidate.json": "c36d926fe433992006167ef13378debe4b0057a1408cd4d9ab6e208e1732d9eb",
+    "verify-firstboot.py": "76d4ceb5990979fcc41d84e945cddc2a4443017033827018648e03d669799d1e",
+    "build-firstboot.py": "fb6c85f237155ddeab024157d014f1f88ce5e8627ddba06f95bac02ac261e850"
+  },
+  "artifacts": [
+    {
+      "file": "Image",
+      "bytes": 34888192,
+      "sha256": "c0efb3bb522005cf106500c26c5c2c02d5905c2bfa9ecb273c2663db20aad4ec",
+      "crc32": "7740ca58",
+      "load_address": "0x400000"
+    },
+    {
+      "file": "firstboot.dtb",
+      "bytes": 161378,
+      "sha256": "20c8f026b71fe4e8a8752a9407087eb05b4e4819b3fa7e2f4845be17727d8c15",
+      "crc32": "8df189f6",
+      "load_address": "0x3000000"
+    },
+    {
+      "file": "initramfs.cpio.gz",
+      "bytes": 533234,
+      "sha256": "2a97a6a3af2054417cd47459770629673a4655131a77c3a12dd8d30568854956",
+      "crc32": "b9718d95",
+      "load_address": "0x4000000"
+    }
+  ],
+  "image_text_offset": 0,
+  "image_memory_bytes": 35520512,
+  "pid1": "/bin/sh /init",
+  "userspace": "static BusyBox 1.36.1 RAM initramfs",
+  "filesystem_types": [
+    "devtmpfs",
+    "proc",
+    "rootfs",
+    "sysfs",
+    "tmpfs"
+  ],
+  "persistent_block_filesystems_mounted_in_linux": false,
+  "emmc_enumerated": true,
+  "linux_emmc_device": "mmcblk0",
+  "bound_drivers": [
+    "fan53555-regulator",
+    "rk808",
+    "rockchip-iodomain",
+    "rockchip-thermal"
+  ],
+  "runtime_memory_reg_bytes": 192,
+  "runtime_high_buffer": {
+    "address": "0x1f0000000",
+    "bytes": 268435456,
+    "no_map": true
+  },
+  "runtime_drm_logo": {
+    "address": "0xedf00000",
+    "bytes": 3111680
+  },
+  "runtime_drm_cubic_lut": {
+    "address": "0xeff00000",
+    "bytes": 32768
+  },
+  "runtime_initrd": {
+    "start": "0x04000000",
+    "end": "0x040822f2"
+  },
+  "observed_uptime_seconds": 199.19,
+  "temperature_millidegrees_c": [
+    37222,
+    36111
+  ],
+  "fatal_diagnostics_in_captured_window": [],
+  "warning_free": false,
+  "long_term_stability_tested": false,
+  "realtime_latency_tested": false,
+  "return_method": "RAM-only mount guard, then requested SysRq immediate reset",
+  "normal_shutdown_lifecycle_validated": false,
+  "original_android_restored": true,
+  "original_android_version": "11",
+  "original_android_kernel": "4.19.232",
+  "original_android_boot_completed": true,
+  "startup_partition_sha256": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+  },
+  "five_startup_partition_hashes_unchanged": true,
+  "boot_partition_write_performed": false,
+  "saveenv_performed": false,
+  "ordinary_files_staged_on_android": true,
+  "kernel_probe_hardware_register_writes": true,
+  "motor_commands_sent": false,
+  "physical_mcu_ack_tested": false,
+  "original_ddr_loader_trust_binaries_retained": true,
+  "final_adb_connected": false,
+  "final_adbd_running": true,
+  "final_android_wlan_ipv4_present": true,
+  "final_router_ping": "2 sent, 0 received",
+  "serial_port_released": true,
+  "printk_readback": [
+    7,
+    4,
+    1,
+    7
+  ],
+  "raw_evidence_sha256": {
+    "preflight.raw.txt": "cbb01436f6dd3e89f91f9f2155396dba5a39d281f1f933ce301a5829b3ef51a0",
+    "uboot-console.raw.txt": "770f175091ec30ad55b60fea6d7f0b9c90882741a94bf2e47a9b691be7ba4320",
+    "load-ram.raw.txt": "e765aba7e7336ff7b85ba49a6cf45cb4b6150de1e7722ae9d4a8a7f45d26f44a",
+    "boot-ram.raw.txt": "1aa69cabf670eca772b387b0c4c3fe819fa2693dfc5e650498e40a30e5092574",
+    "linux-check.raw.txt": "8b6295d0ab9ef25c1018ebd46f99fe458f43476b0e9a1b30d48c94a01218342a",
+    "linux-final-check.raw.txt": "fad45477c57cec2149e493bd917ae85f8ae940ee64dde72487364233e4799e4e",
+    "return-android.raw.txt": "1ed31ab197b29f9df345ea4e38b28f02bece9465cd70118b2d6aab6206bcca4c",
+    "android-final.raw.txt": "c8b751194daf55a83bf7a033a3953c1e800156360441c470d2cd645767c02187",
+    "android-network-final.raw.txt": "113a31c76acc87cc53bb7ff0d896f313df5cee474d4d17b2bc2ccbe650339a51"
+  }
+}

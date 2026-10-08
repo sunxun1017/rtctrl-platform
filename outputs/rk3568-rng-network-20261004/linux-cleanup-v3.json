@@ -1,0 +1,22 @@
+[
+  {
+    "command": "cat /tmp/rtctrl-rng-network-20261004/server.log"
+  },
+  {
+    "command": "cat /proc/net/arp"
+  },
+  {
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 status"
+  },
+  {
+    "command": "wpa_cli -p /tmp/wpa-control -i wlan0 signal_poll"
+  },
+  {
+    "command": "ps"
+  },
+  {
+    "expect": "(?m)^WIFI_CREDENTIAL_PROCESSES_MODULE_AND_INTERFACE_RELEASED\\r?$",
+    "command": "sh /tmp/linux-network-cleanup-v3.sh",
+    "wait": 9
+  }
+]

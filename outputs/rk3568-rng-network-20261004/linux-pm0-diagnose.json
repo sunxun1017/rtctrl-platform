@@ -1,0 +1,23 @@
+[
+  {
+    "command": "cat /sys/module/bcmdhd/parameters/config_path"
+  },
+  {
+    "command": "cat /sys/module/bcmdhd/parameters/firmware_path"
+  },
+  {
+    "command": "cat /sys/module/bcmdhd/parameters/nvram_path"
+  },
+  {
+    "command": "cat /sys/module/firmware_class/parameters/path"
+  },
+  {
+    "command": "ls -l /lib/firmware/rtctrl-pm0.txt"
+  },
+  {
+    "command": "cat /lib/firmware/rtctrl-pm0.txt"
+  },
+  {
+    "command": "dmesg | grep -E \"(config_path|conf_path|config file|rtctrl-pm0|PM =|Unknown parameter)\""
+  }
+]

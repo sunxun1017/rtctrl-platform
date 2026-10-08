@@ -1,0 +1,15 @@
+[
+  {"command":"ext4ls mmc 0:c /rtctrl-source-kernel-20261004"},
+  {"command":"ext4load mmc 0:c 400000 /rtctrl-source-kernel-20261004/Image","wait":4,"expect":"34888192 bytes read"},
+  {"command":"crc32 400000 2145a00","expect":"7740ca58"},
+  {"command":"ext4load mmc 0:c 3000000 /rtctrl-source-kernel-20261004/firstboot.dtb","wait":2,"expect":"161378 bytes read"},
+  {"command":"crc32 3000000 27662","expect":"8df189f6"},
+  {"command":"ext4load mmc 0:c 4000000 /rtctrl-source-kernel-20261004/initramfs.cpio.gz","wait":2,"expect":"533234 bytes read"},
+  {"command":"crc32 4000000 822f2","expect":"b9718d95"},
+  {"command":"fdt addr 3000000"},
+  {"command":"fdt header"},
+  {"command":"fdt rsvmem print"},
+  {"command":"fdt print /memory@200000"},
+  {"command":"fdt print /reserved-memory","wait":2,"expect":"no-map"},
+  {"command":"fdt print /chosen"}
+]

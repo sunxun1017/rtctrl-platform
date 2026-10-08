@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-03",
+  "board": "AIoT-3568PQ / RK3568",
+  "goal": "Publicly reproducible Linux; prioritize independent source replacements for manufacturer custom binaries",
+  "scope": "Read-only source, ELF, bytecode, build dependency and live metadata audit",
+  "reference_commit": "ed91ef7486cdebca00aa32d497f5aa45cb226c0e",
+  "reference_license_found": false,
+  "reference_algorithm_wrappers": [
+    {"library": "patchx-face", "java_class": "FaceEngine", "implementation_source_found": false},
+    {"library": "video_process", "java_class": "ImageProcessing", "implementation_source_found": false},
+    {"library": "speekerid", "java_class": "SpeekerID", "implementation_source_found": false},
+    {"library": "ovrlip_bridge", "java_class": "OVRLipSyncJNI", "implementation_source_found": false}
+  ],
+  "reference_serial_library": {
+    "name": "libserial_port.so",
+    "bytes": 4820,
+    "sha256": "a2d50990295e95d5fc1fc1430d31166013be88448f2c32675da50773eda2401d",
+    "abi": "ELF32 ARM",
+    "jni_operations": ["open", "close", "write", "read"],
+    "replacement": "Existing PosixSerialTransport; physical board protocol behavior pending"
+  },
+  "reference_jar": {
+    "name": "smdt.jar",
+    "bytes": 163108,
+    "sha256": "53371d0b7fb90d0de383b1afa210e5eb6c0185747d1e9cc49ff598b5f0111544",
+    "uart_call_chain": "SmdtManagerNew -> ISmdtManagerNew Binder -> smdtserver",
+    "mcu_jni_class_found": false,
+    "board_jni_library_call_relation_proven": false
+  },
+  "board_jni_library": {
+    "path": "/system/lib64/libmcuencryption-lib.so",
+    "bytes": 74864,
+    "sha256": "326431c4ac33548ba48f87078abbd936c11c1e177f5e4e07d7ca9f6fc9de126d",
+    "host_board_sha256_match": true,
+    "abi": "ELF64 AArch64",
+    "needed": ["liblog.so", "libm.so", "libdl.so", "libc.so"],
+    "jni_exports": [
+      "Java_android_app_smdt_utill_McuJNIUtils_getEncryptionResult",
+      "Java_android_app_smdt_utill_McuJNIUtils_getCustomerResult"
+    ],
+    "static_observations": {
+      "device_path": "/dev/rjgt102",
+      "open_flags": "O_RDWR",
+      "ioctl_request": 0,
+      "ioctl_buffer_status_offset": 9
+    },
+    "live_snapshot": {
+      "device_node_present": false,
+      "dt_node": "/sys/firmware/devicetree/base/i2c@fe5c0000/rjgt102@68",
+      "dt_status": "okay",
+      "driver_directory_present": true,
+      "driver_bound_device_found": false,
+      "maps_checked": ["system_server", "com.patchx_sys", "com.patchx_main"],
+      "library_mapping_found": false,
+      "caveat": "Snapshot only; does not prove unused by all processes or at other times"
+    },
+    "library_executed": false,
+    "device_opened_or_ioctl_invoked": false,
+    "business_necessity_proven": false,
+    "motor_control_relation_proven": false,
+    "replacement_implemented": false
+  },
+  "kernel": {
+    "actual_board_baseline": "Original binary 4.19.232",
+    "baseline_complete_corresponding_source_obtained": false,
+    "source_candidate": "5.10.160",
+    "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+    "source_candidate_build_passed": true,
+    "source_candidate_board_boot_tested": false
+  },
+  "remaining_source_gaps": [
+    "Manufacturer I2C MCU power/watchdog contract and driver",
+    "GD32/STM8 firmware source",
+    "Real CPU model-execution backend and reproducible model inputs",
+    "RKAIQ algorithm archives",
+    "RKNN runtime and conversion implementation",
+    "Wi-Fi firmware and DDR loader source"
+  ],
+  "validation_boundary": {
+    "actuator_commands_sent": false,
+    "new_product_backend_implemented": false,
+    "new_library_functional_test_passed": false,
+    "reboot_or_boot_partition_write_performed": false,
+    "all_components_open_source": false
+  }
+}

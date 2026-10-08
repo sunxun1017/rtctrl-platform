@@ -1,0 +1,59 @@
+
+# ls -l /proc/1/exe
+lrwxrwxrwx    1         0 Oct  4 12:03 /proc/1/exe -> /bin/busybox
+# cat /proc/mounts
+rootfs / rootfs rw,size=1854584k,nr_inodes=463646 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1854584k,nr_inodes=463646,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# cat /proc/uptime
+85.68 334.87
+# cat /proc/modules
+# cat /sys/class/thermal/thermal_zone0/temp
+43125
+# dmesg | tail -n 45
+<6>[    1.436941] mmc_host mmc2: Bus speed (slot 0) = 375000Hz (slot req 400000Hz, actual 375000HZ div = 0)
+<6>[    1.450194] rockchip-iodomain fdc20000.syscon:io-domains: pmuio2(3300000 uV) supplied by vcc3v3_pmu
+<6>[    1.450357] rockchip-iodomain fdc20000.syscon:io-domains: vccio1(3100000 uV) supplied by vccio_acodec
+<6>[    1.450566] rockchip-iodomain fdc20000.syscon:io-domains: vccio3(3300000 uV) supplied by vccio_sd
+<6>[    1.450719] rockchip-iodomain fdc20000.syscon:io-domains: vccio4(1800000 uV) supplied by vcc_1v8
+<6>[    1.450882] rockchip-iodomain fdc20000.syscon:io-domains: vccio5(3300000 uV) supplied by vcc_3v3
+<6>[    1.450974] rockchip-iodomain fdc20000.syscon:io-domains: vccio6(1800000 uV) supplied by vcc_1v8
+<6>[    1.451064] rockchip-iodomain fdc20000.syscon:io-domains: vccio7(3300000 uV) supplied by vcc_3v3
+<5>[    1.454011] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+<5>[    1.455899] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+<4>[    1.456744] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+<6>[    1.456759] cfg80211: failed to load regulatory.db
+<6>[    1.457707] I : [File] : drivers/gpu/arm/mali400/mali/linux/mali_kernel_linux.c; [Line] : 406; [Func] : mali_module_init(); svn_rev_string_from_arm of this mali_ko is '', rk_ko_ver is '5', built at '18:23:03', on 'Oct  4 2026'.
+<4>[    1.457965] Mali:
+<4>[    1.457967] Mali device driver loaded
+<6>[    1.457974] ALSA device list:
+<6>[    1.457977]   #0: Bothlent Bothlent UAC Dongle at usb-fd880000.usb-1, high speed
+<6>[    1.464715] Freeing unused kernel memory: 6464K
+<6>[    1.480099] Run /init as init process
+<7>[    1.480106]   with arguments:
+<7>[    1.480110]     /init
+<7>[    1.480112]   with environment:
+<7>[    1.480115]     HOME=/
+<7>[    1.480117]     TERM=linux
+<7>[    1.480119]     smdt_hw_id=6
+<7>[    1.480121]     smdt_bom_id=7
+<4>[    1.483815] mmc2: queuing unknown CIS tuple 0x80 (2 bytes)
+<4>[    1.485543] mmc2: queuing unknown CIS tuple 0x80 (3 bytes)
+<4>[    1.487378] mmc2: queuing unknown CIS tuple 0x80 (3 bytes)
+<4>[    1.490493] mmc2: queuing unknown CIS tuple 0x80 (7 bytes)
+<4>[    1.494398] mmc2: queuing unknown CIS tuple 0x81 (9 bytes)
+<6>[    1.554558] mmc_host mmc2: Bus speed (slot 0) = 148500000Hz (slot req 150000000Hz, actual 148500000HZ div = 0)
+<6>[    1.569720] dwmmc_rockchip fe2c0000.dwmmc: Successfully tuned phase to 202
+<6>[    1.579406] mmc2: new ultra high speed SDR104 SDIO card at address 0001
+<6>[   51.139760] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+<6>[   51.203146] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+<6>[   52.723537] EXT4-fs (loop0): mounted filesystem without journal. Opts: noload
+<5>[   53.175929] random: wpa_supplicant: uninitialized urandom read (4096 bytes read)
+<5>[   53.178692] random: wpa_cli: uninitialized urandom read (4096 bytes read)
+<6>[   54.771932] EXT4-fs (mmcblk0p12): mounted filesystem with ordered data mode. Opts: (null)
+<4>[   54.771969] ext4 filesystem being mounted at /mnt/cache supports timestamps until 2038 (0x7fffffff)
+<6>[   56.296370] EXT4-fs (loop0): mounted filesystem with ordered data mode. Opts: (null)
+<6>[   56.410137] EXT4-fs (loop0): mounted filesystem without journal. Opts: noload
+#

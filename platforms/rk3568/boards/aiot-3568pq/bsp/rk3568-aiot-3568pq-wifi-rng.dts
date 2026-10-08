@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/* Offline candidate: retain the Wi-Fi DT and enable the existing SoC RNG. */
+#include "rk3568-aiot-3568pq-wifi.dts"
+
+&rng {
+    status = "okay";
+};

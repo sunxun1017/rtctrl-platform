@@ -46,6 +46,22 @@ class AuditFaults(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'FDT reservations'):
             module.audit(properties, [])
 
+    def test_high_remap_without_no_map(self):
+        changed = dict(properties)
+        changed.pop('/reserved-memory/buffer@1f0000000/no-map', None)
+        with self.assertRaisesRegex(ValueError, 'high remap no-map'):
+            module.audit(changed, reservations)
+
+    def test_high_remap_wrong_size(self):
+        self.reject('/reserved-memory/buffer@1f0000000/reg',
+                    struct.pack('>4I', 1, 0xf0000000, 0, 0x08000000), 'high remap reservation')
+
+    def test_loader_logo_not_reserved(self):
+        self.reject('/reserved-memory/drm-logo@00000000/reg', bytes(16), 'loader logo reservation')
+
+    def test_loader_lut_not_reserved(self):
+        self.reject('/reserved-memory/drm-cubic-lut@00000000/reg', bytes(16), 'loader LUT reservation')
+
 
 if __name__ == '__main__':
     unittest.main()

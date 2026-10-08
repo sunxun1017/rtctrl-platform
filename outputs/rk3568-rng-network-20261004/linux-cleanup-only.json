@@ -1,0 +1,5 @@
+{
+  "expect": "(?m)^WIFI_CREDENTIAL_PROCESSES_MODULE_AND_INTERFACE_RELEASED\\r?$",
+  "command": "sh /tmp/linux-network-cleanup.sh",
+  "wait": 9
+}

@@ -1,0 +1,18 @@
+== DO RELOCATE == Kernel from 0x00280000 to 0x00400000
+[    0.000000] Linux version 5.10.160-rt89-g9f9e9d18574d-dirty (<builder>) (aarch64-linux-gnu-gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP PREEMPT_RT Tue Sep 29 01:20:11 CST 2026
+[    0.000000] Machine model: 3568A Linux reconstruction - firstboot candidate
+[    0.000000] Kernel command line: console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=10 smdt_hw_id=6 smdt_bom_id=7 cpuid=<redacted> cid=<redacted>
+[    0.126762] fiq_debugger fiq_debugger.0: IRQ fiq not found
+[    0.127301] fiq_debugger fiq_debugger.0: IRQ wakeup not found
+[    0.127845] fiq_debugger_probe: could not install nmi irq handler
+[    0.640438] arm-scmi firmware:scmi: Failed. SCMI protocol 22 not active.
+# [    0.868507] rk817-battery: Failed to locate of_node [id: -1]
+[    0.868693] rk817-charger: Failed to locate of_node [id: -1]
+[    0.868802] rk817-charger rk817-charger: Failed to find matching dt id
+[    0.880355] rk817-codec: Failed to locate of_node [id: -1]
+[    0.887245] arm-scmi firmware:scmi: Failed. SCMI protocol 17 not active.
+[    0.901728] rga_iommu: rga_iommu_bind, binding map scheduler failed!
+[    0.901739] rga: rga iommu bind failed!
+[    0.947967] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[    0.947977] cfg80211: failed to load regulatory.db
+[    0.971054] Run /init as init process

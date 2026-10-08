@@ -1,0 +1,229 @@
+
+# uname -r
+5.10.160-rt89-g9f9e9d18574d-dirty
+# hexdump -C /proc/1/cmdline
+00000000  2f 62 69 6e 2f 73 68 00  2f 69 6e 69 74 00        |/bin/sh./init.|
+0000000e
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856220k,nr_inodes=464055 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856220k,nr_inodes=464055,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# cat /proc/partitions
+major minor  #blocks  name
+
+   1        0       4096 ram0
+ 179        0   61063168 mmcblk0
+ 179        1       4096 mmcblk0p1
+ 179        2       4096 mmcblk0p2
+ 179        3       4096 mmcblk0p3
+ 179        4       4096 mmcblk0p4
+ 179        5     262144 mmcblk0p5
+ 179        6       4096 mmcblk0p6
+ 179        7       4096 mmcblk0p7
+ 179        8       1024 mmcblk0p8
+ 179        9      40960 mmcblk0p9
+ 179       10      98304 mmcblk0p10
+ 179       11     393216 mmcblk0p11
+ 179       12     393216 mmcblk0p12
+ 179       13      16384 mmcblk0p13
+ 179       14       1024 mmcblk0p14
+ 179       15    3186688 mmcblk0p15
+ 179       16   56641504 mmcblk0p16
+# ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver
+lrwxrwxrwx    1         0 /sys/bus/i2c/devices/0-0020/driver -> ../../../../../bus/i2c/drivers/rk808
+lrwxrwxrwx    1         0 /sys/bus/i2c/devices/0-001c/driver -> ../../../../../bus/i2c/drivers/fan53555-regulator
+# ls -l /sys/bus/platform/drivers/rockchip-io-domain /sys/bus/platform/drivers/rockchip-thermal
+ls: /sys/bus/platform/drivers/rockchip-io-domain: No such file or directory
+/sys/bus/platform/drivers/rockchip-thermal:
+--w-------    1      4096 unbind
+lrwxrwxrwx    1         0 fe710000.tsadc -> ../../../../devices/platform/fe710000.tsadc
+--w-------    1      4096 bind
+--w-------    1      4096 uevent
+# cat /sys/class/thermal/thermal_zone*/type /sys/class/thermal/thermal_zone*/temp
+soc-thermal
+gpu-thermal
+37222
+37222
+# hexdump -C /sys/firmware/devicetree/base/memory@200000/reg
+00000000  00 00 00 00 00 20 00 00  00 00 00 00 08 20 00 00  |..... ....... ..|
+00000010  00 00 00 00 09 40 00 00  00 00 00 00 e6 c0 00 00  |.....@..........|
+00000020  00 00 00 01 f0 00 00 00  00 00 00 00 10 00 00 00  |................|
+00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+000000c0
+# hexdump -C /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/reg
+00000000  00 00 00 01 f0 00 00 00  00 00 00 00 10 00 00 00  |................|
+00000010
+# ls -l /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map
+-r--r--r--    1         0 /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map
+# hexdump -C /sys/firmware/devicetree/base/reserved-memory/drm-logo@00000000/reg
+00000000  00 00 00 00 ed f0 00 00  00 00 00 00 00 2f 7b 00  |............./{.|
+00000010
+# hexdump -C /sys/firmware/devicetree/base/reserved-memory/drm-cubic-lut@00000000/reg
+00000000  00 00 00 00 ef f0 00 00  00 00 00 00 00 00 80 00  |................|
+00000010
+# hexdump -C /sys/firmware/devicetree/base/chosen/linux,initrd-start /sys/firmware/devicetree/base/chosen/linux,initrd-end
+00000000  00 00 00 00 04 00 00 00  00 00 00 00 04 08 22 f2  |..............".|
+00000010
+# cat /proc/iomem
+00200000-083fffff : System RAM
+  00400000-01b9ffff : Kernel code
+  01ba0000-021effff : reserved
+  021f0000-025dffff : Kernel data
+  03000000-03028fff : reserved
+  04000000-04082fff : reserved
+09400000-efffffff : System RAM
+  e5a00000-eddfffff : reserved
+  edf00000-ee1f7fff : reserved
+  ee400000-ef3fffff : reserved
+  ef4ef000-ef54efff : reserved
+  ef54f000-ef74ffff : reserved
+  ef750000-ef7b7fff : reserved
+  ef7ba000-ef7bafff : reserved
+  ef7bb000-ef7bbfff : reserved
+  ef7bc000-ef7cdfff : reserved
+  ef7ce000-efffffff : reserved
+fd800000-fd83ffff : fd800000.usb usb@fd800000
+fd840000-fd87ffff : fd840000.usb usb@fd840000
+fd880000-fd8bffff : fd880000.usb usb@fd880000
+fd8c0000-fd8fffff : fd8c0000.usb usb@fd8c0000
+fdcc0000-fdccafff : fdcc0000.sram sram@fdcc0000
+fdd40000-fdd40fff : fdd40000.i2c i2c@fdd40000
+fdd60000-fdd600ff : fdd60000.gpio0 gpio0@fdd60000
+fde00000-fde000ff : fde00000.pvtm pvtm@fde00000
+fde80000-fde800ff : fde80000.pvtm pvtm@fde80000
+fde90000-fde900ff : fde90000.pvtm pvtm@fde90000
+fe102000-fe1023ff : fe102000.nocp-cpu nocp-cpu@fe102000
+fe102400-fe1027ff : fe102400.nocp-gpu-vpu-rga-venc nocp-gpu-vpu-rga-venc@fe102400
+fe102800-fe102bff : fe102800.nocp-vdec nocp-vdec@fe102800
+fe102c00-fe102fff : fe102c00.nocp-vi-usb-peri-pipe nocp-vi-usb-peri-pipe@fe102c00
+fe103000-fe1033ff : fe103000.nocp-vo nocp-vo@fe103000
+fe310000-fe31ffff : fe310000.sdhci sdhci@fe310000
+fe38c000-fe38ffff : fe38c000.otp otp@fe38c000
+fe530000-fe533fff : dmac@fe530000
+  fe530000-fe533fff : fe530000.dmac dmac@fe530000
+fe550000-fe553fff : dmac@fe550000
+  fe550000-fe553fff : fe550000.dmac dmac@fe550000
+fe600000-fe6000ff : fe600000.watchdog watchdog@fe600000
+fe710000-fe7100ff : fe710000.tsadc tsadc@fe710000
+fe740000-fe7400ff : fe740000.gpio1 gpio1@fe740000
+fe750000-fe7500ff : fe750000.gpio2 gpio2@fe750000
+fe760000-fe7600ff : fe760000.gpio3 gpio3@fe760000
+fe770000-fe7700ff : fe770000.gpio4 gpio4@fe770000
+fe8a0000-fe8affff : fe8a0000.usb2-phy usb2-phy@fe8a0000
+fe8b0000-fe8bffff : fe8b0000.usb2-phy usb2-phy@fe8b0000
+1f0000000-1ffffffff : reserved
+# for regdir in /sys/class/regulator/regulator.*
+do
+    ec> > ho "$regdir"
+    ca> t "$regdir/name" "$regdir/microvolts"
+done>
+/sys/class/regulator/regulator.0
+regulator-dummy
+cat: can't open '/sys/class/regulator/regulator.0/microvolts': No such file or directory
+/sys/class/regulator/regulator.1
+dc_12v
+12000000
+/sys/class/regulator/regulator.10
+vcc_ddr
+500000
+/sys/class/regulator/regulator.11
+vdd_npu
+900000
+/sys/class/regulator/regulator.12
+vcc_1v8
+1800000
+/sys/class/regulator/regulator.13
+vdda0v9_image
+900000
+/sys/class/regulator/regulator.14
+vdda_0v9
+900000
+/sys/class/regulator/regulator.15
+vdda0v9_pmu
+900000
+/sys/class/regulator/regulator.16
+vccio_acodec
+3100000
+/sys/class/regulator/regulator.17
+vccio_sd
+3300000
+/sys/class/regulator/regulator.18
+vcc3v3_pmu
+3300000
+/sys/class/regulator/regulator.19
+vcca_1v8
+1800000
+/sys/class/regulator/regulator.2
+vcc3v3_sys
+3300000
+/sys/class/regulator/regulator.20
+vcca1v8_pmu
+1800000
+/sys/class/regulator/regulator.21
+vcca1v8_image
+1800000
+/sys/class/regulator/regulator.22
+vcc_3v3
+cat: can't open '/sys/class/regulator/regulator.22/microvolts': No such file or directory
+/sys/class/regulator/regulator.23
+vcc3v3_sd
+cat: can't open '/sys/class/regulator/regulator.23/microvolts': No such file or directory
+/sys/class/regulator/regulator.3
+vcc5v0_sys
+5000000
+/sys/class/regulator/regulator.4
+vcc5v0_usb
+5000000
+/sys/class/regulator/regulator.5
+vcc5v0_host
+5000000
+/sys/class/regulator/regulator.6
+vcc2v5-sys
+2500000
+/sys/class/regulator/regulator.7
+vdd_cpu
+1000000
+/sys/class/regulator/regulator.8
+vdd_logic
+925000
+/sys/class/regulator/regulator.9
+vdd_gpu
+900000
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856220k,nr_inodes=464055 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856220k,nr_inodes=464055,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# echo SOURCE_KERNEL_CHECK_COMPLETE
+SOURCE_KERNEL_CHECK_COMPLETE
+#
+# Final readbacks
+
+# ls -l /sys/bus/platform/drivers/rockchip-iodomain
+--w-------    1      4096 unbind
+lrwxrwxrwx    1         0 fdc20000.syscon:io-domains -> ../../../../devices/platform/fdc20000.syscon/fdc20000.syscon:io-domains
+--w-------    1      4096 bind
+--w-------    1      4096 uevent
+# cat /sys/class/thermal/thermal_zone*/temp
+36111
+36111
+# cat /proc/uptime
+199.19 795.48
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856220k,nr_inodes=464055 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856220k,nr_inodes=464055,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# if grep -vE '^[^ ]+ [^ ]+ (rootfs|devtmpfs|proc|sysfs|tmpfs) ' /proc/mounts
+then
+    echo UN> > EXPECTED_FILESYSTEM_PRESENT
+else
+   > >  echo RAM_ONLY_STATE_CONFIRMED
+f> i
+RAM_ONLY_STATE_CONFIRMED
+#

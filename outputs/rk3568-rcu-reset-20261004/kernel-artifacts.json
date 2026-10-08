@@ -1,0 +1,39 @@
+{
+  "kernel_release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+  "artifacts": [
+    {
+      "file": "Image",
+      "bytes": 34755072,
+      "sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+      "crc32": "c91762d1",
+      "load_address": "0x400000"
+    },
+    {
+      "file": "firstboot.dtb",
+      "bytes": 161378,
+      "sha256": "20c8f026b71fe4e8a8752a9407087eb05b4e4819b3fa7e2f4845be17727d8c15",
+      "crc32": "8df189f6",
+      "load_address": "0x3000000"
+    },
+    {
+      "file": "initramfs.cpio.gz",
+      "bytes": 621515,
+      "sha256": "7e5c405148ee46e44d845d0c123d469c4d848fbe928f6ed3e448cfed98d57e5c",
+      "crc32": "a445b434",
+      "load_address": "0x4000000"
+    }
+  ],
+  "image_text_offset": 0,
+  "image_memory_bytes": 35389440,
+  "image_flags": 10,
+  "kernel_config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+  "patches": {
+    "0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+    "0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b",
+    "0003-printk-rcu-flush-context.patch": "b8ca5eb49e55dbc2cfdff55ab407d021d7cd8c094fd77372018bc859d9b712de"
+  },
+  "dtb_and_initramfs_reused_byte_for_byte": true,
+  "board_tested_at_manifest_creation": false,
+  "deployable": false
+}

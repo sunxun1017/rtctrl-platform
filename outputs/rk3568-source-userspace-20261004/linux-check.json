@@ -1,0 +1,16 @@
+[
+  {"command":"uname -r","expect":"5.10.160-rt89-g9f9e9d18574d-dirty"},
+  {"command":"hexdump -C /proc/1/cmdline"},
+  {"command":"cat /proc/mounts"},
+  {"command":"cat /proc/partitions"},
+  {"command":"cat /sys/class/block/mmcblk0p12/uevent /sys/class/block/mmcblk0p12/size","expect":"PARTNAME=cache"},
+  {"command":"ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver /sys/bus/platform/drivers/rockchip-iodomain /sys/bus/platform/drivers/rockchip-thermal"},
+  {"command":"cat /sys/class/thermal/thermal_zone*/temp"},
+  {"command":"ls -l /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map"},
+  {"command":"dmesg | grep -E 'rga|SCMI protocol|dcdc3 feedback|rk817|of_node|panic|BUG:'"},
+  {"command":"sh /bin/test-userspace.sh /dev/mmcblk0p12 5.10.160-rt89-g9f9e9d18574d-dirty","wait":12,"expect":"(?m)^SOURCE_USERSPACE_TEST_COMPLETE\\r?$"},
+  {"command":"cat /proc/mounts"},
+  {"command":"losetup -a"},
+  {"command":"cat /proc/uptime"},
+  {"command":"echo SOURCE_KERNEL_USERSPACE_CHECK_DONE","expect":"(?m)^SOURCE_KERNEL_USERSPACE_CHECK_DONE\\r?$"}
+]

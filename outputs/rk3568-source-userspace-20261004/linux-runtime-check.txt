@@ -1,0 +1,100 @@
+
+# uname -r
+5.10.160-rt89-g9f9e9d18574d-dirty
+# hexdump -C /proc/1/cmdline
+00000000  2f 62 69 6e 2f 73 68 00  2f 69 6e 69 74 00        |/bin/sh./init.|
+0000000e
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856244k,nr_inodes=464061 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856244k,nr_inodes=464061,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# cat /proc/partitions
+major minor  #blocks  name
+
+   1        0       4096 ram0
+ 179        0   61063168 mmcblk0
+ 179        1       4096 mmcblk0p1
+ 179        2       4096 mmcblk0p2
+ 179        3       4096 mmcblk0p3
+ 179        4       4096 mmcblk0p4
+ 179        5     262144 mmcblk0p5
+ 179        6       4096 mmcblk0p6
+ 179        7       4096 mmcblk0p7
+ 179        8       1024 mmcblk0p8
+ 179        9      40960 mmcblk0p9
+ 179       10      98304 mmcblk0p10
+ 179       11     393216 mmcblk0p11
+ 179       12     393216 mmcblk0p12
+ 179       13      16384 mmcblk0p13
+ 179       14       1024 mmcblk0p14
+ 179       15    3186688 mmcblk0p15
+ 179       16   56641504 mmcblk0p16
+# cat /sys/class/block/mmcblk0p12/uevent /sys/class/block/mmcblk0p12/size
+MAJOR=179
+MINOR=12
+DEVNAME=mmcblk0p12
+DEVTYPE=partition
+PARTN=12
+PARTNAME=cache
+786432
+# ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver /sys/bus/platform/drivers/rockchip-iodomain /sys/bus/platform/drivers/rockchip-thermal
+lrwxrwxrwx    1         0 Oct  4 10:03 /sys/bus/i2c/devices/0-0020/driver -> ../../../../../bus/i2c/drivers/rk808
+lrwxrwxrwx    1         0 Oct  4 10:03 /sys/bus/i2c/devices/0-001c/driver -> ../../../../../bus/i2c/drivers/fan53555-regulator
+
+/sys/bus/platform/drivers/rockchip-thermal:
+--w-------    1      4096 Oct  4 10:03 unbind
+lrwxrwxrwx    1         0 Oct  4 10:03 fe710000.tsadc -> ../../../../devices/platform/fe710000.tsadc
+--w-------    1      4096 Oct  4 10:03 bind
+--w-------    1      4096 Oct  4 10:03 uevent
+
+/sys/bus/platform/drivers/rockchip-iodomain:
+--w-------    1      4096 Oct  4 10:03 unbind
+lrwxrwxrwx    1         0 Oct  4 10:03 fdc20000.syscon:io-domains -> ../../../../devices/platform/fdc20000.syscon/fdc20000.syscon:io-domains
+--w-------    1      4096 Oct  4 10:03 bind
+--w-------    1      4096 Oct  4 10:03 uevent
+# cat /sys/class/thermal/thermal_zone*/temp
+41875
+41250
+# ls -l /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map
+-r--r--r--    1         0 Oct  4 10:03 /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map
+# dmesg | grep -E 'rga|SCMI protocol|dcdc3 feedback|rk817|of_node|panic|BUG:'
+<5>[    0.000000] Kernel command line: console=ttyFIQ0 earlycon=uart8250,mmio32,0xfe660000 rdinit=/init ro loglevel=7 panic=10 smdt_hw_id=6 smdt_bom_id=7 cpuid=<redacted> cid=<redacted>
+<6>[    0.850751] rk808 0-0020: dcdc3 feedback policy: external (fb-inner-reg-idxs unavailable: -22)
+<4>[    0.871403] rk817-battery: Failed to locate of_node [id: -1]
+<4>[    0.871590] rk817-charger: Failed to locate of_node [id: -1]
+<4>[    0.883201] rk817-codec: Failed to locate of_node [id: -1]
+# sh /bin/test-userspace.sh /dev/mmcblk0p12 5.10.160-rt89-g9f9e9d18574d-dirty
+[   90.369385] EXT4-fs (mmcblk0p12): mounted filesystem without journal. Opts: noload
+rootfs.ext4: OK
+[   91.843224] EXT4-fs (loop0): mounted filesystem without journal. Opts: noload
+android-source-userspace-20261004
+2169a6a96b955d7a08d52a726e205a5a5770b8305ad16cebf42926f21778432b  /mnt/root/var/lib/rtctrl/android-marker
+SOURCE_ROOTFS_READONLY_PASSED
+USERSPACE_MOUNTS_RELEASED
+[   91.976148] EXT4-fs (mmcblk0p12): mounted filesystem with ordered data mode. Opts: (null)
+[   91.976184] ext4 filesystem being mounted at /mnt/cache supports timestamps until 2038 (0x7fffffff)
+[   92.007368] EXT4-fs (loop0): mounted filesystem with ordered data mode. Opts: (null)
+[   92.007406] ext4 filesystem being mounted at /mnt/root supports timestamps until 2038 (0x7fffffff)
+/usr/bin/codec-test: OK
+/usr/bin/pty-test: OK
+ROOTFS_SOURCE_TEST_BEGIN
+PatchX codec: vectors, fragmentation, corruption, bounds and byte transport passed
+PatchX POSIX PTY: idle, exact TX, fragmented RX, corruption, reopen and hangup passed
+ROOTFS_SOURCE_TEST_PASSED
+dd92ca2bc8b6dd597c466ad138adc7fa05b37602ed41eccb41abd01211857e99  /mnt/root/var/lib/rtctrl/linux-marker
+USERSPACE_MOUNTS_RELEASED
+SOURCE_USERSPACE_TEST_COMPLETE
+# cat /proc/mounts
+rootfs / rootfs rw,size=1856244k,nr_inodes=464061 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=1856244k,nr_inodes=464061,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /tmp tmpfs rw,relatime 0 0
+# losetup -a
+# cat /proc/uptime
+104.60 415.48
+# echo SOURCE_KERNEL_USERSPACE_CHECK_DONE
+SOURCE_KERNEL_USERSPACE_CHECK_DONE
+#

@@ -1,0 +1,11 @@
+[
+  {
+    "wait": 10,
+    "command": "sh /tmp/linux-network-start-v3.sh pm0",
+    "expect": "(?m)^WIFI_DEVICE_READY_FOR_AUTHENTICATION\\r?$"
+  },
+  {
+    "expect": "band = 1",
+    "command": "dmesg | grep -E \"(config.txt.*open success|PM =|band =|WLC_SET_BAND.*failed)\""
+  }
+]

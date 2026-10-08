@@ -1,0 +1,5 @@
+{
+  "wait": 3,
+  "expect": "(?m)^TRANSFER_SERVER_READY\\r?$",
+  "command": "sh -c '\nset -eu\nstate=/tmp/rtctrl-rng-network-20261004\ntest -d \"$state\"\ntest ! -e \"$state/server.pid\"\ntest ! -e \"$state/transfer.bin\"\nprintf \"%s  %s\\n\" b713e277bfcd25384975acb31253254b93bdad4a70e529b403368f6dbb4dc6f6 /bin/network-helper | sha256sum -c -\n/bin/network-helper serve \"$state/transfer.bin\" > \"$state/server.log\" 2>&1 &\nprintf \"%s\\n\" \"$!\" > \"$state/server.pid\"\nsleep 1\ncat \"$state/server.log\"\n'"
+}

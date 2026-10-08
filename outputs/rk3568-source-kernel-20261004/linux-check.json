@@ -1,0 +1,19 @@
+[
+  {"command":"uname -r","expect":"5.10.160-rt89-g9f9e9d18574d-dirty"},
+  {"command":"hexdump -C /proc/1/cmdline"},
+  {"command":"cat /proc/mounts"},
+  {"command":"cat /proc/partitions"},
+  {"command":"ls -l /sys/bus/i2c/devices/0-001c/driver /sys/bus/i2c/devices/0-0020/driver"},
+  {"command":"ls -l /sys/bus/platform/drivers/rockchip-io-domain /sys/bus/platform/drivers/rockchip-thermal"},
+  {"command":"cat /sys/class/thermal/thermal_zone*/type /sys/class/thermal/thermal_zone*/temp"},
+  {"command":"hexdump -C /sys/firmware/devicetree/base/memory@200000/reg"},
+  {"command":"hexdump -C /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/reg"},
+  {"command":"ls -l /sys/firmware/devicetree/base/reserved-memory/buffer@1f0000000/no-map"},
+  {"command":"hexdump -C /sys/firmware/devicetree/base/reserved-memory/drm-logo@00000000/reg"},
+  {"command":"hexdump -C /sys/firmware/devicetree/base/reserved-memory/drm-cubic-lut@00000000/reg"},
+  {"command":"hexdump -C /sys/firmware/devicetree/base/chosen/linux,initrd-start /sys/firmware/devicetree/base/chosen/linux,initrd-end"},
+  {"command":"cat /proc/iomem","wait":2},
+  {"command":"for regdir in /sys/class/regulator/regulator.*\ndo\n    echo \"$regdir\"\n    cat \"$regdir/name\" \"$regdir/microvolts\"\ndone","wait":2},
+  {"command":"cat /proc/mounts"},
+  {"command":"echo SOURCE_KERNEL_CHECK_COMPLETE","expect":"(?m)^SOURCE_KERNEL_CHECK_COMPLETE\\r?$"}
+]

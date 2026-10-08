@@ -1,0 +1,49 @@
+2026-10-04; current image and captured board logs only.
+
+Host original image: fb998ec342e19d28df0dc7ba1f24171c4f9cb651b4a1150045ed5d3c3c6ba757
+64 MiB ext4; 104 paths; allocated 22982656 bytes.
+Read-only e2fsck, full payload/symlink/inode uid/gid audit and static ELF/QEMU: PASS.
+test-rootfs.py: 21 actual image and input-boundary cases PASS.
+test-runtime-cleanup.py: 7 original shell-fragment mock cases PASS.
+sh -n: prepare-android.sh/rootfs-check.sh/linux-rootfs-check.sh PASS.
+
+Android raw TCP roundtrip: 65536 bytes, SHA
+7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2
+matches upload, actual board file and download; RAM server cleaned.
+
+Android4.19: payload + codec/PTY + WPA/CLI -v PASS.
+RO loop/ro,noload + bind RAM/tmp; temporary write leaves full image SHA unchanged.
+Independent RW Android marker, independent RO readback and mount/loop cleanup PASS.
+Compressed snapshot copied to host; gzip SHA and decompressed 67108864-byte image SHA PASS.
+
+Original U-Boot2017.09: current mmc0/cache0:c and bdinfo inspected.
+Image/DTB/v5 initrd exact SHA + per-input RAM CRC match prior tested artifacts.
+Runtime shell scripts separately SHA checked; RAM setenv/FDT only, no saveenv.
+Source Linux5.10: same source payload/codec/PTY/WPA versions PASS.
+RO/noload cache and rootfs; Android marker readback + RAM/tmp/full image SHA PASS.
+Independent RW cache/rootfs Linux marker then independent RO readback PASS.
+All child/root mounts, loop, cache and devpts released; RAM/loop reset guard PASS.
+PID1 remains RAM /bin/sh /init; no switch_root, module load or Wi-Fi authentication this phase.
+random uninitialized urandom read seen during -v at about53s; CRNG readiness NOT validated.
+SysRq reset at103.129735s; source Linux reset prefix no WARNING/BUG/Call trace captured.
+
+Returned Android11/4.19.232 boot_completed=1 root confirmed.
+All five complete boot/uboot/trust/dtbo/vbmeta SHA match baseline.
+RO/noload Linux marker + full payload/source programs/RAM/tmp/full image SHA PASS.
+printk7/4/1/7 and kptr_restrict2; serial helper finally closes port.
+Second complete rootfs snapshot on host; gzip SHA and decompressed image SHA PASS.
+Original15 startup artifacts verified; full eMMC and bare-metal restore NOT verified.
+Latest actual battery3%; user reminded to replace battery; no further board operations.
+
+result.json and private evidence SHA written by record-results.py after checking captured tokens,
+partition hashes, script binding and compressed/decompressed snapshot hashes.
+Old Linux ARP/TCP failure remains unresolved; Android success is a current control only.
+No MCU/motor, partition flashing, normal Linux shutdown, git commit or push.
+
+Offline wifi-rng candidate: 162418 bytes,
+ab0893cea485cb9972d93dfb3eaa61ec955cbf4314a3f0f39c43b418249e8035.
+104 compiled-DTB audit checks and 11 actual-DTB fault rejections PASS.
+Only /rng@fe388000/status differs from SHA-locked original Wi-Fi DTB;
+reservations identical, zero new DTC warnings, original source/artifacts preserved.
+Output existing/outside-boundary/symlink rejection tests PASS.
+RNG driver binding, CRNG readiness and wireless fix NOT board-tested with this candidate.

@@ -1,0 +1,37 @@
+2026-10-04 final host verification
+Board runtime claims are from retained captures, not these host checks.
+
+python3 outputs/rk3568-source-userspace-20261004/record-results.py
+PASS: Android/source Linux tests; RO/RW rootfs; markers persisted; cleanup; Android return; 5 partition hashes
+Known limitation: SysRq RCU warning captured; normal lifecycle not validated
+PASS: 4 unused drivers disabled, 15 required built-ins retained
+test_actuator_uart_regression (__main__.AuditFaults) ... ok
+test_android_partition_bootargs (__main__.AuditFaults) ... ok
+test_camera_probe_regression (__main__.AuditFaults) ... ok
+test_emmc_high_speed_regression (__main__.AuditFaults) ... ok
+test_high_remap_without_no_map (__main__.AuditFaults) ... ok
+test_high_remap_wrong_size (__main__.AuditFaults) ... ok
+test_loader_logo_not_reserved (__main__.AuditFaults) ... ok
+test_loader_lut_not_reserved (__main__.AuditFaults) ... ok
+test_missing_memory_reservations (__main__.AuditFaults) ... ok
+test_real_compiled_candidate (__main__.AuditFaults) ... ok
+test_wrong_io_voltage_domain (__main__.AuditFaults) ... ok
+test_wrong_regulator_voltage (__main__.AuditFaults) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.008s
+
+OK
+PMIC diagnostic red: original function rejected poisoned failed-property output (expected failure).
+PASS: missing/invalid/inner/external properties; register branch unchanged; invalid data not logged
+PASS: shell syntax (7 files), Python syntax, public JSON parsing.
+PASS: third_party kernel restored clean; git diff --check; raw/binary outputs ignored.
+PASS: completed Image build log, resolved configuration equality and 53 compiled-DTB audit checks.
+PASS: packed shell scripts match source; codec/PTY/BusyBox hashes match; no vendor libraries/modules/firmware packed.
+PASS: touched documentation links; public current-phase files exclude captured device IDs and LAN addresses.
+
+Known limits: SysRq RCU warning present; normal lifecycle/physical UART/MCU/motors/NPU/long-term/RT latency not tested.
+ADB root/transfer worked earlier and after return, then offline/TCP timeout; final Android status verified by serial.
+Independent read-only review: input manifests, 11 raw hashes, ARM64 range, Android/Linux programs,
+marker hashes, RO/RW cleanup, separate RAM/loop guard, five partition hashes and Android root/kernel verified.
+No required corrections found; normal lifecycle and physical UART/MCU limitations remain explicit.

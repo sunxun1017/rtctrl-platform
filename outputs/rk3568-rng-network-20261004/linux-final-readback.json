@@ -1,0 +1,15 @@
+[
+  {
+    "command": "cat /proc/mounts"
+  },
+  {
+    "command": "cat /proc/1/cmdline"
+  },
+  {
+    "command": "cat /proc/uptime"
+  },
+  {
+    "command": "dmesg",
+    "wait": 3
+  }
+]

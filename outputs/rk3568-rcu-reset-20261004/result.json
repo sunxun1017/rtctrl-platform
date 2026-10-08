@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-04",
+  "board_kernel_boot_tested": true,
+  "deployable": false,
+  "kernel_inputs": {
+    "kernel_release": "5.10.160-rt89-g9f9e9d18574d-dirty",
+    "source_commit": "9f9e9d18574d0914c0d192a90c3babfe1fd63c95",
+    "artifacts": [
+      {
+        "file": "Image",
+        "bytes": 34755072,
+        "sha256": "e7a95d9fc5a3e87f407145cbadaf0cb2c787c637b2311c4ff551a73f8b8fa457",
+        "crc32": "c91762d1",
+        "load_address": "0x400000"
+      },
+      {
+        "file": "firstboot.dtb",
+        "bytes": 161378,
+        "sha256": "20c8f026b71fe4e8a8752a9407087eb05b4e4819b3fa7e2f4845be17727d8c15",
+        "crc32": "8df189f6",
+        "load_address": "0x3000000"
+      },
+      {
+        "file": "initramfs.cpio.gz",
+        "bytes": 621515,
+        "sha256": "7e5c405148ee46e44d845d0c123d469c4d848fbe928f6ed3e448cfed98d57e5c",
+        "crc32": "a445b434",
+        "load_address": "0x4000000"
+      }
+    ],
+    "image_text_offset": 0,
+    "image_memory_bytes": 35389440,
+    "image_flags": 10,
+    "kernel_config_sha256": "1268f3061ecf94e063d8785010a793cc7edaaf0d61d29d6c29887a9dccfed912",
+    "patches": {
+      "0001-arm64-cache-kasan-include.patch": "50fe5627b4fed8d765faf9210ab7ea5e5f74dcc7dd67cc2d4e3d2a3108c5619a",
+      "0002-rk817-feedback-diagnostic.patch": "4354f6c9cb9de1d618f3b3e8838f39923d6c4e2bb9d851d92a8ee2e2a03df30b",
+      "0003-printk-rcu-flush-context.patch": "b8ca5eb49e55dbc2cfdff55ab407d021d7cd8c094fd77372018bc859d9b712de"
+    },
+    "dtb_and_initramfs_reused_byte_for_byte": true,
+    "board_tested_at_manifest_creation": false,
+    "deployable": false
+  },
+  "source_program_inputs": [
+    {
+      "name": "codec-test",
+      "cmake_target": "rtctrl_patchx_codec_test",
+      "bytes": 2136440,
+      "sha256": "18fd4744d881e46661d16ad60112f395262b6a6e97ce83f246a4334f6448234c",
+      "hardware_uart_opened": false
+    },
+    {
+      "name": "pty-test",
+      "cmake_target": "rtctrl_patchx_pty_test",
+      "bytes": 2134160,
+      "sha256": "5eb5fd9aba8133933dce602d5e0dbd3acf5f1829f700615dc77a67b5f1d0cbda",
+      "hardware_uart_opened": false
+    }
+  ],
+  "same_config_dtb_initramfs_as_previous_run": true,
+  "ram_pid1_confirmed": true,
+  "linux_cache_readonly_noload": true,
+  "source_codec_and_pty_passed": true,
+  "physical_uart_or_mcu_control_tested": false,
+  "test_mounts_cleaned_before_reset": true,
+  "loop_guard_passed": true,
+  "sysrq_reset_to_original_android_passed": true,
+  "sysrq_rcu_warning_in_this_reset_capture": false,
+  "sleep_branch_instrumented_on_board": false,
+  "board_reset_repetitions": 1,
+  "normal_reboot_shutdown_lifecycle_validated": false,
+  "all_boot_messages_warning_free": false,
+  "long_term_stability_tested": false,
+  "realtime_latency_tested": false,
+  "original_android_kernel": "4.19.232",
+  "original_android_boot_completed": true,
+  "five_startup_partition_hashes_unchanged": true,
+  "startup_partition_sha256": {
+    "boot": "0db7ae12eebf0f3819e5fb72d9291abb4f12222084d87348a6a95a6a00f21b28",
+    "uboot": "4758af21c8f5751cc92166baf7a6e4a79c17d0f87ce9bad64a16af91a125447e",
+    "trust": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+    "dtbo": "59b971b4300092de56164904d6a1747276eb569acfc31c09dda6569aa5c8e57d",
+    "vbmeta": "76ff77959f2451ee3838de5b2d90a0e21017345cac4f7ce56c9da7a630edc752"
+  },
+  "initial_adb_service_listening_but_gateway_neighbor_failed": true,
+  "saved_wifi_disable_enable_performed": true,
+  "adb_root_and_upload_recovered": true,
+  "final_network_adb_root_available_at_check": true,
+  "wifi_long_term_stability_proven": false,
+  "final_battery_level_percent": 45,
+  "final_external_power_reported": false,
+  "printk_readback": [
+    7,
+    4,
+    1,
+    7
+  ],
+  "serial_port_released": true,
+  "flash_performed": false,
+  "saveenv_performed": false,
+  "motor_commands_sent": false,
+  "raw_evidence_sha256": {
+    "kernel-build.log": "e014461e4b6f65340f351adb176a8cf273b9a2023b03af05ff1996b5045aa354",
+    "android-preflight.raw.txt": "6e24e068573e1360f3004dd65993d58b47e7e48fcca42f2e87e3fd1bbca9491c",
+    "android-network.raw.txt": "2bedf83143f47c95c3c7f7faaa3314ce149ce2101ef9ed07c5616a9559bd0678",
+    "wifi-reconnect.raw.txt": "0207297fb2453b428ec6c9826e97106d204a41cd87ba67b05e1aed4b9977b9cc",
+    "wifi-status.raw.txt": "7da3e103817a8b2b3551f2a367b222831af298156e1ffb00a29b27fea647c009",
+    "android-staging.txt": "658b1d4adb0c630eb637c436f4a94dfc7af6b375aed88a45d5fcc504ac1a3691",
+    "startup-before.txt": "f9d0ff0485a5a7a795ccfb96ef2e069a239d431b9c3002321c63839c15cf4971",
+    "uboot-console.raw.txt": "c3f5ca814dc0f261f574007d4143d431a87265c0f6f83db820994c238d8150d6",
+    "load-ram.raw.txt": "3fe8d7a7aebcc371295a4bdec1304fcabc5e522e54a54d05328c7ce49b88e511",
+    "boot-ram.raw.txt": "3831c27684152f0844e1c5b1005f3eb610594ee1e5bc901bc2da02112222426c",
+    "linux-check.raw.txt": "8034d6d04e26a3b1b5189a17c8501f78f60a5171aec273200bcc37dd4bdc302e",
+    "return-android.raw.txt": "393b555e0abd58efc4de2c62c149ed578fd2b7e02bc1312065dd30914a0b158e",
+    "android-final.raw.txt": "faf09b8d8ca5020a2bcb6a5e1a0206693ec459216ded976e0b9464d43a2e6a3c",
+    "adb-final-root.txt": "834b454e33e3bce69800c6e0152fbc33808347bc364c702793a553d24b6e2f26"
+  }
+}

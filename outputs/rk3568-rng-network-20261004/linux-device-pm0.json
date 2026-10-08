@@ -1,0 +1,10 @@
+[
+  {
+    "expect": "(?m)^WIFI_DEVICE_READY_FOR_AUTHENTICATION\\r?$",
+    "command": "sh /tmp/linux-network-start.sh pm0",
+    "wait": 10
+  },
+  {
+    "command": "dmesg | grep -E \"(conf_path|rtctrl-pm0|PM =|setting failed)\""
+  }
+]
