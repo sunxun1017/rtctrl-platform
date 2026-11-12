@@ -1,0 +1,1400 @@
+{
+  "kernel": "5.10.160-rt89-g9f9e9d18574d-dirty",
+  "boot_image_bytes": 41943040,
+  "boot_crc32": "1d4f9d74",
+  "image_load": "U-Boot one-time RAM boot",
+  "usb_agc_off": [
+    {
+      "event": "usb_controls",
+      "returncode": 0,
+      "summary": "numid=4,iface=CARD,name='Keep Interface'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=off\nnumid=3,iface=MIXER,name='Auto Gain Control'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=off\nnumid=2,iface=MIXER,name='MIC Capture Switch'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=on\nnumid=1,iface=PCM,name='Capture Channel Map'\n  ; type=INTEGER,access=r----R--,values=8,min=0,max=36,step=0\n  : values=0,0,0,0,0,0,0,0\n  | container\n    | chmap-fixed=FL,FR,FC,LFE,RL,RR,FLC,FRC\n"
+    },
+    {
+      "second": 1,
+      "channels": [
+        {
+          "ac_rms": 19.5,
+          "ac_peak": 482,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 468,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 102,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 131,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.1,
+          "ac_peak": 7,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.5,
+          "ac_peak": 12,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 2,
+      "channels": [
+        {
+          "ac_rms": 19.8,
+          "ac_peak": 477,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.0,
+          "ac_peak": 482,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 96,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.5,
+          "ac_peak": 121,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 30,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 36,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 3,
+      "channels": [
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 479,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.4,
+          "ac_peak": 465,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.4,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 4,
+      "channels": [
+        {
+          "ac_rms": 20.0,
+          "ac_peak": 467,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.9,
+          "ac_peak": 477,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 97,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 135,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 25,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 5,
+      "channels": [
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 468,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.0,
+          "ac_peak": 466,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.4,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.5,
+          "ac_peak": 134,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 39,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 6,
+      "channels": [
+        {
+          "ac_rms": 20.0,
+          "ac_peak": 481,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.1,
+          "ac_peak": 474,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.5,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.8,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.6,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 7,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 461,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 472,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 112,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 8,
+      "channels": [
+        {
+          "ac_rms": 19.7,
+          "ac_peak": 479,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.0,
+          "ac_peak": 470,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 96,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 134,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 9,
+      "channels": [
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 462,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 466,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.4,
+          "ac_peak": 100,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.5,
+          "ac_peak": 136,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.8,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 10,
+      "channels": [
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 483,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 463,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.4,
+          "ac_peak": 100,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 131,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 11,
+      "channels": [
+        {
+          "ac_rms": 19.8,
+          "ac_peak": 485,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.0,
+          "ac_peak": 477,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 103,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.5,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 8,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.2,
+          "ac_peak": 13,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 12,
+      "channels": [
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 485,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 21.0,
+          "ac_peak": 481,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 97,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 13,
+      "channels": [
+        {
+          "ac_rms": 19.5,
+          "ac_peak": 465,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 471,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 111,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 14,
+      "channels": [
+        {
+          "ac_rms": 19.0,
+          "ac_peak": 469,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 474,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 107,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 25,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    }
+  ],
+  "usb_agc_on": [
+    {
+      "event": "agc",
+      "before": "off",
+      "during": "on"
+    },
+    {
+      "event": "usb_controls",
+      "returncode": 0,
+      "summary": "numid=4,iface=CARD,name='Keep Interface'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=off\nnumid=3,iface=MIXER,name='Auto Gain Control'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=on\nnumid=2,iface=MIXER,name='MIC Capture Switch'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=on\nnumid=1,iface=PCM,name='Capture Channel Map'\n  ; type=INTEGER,access=r----R--,values=8,min=0,max=36,step=0\n  : values=0,0,0,0,0,0,0,0\n  | container\n    | chmap-fixed=FL,FR,FC,LFE,RL,RR,FLC,FRC\n"
+    },
+    {
+      "second": 1,
+      "channels": [
+        {
+          "ac_rms": 19.1,
+          "ac_peak": 483,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.6,
+          "ac_peak": 477,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 102,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 2,
+      "channels": [
+        {
+          "ac_rms": 19.1,
+          "ac_peak": 483,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 469,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 100,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 135,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 30,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 3,
+      "channels": [
+        {
+          "ac_rms": 19.1,
+          "ac_peak": 459,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 477,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 4,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 464,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 478,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 98,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 131,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 38,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 5,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 466,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 476,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 103,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.2,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 6,
+      "channels": [
+        {
+          "ac_rms": 19.0,
+          "ac_peak": 475,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 471,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 98,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.2,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 7,
+      "channels": [
+        {
+          "ac_rms": 19.1,
+          "ac_peak": 472,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 470,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 101,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.4,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 8,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 470,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 470,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 110,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 133,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 3,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 9,
+      "channels": [
+        {
+          "ac_rms": 19.0,
+          "ac_peak": 467,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 467,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.4,
+          "ac_peak": 129,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 10,
+      "channels": [
+        {
+          "ac_rms": 19.1,
+          "ac_peak": 480,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 473,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 98,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.2,
+          "ac_peak": 137,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 30,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 11,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 480,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.8,
+          "ac_peak": 469,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 142,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 12,
+      "channels": [
+        {
+          "ac_rms": 19.3,
+          "ac_peak": 467,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.7,
+          "ac_peak": 465,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 100,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 5,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 13,
+      "channels": [
+        {
+          "ac_rms": 18.8,
+          "ac_peak": 464,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 472,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.2,
+          "ac_peak": 102,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.3,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 25,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.9,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 6,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 14,
+      "channels": [
+        {
+          "ac_rms": 19.2,
+          "ac_peak": 460,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.6,
+          "ac_peak": 471,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.3,
+          "ac_peak": 106,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.2,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.5,
+          "ac_peak": 30,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 36,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 5,
+          "dc": -0.6
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 5,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "event": "agc_restore",
+      "after": "off"
+    }
+  ],
+  "usb_rms_by_channel_agc_off": [
+    [
+      19.0,
+      20.0
+    ],
+    [
+      20.4,
+      21.1
+    ],
+    [
+      7.2,
+      7.4
+    ],
+    [
+      8.3,
+      8.5
+    ],
+    [
+      6.6,
+      6.8
+    ],
+    [
+      7.6,
+      7.8
+    ],
+    [
+      0.9,
+      1.1
+    ],
+    [
+      1.0,
+      1.5
+    ]
+  ],
+  "usb_rms_by_channel_agc_on": [
+    [
+      18.8,
+      19.3
+    ],
+    [
+      20.3,
+      20.8
+    ],
+    [
+      7.2,
+      7.3
+    ],
+    [
+      8.2,
+      8.4
+    ],
+    [
+      6.4,
+      6.6
+    ],
+    [
+      7.8,
+      7.9
+    ],
+    [
+      0.9,
+      1.0
+    ],
+    [
+      1.0,
+      1.0
+    ]
+  ],
+  "rk809_playback": [
+    {
+      "event": "play",
+      "device": "hw:CARD=rockchiprk809co,DEV=0",
+      "rate": 48000,
+      "channels": 2,
+      "bytes": 408952,
+      "peak": 10536
+    },
+    {
+      "event": "play_done",
+      "device": "hw:CARD=rockchiprk809co,DEV=0",
+      "exit": 0
+    },
+    {
+      "event": "play",
+      "device": "patchx_playback",
+      "rate": 24000,
+      "channels": 1,
+      "bytes": 102238,
+      "peak": 10536
+    },
+    {
+      "event": "play_done",
+      "device": "patchx_playback",
+      "exit": 0
+    },
+    {
+      "event": "local_speech_cleanup",
+      "pcm": "closed"
+    }
+  ],
+  "listener_report": "audible sound, speech unintelligible",
+  "cleanup": {
+    "native_pcm_closed": true,
+    "rk809_routes_off": true,
+    "pid1_phase": 4,
+    "independent_ram_only_guard_passed": true,
+    "android_boot_completed": true,
+    "android_release": "11",
+    "android_kernel": "4.19.232",
+    "temporary_cache_removed": true
+  }
+}
