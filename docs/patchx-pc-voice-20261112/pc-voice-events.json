@@ -1,0 +1,206 @@
+{
+  "synthetic_decode": {
+    "input": "synthetic Mandarin WAV: 一加一等于几",
+    "audio_output": "decoded PCM",
+    "native_microphone_speaker_tested": false,
+    "connected": true,
+    "asr": "1+1等于几？",
+    "llm": "2。",
+    "state": "idle",
+    "error": "",
+    "sent_frames": 56,
+    "tts_frames": 21,
+    "tts_sample_rate": 24000,
+    "tts_samples": 30240,
+    "tts_peak": 27285,
+    "tts_finished": true,
+    "asr_pass": true,
+    "llm_pass": true,
+    "tts_pass": true
+  },
+  "wslg_microphone_no_utterance": [
+    {
+      "event": "ready"
+    },
+    {
+      "event": "standby"
+    },
+    {
+      "event": "listening",
+      "seconds": 12
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "error",
+      "progress": "failed",
+      "error": "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务。会话超时，已停止录放音；请重新连接",
+      "transcript": "",
+      "answer": "",
+      "capture_peak": 5364,
+      "sent_frames": 217,
+      "received_frames": 0,
+      "pcm_written": false,
+      "sample_rate": 24000,
+      "software_pass": false
+    },
+    {
+      "event": "cleanup"
+    }
+  ],
+  "wslg_microphone_retry": [
+    {
+      "event": "ready"
+    },
+    {
+      "event": "standby"
+    },
+    {
+      "event": "listening",
+      "seconds": 18
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "error",
+      "progress": "failed",
+      "error": "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务。会话超时，已停止录放音；请重新连接",
+      "transcript": "",
+      "answer": "",
+      "capture_peak": 1,
+      "sent_frames": 318,
+      "received_frames": 0,
+      "pcm_written": false,
+      "sample_rate": 24000,
+      "software_pass": false
+    },
+    {
+      "event": "cleanup"
+    }
+  ],
+  "synthetic_to_pc_speaker": [
+    {
+      "event": "ready"
+    },
+    {
+      "event": "standby",
+      "input": "synthetic WAV"
+    },
+    {
+      "event": "listening",
+      "seconds": 12
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "idle",
+      "progress": "complete",
+      "error": "",
+      "transcript": "1+1等于几？",
+      "answer": "2。",
+      "capture_peak": 19756,
+      "sent_frames": 54,
+      "received_frames": 21,
+      "pcm_written": true,
+      "sample_rate": 24000,
+      "software_pass": true
+    },
+    {
+      "event": "cleanup"
+    }
+  ],
+  "windows_direct_capture_initial_rejection": [
+    {
+      "event": "ready"
+    },
+    {
+      "event": "standby",
+      "input": "Windows DirectShow"
+    },
+    {
+      "event": "windows_recording",
+      "seconds": 8
+    },
+    {
+      "event": "windows_capture_failure",
+      "exit": 0,
+      "bytes": 255616
+    },
+    {
+      "event": "failure",
+      "reason": "Windows audio capture did not produce 8 seconds"
+    },
+    {
+      "event": "cleanup"
+    }
+  ],
+  "windows_direct_capture_retry": [
+    {
+      "event": "ready"
+    },
+    {
+      "event": "standby",
+      "input": "Windows DirectShow"
+    },
+    {
+      "event": "windows_recording",
+      "seconds": 8
+    },
+    {
+      "event": "windows_capture",
+      "peak": 7435,
+      "rms_by_second": [
+        649,
+        471,
+        447,
+        603,
+        1504,
+        997,
+        509,
+        612
+      ]
+    },
+    {
+      "event": "listening",
+      "seconds": 12
+    },
+    {
+      "event": "result",
+      "state": "idle",
+      "progress": "complete",
+      "error": "",
+      "transcript": "7+5等于几？",
+      "answer": "12。",
+      "capture_peak": 7435,
+      "sent_frames": 114,
+      "received_frames": 26,
+      "pcm_written": true,
+      "sample_rate": 24000,
+      "software_pass": true
+    },
+    {
+      "event": "cleanup"
+    }
+  ],
+  "listener_synthetic": "好像是2",
+  "reply_replay": [
+    {
+      "event": "replay_ready",
+      "answer": "12",
+      "frames": 26,
+      "sample_rate": 24000
+    },
+    {
+      "event": "replay_drained",
+      "repetitions": 2,
+      "sample_rate": 24000
+    }
+  ],
+  "listener_replay": "12，很清楚"
+}
