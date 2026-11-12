@@ -1,0 +1,1006 @@
+{
+  "mic-10s": [
+    {
+      "event": "preflight",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ]
+    },
+    {
+      "event": "ready",
+      "capture_seconds": 10
+    },
+    {
+      "event": "connected"
+    },
+    {
+      "event": "standby"
+    },
+    {
+      "event": "listening"
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "error",
+      "progress": "failed",
+      "error": "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务。会话超时，已停止录放音；请重新连接",
+      "transcript": "",
+      "answer": "",
+      "sent_frames": 186,
+      "received_frames": 0,
+      "capture_peak": 475,
+      "audio_worker": {},
+      "capture_pcm_running": true,
+      "playback_pcm_running": false,
+      "pcm_written_to_aplay": false
+    },
+    {
+      "event": "cleanup",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ],
+      "cleanup_uncertain": false,
+      "route_state": {
+        "active": false,
+        "cleanup_uncertain": false,
+        "error": "",
+        "card_id": "rockchiprk809co"
+      }
+    }
+  ],
+  "mic-18s": [
+    {
+      "event": "preflight",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ]
+    },
+    {
+      "event": "ready",
+      "capture_seconds": 18
+    },
+    {
+      "event": "connected"
+    },
+    {
+      "event": "standby"
+    },
+    {
+      "event": "listening"
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "error",
+      "progress": "failed",
+      "error": "已上传录音，但未收到识别结果；请检查录音电平和后端识别服务。会话超时，已停止录放音；请重新连接",
+      "transcript": "",
+      "answer": "",
+      "sent_frames": 320,
+      "received_frames": 0,
+      "capture_peak": 491,
+      "audio_worker": {},
+      "capture_pcm_running": true,
+      "playback_pcm_running": false,
+      "pcm_written_to_aplay": false
+    },
+    {
+      "event": "cleanup",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ],
+      "cleanup_uncertain": false,
+      "route_state": {
+        "active": false,
+        "cleanup_uncertain": false,
+        "error": "",
+        "card_id": "rockchiprk809co"
+      }
+    }
+  ],
+  "usb-eight-channels": [
+    {
+      "event": "usb_controls",
+      "returncode": 0,
+      "summary": "numid=4,iface=CARD,name='Keep Interface'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=off\nnumid=3,iface=MIXER,name='Auto Gain Control'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=off\nnumid=2,iface=MIXER,name='MIC Capture Switch'\n  ; type=BOOLEAN,access=rw------,values=1\n  : values=on\nnumid=1,iface=PCM,name='Capture Channel Map'\n  ; type=INTEGER,access=r----R--,values=8,min=0,max=36,step=0\n  : values=0,0,0,0,0,0,0,0\n  | container\n    | chmap-fixed=FL,FR,FC,LFE,RL,RR,FLC,FRC\n"
+    },
+    {
+      "event": "ready_raw",
+      "seconds": 14
+    },
+    {
+      "second": 1,
+      "channels": [
+        {
+          "ac_rms": 20.4,
+          "ac_peak": 360,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 451,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 12.9,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 9.0,
+          "ac_peak": 131,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 2,
+      "channels": [
+        {
+          "ac_rms": 20.2,
+          "ac_peak": 414,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 452,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.1,
+          "ac_peak": 99,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 131,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.6,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 3,
+      "channels": [
+        {
+          "ac_rms": 20.4,
+          "ac_peak": 430,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 447,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.0,
+          "ac_peak": 117,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 128,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 4,
+      "channels": [
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 399,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.2,
+          "ac_peak": 452,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 12.9,
+          "ac_peak": 92,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.8,
+          "ac_peak": 128,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 5,
+      "channels": [
+        {
+          "ac_rms": 20.6,
+          "ac_peak": 452,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.2,
+          "ac_peak": 442,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.1,
+          "ac_peak": 97,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 136,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 37,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 6,
+      "channels": [
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 468,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 444,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.1,
+          "ac_peak": 109,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 140,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 35,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 7,
+      "channels": [
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 416,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 19.9,
+          "ac_peak": 428,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.0,
+          "ac_peak": 95,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.8,
+          "ac_peak": 133,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.8,
+          "ac_peak": 32,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 8,
+      "channels": [
+        {
+          "ac_rms": 20.6,
+          "ac_peak": 435,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 448,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.0,
+          "ac_peak": 110,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 9,
+      "channels": [
+        {
+          "ac_rms": 20.4,
+          "ac_peak": 475,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 19.7,
+          "ac_peak": 425,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.1,
+          "ac_peak": 100,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 148,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.6,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 10,
+      "channels": [
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 377,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 459,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.0,
+          "ac_peak": 101,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 127,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.7,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 29,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        }
+      ]
+    },
+    {
+      "second": 11,
+      "channels": [
+        {
+          "ac_rms": 20.5,
+          "ac_peak": 391,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 459,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.0,
+          "ac_peak": 86,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 132,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 27,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 33,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 12,
+      "channels": [
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 428,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 444,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.2,
+          "ac_peak": 91,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 9.0,
+          "ac_peak": 130,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.7,
+          "ac_peak": 34,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 13,
+      "channels": [
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 488,
+          "dc": -0.9
+        },
+        {
+          "ac_rms": 20.3,
+          "ac_peak": 417,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 13.1,
+          "ac_peak": 98,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.9,
+          "ac_peak": 141,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 26,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.6,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 0.9,
+          "ac_peak": 4,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.0,
+          "ac_peak": 4,
+          "dc": -0.6
+        }
+      ]
+    },
+    {
+      "second": 14,
+      "channels": [
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 483,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 20.1,
+          "ac_peak": 360,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 12.9,
+          "ac_peak": 111,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 8.8,
+          "ac_peak": 150,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 6.6,
+          "ac_peak": 28,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 7.6,
+          "ac_peak": 31,
+          "dc": -1.0
+        },
+        {
+          "ac_rms": 1.1,
+          "ac_peak": 12,
+          "dc": -0.7
+        },
+        {
+          "ac_rms": 1.2,
+          "ac_peak": 11,
+          "dc": -0.7
+        }
+      ]
+    }
+  ],
+  "cloud-tts": [
+    {
+      "event": "preflight",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ]
+    },
+    {
+      "event": "ready",
+      "capture_seconds": 18
+    },
+    {
+      "event": "connected"
+    },
+    {
+      "event": "standby",
+      "input": "synthetic WAV, microphone remains closed"
+    },
+    {
+      "event": "listening"
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "result",
+      "state": "idle",
+      "progress": "complete",
+      "error": "",
+      "transcript": "1+1等于几？",
+      "answer": "2。",
+      "sent_frames": 56,
+      "received_frames": 21,
+      "capture_peak": 19756,
+      "audio_worker": {
+        "available": true,
+        "cleanup_uncertain": false,
+        "capture_active": false,
+        "speaker_owned": true,
+        "error": null,
+        "volume": {
+          "available": true,
+          "raw": 8,
+          "maximum": 15,
+          "verified": true,
+          "method": "software_pcm_linear",
+          "hardware_gain": false
+        },
+        "capture_device": "patchx_capture",
+        "playback_device": "patchx_playback",
+        "aec_verified": false,
+        "wake_word_verified": false
+      },
+      "capture_pcm_running": false,
+      "playback_pcm_running": true,
+      "pcm_written_to_aplay": true
+    },
+    {
+      "event": "cleanup",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ],
+      "cleanup_uncertain": false,
+      "route_state": {
+        "active": false,
+        "cleanup_uncertain": false,
+        "error": "",
+        "card_id": "rockchiprk809co"
+      }
+    }
+  ],
+  "speaker-tone": [
+    {
+      "event": "tone_ready",
+      "seconds": 3,
+      "peak": 2048
+    },
+    {
+      "event": "tone_playing",
+      "pcm": "state: RUNNING",
+      "path": 2
+    },
+    {
+      "event": "tone_cleanup",
+      "pcm": "closed"
+    }
+  ],
+  "tts-drain-replay": [
+    {
+      "event": "preflight",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ]
+    },
+    {
+      "event": "ready",
+      "capture_seconds": 18
+    },
+    {
+      "event": "connected"
+    },
+    {
+      "event": "standby",
+      "input": "synthetic WAV, microphone remains closed"
+    },
+    {
+      "event": "listening"
+    },
+    {
+      "event": "capture_stopped"
+    },
+    {
+      "event": "drain_replay",
+      "reply_pcm_bytes": 60480,
+      "sample_rate": 24000
+    },
+    {
+      "event": "drain_complete",
+      "busy": false,
+      "pcm": "closed"
+    },
+    {
+      "event": "result",
+      "state": "idle",
+      "progress": "complete",
+      "error": "",
+      "transcript": "1+1等于几？",
+      "answer": "2。",
+      "sent_frames": 56,
+      "received_frames": 21,
+      "capture_peak": 19756,
+      "audio_worker": {
+        "available": true,
+        "cleanup_uncertain": false,
+        "capture_active": false,
+        "speaker_owned": false,
+        "error": null,
+        "volume": {
+          "available": true,
+          "raw": 8,
+          "maximum": 15,
+          "verified": true,
+          "method": "software_pcm_linear",
+          "hardware_gain": false
+        },
+        "capture_device": "patchx_capture",
+        "playback_device": "patchx_playback",
+        "aec_verified": false,
+        "wake_word_verified": false
+      },
+      "capture_pcm_running": false,
+      "playback_pcm_running": true,
+      "pcm_written_to_aplay": true
+    },
+    {
+      "event": "cleanup",
+      "route": {
+        "Playback Path": 0,
+        "Capture MIC Path": 0
+      },
+      "pcm": [
+        "closed",
+        "closed"
+      ],
+      "cleanup_uncertain": false,
+      "route_state": {
+        "active": false,
+        "cleanup_uncertain": false,
+        "error": "",
+        "card_id": "rockchiprk809co"
+      }
+    }
+  ],
+  "speaker-gpio": [
+    "gpio-148 (                    |spk-ctl             ) out hi",
+    "gpio-148 (                    |spk-ctl             ) out hi",
+    "closed",
+    "gpio-148 (                    |spk-ctl             ) out lo",
+    "state: RUNNING",
+    "gpio-148 (                    |spk-ctl             ) out lo",
+    "state: RUNNING",
+    "gpio-148 (                    |spk-ctl             ) out lo",
+    "state: RUNNING",
+    "gpio-148 (                    |spk-ctl             ) out lo",
+    "state: DRAINING",
+    "gpio-148 (                    |spk-ctl             ) out hi",
+    "closed",
+    "00 00 00 40 00 00 00 14 00 00 00 01"
+  ],
+  "local-speech": [
+    {
+      "event": "local_speech_ready"
+    },
+    {
+      "event": "play",
+      "device": "hw:CARD=rockchiprk809co,DEV=0",
+      "rate": 48000,
+      "channels": 2,
+      "bytes": 408952,
+      "peak": 10536
+    },
+    {
+      "event": "play_done",
+      "device": "hw:CARD=rockchiprk809co,DEV=0",
+      "exit": 0
+    },
+    {
+      "event": "play",
+      "device": "patchx_playback",
+      "rate": 24000,
+      "channels": 1,
+      "bytes": 102238,
+      "peak": 10536
+    },
+    {
+      "event": "play_done",
+      "device": "patchx_playback",
+      "exit": 0
+    },
+    {
+      "event": "local_speech_cleanup",
+      "pcm": "closed"
+    }
+  ]
+}
