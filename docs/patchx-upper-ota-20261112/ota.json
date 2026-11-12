@@ -1,0 +1,14 @@
+{
+  "bytes": 42080,
+  "crc32": "C19797DF",
+  "sha256": "859d42956d539aa72504ca4b6a3817fbbced6d377712995303aa238074d36a85",
+  "packets": 165,
+  "acked_packets": 165,
+  "transfer_acknowledged": true,
+  "app_restarted": true,
+  "image_confirmation": "requires_readback",
+  "version_before": "TO_G-2026.10.27-01",
+  "final_ack_seconds": 1.513,
+  "version_after": "TO_G-2026.10.27-01",
+  "update_faults": []
+}

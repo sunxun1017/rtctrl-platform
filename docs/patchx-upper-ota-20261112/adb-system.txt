@@ -1,0 +1,4 @@
+3568A
+11
+Linux 4.19.232 aarch64
+Wifi is connected (SSID omitted)

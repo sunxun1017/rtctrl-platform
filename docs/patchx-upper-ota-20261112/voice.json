@@ -1,0 +1,19 @@
+{
+  "input": "synthetic Mandarin WAV: 一加一等于几",
+  "audio_output": "decoded PCM",
+  "native_microphone_speaker_tested": false,
+  "connected": true,
+  "asr": "1+1等于几？",
+  "llm": "2。",
+  "state": "idle",
+  "error": "",
+  "sent_frames": 56,
+  "tts_frames": 21,
+  "tts_sample_rate": 24000,
+  "tts_samples": 30240,
+  "tts_peak": 27285,
+  "tts_finished": true,
+  "asr_pass": true,
+  "llm_pass": true,
+  "tts_pass": true
+}

@@ -1,0 +1,13 @@
+{
+  "app_bytes_match": true,
+  "bootloader_unchanged": true,
+  "slot_a_matches": true,
+  "slot_b_matches": true,
+  "trial_seq": 30,
+  "confirmed_seq": 31,
+  "state": "CONFIRMED",
+  "trials": 0,
+  "error": 0,
+  "image_bytes": 42080,
+  "image_crc32": "C19797DF"
+}
