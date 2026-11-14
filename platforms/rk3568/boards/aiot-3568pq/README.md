@@ -67,8 +67,8 @@ RK3568 I²C/SPI 下的设备，不给 Linux 虚构六路 PWM 引脚。MCU Flash 
 ## 可复现配置
 
 候选复用仓库锁定的 Orange Pi/Rockchip Linux **5.10.160**，commit
-`9f9e9d18574d0914c0d192a90c3babfe1fd63c95`。目录名 `linux-rk3588` 是历史名称，
-这棵树实际也含 RK3568 驱动。它是厂商 BSP；用户的 Linux 产品路线不等于已选择上游 mainline。
+`9f9e9d18574d0914c0d192a90c3babfe1fd63c95`。共用源码在 `third_party/linux-rk35xx`，
+包含 RK3568 和 RK3588 的驱动。它是厂商 BSP；用户的 Linux 产品路线不等于已选择上游 mainline。
 目前采用无原厂BSP重建路线；若后续取得原厂源码再重新评估，不复用 Orange Pi 的板级 DTB。
 
 从仓库根目录，在 Linux/WSL 执行（输出须为新目录或空目录）：

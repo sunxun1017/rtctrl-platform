@@ -22,7 +22,7 @@ def main():
     args = parser.parse_args()
     candidate = args.dtb.resolve(strict=True)
     rng.audit(*rng.wifi.base.read_dtb(candidate))
-    kernel = ROOT / "third_party/linux-rk3588"
+    kernel = ROOT / "third_party/linux-rk35xx"
     cases = {
         "RNG disabled": ('&rng { status = "disabled"; };\n', "candidate RNG status enabled"),
         "wrong RNG register range": ("&rng { reg = <0 0xfe388000 0 0x1000>; };\n", "RNG register range retained"),

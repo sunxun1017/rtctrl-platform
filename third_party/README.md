@@ -13,13 +13,13 @@ git submodule update --init --recursive
 | Path | Upstream | Pin | License | Required by default build |
 | --- | --- | --- | --- | --- |
 | `igh-ethercat` | `https://gitlab.com/etherlab.org/ethercat.git` | `1.6.12` / `381577314d1bedc14e156512616f6dd31fb52c88` | GPL-2.0 and LGPL-2.1 components; see upstream files | No |
-| `linux-rk3588` | `https://github.com/orangepi-xunlong/linux-orangepi.git` | `orange-pi-5.10-rk35xx-rt` snapshot / `9f9e9d18574d0914c0d192a90c3babfe1fd63c95` | GPL-2.0; see upstream files | No; used by the Orange Pi 5 Max kernel profile |
+| `linux-rk35xx` | `https://github.com/orangepi-xunlong/linux-orangepi.git` | `orange-pi-5.10-rk35xx-rt` snapshot / `9f9e9d18574d0914c0d192a90c3babfe1fd63c95` | GPL-2.0; see upstream files | No; used by the RK3568 AIoT-3568PQ and RK3588 Orange Pi 5 Max kernel profiles |
 | `linux-rv1126b` | `https://github.com/rockchip-linux/kernel.git` | `develop-6.1` snapshot / `77168c8d5ab82399f65a80e9f807b50ba37cf483` | GPL-2.0 WITH Linux-syscall-note; see `COPYING` and per-file notices | No; used by the RV1126B kernel profile |
 | `rknn-toolkit` | `https://github.com/airockchip/rknn-toolkit2.git` | `59a913d172e7f5ff03c9076e2ec7b1b1288ffd08` | RKNN SDK License; bundled components have their own notices | No; used by the optional RKNN adapter |
 
 Pins above are the main repository's gitlink commits; upstream branch names do not
 replace them. `scripts/check-third-party.sh` currently checks only IgH and the
-RK3588 kernel. Use `git submodule status` to inspect all four modules; `-` marks an
+RK35xx kernel. Use `git submodule status` to inspect all four modules; `-` marks an
 uninitialized module and `+` marks a checkout different from the recorded commit.
 Read each module's own license files for its terms.
 
@@ -36,3 +36,8 @@ The kernel submodule is a verified starting point, not a claim that one vendor
 kernel image supports every RK3588 carrier. Board selection lives in
 `platforms/<board>/profile.env`; another board may override the kernel source,
 commit, defconfig, fragments, and DTB without changing the build scripts.
+
+The shared RK35xx kernel checkout moved to `third_party/linux-rk35xx`.
+Historical logs and scripts under `outputs/` may use the original checkout
+path. To replay a frozen experiment that expects that path, use the Git
+revision recorded for the experiment.

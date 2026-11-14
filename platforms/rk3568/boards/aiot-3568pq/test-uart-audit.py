@@ -34,7 +34,7 @@ def main():
         "unrelated PWM enabled": ('&pwm1 { status = "okay"; };', "only UART0 status property differs"),
         "unrelated RNG disabled": ('&rng { status = "disabled"; };', "only UART0 status property differs"),
     }
-    kernel = ROOT / "third_party/linux-rk3588"
+    kernel = ROOT / "third_party/linux-rk35xx"
     dtc = ROOT / ".deps/kernel/aiot-3568pq-rcu-reset/scripts/dtc/dtc"
     passed = []
     with tempfile.TemporaryDirectory(prefix="uart-faults-", dir=candidate.parent) as directory:

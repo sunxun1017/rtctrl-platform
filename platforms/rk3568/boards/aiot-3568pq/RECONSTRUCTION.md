@@ -65,7 +65,7 @@ python3 scripts/prepare-linux-config.py \
   --output .deps/kernel/aiot-3568pq-firstboot-config --prepare-headers
 
 python3 platforms/rk3568/boards/aiot-3568pq/build-firstboot.py \
-  --kernel third_party/linux-rk3588 \
+  --kernel third_party/linux-rk35xx \
   --dtc .deps/kernel/aiot-3568pq-firstboot-config/scripts/dtc/dtc \
   --output .deps/kernel/aiot-3568pq-firstboot-dtb
 ```
